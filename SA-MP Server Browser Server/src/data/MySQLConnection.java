@@ -9,17 +9,18 @@ public class MySQLConnection
 {
 	public static Connection connect = null;
 
-	public static void init(String password)
+	public static void init(String username, String password)
 	{
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			connect = DriverManager.getConnection("jdbc:mysql://localhost?useSSL=false&useUnicode=true&characterEncoding=UTF-8", "root", password);
+			connect = DriverManager.getConnection("jdbc:mysql://localhost?useSSL=false&useUnicode=true&characterEncoding=UTF-8", username, password);
 			connect.setCatalog("mp_server_browser");
 		}
 		catch (SQLException | ClassNotFoundException e)
 		{
 			e.printStackTrace();
+			System.exit(0);
 		}
 	}
 

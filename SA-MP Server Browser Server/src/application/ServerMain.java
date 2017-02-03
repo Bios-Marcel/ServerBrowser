@@ -35,6 +35,7 @@ public class ServerMain
 	public static void main(String[] args)
 	{
 		boolean recreatedb = false;
+		String username = "";
 		String password = "";
 
 		if (args.length >= 1)
@@ -47,14 +48,34 @@ public class ServerMain
 				}
 				else if (args[i].equals("-p") || args[i].equals("-password"))
 				{
-					password = args[i + 1];
+					if (args.length >= 2)
+					{
+						password = args[i + 1];
+					}
+					else
+					{
+						System.out.println("You must enter a password to access the MySQL database.");
+						System.exit(0);
+					}
+				}
+				else if (args[i].equals("-u") || args[i].equals("-username"))
+				{
+					if (args.length >= 2)
+					{
+						username = args[i + 1];
+					}
+					else
+					{
+						System.out.println("You must enter a username to access the MySQL database.");
+						System.exit(0);
+					}
 				}
 			}
 		}
 
 		try
 		{
-			MySQLConnection.init(password);
+			MySQLConnection.init(username, password);
 
 			System.out.println("Creating Registry");
 
