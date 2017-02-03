@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox fx:id="tabpane" maxHeight="1.7976931348623157E308" prefWidth="100.0">
+         <children>
+            <StackPane id="MenuItem" fx:id="menuItemFav" onMouseReleased="#onMenuItemClicked">
+               <children>
+	<ImageView fx:id="menuItemPicture" fitHeight="54.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+				    <image>
+				        <Image url="/views/star.png" />
+				    </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane id="MenuItem" fx:id="menuItemAll" onMouseReleased="#onMenuItemClicked">
+               <children>
+                  <ImageView fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+				    <image>
+				        <Image url="/views/list.png" />
+				    </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane id="MenuItem" fx:id="menuItemUser" onMouseReleased="#onMenuItemClicked">
+              <children>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+				    <image>
+				        <Image url="/views/user.png" />
+				    </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane id="MenuItem" fx:id="menuItemVersion" onMouseReleased="#onMenuItemClicked">
+              <children>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+				    <image>
+				        <Image url="/views/version.png" />
+				    </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane id="MenuItem" fx:id="menuItemSettings" onMouseReleased="#onMenuItemClicked">
+              <children>
+                  <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+				    <image>
+				        <Image url="/views/settings.png" />
+				    </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+         <children>
+            <Label id="title" fx:id="headerTitle" maxWidth="1.7976931348623157E308" text="Placeholder" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="Open Sans" size="20.0" />
+               </font>
+               <padding>
+                  <Insets bottom="34.0" left="35.0" top="33.0" />
+               </padding>
+            </Label>
+            <StackPane fx:id="activeView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </children>
+</HBox>
