@@ -7,6 +7,7 @@ import java.net.URI;
 
 import org.apache.commons.lang3.StringUtils;
 
+import data.PastUsernames;
 import javafx.beans.property.SimpleStringProperty;
 import windows.WinRegistry;
 
@@ -115,6 +116,7 @@ public class GTA
 
 	public static void connectToServerPerShell(String ipAndPort, String password)
 	{
+		PastUsernames.addPastUsernames(GTA.getUsername().get());
 		try
 		{
 			ProcessBuilder builder = new ProcessBuilder(getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);

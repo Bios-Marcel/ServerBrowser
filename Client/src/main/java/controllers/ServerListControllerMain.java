@@ -419,10 +419,4 @@ public abstract class ServerListControllerMain implements ViewController
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(freeSlots + "");
 	}
-
-	// private void addData(SampServer server)
-	// {
-	// tableView.getItems().add(server);
-	// }
-
 }
