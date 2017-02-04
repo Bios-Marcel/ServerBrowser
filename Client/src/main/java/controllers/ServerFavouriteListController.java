@@ -54,6 +54,9 @@ public class ServerFavouriteListController extends ServerListControllerMain
 		servers.clear();
 		servers.addAll(favs);
 
+		sortedServers.clear();
+		sortedServers.addAll(filteredServers);
+
 		int freeSlots = maxSlots - playersPlaying;
 
 		serverCount.setText(tableView.getItems().size() + "");

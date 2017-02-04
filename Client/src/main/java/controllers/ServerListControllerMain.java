@@ -3,6 +3,7 @@ package controllers;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,80 +36,97 @@ import util.GTA;
 public abstract class ServerListControllerMain implements ViewController
 {
 	@FXML
-	protected TableView<SampServer>				tableView;
+	protected TableView<SampServer>			tableView;
 
 	@FXML
-	private TableColumn<SampServer, String>		columnPassword;
+	private TableColumn<SampServer, String>	columnPassword;
 
 	@FXML
-	private TableColumn<SampServer, String>		columnHostname;
+	private TableColumn<SampServer, String>	columnHostname;
 
 	@FXML
-	private TableColumn<SampServer, Integer>	columnPlayers;
+	private TableColumn<SampServer, String>	columnPlayers;
 
 	@FXML
-	private TableColumn<SampServer, String>		columnPing;
+	private TableColumn<SampServer, String>	columnPing;
 
 	@FXML
-	private TableColumn<SampServer, String>		columnMode;
+	private TableColumn<SampServer, String>	columnMode;
 
 	@FXML
-	private TableColumn<SampServer, String>		columnLanguage;
+	private TableColumn<SampServer, String>	columnLanguage;
 
 	@FXML
-	private TableView<Player>					playerTable;
+	private TableView<Player>				playerTable;
 
 	@FXML
-	private TableColumn<Player, String>			playerName;
+	private TableColumn<Player, String>		playerName;
 
 	@FXML
-	private TableColumn<Player, String>			playerScore;
+	private TableColumn<Player, String>		playerScore;
 
 	@FXML
-	protected Label								playerCount;
+	protected Label							playerCount;
 
 	@FXML
-	protected Label								slotCount;
+	protected Label							slotCount;
 
 	@FXML
-	protected Label								serverCount;
+	protected Label							serverCount;
 
 	@FXML
-	private Label								serverAddress;
+	private Label							serverAddress;
 
 	@FXML
-	private Label								serverLagcomp;
+	private Label							serverLagcomp;
 
 	@FXML
-	private Label								serverPing;
+	private Label							serverPing;
 
 	@FXML
-	private Label								serverPassword;
+	private Label							serverPassword;
 
-	private static Thread						threadGetPlayers;
+	private static Thread					threadGetPlayers;
 
-	protected ContextMenu						menu;
-	protected MenuItem							addToFavourites;
-	protected MenuItem							removeFromFavourites;
-	private MenuItem							connectItem;
-	private MenuItem							copyIpAddressAndPort;
-
-	@FXML
-	private TextField							modeFilter;
+	protected ContextMenu					menu;
+	protected MenuItem						addToFavourites;
+	protected MenuItem						removeFromFavourites;
+	private MenuItem						connectItem;
+	private MenuItem						copyIpAddressAndPort;
 
 	@FXML
-	private TextField							languageFilter;
+	private TextField						modeFilter;
 
 	@FXML
-	private ComboBox<String>					versionFilter;
+	private TextField						languageFilter;
 
-	protected ObservableList<SampServer>		servers			= FXCollections.observableArrayList();
+	@FXML
+	private ComboBox<String>				versionFilter;
 
-	protected FilteredList<SampServer>			filteredServers	= new FilteredList<>(servers);
+	// HACK(MSC) This is a little hacky, because it needs 3 lists in order to
+	// keep all data, make sorting possible and make filtering possible.
+	protected ObservableList<SampServer>	servers			= FXCollections.observableArrayList();
+
+	protected FilteredList<SampServer>		filteredServers	= new FilteredList<>(servers);
+
+	protected ObservableList<SampServer>	sortedServers	= FXCollections.observableArrayList();
 
 	public void init()
 	{
-		tableView.setItems(filteredServers);
+		// TODO(MSC) Improve by including MaxPlayers as Secondary sorting
+		// condition
+		columnPlayers.setComparator(new Comparator<String>()
+		{
+			@Override
+			public int compare(String o1, String o2)
+			{
+				int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));
+				int p2 = Integer.parseInt(o2.replaceAll("[/](.*)", ""));
+				return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
+			}
+		});
+
+		tableView.setItems(sortedServers);
 
 		tableView.setOnMouseReleased(clicked ->
 		{
@@ -136,7 +154,7 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	public void onFilterSettingsChange()
 	{
-		((FilteredList<SampServer>) tableView.getItems()).setPredicate(server ->
+		filteredServers.setPredicate(server ->
 		{
 			String modeFilterSetting = modeFilter.getText();
 
@@ -190,6 +208,10 @@ public abstract class ServerListControllerMain implements ViewController
 
 			return true;
 		});
+
+		sortedServers.clear();
+		sortedServers.addAll(filteredServers);
+		tableView.sort();
 	}
 
 	protected void displayMenu(SampServer server, double posX, double posY)

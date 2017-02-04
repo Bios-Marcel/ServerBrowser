@@ -36,10 +36,10 @@ public class ServerAllListController extends ServerListControllerMain
 		{
 			String name = "DataServiceInterface";
 			Registry registry = LocateRegistry.getRegistry("ts3.das-chat.xyz");
-			DataServiceInterface comp = (DataServiceInterface) registry.lookup(name);
+			DataServiceInterface remoteDataService = (DataServiceInterface) registry.lookup(name);
 
 			servers.clear();
-			servers.addAll(comp.getAllServers().stream().map(server -> new SampServer(server)).collect(Collectors.toSet()));
+			servers.addAll(remoteDataService.getAllServers().stream().map(server -> new SampServer(server)).collect(Collectors.toSet()));
 
 			for (SampServer server : servers)
 			{
@@ -49,6 +49,9 @@ public class ServerAllListController extends ServerListControllerMain
 				server.setLanguage(StringEscapeUtils.unescapeHtml4(server.getLanguage()));
 				server.setMode(StringEscapeUtils.unescapeHtml4(server.getMode()));
 			}
+
+			sortedServers.clear();
+			sortedServers.addAll(filteredServers);
 		}
 		catch (RemoteException | NotBoundException e)
 		{

@@ -20,11 +20,6 @@
 <VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" VBox.vgrow="ALWAYS">
 		<columns>
-			<!--TableColumn fx:id="columnPassword" maxWidth="35.0" minWidth="35.0" prefWidth="35.0" resizable="false" text="PW">
-				<cellValueFactory>
-					<PropertyValueFactory property="password" />
-				</cellValueFactory>
-			</TableColumn-->
 			<TableColumn fx:id="columnHostname" minWidth="20.0" prefWidth="20.0" text="Hostname">
 				<cellValueFactory>
 					<PropertyValueFactory property="hostname" />
