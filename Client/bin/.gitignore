@@ -1,8 +1,4 @@
-/application/
 /controllers/
-/data/
-/icons/
-/logger/
 /util/
+/data/
 /views/
-/windows/

@@ -1,20 +1,36 @@
 package controllers;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.Objects;
+import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+
+import data.Favourites;
 import data.SampServer;
 import entities.Player;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
 import query.SampQuery;
+import util.GTA;
 
 public abstract class ServerListControllerMain implements ViewController
 {
@@ -69,12 +85,31 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private Label								serverPassword;
 
-	protected static ContextMenu				menu;
-
 	private static Thread						threadGetPlayers;
+
+	protected ContextMenu						menu;
+	protected MenuItem							addToFavourites;
+	protected MenuItem							removeFromFavourites;
+	private MenuItem							connectItem;
+	private MenuItem							copyIpAddressAndPort;
+
+	@FXML
+	private TextField							modeFilter;
+
+	@FXML
+	private TextField							languageFilter;
+
+	@FXML
+	private ComboBox<String>					versionFilter;
+
+	protected ObservableList<SampServer>		servers			= FXCollections.observableArrayList();
+
+	protected FilteredList<SampServer>			filteredServers	= new FilteredList<>(servers);
 
 	public void init()
 	{
+		tableView.setItems(filteredServers);
+
 		tableView.setOnMouseReleased(clicked ->
 		{
 			if (Objects.nonNull(menu))
@@ -98,7 +133,141 @@ public abstract class ServerListControllerMain implements ViewController
 		});
 	}
 
-	protected abstract void displayMenu(SampServer server, double d, double e);
+	@FXML
+	public void onFilterSettingsChange()
+	{
+		((FilteredList<SampServer>) tableView.getItems()).setPredicate(server ->
+		{
+			String modeFilterSetting = modeFilter.getText();
+
+			if (!StringUtils.isEmpty(modeFilterSetting))
+			{
+				if (modeFilterSetting.charAt(0) == '!')
+				{
+					if (server.getMode().contains((modeFilterSetting.replace("!", "").toLowerCase())))
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (!server.getMode().contains(modeFilterSetting))
+					{
+						return false;
+					}
+				}
+			}
+
+			String languageFilterSetting = languageFilter.getText();
+
+			if (!StringUtils.isEmpty(languageFilterSetting))
+			{
+				if (languageFilterSetting.charAt(0) == '!')
+				{
+					if (server.getLanguage().contains(languageFilterSetting.replace("!", "").toLowerCase()))
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (!server.getLanguage().contains(languageFilterSetting))
+					{
+						return false;
+					}
+				}
+			}
+
+			if (!versionFilter.getSelectionModel().isEmpty())
+			{
+				String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString();
+
+				if (!server.getVersion().contains(versionFilterSetting.toLowerCase()))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		});
+	}
+
+	protected void displayMenu(SampServer server, double posX, double posY)
+	{
+		if (Objects.isNull(menu))
+		{
+			menu = new ContextMenu();
+			connectItem = new MenuItem("Connect to Server");
+			addToFavourites = new MenuItem("Add to Favourites");
+			removeFromFavourites = new MenuItem("Remove from Favourites");
+			copyIpAddressAndPort = new MenuItem("Copy IP Address and Port");
+
+			menu.getItems().add(connectItem);
+			menu.getItems().add(new SeparatorMenuItem());
+			menu.getItems().add(addToFavourites);
+			menu.getItems().add(removeFromFavourites);
+			menu.getItems().add(copyIpAddressAndPort);
+		}
+
+		menu.setOnAction(action ->
+		{
+			MenuItem clickedItem = (MenuItem) action.getTarget();
+
+			if (clickedItem == connectItem)
+			{
+				SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort()));
+
+				if (query.connect())
+				{
+					String[] serverInfo = query.getBasicServerInfo();
+
+					if (!serverInfo[0].equals("0"))
+					{
+						TextInputDialog dialog = new TextInputDialog();
+						dialog.setTitle("Connect to Server");
+						dialog.setHeaderText("Enter the servers password.");
+
+						Optional<String> result = dialog.showAndWait();
+						if (result.isPresent())
+						{
+							GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort(), result.get());
+						}
+					}
+					else
+					{
+						GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort());
+					}
+					query.close();
+				}
+				else
+				{
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Connect to Server");
+					alert.setHeaderText("Can't connect to Server");
+					alert.setContentText("Server seems to be offline, try again.");
+
+					alert.showAndWait();
+				}
+			}
+			else if (clickedItem == addToFavourites)
+			{
+				Favourites.addServerToFavourites(server);
+			}
+			else if (clickedItem == removeFromFavourites)
+			{
+				Favourites.removeServerFromFavourites(server);
+				tableView.getItems().remove(server);
+			}
+			else if (clickedItem == copyIpAddressAndPort)
+			{
+				StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
+				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				clipboard.setContents(stringSelection, null);
+			}
+		});
+
+		menu.show(tableView, posX, posY);
+	}
 
 	protected void updateServerInfo(SampServer server)
 	{

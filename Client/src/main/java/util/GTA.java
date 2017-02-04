@@ -5,6 +5,8 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javafx.beans.property.SimpleStringProperty;
 import windows.WinRegistry;
 
@@ -95,30 +97,45 @@ public class GTA
 		return "Unknown Version";
 	}
 
-	public static void connectToServer(String ipAndPort)
+	private static boolean connectToServer(String ipAndPort)
 	{
 		try
 		{
 			setUsername(getUsername().get());
 			Desktop d = Desktop.getDesktop();
 			d.browse(new URI("samp://" + ipAndPort));
+			return true;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static void connectToServerPerShell(String ipAndPort, String password)
+	{
+		try
+		{
+			ProcessBuilder builder = new ProcessBuilder(getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);
+			builder.directory(new File(getGtaPath()));
+			builder.start();
+		}
+		catch (Exception e)
+		{
+			if (StringUtils.isEmpty(password))
+			{
+				connectToServer(ipAndPort);
+			}
+			else
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public static void connectToServerPerShell(String ipAndPort)
 	{
-		try
-		{
-			ProcessBuilder builder = new ProcessBuilder(getGtaPath() + File.separator + "samp.exe " + ipAndPort);
-			builder.start();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		connectToServerPerShell(ipAndPort, "");
 	}
 }

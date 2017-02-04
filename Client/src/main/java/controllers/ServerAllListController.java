@@ -1,28 +1,20 @@
 package controllers;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import data.Favourites;
 import data.SampServer;
 import interfaces.DataServiceInterface;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCode;
-import util.GTA;
 
 public class ServerAllListController extends ServerListControllerMain
 {
+	@Override
 	public void init()
 	{
 		super.init();
@@ -46,7 +38,9 @@ public class ServerAllListController extends ServerListControllerMain
 			Registry registry = LocateRegistry.getRegistry("ts3.das-chat.xyz");
 			DataServiceInterface comp = (DataServiceInterface) registry.lookup(name);
 
-			Set<SampServer> servers = comp.getAllServers().stream().map(server -> new SampServer(server)).collect(Collectors.toSet());;
+			servers.clear();
+			servers.addAll(comp.getAllServers().stream().map(server -> new SampServer(server)).collect(Collectors.toSet()));
+
 			for (SampServer server : servers)
 			{
 				playersPlaying += server.getPlayers();
@@ -55,7 +49,6 @@ public class ServerAllListController extends ServerListControllerMain
 				server.setLanguage(StringEscapeUtils.unescapeHtml4(server.getLanguage()));
 				server.setMode(StringEscapeUtils.unescapeHtml4(server.getMode()));
 			}
-			tableView.getItems().addAll(servers);
 		}
 		catch (RemoteException | NotBoundException e)
 		{
@@ -69,39 +62,11 @@ public class ServerAllListController extends ServerListControllerMain
 		slotCount.setText(freeSlots + "");
 	}
 
-	@Override
 	protected void displayMenu(SampServer server, double posX, double posY)
 	{
-		menu = new ContextMenu();
-		MenuItem connectItem = new MenuItem("Connect to Server");
-		MenuItem addToFavourites = new MenuItem("Add to Favourites");
-		MenuItem copyIpAddressAndPort = new MenuItem("Copy IP Address and Port");
+		super.displayMenu(server, posX, posY);
 
-		menu.getItems().add(connectItem);
-		menu.getItems().add(new SeparatorMenuItem());
-		menu.getItems().add(addToFavourites);
-		menu.getItems().add(copyIpAddressAndPort);
-
-		menu.setOnAction(action ->
-		{
-			MenuItem clickedItem = (MenuItem) action.getTarget();
-
-			if (clickedItem == connectItem)
-			{
-				GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort());
-			}
-			else if (clickedItem == addToFavourites)
-			{
-				Favourites.addServerToFavourites(server);
-			}
-			else if (clickedItem == copyIpAddressAndPort)
-			{
-				StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
-				Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
-				clpbrd.setContents(stringSelection, null);
-			}
-		});
-
-		menu.show(tableView, posX, posY);
+		addToFavourites.setVisible(true);
+		removeFromFavourites.setVisible(false);
 	}
 }

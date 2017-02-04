@@ -14,6 +14,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -91,23 +93,35 @@
 							<RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
+							<!--RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
-							<RowConstraints vgrow="ALWAYS" />
-							<RowConstraints vgrow="ALWAYS" />
+							<RowConstraints vgrow="ALWAYS" /-->
 						</rowConstraints>
 						<children>
-							<TextField maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-							<TextField maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-							<ComboBox maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+							<TextField fx:id="modeFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+							<TextField fx:id="languageFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+							<ComboBox fx:id="versionFilter" onAction="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
+								<items>
+							        <FXCollections fx:factory="observableArrayList">
+							          <String fx:value="0.3.7" />
+							          <String fx:value="0.3z" />
+							          <String fx:value="0.3x" />
+							          <String fx:value="0.3e" />
+							          <String fx:value="0.3e" />
+							          <String fx:value="0.3c" />
+							          <String fx:value="0.3a" />
+							        </FXCollections>
+								</items>
+							</ComboBox>
 							<Label text="Version" GridPane.rowIndex="2" />
 							<Label text="Mode" />
 							<Label text="Language" GridPane.rowIndex="1" />
-							<Label text="Empty Servers" GridPane.rowIndex="3" />
+							<!--Label text="Empty Servers" GridPane.rowIndex="3" />
 							<Label text="Full Servers" GridPane.rowIndex="4" />
 							<Label text="Passworded Servers" GridPane.rowIndex="5" />
-							<CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-							<CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-							<CheckBox mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+							<CheckBox fx:id="modeFilter" onAction="#onFilterSettingsChange" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+							<CheckBox fx:id="fullFilter" onAction="#onFilterSettingsChange" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+							<CheckBox fx:id="passwordFilter" onAction="#onFilterSettingsChange" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" /-->
 						</children>
 					</GridPane>
 				</content>
