@@ -1,9 +1,8 @@
-package logger;
+package logging;
 
 import java.util.logging.Logger;
 
 public class Logging
 {
-
 	public static final Logger logger = Logger.getAnonymousLogger();
 }

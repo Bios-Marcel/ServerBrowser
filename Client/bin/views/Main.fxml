@@ -17,7 +17,7 @@
                <children>
 	<ImageView fx:id="menuItemPicture" fitHeight="54.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
 				    <image>
-				        <Image url="/views/star.png" />
+				        <Image url="/icons/menuicons/star.png" />
 				    </image>
                   </ImageView>
                </children>
@@ -26,7 +26,7 @@
                <children>
                   <ImageView fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
 				    <image>
-				        <Image url="/views/list.png" />
+				        <Image url="/icons/menuicons/list.png" />
 				    </image>
                   </ImageView>
                </children>
@@ -35,7 +35,7 @@
               <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
 				    <image>
-				        <Image url="/views/user.png" />
+				        <Image url="/icons/menuicons/user.png" />
 				    </image>
                   </ImageView>
                </children>
@@ -44,7 +44,7 @@
               <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
 				    <image>
-				        <Image url="/views/version.png" />
+				        <Image url="/icons/menuicons/version.png" />
 				    </image>
                   </ImageView>
                </children>
@@ -53,7 +53,7 @@
               <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
 				    <image>
-				        <Image url="/views/settings.png" />
+				        <Image url="/icons/menuicons/settings.png" />
 				    </image>
                   </ImageView>
                </children>

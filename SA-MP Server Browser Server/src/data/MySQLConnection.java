@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+
+import logging.Logging;
 
 public class MySQLConnection
 {
@@ -16,23 +19,33 @@ public class MySQLConnection
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection("jdbc:mysql://localhost?useSSL=false&useUnicode=true&characterEncoding=UTF-8", username, password);
 			connect.setCatalog("mp_server_browser");
+			Logging.logger.log(Level.INFO, "Databank connection has been established.");
+
 		}
-		catch (SQLException | ClassNotFoundException e)
+		catch (ClassNotFoundException e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Couldn't load MySQL Driver.", e);
+			System.exit(0);
+		}
+		catch (SQLException e)
+		{
+			Logging.logger.log(Level.SEVERE, "Couldn't connect to Database.", e);
 			System.exit(0);
 		}
 	}
 
-	public static void truncate()
+	public static boolean truncate()
 	{
 		try
 		{
 			connect.createStatement().executeUpdate("TRUNCATE TABLE internet_offline;");
+			Logging.logger.log(Level.INFO, "Table has been successfully truncated.");
+			return true;
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Couldn't truncate table.", e);
+			return false;
 		}
 	}
 
@@ -41,6 +54,7 @@ public class MySQLConnection
 	{
 		try
 		{
+			// TODO(MSC) Fix Encoding problems and escaping
 			Statement statement = connect.createStatement();
 			statement.setEscapeProcessing(true);
 			statement.executeUpdate("INSERT INTO internet_offline (ip_address, port, hostname, players, max_players, mode, language, lagcomp, mapname, version, weather, weburl, worldtime) VALUES("

@@ -19,10 +19,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
 
 import data.MySQLConnection;
 import entities.SampServerSerializeable;
 import interfaces.DataServiceInterface;
+import logging.Logging;
 import query.SampQuery;
 import serviceImplementations.DataServiceServerImplementation;
 
@@ -35,20 +37,20 @@ public class ServerMain
 	public static void main(String[] args)
 	{
 		boolean recreatedb = false;
-		String username = "";
-		String password = "";
+		String username = null;
+		String password = null;
 
 		if (args.length >= 1)
 		{
 			for (int i = 0; i < args.length; i++)
 			{
-				if (args[i].equals("-recreatedb"))
+				if (args[i].equals("-recreatedb") || args[i].equals("-updatedb"))
 				{
 					recreatedb = true;
 				}
 				else if (args[i].equals("-p") || args[i].equals("-password"))
 				{
-					if (args.length >= 2)
+					if (args.length >= i + 2)
 					{
 						password = args[i + 1];
 					}
@@ -60,7 +62,7 @@ public class ServerMain
 				}
 				else if (args[i].equals("-u") || args[i].equals("-username"))
 				{
-					if (args.length >= 2)
+					if (args.length >= i + 2)
 					{
 						username = args[i + 1];
 					}
@@ -73,30 +75,26 @@ public class ServerMain
 			}
 		}
 
+		if (Objects.isNull(username) || Objects.isNull(password))
+		{
+			Logging.logger.log(Level.SEVERE, "Please enter a Username and a Password for your Database");
+			System.exit(0);
+		}
+
+		MySQLConnection.init(username, password);
+
 		try
 		{
-			MySQLConnection.init(username, password);
-
-			System.out.println("Creating Registry");
-
-			try
-			{
-				registry = LocateRegistry.createRegistry(1099);
-				dataService = new DataServiceServerImplementation();
-				stub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
-				registry.rebind("DataServiceInterface", stub);
-				System.out.println("Registry created");
-			}
-			catch (Exception e2)
-			{
-				System.err.println("Error creating Registry.");
-				e2.printStackTrace();
-			}
-
+			registry = LocateRegistry.createRegistry(1099);
+			dataService = new DataServiceServerImplementation();
+			stub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
+			registry.rebind("DataServiceInterface", stub);
+			Logging.logger.log(Level.INFO, "RMI has been initialized.");
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
+			System.exit(0);
 		}
 
 		if (recreatedb)
@@ -107,6 +105,7 @@ public class ServerMain
 		setServerList();
 
 		createCronJob();
+
 	}
 
 	private static void setServerList()
@@ -192,10 +191,15 @@ public class ServerMain
 
 	private static void updateDBWithMasterlistContent()
 	{
-		MySQLConnection.truncate();
+		Logging.logger.log(Level.INFO, "Starting to update Database.");
 
-		addToDatabaseFromList("http://monitor.sacnr.com/list/masterlist.txt");
-		addToDatabaseFromList("http://monitor.sacnr.com/list/hostedlist.txt");
+		if (MySQLConnection.truncate())
+		{
+			addToDatabaseFromList("http://monitor.sacnr.com/list/masterlist.txt");
+			addToDatabaseFromList("http://monitor.sacnr.com/list/hostedlist.txt");
+		}
+
+		Logging.logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
 	}
 
 	private static void addToDatabaseFromList(String url)
@@ -265,7 +269,7 @@ public class ServerMain
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
 		}
 	}
 }

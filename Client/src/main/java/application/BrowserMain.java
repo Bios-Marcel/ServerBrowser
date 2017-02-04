@@ -23,7 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import logger.Logging;
+import logging.Logging;
 import util.FileUtility;
 import windows.OSInfo;
 
@@ -31,7 +31,7 @@ public class BrowserMain extends Application
 {
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private static final String	VERSION				= "1.0.5";
+	private static final String	VERSION				= "1.0.6";
 
 	@Override
 	public void start(Stage primaryStage)
@@ -56,7 +56,7 @@ public class BrowserMain extends Application
 			final Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.getScene().getStylesheets().add(getClass().getResource("/views/style.css").toExternalForm());
-			primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/views/icon.png")));
+			primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/icons/icon.png")));
 			primaryStage.setTitle(APPLICATION_NAME);
 			primaryStage.show();
 			primaryStage.setMinWidth(primaryStage.getWidth());
