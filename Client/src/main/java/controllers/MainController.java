@@ -12,14 +12,21 @@ public class MainController implements ViewController
 {
 
 	private static final String	VERSION_CHANGER_TITLE	= "Version Changer";
+
 	private static final String	USERNAME_CHANGER_TITLE	= "Username Changer";
+
 	private static final String	SA_MP_SERVERS_FAV_TITLE	= "Servers | Favourites";
+
 	private static final String	SA_MP_SERVERS_ALL_TITLE	= "Servers | All";
 
 	private static final int	VERSION_CHANGER			= 1;
+
 	private static final int	USERNAME_CHANGER		= 2;
+
 	private static final int	SETTINGS				= 3;
+
 	private static final int	SERVERS_FAV				= 4;
+
 	private static final int	SERVERS_ALL				= 5;
 
 	@FXML

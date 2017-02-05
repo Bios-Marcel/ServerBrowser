@@ -16,8 +16,11 @@ public class SampQuery
 {
 
 	private DatagramSocket	socket			= null;
+
 	private InetAddress		server			= null;
+
 	private String			serverAddress	= "";
+
 	private int				serverPort		= 0;
 
 	/**

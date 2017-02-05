@@ -7,14 +7,23 @@ public class SampServerSerializeable implements Serializable
 	private static final long	serialVersionUID	= 4910435015362133564L;
 
 	private String				hostname;
+
 	private String				address;
+
 	private String				port;
+
 	private Integer				players;
+
 	private Integer				maxPlayers;
+
 	private String				mode;
+
 	private String				language;
+
 	private String				lagcomp;
+
 	private String				website;
+
 	private String				version;
 
 	public SampServerSerializeable(String hostname, String address, String port, int players, int maxPlayers, String mode, String language, String lagcomp, String website, String version)

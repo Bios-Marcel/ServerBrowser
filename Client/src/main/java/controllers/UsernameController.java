@@ -26,6 +26,7 @@ public class UsernameController
 	private ContextMenu			menu;
 
 	private MenuItem			setName;
+
 	private MenuItem			removeName;
 
 	public void init()

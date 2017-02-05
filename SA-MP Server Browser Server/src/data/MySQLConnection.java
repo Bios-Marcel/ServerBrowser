@@ -50,7 +50,7 @@ public class MySQLConnection
 	}
 
 	public static void addServer(String ip, String port, String hostname, int players, int max_players, String mode, String language, String lagcomp, String mapname, String version, int weather,
-			String weburl, String worldtime)
+					String weburl, String worldtime)
 	{
 		try
 		{
@@ -58,33 +58,33 @@ public class MySQLConnection
 			Statement statement = connect.createStatement();
 			statement.setEscapeProcessing(true);
 			statement.executeUpdate("INSERT INTO internet_offline (ip_address, port, hostname, players, max_players, mode, language, lagcomp, mapname, version, weather, weburl, worldtime) VALUES("
-					+ "'"
-					+ ip
-					+ "', '"
-					+ port
-					+ "', '"
-					+ hostname
-					+ "', "
-					+ players
-					+ ", "
-					+ max_players
-					+ ", '"
-					+ mode
-					+ "', '"
-					+ language
-					+ "', '"
-					+ lagcomp
-					+ "', '"
-					+ mapname
-					+ "', '"
-					+ version
-					+ "', "
-					+ weather
-					+ ", '"
-					+ weburl
-					+ "', '"
-					+ worldtime
-					+ "');");
+							+ "'"
+							+ ip
+							+ "', '"
+							+ port
+							+ "', '"
+							+ hostname
+							+ "', "
+							+ players
+							+ ", "
+							+ max_players
+							+ ", '"
+							+ mode
+							+ "', '"
+							+ language
+							+ "', '"
+							+ lagcomp
+							+ "', '"
+							+ mapname
+							+ "', '"
+							+ version
+							+ "', "
+							+ weather
+							+ ", '"
+							+ weburl
+							+ "', '"
+							+ worldtime
+							+ "');");
 		}
 		catch (SQLException e)
 		{

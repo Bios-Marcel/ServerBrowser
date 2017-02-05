@@ -89,9 +89,13 @@ public abstract class ServerListControllerMain implements ViewController
 	private static Thread					threadGetPlayers;
 
 	protected ContextMenu					menu;
+
 	protected MenuItem						addToFavourites;
+
 	protected MenuItem						removeFromFavourites;
+
 	private MenuItem						connectItem;
+
 	private MenuItem						copyIpAddressAndPort;
 
 	@FXML

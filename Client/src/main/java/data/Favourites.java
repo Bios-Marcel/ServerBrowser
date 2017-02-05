@@ -146,8 +146,8 @@ public class Favourites
 					Node maxplayersNode = attr.getNamedItem("maxplayers");
 
 					servers.add(new SampServer(new SampServerSerializeable(hostnameNode.getTextContent(), ipNode.getTextContent(), portNode.getTextContent(),
-							Integer.parseInt(playersNode.getTextContent()), Integer.parseInt(maxplayersNode.getTextContent()), modeNode.getTextContent(), languageNode.getTextContent(),
-							lagcompNode.getTextContent(), websiteNode.getTextContent(), versionNode.getTextContent())));
+									Integer.parseInt(playersNode.getTextContent()), Integer.parseInt(maxplayersNode.getTextContent()), modeNode.getTextContent(), languageNode.getTextContent(),
+									lagcompNode.getTextContent(), websiteNode.getTextContent(), versionNode.getTextContent())));
 				}
 				catch (NullPointerException e)
 				{

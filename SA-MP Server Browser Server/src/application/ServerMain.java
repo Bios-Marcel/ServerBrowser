@@ -31,7 +31,9 @@ import serviceImplementations.DataServiceServerImplementation;
 public class ServerMain
 {
 	private static Registry				registry;
+
 	private static DataServiceInterface	dataService;
+
 	private static DataServiceInterface	stub;
 
 	public static void main(String[] args)
@@ -130,9 +132,9 @@ public class ServerMain
 					ipAndPorts.add(ipAndPort);
 
 					SampServerSerializeable server =
-							new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getString("port"), resultSet.getInt("players"),
-									resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"), resultSet.getString("weburl"),
-									resultSet.getString("version"));
+									new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getString("port"), resultSet.getInt("players"),
+													resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"),
+													resultSet.getString("weburl"), resultSet.getString("version"));
 
 					servers.add(server);
 				}
@@ -150,9 +152,9 @@ public class ServerMain
 					ipAndPorts.add(ipAndPort);
 
 					SampServerSerializeable server =
-							new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getString("port"), resultSet.getInt("players"),
-									resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"), resultSet.getString("weburl"),
-									resultSet.getString("version"));
+									new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getString("port"), resultSet.getInt("players"),
+													resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"),
+													resultSet.getString("weburl"), resultSet.getString("version"));
 
 					servers.add(server);
 				}

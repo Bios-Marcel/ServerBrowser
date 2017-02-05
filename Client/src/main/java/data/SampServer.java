@@ -9,15 +9,25 @@ import javafx.beans.property.StringProperty;
 public class SampServer
 {
 	private StringProperty	hostnameProperty		= new SimpleStringProperty();
+
 	private StringProperty	addressProperty			= new SimpleStringProperty();
+
 	private StringProperty	portProperty			= new SimpleStringProperty();
+
 	private IntegerProperty	playersProperty			= new SimpleIntegerProperty();
+
 	private IntegerProperty	maxPlayersProperty		= new SimpleIntegerProperty();
+
 	private StringProperty	actualPlayersProperty	= new SimpleStringProperty();
+
 	private StringProperty	modeProperty			= new SimpleStringProperty();
+
 	private StringProperty	languageProperty		= new SimpleStringProperty();
+
 	private StringProperty	lagcompProperty			= new SimpleStringProperty();
+
 	private StringProperty	websiteProperty			= new SimpleStringProperty();
+
 	private StringProperty	versionProperty			= new SimpleStringProperty();
 
 	public SampServer(SampServerSerializeable server)
