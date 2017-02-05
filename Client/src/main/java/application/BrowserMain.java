@@ -31,7 +31,7 @@ public class BrowserMain extends Application
 {
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private static final String	VERSION				= "1.0.9";
+	private static final String	VERSION				= "1.0.11";
 
 	@Override
 	public void start(Stage primaryStage)
@@ -145,10 +145,12 @@ public class BrowserMain extends Application
 			File currentJar = f.getAbsoluteFile();
 			/* is it a jar file? */
 			if (!currentJar.getName().endsWith(".jar"))
+			{
 				return;
+			}
 
 			/* Build command: java -jar application.jar */
-			final ArrayList<String> command = new ArrayList<String>();
+			final ArrayList<String> command = new ArrayList<>();
 			command.add(javaBin);
 			command.add("-jar");
 			command.add(currentJar.getPath());
@@ -180,6 +182,7 @@ public class BrowserMain extends Application
 		{
 			RMISocketFactory.setSocketFactory(new RMISocketFactory()
 			{
+				@Override
 				public Socket createSocket(String host, int port) throws IOException
 				{
 					Socket socket = new Socket();
@@ -189,6 +192,7 @@ public class BrowserMain extends Application
 					return socket;
 				}
 
+				@Override
 				public ServerSocket createServerSocket(int port) throws IOException
 				{
 					return new ServerSocket(port);

@@ -3,7 +3,6 @@ package controllers;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,7 +28,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import query.SampQuery;
 import util.GTA;
 
@@ -115,44 +117,53 @@ public abstract class ServerListControllerMain implements ViewController
 
 	protected ObservableList<SampServer>	sortedServers	= FXCollections.observableArrayList();
 
+	@Override
 	public void init()
 	{
 		// TODO(MSC) Improve by including MaxPlayers as Secondary sorting
 		// condition
-		columnPlayers.setComparator(new Comparator<String>()
+		columnPlayers.setComparator((o1, o2) ->
 		{
-			@Override
-			public int compare(String o1, String o2)
-			{
-				int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));
-				int p2 = Integer.parseInt(o2.replaceAll("[/](.*)", ""));
-				return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
-			}
+			int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));
+			int p2 = Integer.parseInt(o2.replaceAll("[/](.*)", ""));
+			return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
 		});
 
 		tableView.setItems(sortedServers);
+	}
 
-		tableView.setOnMouseReleased(clicked ->
+	@FXML
+	protected void onTableViewMouseReleased(MouseEvent clicked)
+	{
+		if (Objects.nonNull(menu))
 		{
-			if (Objects.nonNull(menu))
-			{
-				menu.hide();
-			}
+			menu.hide();
+		}
 
-			SampServer server = tableView.getSelectionModel().getSelectedItem();
+		SampServer server = tableView.getSelectionModel().getSelectedItem();
 
-			if (Objects.nonNull(server))
+		if (Objects.nonNull(server))
+		{
+			if (clicked.getButton().equals(MouseButton.PRIMARY))
 			{
-				if (clicked.getButton().equals(MouseButton.PRIMARY))
-				{
-					updateServerInfo(server);
-				}
-				else if (clicked.getButton().equals(MouseButton.SECONDARY))
-				{
-					displayMenu(server, clicked.getScreenX(), clicked.getScreenY());
-				}
+				updateServerInfo(server);
 			}
-		});
+			else if (clicked.getButton().equals(MouseButton.SECONDARY))
+			{
+				displayMenu(server, clicked.getScreenX(), clicked.getScreenY());
+			}
+		}
+	}
+
+	@FXML
+	protected void onTableViewKeyReleased(KeyEvent released)
+	{
+		SampServer server = tableView.getSelectionModel().getSelectedItem();
+
+		if (released.getCode().equals(KeyCode.DOWN) || released.getCode().equals(KeyCode.KP_DOWN) || released.getCode().equals(KeyCode.KP_UP) || released.getCode().equals(KeyCode.UP))
+		{
+			updateServerInfo(server);
+		}
 	}
 
 	@FXML
@@ -347,7 +358,15 @@ public abstract class ServerListControllerMain implements ViewController
 					}
 				}
 
-				String passworded = serverInfo[0].equals("0") ? "No" : "Yes";
+				final String passworded;
+				if (Objects.nonNull(serverInfo))
+				{
+					passworded = serverInfo[0].equals("0") ? "No" : "Yes";
+				}
+				else
+				{
+					passworded = "";
+				}
 
 				long ping = query.getPing();
 
@@ -411,7 +430,7 @@ public abstract class ServerListControllerMain implements ViewController
 		int playersPlaying = 0;
 		int maxSlots = 0;
 
-		for (SampServer server : tableView.getItems())
+		for (SampServer server : sortedServers)
 		{
 			playersPlaying += server.getPlayers();
 			maxSlots += server.getMaxPlayers();
@@ -419,7 +438,7 @@ public abstract class ServerListControllerMain implements ViewController
 
 		int freeSlots = maxSlots - playersPlaying;
 
-		serverCount.setText(tableView.getItems().size() + "");
+		serverCount.setText(sortedServers.size() + "");
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(freeSlots + "");
 	}

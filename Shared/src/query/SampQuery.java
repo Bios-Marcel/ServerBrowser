@@ -298,6 +298,7 @@ public class SampQuery
 	 */
 	public boolean connect()
 	{
+		// TODO(MSC) Check if server deactivated querying
 		send(assemblePacket("p0101"));
 		String reply = receive();
 		return reply == null ? false : reply.substring(10).trim().equals("p0101");

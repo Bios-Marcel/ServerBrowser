@@ -4,39 +4,44 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import data.SampServer;
 import interfaces.DataServiceInterface;
-import javafx.scene.input.KeyCode;
+import logging.Logging;
 
 public class ServerAllListController extends ServerListControllerMain
 {
+	private static Registry				registry;
+
+	private static DataServiceInterface	remoteDataService;
+
+	static
+	{
+		try
+		{
+			registry = LocateRegistry.getRegistry("ts3.das-chat.xyz");
+			remoteDataService = (DataServiceInterface) registry.lookup("DataServiceInterface");
+		}
+		catch (RemoteException | NotBoundException e)
+		{
+			Logging.logger.log(Level.SEVERE, "Couldn't connect to RMI Server.", e);
+		}
+	}
+
 	@Override
 	public void init()
 	{
 		super.init();
-
-		tableView.setOnKeyReleased(released ->
-		{
-			SampServer server = tableView.getSelectionModel().getSelectedItem();
-
-			if (released.getCode().equals(KeyCode.DOWN) || released.getCode().equals(KeyCode.KP_DOWN) || released.getCode().equals(KeyCode.KP_UP) || released.getCode().equals(KeyCode.UP))
-			{
-				updateServerInfo(server);
-			}
-		});
 
 		int playersPlaying = 0;
 		int maxSlots = 0;
 
 		try
 		{
-			String name = "DataServiceInterface";
-			Registry registry = LocateRegistry.getRegistry("ts3.das-chat.xyz");
-			DataServiceInterface remoteDataService = (DataServiceInterface) registry.lookup(name);
 
 			servers.clear();
 			servers.addAll(remoteDataService.getAllServers().stream().map(server -> new SampServer(server)).collect(Collectors.toSet()));
@@ -53,18 +58,17 @@ public class ServerAllListController extends ServerListControllerMain
 			sortedServers.clear();
 			sortedServers.addAll(filteredServers);
 		}
-		catch (RemoteException | NotBoundException e)
+		catch (RemoteException e)
 		{
 			e.printStackTrace();
 		}
 
-		int freeSlots = maxSlots - playersPlaying;
-
-		serverCount.setText(tableView.getItems().size() + "");
+		serverCount.setText(sortedServers.size() + "");
 		playerCount.setText(playersPlaying + "");
-		slotCount.setText(freeSlots + "");
+		slotCount.setText(maxSlots - playersPlaying + "");
 	}
 
+	@Override
 	protected void displayMenu(SampServer server, double posX, double posY)
 	{
 		super.displayMenu(server, posX, posY);
