@@ -101,6 +101,9 @@ public abstract class ServerListControllerMain implements ViewController
 	private MenuItem						copyIpAddressAndPort;
 
 	@FXML
+	private TextField						nameFilter;
+
+	@FXML
 	private TextField						modeFilter;
 
 	@FXML
@@ -108,6 +111,10 @@ public abstract class ServerListControllerMain implements ViewController
 
 	@FXML
 	private ComboBox<String>				versionFilter;
+
+	protected int							playersPlaying	= 0;
+
+	protected int							maxSlots		= 0;
 
 	// HACK(MSC) This is a little hacky, because it needs 3 lists in order to
 	// keep all data, make sorting possible and make filtering possible.
@@ -171,6 +178,26 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		filteredServers.setPredicate(server ->
 		{
+			String nameFilterSetting = nameFilter.getText();
+
+			if (!StringUtils.isEmpty(nameFilterSetting))
+			{
+				if (nameFilterSetting.charAt(0) == '!')
+				{
+					if (server.getHostname().contains((nameFilterSetting.replace("!", "").toLowerCase())))
+					{
+						return false;
+					}
+				}
+				else
+				{
+					if (!server.getHostname().contains(nameFilterSetting))
+					{
+						return false;
+					}
+				}
+			}
+
 			String modeFilterSetting = modeFilter.getText();
 
 			if (!StringUtils.isEmpty(modeFilterSetting))
@@ -254,20 +281,27 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort()));
 
-				if (query.connect())
+				if (query.isConnected())
 				{
 					String[] serverInfo = query.getBasicServerInfo();
 
-					if (!serverInfo[0].equals("0"))
+					if (Objects.nonNull(serverInfo))
 					{
-						TextInputDialog dialog = new TextInputDialog();
-						dialog.setTitle("Connect to Server");
-						dialog.setHeaderText("Enter the servers password.");
-
-						Optional<String> result = dialog.showAndWait();
-						if (result.isPresent())
+						if (!serverInfo[0].equals("0"))
 						{
-							GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort(), result.get());
+							TextInputDialog dialog = new TextInputDialog();
+							dialog.setTitle("Connect to Server");
+							dialog.setHeaderText("Enter the servers password.");
+
+							Optional<String> result = dialog.showAndWait();
+							if (result.isPresent())
+							{
+								GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort(), result.get());
+							}
+						}
+						else
+						{
+							GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort());
 						}
 					}
 					else
@@ -327,7 +361,7 @@ public abstract class ServerListControllerMain implements ViewController
 		{
 			SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort()));
 
-			if (!query.connect())
+			if (!query.isConnected())
 			{
 				Platform.runLater(() ->
 				{

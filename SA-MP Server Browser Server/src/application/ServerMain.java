@@ -215,12 +215,11 @@ public class ServerMain
 			String inputLine;
 			while ((inputLine = in.readLine()) != null)
 			{
-				System.out.println(inputLine);
 				String[] data = inputLine.split("[:]");
 
 				SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1]));
 
-				if (query.connect())
+				if (query.isConnected())
 				{
 					String[] info = query.getBasicServerInfo();
 

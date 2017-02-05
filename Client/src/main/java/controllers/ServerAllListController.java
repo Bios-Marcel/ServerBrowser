@@ -37,23 +37,19 @@ public class ServerAllListController extends ServerListControllerMain
 	{
 		super.init();
 
-		int playersPlaying = 0;
-		int maxSlots = 0;
-
 		try
 		{
-
 			servers.clear();
-			servers.addAll(remoteDataService.getAllServers().stream().map(server -> new SampServer(server)).collect(Collectors.toSet()));
-
-			for (SampServer server : servers)
+			servers.addAll(remoteDataService.getAllServers().stream().map(server ->
 			{
-				playersPlaying += server.getPlayers();
-				maxSlots += server.getMaxPlayers();
-				server.setHostname(StringEscapeUtils.unescapeHtml4(server.getHostname()));
-				server.setLanguage(StringEscapeUtils.unescapeHtml4(server.getLanguage()));
-				server.setMode(StringEscapeUtils.unescapeHtml4(server.getMode()));
-			}
+				SampServer newServer = new SampServer(server);
+				playersPlaying += newServer.getPlayers();
+				maxSlots += newServer.getMaxPlayers();
+				newServer.setHostname(StringEscapeUtils.unescapeHtml4(newServer.getHostname()));
+				newServer.setLanguage(StringEscapeUtils.unescapeHtml4(newServer.getLanguage()));
+				newServer.setMode(StringEscapeUtils.unescapeHtml4(newServer.getMode()));
+				return newServer;
+			}).collect(Collectors.toSet()));
 
 			sortedServers.clear();
 			sortedServers.addAll(filteredServers);

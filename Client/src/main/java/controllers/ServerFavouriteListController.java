@@ -15,15 +15,12 @@ public class ServerFavouriteListController extends ServerListControllerMain
 	{
 		super.init();
 
-		int playersPlaying = 0;
-		int maxSlots = 0;
-
 		Set<SampServer> favs = Favourites.getFavourites();
 		for (SampServer server : favs)
 		{
 			SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort()));
 
-			if (query.connect())
+			if (query.isConnected())
 			{
 				String[] serverInfo = query.getBasicServerInfo();
 				if (Objects.nonNull(serverInfo))
@@ -36,7 +33,6 @@ public class ServerFavouriteListController extends ServerListControllerMain
 				}
 				query.close();
 			}
-
 		}
 
 		servers.clear();
@@ -48,6 +44,7 @@ public class ServerFavouriteListController extends ServerListControllerMain
 		serverCount.setText(sortedServers.size() + "");
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(maxSlots - playersPlaying + "");
+
 	}
 
 	@Override

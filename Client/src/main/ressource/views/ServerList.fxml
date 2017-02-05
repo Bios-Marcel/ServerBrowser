@@ -93,6 +93,7 @@
 							<RowConstraints vgrow="ALWAYS" /-->
 						</rowConstraints>
 						<children>
+							<TextField fx:id="nameFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
 							<TextField fx:id="modeFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
 							<TextField fx:id="languageFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
 							<ComboBox fx:id="versionFilter" onAction="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
@@ -108,9 +109,10 @@
 							        </FXCollections>
 								</items>
 							</ComboBox>
-							<Label text="Version" GridPane.rowIndex="2" />
-							<Label text="Mode" />
-							<Label text="Language" GridPane.rowIndex="1" />
+							<Label text="Version" GridPane.rowIndex="3" />
+							<Label text="Name" />
+							<Label text="Mode" GridPane.rowIndex="1" />
+							<Label text="Language" GridPane.rowIndex="2" />
 							<!--Label text="Empty Servers" GridPane.rowIndex="3" />
 							<Label text="Full Servers" GridPane.rowIndex="4" />
 							<Label text="Passworded Servers" GridPane.rowIndex="5" />

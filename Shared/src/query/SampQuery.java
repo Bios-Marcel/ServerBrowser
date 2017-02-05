@@ -15,13 +15,23 @@ import java.util.StringTokenizer;
 public class SampQuery
 {
 
-	private DatagramSocket	socket			= null;
+	private static final String	PAKCET_GET_SERVERINFO			= "i";
 
-	private InetAddress		server			= null;
+	private static final String	PACKET_GET_BASIC_PLAYERINFO		= "c";
 
-	private String			serverAddress	= "";
+	private static final String	PACKET_GET_DETAILED_PLAYERINFO	= "d";
 
-	private int				serverPort		= 0;
+	private static final String	PACKET_GET_RULES				= "r";
+
+	private static final String	PACKET_MIRROR_CHARACTERS		= "p0101";
+
+	private DatagramSocket		socket							= null;
+
+	private InetAddress			server							= null;
+
+	private String				serverAddress					= "";
+
+	private int					serverPort						= 0;
 
 	/**
 	 * Configures the socket and the address.
@@ -39,12 +49,12 @@ public class SampQuery
 			this.serverAddress = serverAddress;
 			this.server = InetAddress.getByName(this.serverAddress);
 			socket = new DatagramSocket();
-			socket.setSoTimeout(350);
+			socket.setSoTimeout(250);
 			this.serverPort = serverPort;
 		}
 		catch (UnknownHostException | SocketException e)
 		{
-			System.out.println("Error");
+			e.printStackTrace();
 		}
 	}
 
@@ -61,7 +71,7 @@ public class SampQuery
 	 */
 	public String[] getBasicServerInfo()
 	{
-		DatagramPacket packet = assemblePacket("i");
+		DatagramPacket packet = assemblePacket(PAKCET_GET_SERVERINFO);
 
 		if (Objects.nonNull(packet))
 		{
@@ -69,60 +79,60 @@ public class SampQuery
 			byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buff = ByteBuffer.wrap(reply);
-				buff.order(ByteOrder.LITTLE_ENDIAN);
-				buff.position(11);
+				ByteBuffer buffer = ByteBuffer.wrap(reply);
+				buffer.order(ByteOrder.LITTLE_ENDIAN);
+				buffer.position(11);
 				String[] serverInfo = new String[7];
 
 				// Password Yes / No
-				short password = buff.get();
+				short password = buffer.get();
 				serverInfo[0] = "" + password;
 
 				// Players connected
-				short players = buff.getShort();
+				short players = buffer.getShort();
 				serverInfo[1] = "" + players;
 
 				// Max Players
-				short maxPlayers = buff.getShort();
+				short maxPlayers = buffer.getShort();
 				serverInfo[2] = "" + maxPlayers;
 
 				// Hostname
-				int len = buff.getInt();
+				int len = buffer.getInt();
 				byte[] hostname = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
-					hostname[i] = buff.get();
+					hostname[i] = buffer.get();
 				}
 				serverInfo[3] = new String(hostname);
 
 				// Gamemode
-				len = buff.getInt();
+				len = buffer.getInt();
 				byte[] gamemode = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
-					gamemode[i] = buff.get();
+					gamemode[i] = buffer.get();
 				}
 				serverInfo[4] = new String(gamemode);;
 
 				// Map
-				len = buff.getInt();
+				len = buffer.getInt();
 				byte[] map = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
-					map[i] = buff.get();
+					map[i] = buffer.get();
 				}
 				serverInfo[5] = new String(map);
 
 				// Language
-				len = buff.getInt();
+				len = buffer.getInt();
 				byte[] language = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
-					map[i] = buff.get();
+					map[i] = buffer.get();
 				}
 				serverInfo[6] = new String(language);
 
@@ -142,7 +152,7 @@ public class SampQuery
 	 */
 	public String[][] getBasicPlayerInfo()
 	{
-		DatagramPacket packet = assemblePacket("c");
+		DatagramPacket packet = assemblePacket(PACKET_GET_BASIC_PLAYERINFO);
 
 		if (Objects.nonNull(packet))
 		{
@@ -150,26 +160,26 @@ public class SampQuery
 			byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buff = ByteBuffer.wrap(reply);
-				buff.order(ByteOrder.LITTLE_ENDIAN);
-				buff.position(11);
+				ByteBuffer buffer = ByteBuffer.wrap(reply);
+				buffer.order(ByteOrder.LITTLE_ENDIAN);
+				buffer.position(11);
 
-				String[][] players = new String[buff.getShort()][2];
+				String[][] players = new String[buffer.getShort()][2];
 
 				for (int i = 0; players.length > i; i++)
 				{
 					try
 					{
-						byte len = buff.get();
+						byte len = buffer.get();
 						byte[] playerName = new byte[len];
 
 						for (int j = 0; j < len; j++)
 						{
-							playerName[j] = buff.get();
+							playerName[j] = buffer.get();
 						}
 
 						players[i][0] = new String(playerName);
-						players[i][1] = "" + buff.getInt();
+						players[i][1] = "" + buffer.getInt();
 					}
 					catch (BufferUnderflowException e)
 					{
@@ -195,7 +205,7 @@ public class SampQuery
 	 */
 	public String[][] getDetailedPlayerInfo()
 	{
-		DatagramPacket packet = assemblePacket("d");
+		DatagramPacket packet = assemblePacket(PACKET_GET_DETAILED_PLAYERINFO);
 
 		if (Objects.nonNull(packet))
 		{
@@ -203,25 +213,25 @@ public class SampQuery
 			byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buff = ByteBuffer.wrap(reply);
-				buff.order(ByteOrder.LITTLE_ENDIAN);
-				buff.position(11);
+				ByteBuffer buffer = ByteBuffer.wrap(reply);
+				buffer.order(ByteOrder.LITTLE_ENDIAN);
+				buffer.position(11);
 
-				String[][] players = new String[buff.getShort()][3];
+				String[][] players = new String[buffer.getShort()][3];
 
 				for (int i = 0; i < players.length; i++)
 				{
-					int len = buff.get();
+					int len = buffer.get();
 					byte[] playerName = new byte[len];
 
 					for (int j = 0; j < len; j++)
 					{
-						playerName[j] = buff.get();
+						playerName[j] = buffer.get();
 					}
 
-					players[i][0] = "" + buff.get();
+					players[i][0] = "" + buffer.get();
 					players[i][1] = new String(playerName);
-					players[i][2] = "" + buff.getInt();
+					players[i][2] = "" + buffer.getInt();
 				}
 				return players;
 			}
@@ -236,7 +246,7 @@ public class SampQuery
 	 */
 	public String[][] getServersRules()
 	{
-		DatagramPacket packet = assemblePacket("r");
+		DatagramPacket packet = assemblePacket(PACKET_GET_RULES);
 
 		if (Objects.nonNull(packet))
 		{
@@ -244,35 +254,34 @@ public class SampQuery
 			byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buff = ByteBuffer.wrap(reply);
-				buff.order(ByteOrder.LITTLE_ENDIAN);
-				buff.position(11);
+				ByteBuffer buffer = ByteBuffer.wrap(reply);
+				buffer.order(ByteOrder.LITTLE_ENDIAN);
+				buffer.position(11);
 
-				short ruleCount = buff.getShort();
+				short ruleCount = buffer.getShort();
 				String[][] rules = new String[ruleCount][2];
 
 				for (int i = 0; i < rules.length; i++)
 				{
-					int len = buff.get();
+					int len = buffer.get();
 					byte[] ruleName = new byte[len];
 
 					for (int j = 0; j < len; j++)
 					{
-						ruleName[j] = buff.get();
+						ruleName[j] = buffer.get();
 					}
 
-					len = buff.get();
+					len = buffer.get();
 					byte[] ruleValue = new byte[len];
 
 					for (int j = 0; j < len; j++)
 					{
-						ruleValue[j] = buff.get();
+						ruleValue[j] = buffer.get();
 					}
 
 					rules[i][0] = new String(ruleName);
 					rules[i][1] = new String(ruleValue);
 				}
-				return rules;
 			}
 		}
 		return null;
@@ -281,12 +290,12 @@ public class SampQuery
 	/**
 	 * Returns the server's ping.
 	 * 
-	 * @return integer
+	 * @return ping
 	 */
 	public long getPing()
 	{
 		long beforeSend = System.currentTimeMillis();
-		send(assemblePacket("p0101"));
+		send(assemblePacket(PACKET_MIRROR_CHARACTERS));
 		receiveBytes();
 		return System.currentTimeMillis() - beforeSend;
 	}
@@ -296,12 +305,12 @@ public class SampQuery
 	 * 
 	 * @return boolean
 	 */
-	public boolean connect()
+	public boolean isConnected()
 	{
 		// TODO(MSC) Check if server deactivated querying
-		send(assemblePacket("p0101"));
+		send(assemblePacket(PACKET_MIRROR_CHARACTERS));
 		String reply = receive();
-		return reply == null ? false : reply.substring(10).trim().equals("p0101");
+		return Objects.isNull(reply) ? false : reply.substring(10).trim().equals(PACKET_MIRROR_CHARACTERS);
 	}
 
 	/**

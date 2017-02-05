@@ -84,6 +84,7 @@ public class VersionChangeController implements ViewController
 		}
 	}
 
+	@Override
 	public void init()
 	{
 		String version = GTA.getInstalledVersion();

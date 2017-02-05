@@ -4,11 +4,13 @@ import java.awt.Desktop;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 
 import data.PastUsernames;
 import javafx.beans.property.SimpleStringProperty;
+import logging.Logging;
 import windows.WinRegistry;
 
 public class GTA
@@ -29,8 +31,7 @@ public class GTA
 		}
 		catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e)
 		{
-			e.printStackTrace();
-			System.out.println("Error writing username.");
+			Logging.logger.log(Level.WARNING, "Couldn't set username.", e);
 		}
 	}
 
