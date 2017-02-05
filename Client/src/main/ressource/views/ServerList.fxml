@@ -94,9 +94,9 @@
 						</rowConstraints>
 						<children>
 							<TextField fx:id="nameFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-							<TextField fx:id="modeFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-							<TextField fx:id="languageFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-							<ComboBox fx:id="versionFilter" onAction="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
+							<TextField fx:id="modeFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+							<TextField fx:id="languageFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+							<ComboBox fx:id="versionFilter" onAction="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
 								<items>
 							        <FXCollections fx:factory="observableArrayList">
 							          <String fx:value="0.3.7" />

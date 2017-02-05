@@ -184,14 +184,14 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				if (nameFilterSetting.charAt(0) == '!')
 				{
-					if (server.getHostname().contains((nameFilterSetting.replace("!", "").toLowerCase())))
+					if (server.getHostname().toLowerCase().contains((nameFilterSetting.replace("!", "").toLowerCase())))
 					{
 						return false;
 					}
 				}
 				else
 				{
-					if (!server.getHostname().contains(nameFilterSetting))
+					if (!server.getHostname().toLowerCase().contains(nameFilterSetting.toLowerCase()))
 					{
 						return false;
 					}
@@ -204,14 +204,14 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				if (modeFilterSetting.charAt(0) == '!')
 				{
-					if (server.getMode().contains((modeFilterSetting.replace("!", "").toLowerCase())))
+					if (server.getMode().toLowerCase().contains((modeFilterSetting.replace("!", "").toLowerCase())))
 					{
 						return false;
 					}
 				}
 				else
 				{
-					if (!server.getMode().contains(modeFilterSetting))
+					if (!server.getMode().toLowerCase().contains(modeFilterSetting.toLowerCase()))
 					{
 						return false;
 					}
@@ -224,14 +224,14 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				if (languageFilterSetting.charAt(0) == '!')
 				{
-					if (server.getLanguage().contains(languageFilterSetting.replace("!", "").toLowerCase()))
+					if (server.getLanguage().toLowerCase().contains(languageFilterSetting.replace("!", "").toLowerCase()))
 					{
 						return false;
 					}
 				}
 				else
 				{
-					if (!server.getLanguage().contains(languageFilterSetting))
+					if (!server.getLanguage().toLowerCase().contains(languageFilterSetting.toLowerCase()))
 					{
 						return false;
 					}
@@ -242,7 +242,7 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString();
 
-				if (!server.getVersion().contains(versionFilterSetting.toLowerCase()))
+				if (!server.getVersion().toLowerCase().contains(versionFilterSetting.toLowerCase()))
 				{
 					return false;
 				}
