@@ -10,6 +10,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 public class SampQuery
@@ -71,17 +72,12 @@ public class SampQuery
 	 */
 	public String[] getBasicServerInfo()
 	{
-		DatagramPacket packet = assemblePacket(PAKCET_GET_SERVERINFO);
-
-		if (Objects.nonNull(packet))
+		if (send(PAKCET_GET_SERVERINFO))
 		{
-			send(packet);
 			byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buffer = ByteBuffer.wrap(reply);
-				buffer.order(ByteOrder.LITTLE_ENDIAN);
-				buffer.position(11);
+				ByteBuffer buffer = wrapReply(reply);
 				String[] serverInfo = new String[7];
 
 				// Password Yes / No
@@ -152,17 +148,12 @@ public class SampQuery
 	 */
 	public String[][] getBasicPlayerInfo()
 	{
-		DatagramPacket packet = assemblePacket(PACKET_GET_BASIC_PLAYERINFO);
-
-		if (Objects.nonNull(packet))
+		if (send(PACKET_GET_BASIC_PLAYERINFO))
 		{
-			send(packet);
 			byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buffer = ByteBuffer.wrap(reply);
-				buffer.order(ByteOrder.LITTLE_ENDIAN);
-				buffer.position(11);
+				ByteBuffer buffer = wrapReply(reply);
 
 				String[][] players = new String[buffer.getShort()][2];
 
@@ -205,17 +196,12 @@ public class SampQuery
 	 */
 	public String[][] getDetailedPlayerInfo()
 	{
-		DatagramPacket packet = assemblePacket(PACKET_GET_DETAILED_PLAYERINFO);
-
-		if (Objects.nonNull(packet))
+		if (send(PACKET_GET_DETAILED_PLAYERINFO))
 		{
-			send(packet);
 			byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buffer = ByteBuffer.wrap(reply);
-				buffer.order(ByteOrder.LITTLE_ENDIAN);
-				buffer.position(11);
+				ByteBuffer buffer = wrapReply(reply);
 
 				String[][] players = new String[buffer.getShort()][3];
 
@@ -246,17 +232,12 @@ public class SampQuery
 	 */
 	public String[][] getServersRules()
 	{
-		DatagramPacket packet = assemblePacket(PACKET_GET_RULES);
-
-		if (Objects.nonNull(packet))
+		if (send(PACKET_GET_RULES))
 		{
-			send(packet);
 			byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buffer = ByteBuffer.wrap(reply);
-				buffer.order(ByteOrder.LITTLE_ENDIAN);
-				buffer.position(11);
+				ByteBuffer buffer = wrapReply(reply);
 
 				short ruleCount = buffer.getShort();
 				String[][] rules = new String[ruleCount][2];
@@ -287,6 +268,14 @@ public class SampQuery
 		return null;
 	}
 
+	private ByteBuffer wrapReply(byte[] reply)
+	{
+		ByteBuffer buffer = ByteBuffer.wrap(reply);
+		buffer.order(ByteOrder.LITTLE_ENDIAN);
+		buffer.position(11);
+		return buffer;
+	}
+
 	/**
 	 * Returns the server's ping.
 	 * 
@@ -295,7 +284,7 @@ public class SampQuery
 	public long getPing()
 	{
 		long beforeSend = System.currentTimeMillis();
-		send(assemblePacket(PACKET_MIRROR_CHARACTERS));
+		send(PACKET_MIRROR_CHARACTERS);
 		receiveBytes();
 		return System.currentTimeMillis() - beforeSend;
 	}
@@ -308,7 +297,7 @@ public class SampQuery
 	public boolean isConnected()
 	{
 		// TODO(MSC) Check if server deactivated querying
-		send(assemblePacket(PACKET_MIRROR_CHARACTERS));
+		send(PACKET_MIRROR_CHARACTERS);
 		String reply = receive();
 		return Objects.isNull(reply) ? false : reply.substring(10).trim().equals(PACKET_MIRROR_CHARACTERS);
 	}
@@ -321,7 +310,7 @@ public class SampQuery
 		socket.close();
 	}
 
-	private DatagramPacket assemblePacket(String type)
+	private Optional<DatagramPacket> assemblePacket(String type)
 	{
 		try
 		{
@@ -341,11 +330,11 @@ public class SampQuery
 			byte[] data = packetData.getBytes("US-ASCII");
 
 			DatagramPacket sendPacket = new DatagramPacket(data, data.length, server, serverPort);
-			return sendPacket;
+			return Optional.ofNullable(sendPacket);
 		}
 		catch (Exception e)
 		{
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -355,16 +344,22 @@ public class SampQuery
 	 * @param packet
 	 *            that is supposed to be sent
 	 */
-	private void send(DatagramPacket packet)
+	private boolean send(String packetType)
 	{
-		try
+		Optional<DatagramPacket> packet = assemblePacket(packetType);
+		if (packet.isPresent())
 		{
-			socket.send(packet);
+			try
+			{
+				socket.send(packet.get());
+				return true;
+			}
+			catch (IOException e)
+			{
+				return false;
+			}
 		}
-		catch (IOException e)
-		{
-			// Do nothing
-		}
+		return false;
 	}
 
 	/**
