@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,53 +23,71 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import entities.SampServerSerializeable;
+import logging.Logging;
 
 public class Favourites
 {
 
 	public static void addServerToFavourites(SampServer server)
 	{
-		File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		try
-		{
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Set<SampServer> existantData = getFavourites();
 
-			Document doc;
+		boolean existant = false;
+
+		for (SampServer serverExistant : existantData)
+		{
+			if (server.getHostname().equals(serverExistant.getHostname()) && server.getPort().equals(serverExistant.getPort()))
+			{
+				existant = true;
+				break;
+			}
+		}
+
+		if (!existant)
+		{
+			File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			try
 			{
-				doc = dBuilder.parse(xmlFile);
-				doc.getDocumentElement().normalize();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+				Document doc;
+				try
+				{
+					doc = dBuilder.parse(xmlFile);
+					doc.getDocumentElement().normalize();
+				}
+				catch (Exception e)
+				{
+					doc = dBuilder.newDocument();
+				}
+
+				Element newServer = doc.createElement("server");
+
+				newServer.setAttribute("ip", server.getAddress());
+				newServer.setAttribute("port", server.getPort());
+				newServer.setAttribute("hostname", server.getHostname());
+				newServer.setAttribute("mode", server.getMode());
+				newServer.setAttribute("language", server.getLanguage());
+				newServer.setAttribute("lagcomp", server.getLagcomp());
+				newServer.setAttribute("version", server.getVersion());
+				newServer.setAttribute("maxplayers", server.getMaxPlayers().toString());
+				newServer.setAttribute("players", server.getPlayers().toString());
+				newServer.setAttribute("website", server.getWebsite());
+
+				doc.getElementsByTagName("servers").item(0).appendChild(newServer);
+
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				Transformer transformer = transformerFactory.newTransformer();
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(xmlFile);
+				transformer.transform(source, result);
+
 			}
-			catch (Exception e)
+			catch (ParserConfigurationException | TransformerException e)
 			{
-				doc = dBuilder.newDocument();
+				Logging.logger.log(Level.WARNING, "Couldn't save Server to Favourites (Hostname " + server.getHostname() + " IP: " + server.getAddress() + " Port: " + server.getPort(), e);
 			}
-
-			Element newServer = doc.createElement("server");
-
-			newServer.setAttribute("ip", server.getAddress());
-			newServer.setAttribute("port", server.getPort());
-			newServer.setAttribute("hostname", server.getHostname());
-			newServer.setAttribute("mode", server.getMode());
-			newServer.setAttribute("language", server.getLanguage());
-			newServer.setAttribute("lagcomp", server.getLagcomp());
-			newServer.setAttribute("version", server.getVersion());
-			newServer.setAttribute("maxplayers", server.getMaxPlayers().toString());
-			newServer.setAttribute("players", server.getPlayers().toString());
-			newServer.setAttribute("website", server.getWebsite());
-
-			doc.getElementsByTagName("servers").item(0).appendChild(newServer);
-
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(xmlFile);
-			transformer.transform(source, result);
-		}
-		catch (ParserConfigurationException | TransformerException e)
-		{
-			e.printStackTrace();
 		}
 	}
 

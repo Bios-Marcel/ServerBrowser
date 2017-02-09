@@ -3,6 +3,7 @@ package controllers;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -136,6 +138,8 @@ public abstract class ServerListControllerMain implements ViewController
 			return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
 		});
 
+		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
 		tableView.setItems(sortedServers);
 	}
 
@@ -147,17 +151,21 @@ public abstract class ServerListControllerMain implements ViewController
 			menu.hide();
 		}
 
-		SampServer server = tableView.getSelectionModel().getSelectedItem();
+		List<SampServer> serverList = tableView.getSelectionModel().getSelectedItems();
 
-		if (Objects.nonNull(server))
+		if (Objects.nonNull(serverList))
 		{
 			if (clicked.getButton().equals(MouseButton.PRIMARY))
 			{
-				updateServerInfo(server);
+				SampServer server = serverList.get(0);
+				if (Objects.nonNull(server))
+				{
+					updateServerInfo(server);
+				}
 			}
 			else if (clicked.getButton().equals(MouseButton.SECONDARY))
 			{
-				displayMenu(server, clicked.getScreenX(), clicked.getScreenY());
+				displayMenu(serverList, clicked.getScreenX(), clicked.getScreenY());
 			}
 		}
 	}
@@ -251,12 +259,17 @@ public abstract class ServerListControllerMain implements ViewController
 			return true;
 		});
 
+		updateTable();
+	}
+
+	private void updateTable()
+	{
 		sortedServers.clear();
 		sortedServers.addAll(filteredServers);
 		tableView.sort();
 	}
 
-	protected void displayMenu(SampServer server, double posX, double posY)
+	protected void displayMenu(List<SampServer> serverList, double posX, double posY)
 	{
 		if (Objects.isNull(menu))
 		{
@@ -273,12 +286,26 @@ public abstract class ServerListControllerMain implements ViewController
 			menu.getItems().add(copyIpAddressAndPort);
 		}
 
+		if (serverList.size() == 1)
+		{
+			connectItem.setVisible(true);
+			copyIpAddressAndPort.setVisible(true);
+			menu.getItems().get(1).setVisible(true);
+		}
+		else
+		{
+			connectItem.setVisible(false);
+			copyIpAddressAndPort.setVisible(false);
+			menu.getItems().get(1).setVisible(false);
+		}
+
 		menu.setOnAction(action ->
 		{
 			MenuItem clickedItem = (MenuItem) action.getTarget();
 
 			if (clickedItem == connectItem)
 			{
+				SampServer server = serverList.get(0);
 				SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort()));
 
 				if (query.isConnected())
@@ -322,15 +349,24 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 			else if (clickedItem == addToFavourites)
 			{
-				Favourites.addServerToFavourites(server);
+				for (SampServer serverItem : serverList)
+				{
+					Favourites.addServerToFavourites(serverItem);
+				}
 			}
 			else if (clickedItem == removeFromFavourites)
 			{
-				Favourites.removeServerFromFavourites(server);
-				tableView.getItems().remove(server);
+				for (SampServer serverItem : serverList)
+				{
+					System.out.println("Removing: " + serverItem.getHostname());
+					Favourites.removeServerFromFavourites(serverItem);
+				}
+				servers.removeAll(serverList);
+				updateTable();
 			}
 			else if (clickedItem == copyIpAddressAndPort)
 			{
+				SampServer server = serverList.get(0);
 				StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
 				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, null);

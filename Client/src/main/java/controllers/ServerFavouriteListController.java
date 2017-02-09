@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -48,9 +49,9 @@ public class ServerFavouriteListController extends ServerListControllerMain
 	}
 
 	@Override
-	protected void displayMenu(SampServer server, double posX, double posY)
+	protected void displayMenu(List<SampServer> servers, double posX, double posY)
 	{
-		super.displayMenu(server, posX, posY);
+		super.displayMenu(servers, posX, posY);
 
 		addToFavourites.setVisible(false);
 		removeFromFavourites.setVisible(true);
