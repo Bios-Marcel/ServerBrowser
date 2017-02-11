@@ -101,3 +101,10 @@
 	-fx-border-insets: 10;
 	-fx-border-color: #E2E2E1;
 }
+
+.copyableLabel, .copyableLabel:focused 
+{
+	-fx-padding: 0;
+    -fx-background-color: transparent ;
+    -fx-background-insets: 0px ;
+}

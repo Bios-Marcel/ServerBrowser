@@ -263,8 +263,12 @@ public class ServerMain
 					query.close();
 
 					MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4], info[6], lagcomp, info[5], version, weather, weburl, worldtime);
+					Logging.logger.log(Level.INFO, "Added Server: " + inputLine);
 				}
-
+				else
+				{
+					Logging.logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
+				}
 			}
 			in.close();
 		}

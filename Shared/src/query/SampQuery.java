@@ -9,9 +9,12 @@ import java.net.UnknownHostException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
+
+import util.Encoding;
 
 public class SampQuery
 {
@@ -43,20 +46,34 @@ public class SampQuery
 	 * @param serverPort
 	 *            port
 	 */
-	public SampQuery(String serverAddress, int serverPort)
+	public SampQuery(String serverAddress, int serverPort, int timeout)
 	{
 		try
 		{
 			this.serverAddress = serverAddress;
 			this.server = InetAddress.getByName(this.serverAddress);
 			socket = new DatagramSocket();
-			socket.setSoTimeout(250);
+			socket.setSoTimeout(timeout);
 			this.serverPort = serverPort;
 		}
 		catch (UnknownHostException | SocketException e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Configures the socket and the address.
+	 * 
+	 * @param serverAddress
+	 *            hostname / ip
+	 * 
+	 * @param serverPort
+	 *            port
+	 */
+	public SampQuery(String serverAddress, int serverPort)
+	{
+		this(serverAddress, serverPort, 250);
 	}
 
 	/**
@@ -79,6 +96,7 @@ public class SampQuery
 			{
 				ByteBuffer buffer = wrapReply(reply);
 				String[] serverInfo = new String[7];
+				String encoding = Encoding.getEncoding(reply);
 
 				// Password Yes / No
 				short password = buffer.get();
@@ -100,7 +118,8 @@ public class SampQuery
 				{
 					hostname[i] = buffer.get();
 				}
-				serverInfo[3] = new String(hostname);
+
+				serverInfo[3] = Encoding.encodeUsingCharsetIfPossible(hostname, encoding);
 
 				// Gamemode
 				len = buffer.getInt();
@@ -110,7 +129,7 @@ public class SampQuery
 				{
 					gamemode[i] = buffer.get();
 				}
-				serverInfo[4] = new String(gamemode);;
+				serverInfo[4] = Encoding.encodeUsingCharsetIfPossible(gamemode, encoding);
 
 				// Map
 				len = buffer.getInt();
@@ -120,7 +139,7 @@ public class SampQuery
 				{
 					map[i] = buffer.get();
 				}
-				serverInfo[5] = new String(map);
+				serverInfo[5] = Encoding.encodeUsingCharsetIfPossible(map, encoding);
 
 				// Language
 				len = buffer.getInt();
@@ -130,7 +149,7 @@ public class SampQuery
 				{
 					map[i] = buffer.get();
 				}
-				serverInfo[6] = new String(language);
+				serverInfo[6] = Encoding.encodeUsingCharsetIfPossible(language, encoding);
 
 				return serverInfo;
 			}
@@ -263,6 +282,8 @@ public class SampQuery
 					rules[i][0] = new String(ruleName);
 					rules[i][1] = new String(ruleValue);
 				}
+
+				return rules;
 			}
 		}
 		return null;
@@ -296,10 +317,12 @@ public class SampQuery
 	 */
 	public boolean isConnected()
 	{
-		// TODO(MSC) Check if server deactivated querying
+		// TODO(MSC) Check if server deactivated querying, since this will only tell fi the server is online, but will still work with
+		// deactivated quering
 		send(PACKET_MIRROR_CHARACTERS);
 		String reply = receive();
-		return Objects.isNull(reply) ? false : reply.substring(10).trim().equals(PACKET_MIRROR_CHARACTERS);
+		// Removed the checks if the reply was valid, i think its not even necessary
+		return Objects.isNull(reply) ? false : true;
 	}
 
 	/**
@@ -327,7 +350,7 @@ public class SampQuery
 			packetData += (char) (serverPort >> 8 & 0xFF);
 			packetData += type;
 
-			byte[] data = packetData.getBytes("US-ASCII");
+			byte[] data = packetData.getBytes(StandardCharsets.US_ASCII);
 
 			DatagramPacket sendPacket = new DatagramPacket(data, data.length, server, serverPort);
 			return Optional.ofNullable(sendPacket);
@@ -396,5 +419,4 @@ public class SampQuery
 			return null;
 		}
 	}
-
 }

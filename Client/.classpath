@@ -11,5 +11,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/Libraries/src/commons-lang3-3.5-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/Downloads/juniversalchardet-1.0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

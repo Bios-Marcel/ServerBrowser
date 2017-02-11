@@ -79,7 +79,7 @@ public abstract class ServerListControllerMain implements ViewController
 	protected Label							serverCount;
 
 	@FXML
-	private Label							serverAddress;
+	private TextField						serverAddress;
 
 	@FXML
 	private Label							serverLagcomp;
@@ -358,7 +358,6 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				for (SampServer serverItem : serverList)
 				{
-					System.out.println("Removing: " + serverItem.getHostname());
 					Favourites.removeServerFromFavourites(serverItem);
 				}
 				servers.removeAll(serverList);

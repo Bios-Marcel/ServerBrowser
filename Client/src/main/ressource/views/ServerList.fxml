@@ -145,7 +145,7 @@
                               </GridPane.margin>
                            </Label>
 									<Label text="lagcomp:" GridPane.rowIndex="1" />
-									<Label fx:id="serverAddress" prefHeight="17.0" prefWidth="140.0" text="" GridPane.columnIndex="1" />
+									<TextField fx:id="serverAddress" styleClass="copyableLabel" editable="false" prefHeight="17.0" prefWidth="140.0" text="" GridPane.columnIndex="1" />
 									<Label fx:id="serverLagcomp" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 									<Label text="Ping:" GridPane.rowIndex="2" />
 									<Label fx:id="serverPing" GridPane.columnIndex="1" GridPane.rowIndex="2" />
