@@ -23,15 +23,15 @@ import org.xml.sax.SAXException;
 
 public class PastUsernames
 {
-	public static void addPastUsernames(String username)
+	public static void addPastUsernames(final String username)
 	{
 		if (!getPastUsernames().contains(username))
 		{
-			File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
+			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			try
 			{
-				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
 				Document doc;
 				try
@@ -39,21 +39,21 @@ public class PastUsernames
 					doc = dBuilder.parse(xmlFile);
 					doc.getDocumentElement().normalize();
 				}
-				catch (Exception e)
+				catch (final Exception e)
 				{
 					doc = dBuilder.newDocument();
 				}
 
-				Element newPastUsername = doc.createElement("username");
+				final Element newPastUsername = doc.createElement("username");
 
 				newPastUsername.setAttribute("name", username);
 
 				doc.getElementsByTagName("usernames").item(0).appendChild(newPastUsername);
 
-				TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				Transformer transformer = transformerFactory.newTransformer();
-				DOMSource source = new DOMSource(doc);
-				StreamResult result = new StreamResult(xmlFile);
+				final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				final Transformer transformer = transformerFactory.newTransformer();
+				final DOMSource source = new DOMSource(doc);
+				final StreamResult result = new StreamResult(xmlFile);
 				transformer.transform(source, result);
 			}
 			catch (ParserConfigurationException | TransformerException e)
@@ -63,24 +63,24 @@ public class PastUsernames
 		}
 	}
 
-	public static void removePastUsername(String username)
+	public static void removePastUsername(final String username)
 	{
-		File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
+		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 		try
 		{
 			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlFile);
+			final Document doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 
-			NodeList list = doc.getElementsByTagName("username");
+			final NodeList list = doc.getElementsByTagName("username");
 
 			for (int i = 0; i < list.getLength(); i++)
 			{
-				Node node = list.item(i);
-				NamedNodeMap attr = node.getAttributes();
-				Node nameNode = attr.getNamedItem("name");;
+				final Node node = list.item(i);
+				final NamedNodeMap attr = node.getAttributes();
+				final Node nameNode = attr.getNamedItem("name");;
 
 				if (nameNode.getTextContent().equals(username))
 				{
@@ -88,10 +88,10 @@ public class PastUsernames
 				}
 			}
 
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(xmlFile);
+			final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			final Transformer transformer = transformerFactory.newTransformer();
+			final DOMSource source = new DOMSource(doc);
+			final StreamResult result = new StreamResult(xmlFile);
 			transformer.transform(source, result);
 		}
 		catch (ParserConfigurationException | SAXException | IOException | TransformerException e)
@@ -102,30 +102,30 @@ public class PastUsernames
 
 	public static Set<String> getPastUsernames()
 	{
-		Set<String> usernames = new HashSet<>();
+		final Set<String> usernames = new HashSet<>();
 
-		File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
+		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 
 		try
 		{
 			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlFile);
+			final Document doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 
-			NodeList list = doc.getElementsByTagName("username");
+			final NodeList list = doc.getElementsByTagName("username");
 
 			for (int i = 0; i < list.getLength(); i++)
 			{
 				try
 				{
-					Node node = list.item(i);
-					NamedNodeMap attr = node.getAttributes();
-					Node name = attr.getNamedItem("name");
+					final Node node = list.item(i);
+					final NamedNodeMap attr = node.getAttributes();
+					final Node name = attr.getNamedItem("name");
 					usernames.add(name.getTextContent());
 				}
-				catch (NullPointerException e)
+				catch (final NullPointerException e)
 				{
 					e.printStackTrace();
 				}

@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import data.PastUsernames;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
@@ -31,15 +30,11 @@ public class UsernameController
 
 	public void init()
 	{
-		usernameTextField.focusedProperty().addListener(new ChangeListener<Boolean>()
+		usernameTextField.focusedProperty().addListener((ChangeListener<Boolean>) (arg0, oldPropertyValue, newPropertyValue) ->
 		{
-			@Override
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+			if (!newPropertyValue)
 			{
-				if (!newPropertyValue)
-				{
-					GTA.getUsername().set(usernameTextField.getText());
-				}
+				GTA.getUsername().set(usernameTextField.getText());
 			}
 		});
 
@@ -49,9 +44,9 @@ public class UsernameController
 	}
 
 	@FXML
-	public void onUsernameClicked(MouseEvent e)
+	public void onUsernameClicked(final MouseEvent e)
 	{
-		String username = nameList.getSelectionModel().getSelectedItem();
+		final String username = nameList.getSelectionModel().getSelectedItem();
 
 		if (Objects.isNull(menu))
 		{
@@ -71,7 +66,7 @@ public class UsernameController
 
 				menu.setOnAction(click ->
 				{
-					MenuItem clickedItem = (MenuItem) click.getTarget();
+					final MenuItem clickedItem = (MenuItem) click.getTarget();
 
 					if (clickedItem.equals(setName))
 					{

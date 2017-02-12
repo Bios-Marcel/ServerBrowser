@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -14,11 +15,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-	<TableView fx:id="tableView" onKeyReleased="#onTableViewKeyReleased" onMouseReleased="#onTableViewMouseReleased" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" VBox.vgrow="ALWAYS">
+	<TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onTableViewKeyReleased" onMouseReleased="#onTableViewMouseReleased" prefHeight="100.0" VBox.vgrow="ALWAYS">
 		<columns>
 			<TableColumn fx:id="columnHostname" minWidth="20.0" prefWidth="20.0" text="Hostname">
 				<cellValueFactory>
@@ -45,7 +44,7 @@
 					<PropertyValueFactory property="version" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn minWidth="20.0" prefWidth="200.0" text="Website">
+			<TableColumn fx:id="columnWebsite" minWidth="20.0" prefWidth="200.0" text="Website">
 				<cellValueFactory>
 					<PropertyValueFactory property="website" />
 				</cellValueFactory>
@@ -88,15 +87,16 @@
 							<RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
+                     <RowConstraints vgrow="ALWAYS" />
 							<!--RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" /-->
 						</rowConstraints>
 						<children>
-							<TextField fx:id="nameFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-							<TextField fx:id="modeFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-							<TextField fx:id="languageFilter" onKeyReleased="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-							<ComboBox fx:id="versionFilter" onAction="#onFilterSettingsChange" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
+							<TextField fx:id="nameFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+							<TextField fx:id="modeFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+							<TextField fx:id="languageFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+							<ComboBox fx:id="versionFilter" maxWidth="1.7976931348623157E308" onAction="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
 								<items>
 							        <FXCollections fx:factory="observableArrayList">
 							          <String fx:value="0.3.7" />
@@ -145,7 +145,7 @@
                               </GridPane.margin>
                            </Label>
 									<Label text="lagcomp:" GridPane.rowIndex="1" />
-									<TextField fx:id="serverAddress" styleClass="copyableLabel" editable="false" prefHeight="17.0" prefWidth="140.0" text="" GridPane.columnIndex="1" />
+									<TextField fx:id="serverAddress" editable="false" prefHeight="17.0" prefWidth="140.0" styleClass="copyableLabel" text="" GridPane.columnIndex="1" />
 									<Label fx:id="serverLagcomp" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 									<Label text="Ping:" GridPane.rowIndex="2" />
 									<Label fx:id="serverPing" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -171,9 +171,9 @@
 									<Label text="Free Slots:" GridPane.rowIndex="2" />
 									<Label text="Servers:" />
 									<Label text="Players playing:" GridPane.rowIndex="1" />
-									<Label fx:id="serverCount" text="69" GridPane.columnIndex="1" />
-									<Label fx:id="playerCount" text="420" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-									<Label fx:id="slotCount" text="666" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+									<Label fx:id="serverCount" text="0" GridPane.columnIndex="1" />
+									<Label fx:id="playerCount" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+									<Label fx:id="slotCount" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 								</children>
 							</GridPane>
 						</content>

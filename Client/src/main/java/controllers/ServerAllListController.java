@@ -43,7 +43,7 @@ public class ServerAllListController extends ServerListControllerMain
 			servers.clear();
 			servers.addAll(remoteDataService.getAllServers().stream().map(server ->
 			{
-				SampServer newServer = new SampServer(server);
+				final SampServer newServer = new SampServer(server);
 				playersPlaying += newServer.getPlayers();
 				maxSlots += newServer.getMaxPlayers();
 				newServer.setHostname(StringEscapeUtils.unescapeHtml4(newServer.getHostname()));
@@ -55,7 +55,7 @@ public class ServerAllListController extends ServerListControllerMain
 			sortedServers.clear();
 			sortedServers.addAll(filteredServers);
 		}
-		catch (RemoteException e)
+		catch (final RemoteException e)
 		{
 			e.printStackTrace();
 		}
@@ -66,7 +66,7 @@ public class ServerAllListController extends ServerListControllerMain
 	}
 
 	@Override
-	protected void displayMenu(List<SampServer> servers, double posX, double posY)
+	protected void displayMenu(final List<SampServer> servers, final double posX, final double posY)
 	{
 		super.displayMenu(servers, posX, posY);
 

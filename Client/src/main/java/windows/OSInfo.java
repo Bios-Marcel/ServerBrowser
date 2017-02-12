@@ -2,7 +2,7 @@ package windows;
 
 public class OSInfo
 {
-	private static String OS = System.getProperty("os.name").toLowerCase();
+	private final static String OS = System.getProperty("os.name").toLowerCase();
 
 	public static boolean isWindows()
 	{

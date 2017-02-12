@@ -9,7 +9,7 @@ public class Encoding
 {
 	private static UniversalDetector detector = new UniversalDetector(null);
 
-	public static String encodeUsingCharsetIfPossible(byte[] toEncode, String charset)
+	public static String encodeUsingCharsetIfPossible(final byte[] toEncode, final String charset)
 	{
 		if (Objects.nonNull(charset))
 		{
@@ -17,7 +17,7 @@ public class Encoding
 			{
 				return new String(toEncode, charset);
 			}
-			catch (UnsupportedEncodingException e)
+			catch (final UnsupportedEncodingException e)
 			{
 				// DO NTHN
 			}
@@ -25,12 +25,12 @@ public class Encoding
 		return new String(toEncode);
 	}
 
-	public static String getEncoding(byte[] data)
+	public static String getEncoding(final byte[] data)
 	{
 		detector.handleData(data, 0, data.length - 1);
 		detector.dataEnd();
 
-		String charset = detector.getDetectedCharset();
+		final String charset = detector.getDetectedCharset();
 		detector.reset();
 		if (charset != null)
 		{

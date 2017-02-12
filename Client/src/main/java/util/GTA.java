@@ -22,7 +22,7 @@ public class GTA
 		return username;
 	}
 
-	public static void setUsername(String newName)
+	public static void setUsername(final String newName)
 	{
 		try
 		{
@@ -62,7 +62,7 @@ public class GTA
 
 	public static String getInstalledVersion()
 	{
-		File file = new File(GTA.getGtaPath() + "samp.dll");
+		final File file = new File(GTA.getGtaPath() + "samp.dll");
 
 		switch ((int) file.length())
 		{
@@ -99,32 +99,32 @@ public class GTA
 		return "Unknown Version";
 	}
 
-	private static boolean connectToServer(String ipAndPort)
+	private static boolean connectToServer(final String ipAndPort)
 	{
 		try
 		{
 			setUsername(getUsername().get());
-			Desktop d = Desktop.getDesktop();
+			final Desktop d = Desktop.getDesktop();
 			d.browse(new URI("samp://" + ipAndPort));
 			return true;
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			e.printStackTrace();
 			return false;
 		}
 	}
 
-	public static void connectToServerPerShell(String ipAndPort, String password)
+	public static void connectToServerPerShell(final String ipAndPort, final String password)
 	{
 		PastUsernames.addPastUsernames(GTA.getUsername().get());
 		try
 		{
-			ProcessBuilder builder = new ProcessBuilder(getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);
+			final ProcessBuilder builder = new ProcessBuilder(getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);
 			builder.directory(new File(getGtaPath()));
 			builder.start();
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			if (StringUtils.isEmpty(password))
 			{
@@ -137,7 +137,7 @@ public class GTA
 		}
 	}
 
-	public static void connectToServerPerShell(String ipAndPort)
+	public static void connectToServerPerShell(final String ipAndPort)
 	{
 		connectToServerPerShell(ipAndPort, "");
 	}

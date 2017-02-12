@@ -12,7 +12,7 @@ public class MySQLConnection
 {
 	public static Connection connect = null;
 
-	public static void init(String username, String password)
+	public static void init(final String username, final String password)
 	{
 		try
 		{
@@ -22,12 +22,12 @@ public class MySQLConnection
 			Logging.logger.log(Level.INFO, "Databank connection has been established.");
 
 		}
-		catch (ClassNotFoundException e)
+		catch (final ClassNotFoundException e)
 		{
 			Logging.logger.log(Level.SEVERE, "Couldn't load MySQL Driver.", e);
 			System.exit(0);
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			Logging.logger.log(Level.SEVERE, "Couldn't connect to Database.", e);
 			System.exit(0);
@@ -42,20 +42,20 @@ public class MySQLConnection
 			Logging.logger.log(Level.INFO, "Table has been successfully truncated.");
 			return true;
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			Logging.logger.log(Level.SEVERE, "Couldn't truncate table.", e);
 			return false;
 		}
 	}
 
-	public static void addServer(String ip, String port, String hostname, int players, int max_players, String mode, String language, String lagcomp, String mapname, String version, int weather,
-					String weburl, String worldtime)
+	public static void addServer(final String ip, final String port, final String hostname, final int players, final int max_players, final String mode, final String language, final String lagcomp,
+					final String mapname, final String version, final int weather, final String weburl, final String worldtime)
 	{
 		try
 		{
 			// TODO(MSC) Fix Encoding problems and escaping
-			Statement statement = connect.createStatement();
+			final Statement statement = connect.createStatement();
 			statement.setEscapeProcessing(true);
 			statement.executeUpdate("INSERT INTO internet_offline (ip_address, port, hostname, players, max_players, mode, language, lagcomp, mapname, version, weather, weburl, worldtime) VALUES("
 							+ "'"
@@ -86,7 +86,7 @@ public class MySQLConnection
 							+ worldtime
 							+ "');");
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			e.printStackTrace();
 		}

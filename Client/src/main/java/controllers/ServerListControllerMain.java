@@ -43,31 +43,10 @@ public abstract class ServerListControllerMain implements ViewController
 	protected TableView<SampServer>			tableView;
 
 	@FXML
-	private TableColumn<SampServer, String>	columnPassword;
-
-	@FXML
-	private TableColumn<SampServer, String>	columnHostname;
-
-	@FXML
 	private TableColumn<SampServer, String>	columnPlayers;
 
 	@FXML
-	private TableColumn<SampServer, String>	columnPing;
-
-	@FXML
-	private TableColumn<SampServer, String>	columnMode;
-
-	@FXML
-	private TableColumn<SampServer, String>	columnLanguage;
-
-	@FXML
 	private TableView<Player>				playerTable;
-
-	@FXML
-	private TableColumn<Player, String>		playerName;
-
-	@FXML
-	private TableColumn<Player, String>		playerScore;
 
 	@FXML
 	protected Label							playerCount;
@@ -92,6 +71,9 @@ public abstract class ServerListControllerMain implements ViewController
 
 	private static Thread					threadGetPlayers;
 
+	/**
+	 * The menu that will be dsiplayed, when a user selects 1 .. n servers and right clicks the table
+	 */
 	protected ContextMenu					menu;
 
 	protected MenuItem						addToFavourites;
@@ -133,8 +115,8 @@ public abstract class ServerListControllerMain implements ViewController
 		// condition
 		columnPlayers.setComparator((o1, o2) ->
 		{
-			int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));
-			int p2 = Integer.parseInt(o2.replaceAll("[/](.*)", ""));
+			final int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));
+			final int p2 = Integer.parseInt(o2.replaceAll("[/](.*)", ""));
 			return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
 		});
 
@@ -144,20 +126,20 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	@FXML
-	protected void onTableViewMouseReleased(MouseEvent clicked)
+	protected void onTableViewMouseReleased(final MouseEvent clicked)
 	{
 		if (Objects.nonNull(menu))
 		{
 			menu.hide();
 		}
 
-		List<SampServer> serverList = tableView.getSelectionModel().getSelectedItems();
+		final List<SampServer> serverList = tableView.getSelectionModel().getSelectedItems();
 
 		if (Objects.nonNull(serverList))
 		{
 			if (clicked.getButton().equals(MouseButton.PRIMARY))
 			{
-				SampServer server = serverList.get(0);
+				final SampServer server = serverList.get(0);
 				if (Objects.nonNull(server))
 				{
 					updateServerInfo(server);
@@ -171,9 +153,9 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	@FXML
-	protected void onTableViewKeyReleased(KeyEvent released)
+	protected void onTableViewKeyReleased(final KeyEvent released)
 	{
-		SampServer server = tableView.getSelectionModel().getSelectedItem();
+		final SampServer server = tableView.getSelectionModel().getSelectedItem();
 
 		if (released.getCode().equals(KeyCode.DOWN) || released.getCode().equals(KeyCode.KP_DOWN) || released.getCode().equals(KeyCode.KP_UP) || released.getCode().equals(KeyCode.UP))
 		{
@@ -186,7 +168,7 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		filteredServers.setPredicate(server ->
 		{
-			String nameFilterSetting = nameFilter.getText();
+			final String nameFilterSetting = nameFilter.getText();
 
 			if (!StringUtils.isEmpty(nameFilterSetting))
 			{
@@ -206,7 +188,7 @@ public abstract class ServerListControllerMain implements ViewController
 				}
 			}
 
-			String modeFilterSetting = modeFilter.getText();
+			final String modeFilterSetting = modeFilter.getText();
 
 			if (!StringUtils.isEmpty(modeFilterSetting))
 			{
@@ -226,7 +208,7 @@ public abstract class ServerListControllerMain implements ViewController
 				}
 			}
 
-			String languageFilterSetting = languageFilter.getText();
+			final String languageFilterSetting = languageFilter.getText();
 
 			if (!StringUtils.isEmpty(languageFilterSetting))
 			{
@@ -248,7 +230,7 @@ public abstract class ServerListControllerMain implements ViewController
 
 			if (!versionFilter.getSelectionModel().isEmpty())
 			{
-				String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString();
+				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString();
 
 				if (!server.getVersion().toLowerCase().contains(versionFilterSetting.toLowerCase()))
 				{
@@ -269,7 +251,7 @@ public abstract class ServerListControllerMain implements ViewController
 		tableView.sort();
 	}
 
-	protected void displayMenu(List<SampServer> serverList, double posX, double posY)
+	protected void displayMenu(final List<SampServer> serverList, final double posX, final double posY)
 	{
 		if (Objects.isNull(menu))
 		{
@@ -301,26 +283,25 @@ public abstract class ServerListControllerMain implements ViewController
 
 		menu.setOnAction(action ->
 		{
-			MenuItem clickedItem = (MenuItem) action.getTarget();
+			final MenuItem clickedItem = (MenuItem) action.getTarget();
 
 			if (clickedItem == connectItem)
 			{
-				SampServer server = serverList.get(0);
-				SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort()));
-
-				if (query.isConnected())
+				final SampServer server = serverList.get(0);
+				try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
 				{
-					String[] serverInfo = query.getBasicServerInfo();
+
+					final String[] serverInfo = query.getBasicServerInfo();
 
 					if (Objects.nonNull(serverInfo))
 					{
 						if (!serverInfo[0].equals("0"))
 						{
-							TextInputDialog dialog = new TextInputDialog();
+							final TextInputDialog dialog = new TextInputDialog();
 							dialog.setTitle("Connect to Server");
 							dialog.setHeaderText("Enter the servers password.");
 
-							Optional<String> result = dialog.showAndWait();
+							final Optional<String> result = dialog.showAndWait();
 							if (result.isPresent())
 							{
 								GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort(), result.get());
@@ -335,11 +316,10 @@ public abstract class ServerListControllerMain implements ViewController
 					{
 						GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort());
 					}
-					query.close();
 				}
-				else
+				catch (final Exception e)
 				{
-					Alert alert = new Alert(AlertType.ERROR);
+					final Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("Connect to Server");
 					alert.setHeaderText("Can't connect to Server");
 					alert.setContentText("Server seems to be offline, try again.");
@@ -349,14 +329,14 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 			else if (clickedItem == addToFavourites)
 			{
-				for (SampServer serverItem : serverList)
+				for (final SampServer serverItem : serverList)
 				{
 					Favourites.addServerToFavourites(serverItem);
 				}
 			}
 			else if (clickedItem == removeFromFavourites)
 			{
-				for (SampServer serverItem : serverList)
+				for (final SampServer serverItem : serverList)
 				{
 					Favourites.removeServerFromFavourites(serverItem);
 				}
@@ -365,9 +345,9 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 			else if (clickedItem == copyIpAddressAndPort)
 			{
-				SampServer server = serverList.get(0);
-				StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
-				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				final SampServer server = serverList.get(0);
+				final StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
+				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, null);
 			}
 		});
@@ -375,7 +355,7 @@ public abstract class ServerListControllerMain implements ViewController
 		menu.show(tableView, posX, posY);
 	}
 
-	protected void updateServerInfo(SampServer server)
+	protected void updateServerInfo(final SampServer server)
 	{
 		playerTable.getItems().clear();
 
@@ -394,20 +374,10 @@ public abstract class ServerListControllerMain implements ViewController
 
 		threadGetPlayers = new Thread(() ->
 		{
-			SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort()));
+			try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
 
-			if (!query.isConnected())
 			{
-				Platform.runLater(() ->
-				{
-					serverPing.setText("Server Offline");
-					serverPassword.setText("");
-					playerTable.setPlaceholder(new Label("Couldn't retrieve players, server is offline."));
-				});
-			}
-			else
-			{
-				String[] serverInfo = query.getBasicServerInfo();
+				final String[] serverInfo = query.getBasicServerInfo();
 
 				if (Objects.nonNull(serverInfo))
 				{
@@ -415,9 +385,9 @@ public abstract class ServerListControllerMain implements ViewController
 					server.setMaxPlayers(Integer.parseInt(serverInfo[2]));
 				}
 
-				ObservableList<Player> players = FXCollections.observableArrayList();
+				final ObservableList<Player> players = FXCollections.observableArrayList();
 
-				String[][] basicPlayers = query.getBasicPlayerInfo();
+				final String[][] basicPlayers = query.getBasicPlayerInfo();
 
 				if (Objects.nonNull(basicPlayers))
 				{
@@ -437,7 +407,7 @@ public abstract class ServerListControllerMain implements ViewController
 					passworded = "";
 				}
 
-				long ping = query.getPing();
+				final long ping = query.getPing();
 
 				Platform.runLater(() ->
 				{
@@ -455,14 +425,14 @@ public abstract class ServerListControllerMain implements ViewController
 
 					if (playerTable.getItems().isEmpty() && server.getPlayers() >= 100)
 					{
-						Label label = new Label("Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
+						final Label label = new Label("Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
 						label.setWrapText(true);
 						label.setAlignment(Pos.CENTER);
 						playerTable.setPlaceholder(label);
 					}
 				});
 
-				String[][] rules = query.getServersRules();
+				final String[][] rules = query.getServersRules();
 
 				if (Objects.nonNull(rules))
 				{
@@ -470,7 +440,7 @@ public abstract class ServerListControllerMain implements ViewController
 					{
 						if (rules[i][0].equals("lagcomp"))
 						{
-							String temp = rules[i][1];
+							final String temp = rules[i][1];
 							if (Objects.nonNull(temp) && !temp.isEmpty())
 							{
 								Platform.runLater(() ->
@@ -482,11 +452,19 @@ public abstract class ServerListControllerMain implements ViewController
 						}
 					}
 				}
-				query.close();
 
 				Platform.runLater(() ->
 				{
 					updateGlobalInfo();
+				});
+			}
+			catch (final Exception e)
+			{
+				Platform.runLater(() ->
+				{
+					serverPing.setText("Server Offline");
+					serverPassword.setText("");
+					playerTable.setPlaceholder(new Label("Couldn't retrieve players, server is offline."));
 				});
 			}
 		});
@@ -499,13 +477,13 @@ public abstract class ServerListControllerMain implements ViewController
 		int playersPlaying = 0;
 		int maxSlots = 0;
 
-		for (SampServer server : sortedServers)
+		for (final SampServer server : sortedServers)
 		{
 			playersPlaying += server.getPlayers();
 			maxSlots += server.getMaxPlayers();
 		}
 
-		int freeSlots = maxSlots - playersPlaying;
+		final int freeSlots = maxSlots - playersPlaying;
 
 		serverCount.setText(sortedServers.size() + "");
 		playerCount.setText(playersPlaying + "");

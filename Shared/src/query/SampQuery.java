@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -16,7 +14,7 @@ import java.util.StringTokenizer;
 
 import util.Encoding;
 
-public class SampQuery
+public class SampQuery implements AutoCloseable
 {
 
 	private static final String	PAKCET_GET_SERVERINFO			= "i";
@@ -45,21 +43,18 @@ public class SampQuery
 	 * 
 	 * @param serverPort
 	 *            port
+	 * 
+	 * @throws Exception
+	 *             Thrown if the connection is closed unexpectedly / has never beenopened properly
 	 */
-	public SampQuery(String serverAddress, int serverPort, int timeout)
+	public SampQuery(final String serverAddress, final int serverPort, final int timeout) throws Exception
 	{
-		try
-		{
-			this.serverAddress = serverAddress;
-			this.server = InetAddress.getByName(this.serverAddress);
-			socket = new DatagramSocket();
-			socket.setSoTimeout(timeout);
-			this.serverPort = serverPort;
-		}
-		catch (UnknownHostException | SocketException e)
-		{
-			e.printStackTrace();
-		}
+		this.serverAddress = serverAddress;
+		this.server = InetAddress.getByName(this.serverAddress);
+		socket = new DatagramSocket();
+		socket.setSoTimeout(timeout);
+		this.serverPort = serverPort;
+		checkConnection();
 	}
 
 	/**
@@ -70,10 +65,35 @@ public class SampQuery
 	 * 
 	 * @param serverPort
 	 *            port
+	 * @throws Exception
 	 */
-	public SampQuery(String serverAddress, int serverPort)
+	public SampQuery(final String serverAddress, final int serverPort) throws Exception
 	{
 		this(serverAddress, serverPort, 250);
+	}
+
+	/**
+	 * Returns whether a successful connection was made.
+	 * 
+	 * @return boolean
+	 */
+	private void checkConnection() throws Exception
+	{
+		// TODO(MSC) Check if server deactivated querying, since this will only tell fi the server is online, but will still work with
+		// deactivated quering
+		send(PACKET_MIRROR_CHARACTERS);
+		final String reply = receive();
+		// Removed the checks if the reply was valid, i think its not even necessary
+		if (Objects.isNull(reply))
+		{
+			throw new Exception("Couldn't connect to Server");
+		}
+	}
+
+	@Override
+	public void close() throws Exception
+	{
+		socket.close();
 	}
 
 	/**
@@ -91,28 +111,28 @@ public class SampQuery
 	{
 		if (send(PAKCET_GET_SERVERINFO))
 		{
-			byte[] reply = receiveBytes();
+			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buffer = wrapReply(reply);
-				String[] serverInfo = new String[7];
-				String encoding = Encoding.getEncoding(reply);
+				final ByteBuffer buffer = wrapReply(reply);
+				final String[] serverInfo = new String[7];
+				final String encoding = Encoding.getEncoding(reply);
 
 				// Password Yes / No
-				short password = buffer.get();
+				final short password = buffer.get();
 				serverInfo[0] = "" + password;
 
 				// Players connected
-				short players = buffer.getShort();
+				final short players = buffer.getShort();
 				serverInfo[1] = "" + players;
 
 				// Max Players
-				short maxPlayers = buffer.getShort();
+				final short maxPlayers = buffer.getShort();
 				serverInfo[2] = "" + maxPlayers;
 
 				// Hostname
 				int len = buffer.getInt();
-				byte[] hostname = new byte[len];
+				final byte[] hostname = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
@@ -123,7 +143,7 @@ public class SampQuery
 
 				// Gamemode
 				len = buffer.getInt();
-				byte[] gamemode = new byte[len];
+				final byte[] gamemode = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
@@ -133,7 +153,7 @@ public class SampQuery
 
 				// Map
 				len = buffer.getInt();
-				byte[] map = new byte[len];
+				final byte[] map = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
@@ -143,7 +163,7 @@ public class SampQuery
 
 				// Language
 				len = buffer.getInt();
-				byte[] language = new byte[len];
+				final byte[] language = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
@@ -169,19 +189,19 @@ public class SampQuery
 	{
 		if (send(PACKET_GET_BASIC_PLAYERINFO))
 		{
-			byte[] reply = receiveBytes();
+			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buffer = wrapReply(reply);
+				final ByteBuffer buffer = wrapReply(reply);
 
-				String[][] players = new String[buffer.getShort()][2];
+				final String[][] players = new String[buffer.getShort()][2];
 
 				for (int i = 0; players.length > i; i++)
 				{
 					try
 					{
-						byte len = buffer.get();
-						byte[] playerName = new byte[len];
+						final byte len = buffer.get();
+						final byte[] playerName = new byte[len];
 
 						for (int j = 0; j < len; j++)
 						{
@@ -191,7 +211,7 @@ public class SampQuery
 						players[i][0] = new String(playerName);
 						players[i][1] = "" + buffer.getInt();
 					}
-					catch (BufferUnderflowException e)
+					catch (final BufferUnderflowException e)
 					{
 						// TODO(MSC) Fix ...
 					}
@@ -217,17 +237,17 @@ public class SampQuery
 	{
 		if (send(PACKET_GET_DETAILED_PLAYERINFO))
 		{
-			byte[] reply = receiveBytes();
+			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buffer = wrapReply(reply);
+				final ByteBuffer buffer = wrapReply(reply);
 
-				String[][] players = new String[buffer.getShort()][3];
+				final String[][] players = new String[buffer.getShort()][3];
 
 				for (int i = 0; i < players.length; i++)
 				{
-					int len = buffer.get();
-					byte[] playerName = new byte[len];
+					final int len = buffer.get();
+					final byte[] playerName = new byte[len];
 
 					for (int j = 0; j < len; j++)
 					{
@@ -253,18 +273,18 @@ public class SampQuery
 	{
 		if (send(PACKET_GET_RULES))
 		{
-			byte[] reply = receiveBytes();
+			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
 			{
-				ByteBuffer buffer = wrapReply(reply);
+				final ByteBuffer buffer = wrapReply(reply);
 
-				short ruleCount = buffer.getShort();
-				String[][] rules = new String[ruleCount][2];
+				final short ruleCount = buffer.getShort();
+				final String[][] rules = new String[ruleCount][2];
 
 				for (int i = 0; i < rules.length; i++)
 				{
 					int len = buffer.get();
-					byte[] ruleName = new byte[len];
+					final byte[] ruleName = new byte[len];
 
 					for (int j = 0; j < len; j++)
 					{
@@ -272,7 +292,7 @@ public class SampQuery
 					}
 
 					len = buffer.get();
-					byte[] ruleValue = new byte[len];
+					final byte[] ruleValue = new byte[len];
 
 					for (int j = 0; j < len; j++)
 					{
@@ -289,11 +309,11 @@ public class SampQuery
 		return null;
 	}
 
-	private ByteBuffer wrapReply(byte[] reply)
+	private ByteBuffer wrapReply(final byte[] reply)
 	{
-		ByteBuffer buffer = ByteBuffer.wrap(reply);
+		final ByteBuffer buffer = ByteBuffer.wrap(reply);
 		buffer.order(ByteOrder.LITTLE_ENDIAN);
-		buffer.position(11);
+		buffer.position(11); // Ignoring trash
 		return buffer;
 	}
 
@@ -304,40 +324,17 @@ public class SampQuery
 	 */
 	public long getPing()
 	{
-		long beforeSend = System.currentTimeMillis();
+		final long beforeSend = System.currentTimeMillis();
 		send(PACKET_MIRROR_CHARACTERS);
 		receiveBytes();
 		return System.currentTimeMillis() - beforeSend;
 	}
 
-	/**
-	 * Returns whether a successful connection was made.
-	 * 
-	 * @return boolean
-	 */
-	public boolean isConnected()
-	{
-		// TODO(MSC) Check if server deactivated querying, since this will only tell fi the server is online, but will still work with
-		// deactivated quering
-		send(PACKET_MIRROR_CHARACTERS);
-		String reply = receive();
-		// Removed the checks if the reply was valid, i think its not even necessary
-		return Objects.isNull(reply) ? false : true;
-	}
-
-	/**
-	 * Closes the connection.
-	 */
-	public void close()
-	{
-		socket.close();
-	}
-
-	private Optional<DatagramPacket> assemblePacket(String type)
+	private Optional<DatagramPacket> assemblePacket(final String type)
 	{
 		try
 		{
-			StringTokenizer tok = new StringTokenizer(serverAddress, ".");
+			final StringTokenizer tok = new StringTokenizer(serverAddress, ".");
 
 			String packetData = "SAMP";
 
@@ -350,12 +347,12 @@ public class SampQuery
 			packetData += (char) (serverPort >> 8 & 0xFF);
 			packetData += type;
 
-			byte[] data = packetData.getBytes(StandardCharsets.US_ASCII);
+			final byte[] data = packetData.getBytes(StandardCharsets.US_ASCII);
 
-			DatagramPacket sendPacket = new DatagramPacket(data, data.length, server, serverPort);
+			final DatagramPacket sendPacket = new DatagramPacket(data, data.length, server, serverPort);
 			return Optional.ofNullable(sendPacket);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			return Optional.empty();
 		}
@@ -367,9 +364,9 @@ public class SampQuery
 	 * @param packet
 	 *            that is supposed to be sent
 	 */
-	private boolean send(String packetType)
+	private boolean send(final String packetType)
 	{
-		Optional<DatagramPacket> packet = assemblePacket(packetType);
+		final Optional<DatagramPacket> packet = assemblePacket(packetType);
 		if (packet.isPresent())
 		{
 			try
@@ -377,7 +374,7 @@ public class SampQuery
 				socket.send(packet.get());
 				return true;
 			}
-			catch (IOException e)
+			catch (final IOException e)
 			{
 				return false;
 			}
@@ -392,7 +389,7 @@ public class SampQuery
 	 */
 	private String receive()
 	{
-		byte[] bytes = receiveBytes();
+		final byte[] bytes = receiveBytes();
 		if (Objects.nonNull(bytes))
 		{
 			return new String(bytes);
@@ -409,12 +406,12 @@ public class SampQuery
 	{
 		try
 		{
-			byte[] receivedData = new byte[3072];
-			DatagramPacket receivedPacket = new DatagramPacket(receivedData, receivedData.length);
+			final byte[] receivedData = new byte[3072];
+			final DatagramPacket receivedPacket = new DatagramPacket(receivedData, receivedData.length);
 			socket.receive(receivedPacket);
 			return receivedPacket.getData();
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			return null;
 		}

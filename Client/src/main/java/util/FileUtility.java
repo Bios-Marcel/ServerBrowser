@@ -12,11 +12,11 @@ import net.lingala.zip4j.exception.ZipException;
 
 public class FileUtility
 {
-	public static void downloadUsingNIO(String urlStr, String outputPath) throws IOException
+	public static void downloadUsingNIO(final String urlStr, final String outputPath) throws IOException
 	{
-		URL url = new URL(urlStr);
-		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-		FileOutputStream fos = new FileOutputStream(outputPath);
+		final URL url = new URL(urlStr);
+		final ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+		final FileOutputStream fos = new FileOutputStream(outputPath);
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		fos.close();
 		rbc.close();
@@ -30,14 +30,14 @@ public class FileUtility
 	 * @param output
 	 *            zip file output folder
 	 */
-	public static void unZipIt(File file, String outputLocation)
+	public static void unZipIt(final File file, final String outputLocation)
 	{
 		try
 		{
-			ZipFile zipFile = new ZipFile(file.toString());
+			final ZipFile zipFile = new ZipFile(file.toString());
 			zipFile.extractAll(outputLocation);
 		}
-		catch (ZipException e)
+		catch (final ZipException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();

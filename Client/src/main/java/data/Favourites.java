@@ -28,13 +28,13 @@ import logging.Logging;
 public class Favourites
 {
 
-	public static void addServerToFavourites(SampServer server)
+	public static void addServerToFavourites(final SampServer server)
 	{
-		Set<SampServer> existantData = getFavourites();
+		final Set<SampServer> existantData = getFavourites();
 
 		boolean existant = false;
 
-		for (SampServer serverExistant : existantData)
+		for (final SampServer serverExistant : existantData)
 		{
 			if (server.getHostname().equals(serverExistant.getHostname()) && server.getPort().equals(serverExistant.getPort()))
 			{
@@ -42,14 +42,13 @@ public class Favourites
 				break;
 			}
 		}
-
 		if (!existant)
 		{
-			File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
+			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			try
 			{
-				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
 				Document doc;
 				try
@@ -57,12 +56,12 @@ public class Favourites
 					doc = dBuilder.parse(xmlFile);
 					doc.getDocumentElement().normalize();
 				}
-				catch (Exception e)
+				catch (final Exception e)
 				{
 					doc = dBuilder.newDocument();
 				}
 
-				Element newServer = doc.createElement("server");
+				final Element newServer = doc.createElement("server");
 
 				newServer.setAttribute("ip", server.getAddress());
 				newServer.setAttribute("port", server.getPort());
@@ -77,10 +76,10 @@ public class Favourites
 
 				doc.getElementsByTagName("servers").item(0).appendChild(newServer);
 
-				TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				Transformer transformer = transformerFactory.newTransformer();
-				DOMSource source = new DOMSource(doc);
-				StreamResult result = new StreamResult(xmlFile);
+				final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+				final Transformer transformer = transformerFactory.newTransformer();
+				final DOMSource source = new DOMSource(doc);
+				final StreamResult result = new StreamResult(xmlFile);
 				transformer.transform(source, result);
 
 			}
@@ -91,27 +90,27 @@ public class Favourites
 		}
 	}
 
-	public static void removeServerFromFavourites(SampServer server)
+	public static void removeServerFromFavourites(final SampServer server)
 	{
-		File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
+		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 		try
 		{
 			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlFile);
+			final Document doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 
 			// <server ip='" + ip + "' port='" + port + "'/>
-			NodeList list = doc.getElementsByTagName("server");
+			final NodeList list = doc.getElementsByTagName("server");
 
 			for (int i = 0; i < list.getLength(); i++)
 			{
 
-				Node node = list.item(i);
-				NamedNodeMap attr = node.getAttributes();
-				Node ipNode = attr.getNamedItem("ip");;
-				Node portNode = attr.getNamedItem("port");
+				final Node node = list.item(i);
+				final NamedNodeMap attr = node.getAttributes();
+				final Node ipNode = attr.getNamedItem("ip");;
+				final Node portNode = attr.getNamedItem("port");
 
 				if (portNode.getTextContent().equals(server.getPort()) && ipNode.getTextContent().equals(server.getAddress()))
 				{
@@ -119,10 +118,10 @@ public class Favourites
 				}
 			}
 
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(xmlFile);
+			final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			final Transformer transformer = transformerFactory.newTransformer();
+			final DOMSource source = new DOMSource(doc);
+			final StreamResult result = new StreamResult(xmlFile);
 			transformer.transform(source, result);
 		}
 		catch (ParserConfigurationException | SAXException | IOException | TransformerException e)
@@ -133,42 +132,42 @@ public class Favourites
 
 	public static Set<SampServer> getFavourites()
 	{
-		Set<SampServer> servers = new HashSet<>();
+		final Set<SampServer> servers = new HashSet<>();
 
-		File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
+		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
 
 		try
 		{
 			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(xmlFile);
+			final Document doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 
-			NodeList list = doc.getElementsByTagName("server");
+			final NodeList list = doc.getElementsByTagName("server");
 
 			for (int i = 0; i < list.getLength(); i++)
 			{
 				try
 				{
-					Node node = list.item(i);
-					NamedNodeMap attr = node.getAttributes();
-					Node ipNode = attr.getNamedItem("ip");
-					Node hostnameNode = attr.getNamedItem("hostname");
-					Node modeNode = attr.getNamedItem("mode");
-					Node languageNode = attr.getNamedItem("language");
-					Node portNode = attr.getNamedItem("port");
-					Node versionNode = attr.getNamedItem("version");
-					Node lagcompNode = attr.getNamedItem("lagcomp");
-					Node websiteNode = attr.getNamedItem("website");
-					Node playersNode = attr.getNamedItem("players");
-					Node maxplayersNode = attr.getNamedItem("maxplayers");
+					final Node node = list.item(i);
+					final NamedNodeMap attr = node.getAttributes();
+					final Node ipNode = attr.getNamedItem("ip");
+					final Node hostnameNode = attr.getNamedItem("hostname");
+					final Node modeNode = attr.getNamedItem("mode");
+					final Node languageNode = attr.getNamedItem("language");
+					final Node portNode = attr.getNamedItem("port");
+					final Node versionNode = attr.getNamedItem("version");
+					final Node lagcompNode = attr.getNamedItem("lagcomp");
+					final Node websiteNode = attr.getNamedItem("website");
+					final Node playersNode = attr.getNamedItem("players");
+					final Node maxplayersNode = attr.getNamedItem("maxplayers");
 
 					servers.add(new SampServer(new SampServerSerializeable(hostnameNode.getTextContent(), ipNode.getTextContent(), portNode.getTextContent(),
 									Integer.parseInt(playersNode.getTextContent()), Integer.parseInt(maxplayersNode.getTextContent()), modeNode.getTextContent(), languageNode.getTextContent(),
 									lagcompNode.getTextContent(), websiteNode.getTextContent(), versionNode.getTextContent())));
 				}
-				catch (NullPointerException e)
+				catch (final NullPointerException e)
 				{
 					e.printStackTrace();
 				}

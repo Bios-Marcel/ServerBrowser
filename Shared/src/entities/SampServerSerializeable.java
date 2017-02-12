@@ -26,7 +26,8 @@ public class SampServerSerializeable implements Serializable
 
 	private String				version;
 
-	public SampServerSerializeable(String hostname, String address, String port, int players, int maxPlayers, String mode, String language, String lagcomp, String website, String version)
+	public SampServerSerializeable(final String hostname, final String address, final String port, final int players, final int maxPlayers, final String mode, final String language,
+					final String lagcomp, final String website, final String version)
 	{
 		this.hostname = hostname;
 		this.address = address;
@@ -90,52 +91,52 @@ public class SampServerSerializeable implements Serializable
 		return website;
 	}
 
-	public void setAddress(String address)
+	public void setAddress(final String address)
 	{
 		this.address = address;
 	}
 
-	public void setHostname(String hostname)
+	public void setHostname(final String hostname)
 	{
 		this.hostname = hostname;
 	}
 
-	public void setPort(String port)
+	public void setPort(final String port)
 	{
 		this.port = port;
 	}
 
-	public void setLagcomp(String lagcomp)
+	public void setLagcomp(final String lagcomp)
 	{
 		this.lagcomp = lagcomp;
 	}
 
-	public void setLanguage(String language)
+	public void setLanguage(final String language)
 	{
 		this.language = language;
 	}
 
-	public void setMaxPlayers(Integer maxPlayers)
+	public void setMaxPlayers(final Integer maxPlayers)
 	{
 		this.maxPlayers = maxPlayers;
 	}
 
-	public void setMode(String mode)
+	public void setMode(final String mode)
 	{
 		this.mode = mode;
 	}
 
-	public void setPlayers(Integer players)
+	public void setPlayers(final Integer players)
 	{
 		this.players = players;
 	}
 
-	public void setVersion(String version)
+	public void setVersion(final String version)
 	{
 		this.version = version;
 	}
 
-	public void setWebsite(String website)
+	public void setWebsite(final String website)
 	{
 		this.website = website;
 	}

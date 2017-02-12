@@ -13,39 +13,39 @@ import util.GTA;
 
 public class VersionChangeController implements ViewController
 {
-	public static final String	OUTPUT_ZIP	= System.getProperty("user.home") + File.separator + "temp.zip";
+	public static final String		OUTPUT_ZIP	= System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
 
-	private static String		installing	= "";
-
-	@FXML
-	private Button				buttonZeroThreeSeven;
+	private static String			installing	= "";
 
 	@FXML
-	private Button				buttonZeroZ;
+	private Button					buttonZeroThreeSeven;
 
 	@FXML
-	private Button				buttonZeroX;
+	private Button					buttonZeroZ;
 
 	@FXML
-	private Button				buttonZeroD;
+	private Button					buttonZeroX;
 
 	@FXML
-	private Button				buttonZeroE;
+	private Button					buttonZeroD;
 
 	@FXML
-	private Button				buttonZeroC;
+	private Button					buttonZeroE;
 
 	@FXML
-	private Button				buttonZeroA;
+	private Button					buttonZeroC;
 
-	private MainController		mainController;
+	@FXML
+	private Button					buttonZeroA;
 
-	public VersionChangeController(MainController mainController)
+	private final MainController	mainController;
+
+	public VersionChangeController(final MainController mainController)
 	{
 		this.mainController = mainController;
 	}
 
-	private Button getButtonForVersion(String version)
+	private Button getButtonForVersion(final String version)
 	{
 		switch (version)
 		{
@@ -87,9 +87,9 @@ public class VersionChangeController implements ViewController
 	@Override
 	public void init()
 	{
-		String version = GTA.getInstalledVersion();
+		final String version = GTA.getInstalledVersion();
 
-		Button versionButton = getButtonForVersion(version);
+		final Button versionButton = getButtonForVersion(version);
 
 		if (Objects.nonNull(versionButton))
 		{
@@ -99,7 +99,7 @@ public class VersionChangeController implements ViewController
 
 		if (!installing.equals(""))
 		{
-			Button installingButton = getButtonForVersion(installing);
+			final Button installingButton = getButtonForVersion(installing);
 
 			if (Objects.nonNull(installingButton))
 			{
@@ -111,9 +111,9 @@ public class VersionChangeController implements ViewController
 	}
 
 	@FXML
-	public void clickVersion(ActionEvent e)
+	public void clickVersion(final ActionEvent e)
 	{
-		Button clicked = (Button) e.getTarget();
+		final Button clicked = (Button) e.getTarget();
 
 		disableAllButtons();
 		clicked.setText("Installing ...");
@@ -148,15 +148,15 @@ public class VersionChangeController implements ViewController
 		}
 	}
 
-	private void startVersionChanging(String version)
+	private void startVersionChanging(final String version)
 	{
 		installing = version;
-		Thread thread = new Thread(() ->
+		final Thread thread = new Thread(() ->
 		{
 			try
 			{
 				FileUtility.downloadUsingNIO("http://ts3.das-chat.xyz/sampversion/" + version + ".zip", OUTPUT_ZIP);
-				File file = new File(OUTPUT_ZIP);
+				final File file = new File(OUTPUT_ZIP);
 				FileUtility.unZipIt(file, GTA.getGtaPath());
 				file.delete();
 				installing = "";

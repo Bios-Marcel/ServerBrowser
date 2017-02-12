@@ -52,15 +52,16 @@ public class MainController implements ViewController
 	@FXML
 	private Label				headerTitle;
 
+	@Override
 	public void init()
 	{
 		loadView(SERVERS_FAV);
 	}
 
 	@FXML
-	public void onMenuItemClicked(MouseEvent event)
+	public void onMenuItemClicked(final MouseEvent event)
 	{
-		StackPane clicked = (StackPane) event.getSource();
+		final StackPane clicked = (StackPane) event.getSource();
 
 		if (clicked.equals(menuItemFav))
 		{
@@ -80,12 +81,12 @@ public class MainController implements ViewController
 		}
 	}
 
-	private void loadView(int viewId)
+	private void loadView(final int viewId)
 	{
 		loadView(viewId, false);
 	}
 
-	private void loadView(int viewId, boolean refresh)
+	private void loadView(final int viewId, final boolean refresh)
 	{
 		if (refresh || viewId != activeViewId)
 		{
@@ -137,9 +138,7 @@ public class MainController implements ViewController
 	{
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/ServerList.fxml"));
-		// ServerListController controller = new
-		// ServerListController(ServerListController.MODE_FAV);
-		ServerFavouriteListController controller = new ServerFavouriteListController();
+		final ServerFavouriteListController controller = new ServerFavouriteListController();
 		loader.setController(controller);
 		try
 		{
@@ -148,7 +147,7 @@ public class MainController implements ViewController
 			headerTitle.setText(SA_MP_SERVERS_FAV_TITLE);
 			controller.init();
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -158,7 +157,7 @@ public class MainController implements ViewController
 	{
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/VersionUI.fxml"));
-		VersionChangeController controller = new VersionChangeController(this);
+		final VersionChangeController controller = new VersionChangeController(this);
 		loader.setController(controller);
 		try
 		{
@@ -167,7 +166,7 @@ public class MainController implements ViewController
 			headerTitle.setText(VERSION_CHANGER_TITLE);
 			controller.init();
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -177,9 +176,7 @@ public class MainController implements ViewController
 	{
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/ServerList.fxml"));
-		// ServerListController controller = new
-		// ServerListController(ServerListController.MODE_ALL);
-		ServerAllListController controller = new ServerAllListController();
+		final ServerAllListController controller = new ServerAllListController();
 		loader.setController(controller);
 		try
 		{
@@ -188,7 +185,7 @@ public class MainController implements ViewController
 			headerTitle.setText(SA_MP_SERVERS_ALL_TITLE);
 			controller.init();
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -198,7 +195,7 @@ public class MainController implements ViewController
 	{
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/Username.fxml"));
-		UsernameController controller = new UsernameController();
+		final UsernameController controller = new UsernameController();
 		loader.setController(controller);
 		try
 		{
@@ -207,7 +204,7 @@ public class MainController implements ViewController
 			headerTitle.setText(USERNAME_CHANGER_TITLE);
 			controller.init();
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			e.printStackTrace();
 		}

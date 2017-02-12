@@ -8,29 +8,29 @@ import javafx.beans.property.StringProperty;
 
 public class SampServer
 {
-	private StringProperty	hostnameProperty		= new SimpleStringProperty();
+	private final StringProperty	hostnameProperty		= new SimpleStringProperty();
 
-	private StringProperty	addressProperty			= new SimpleStringProperty();
+	private final StringProperty	addressProperty			= new SimpleStringProperty();
 
-	private StringProperty	portProperty			= new SimpleStringProperty();
+	private final StringProperty	portProperty			= new SimpleStringProperty();
 
-	private IntegerProperty	playersProperty			= new SimpleIntegerProperty();
+	private final IntegerProperty	playersProperty			= new SimpleIntegerProperty();
 
-	private IntegerProperty	maxPlayersProperty		= new SimpleIntegerProperty();
+	private final IntegerProperty	maxPlayersProperty		= new SimpleIntegerProperty();
 
-	private StringProperty	actualPlayersProperty	= new SimpleStringProperty();
+	private final StringProperty	actualPlayersProperty	= new SimpleStringProperty();
 
-	private StringProperty	modeProperty			= new SimpleStringProperty();
+	private final StringProperty	modeProperty			= new SimpleStringProperty();
 
-	private StringProperty	languageProperty		= new SimpleStringProperty();
+	private final StringProperty	languageProperty		= new SimpleStringProperty();
 
-	private StringProperty	lagcompProperty			= new SimpleStringProperty();
+	private final StringProperty	lagcompProperty			= new SimpleStringProperty();
 
-	private StringProperty	websiteProperty			= new SimpleStringProperty();
+	private final StringProperty	websiteProperty			= new SimpleStringProperty();
 
-	private StringProperty	versionProperty			= new SimpleStringProperty();
+	private final StringProperty	versionProperty			= new SimpleStringProperty();
 
-	public SampServer(SampServerSerializeable server)
+	public SampServer(final SampServerSerializeable server)
 	{
 		hostnameProperty.set(server.getHostname());
 		addressProperty.set(server.getAddress());
@@ -155,54 +155,54 @@ public class SampServer
 		return websiteProperty.get();
 	}
 
-	public void setAddress(String address)
+	public void setAddress(final String address)
 	{
 		addressProperty.set(address);
 	}
 
-	public void setHostname(String hostname)
+	public void setHostname(final String hostname)
 	{
 		hostnameProperty.set(hostname);
 	}
 
-	public void setPort(String port)
+	public void setPort(final String port)
 	{
 		portProperty.set(port);
 	}
 
-	public void setLagcomp(String lagcomp)
+	public void setLagcomp(final String lagcomp)
 	{
 		lagcompProperty.set(lagcomp);
 	}
 
-	public void setLanguage(String language)
+	public void setLanguage(final String language)
 	{
 		languageProperty.set(language);
 	}
 
-	public void setMaxPlayers(Integer maxPlayers)
+	public void setMaxPlayers(final Integer maxPlayers)
 	{
 		maxPlayersProperty.set(maxPlayers);
 		updatePlayersAndMaxPlayers();
 	}
 
-	public void setMode(String mode)
+	public void setMode(final String mode)
 	{
 		modeProperty.set(mode);
 	}
 
-	public void setPlayers(Integer players)
+	public void setPlayers(final Integer players)
 	{
 		playersProperty.set(players);
 		updatePlayersAndMaxPlayers();
 	}
 
-	public void setVersion(String version)
+	public void setVersion(final String version)
 	{
 		versionProperty.set(version);
 	}
 
-	public void setWebsite(String website)
+	public void setWebsite(final String website)
 	{
 		websiteProperty.set(website);
 	}

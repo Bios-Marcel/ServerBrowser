@@ -9,11 +9,11 @@ public class Player implements Serializable
 {
 	private static final long	serialVersionUID	= 2770927297609110070L;
 
-	private String				playerName;
+	private final String		playerName;
 
-	private String				playerScore;
+	private final String		playerScore;
 
-	public Player(String playerName, String playerScore)
+	public Player(final String playerName, final String playerScore)
 	{
 		this.playerName = playerName;
 		this.playerScore = playerScore;

@@ -10,14 +10,14 @@ import interfaces.DataServiceInterface;
 
 public class DataServiceServerImplementation implements DataServiceInterface
 {
-	private static Set<SampServerSerializeable> servers = new HashSet<SampServerSerializeable>();
+	private static Set<SampServerSerializeable> servers = new HashSet<>();
 
 	public static void clearList()
 	{
 		servers.clear();
 	}
 
-	public static void addToServers(Collection<SampServerSerializeable> list)
+	public static void addToServers(final Collection<SampServerSerializeable> list)
 	{
 		servers.addAll(list);
 	}

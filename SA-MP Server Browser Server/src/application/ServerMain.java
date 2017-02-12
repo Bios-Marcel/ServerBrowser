@@ -36,7 +36,7 @@ public class ServerMain
 
 	private static DataServiceInterface	stub;
 
-	public static void main(String[] args)
+	public static void main(final String[] args)
 	{
 		boolean recreatedb = false;
 		String username = null;
@@ -50,6 +50,7 @@ public class ServerMain
 				{
 					recreatedb = true;
 				}
+				// TODO(msc) Think about changing this into a passsword input request (would be saver)
 				else if (args[i].equals("-p") || args[i].equals("-password"))
 				{
 					if (args.length >= i + 2)
@@ -93,7 +94,7 @@ public class ServerMain
 			registry.rebind("DataServiceInterface", stub);
 			Logging.logger.log(Level.INFO, "RMI has been initialized.");
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			Logging.logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
 			System.exit(0);
@@ -116,22 +117,22 @@ public class ServerMain
 		{
 			DataServiceServerImplementation.clearList();
 
-			Set<String> ipAndPorts = new HashSet<>();
+			final Set<String> ipAndPorts = new HashSet<>();
 
 			Statement statement = MySQLConnection.connect.createStatement();
 			// Result set get the result of the SQL query
 			ResultSet resultSet = statement.executeQuery("SELECT version, ip_address, id, port, hostname, players, lagcomp, max_players, mode, version, weburl, language FROM internet_offline;");
 
-			Set<SampServerSerializeable> servers = new HashSet<>();
+			final Set<SampServerSerializeable> servers = new HashSet<>();
 
 			while (resultSet.next())
 			{
-				String ipAndPort = resultSet.getString("ip_address") + ":" + resultSet.getString("port");
+				final String ipAndPort = resultSet.getString("ip_address") + ":" + resultSet.getString("port");
 				if (!ipAndPorts.contains(ipAndPort))
 				{
 					ipAndPorts.add(ipAndPort);
 
-					SampServerSerializeable server =
+					final SampServerSerializeable server =
 									new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getString("port"), resultSet.getInt("players"),
 													resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"),
 													resultSet.getString("weburl"), resultSet.getString("version"));
@@ -146,12 +147,12 @@ public class ServerMain
 
 			while (resultSet.next())
 			{
-				String ipAndPort = resultSet.getString("ip_address") + ":" + resultSet.getString("port");
+				final String ipAndPort = resultSet.getString("ip_address") + ":" + resultSet.getString("port");
 				if (!ipAndPorts.contains(ipAndPort))
 				{
 					ipAndPorts.add(ipAndPort);
 
-					SampServerSerializeable server =
+					final SampServerSerializeable server =
 									new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getString("port"), resultSet.getInt("players"),
 													resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"),
 													resultSet.getString("weburl"), resultSet.getString("version"));
@@ -163,7 +164,7 @@ public class ServerMain
 			DataServiceServerImplementation.addToServers(servers);
 
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			e.printStackTrace();
 		}
@@ -171,7 +172,7 @@ public class ServerMain
 
 	private static void createCronJob()
 	{
-		TimerTask readSACNRMasterList = new TimerTask()
+		final TimerTask readSACNRMasterList = new TimerTask()
 		{
 
 			@Override
@@ -181,9 +182,9 @@ public class ServerMain
 			}
 		};
 
-		Timer timer = new Timer();
+		final Timer timer = new Timer();
 
-		Calendar calendar = Calendar.getInstance(Locale.GERMANY);
+		final Calendar calendar = Calendar.getInstance(Locale.GERMANY);
 		calendar.setTime(new Date());
 		calendar.set(Calendar.HOUR_OF_DAY, 23);
 		calendar.set(Calendar.MINUTE, 59);
@@ -204,75 +205,74 @@ public class ServerMain
 		Logging.logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
 	}
 
-	private static void addToDatabaseFromList(String url)
+	private static void addToDatabaseFromList(final String url)
 	{
 		try
 		{
-			URLConnection openConnection = new URL(url).openConnection();
+			final URLConnection openConnection = new URL(url).openConnection();
 			openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-			BufferedReader in = new BufferedReader(new InputStreamReader(openConnection.getInputStream()));
-
-			String inputLine;
-			while ((inputLine = in.readLine()) != null)
+			try (final BufferedReader in = new BufferedReader(new InputStreamReader(openConnection.getInputStream())))
 			{
-				String[] data = inputLine.split("[:]");
-
-				SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1]));
-
-				if (query.isConnected())
+				String inputLine;
+				while ((inputLine = in.readLine()) != null)
 				{
-					String[] info = query.getBasicServerInfo();
+					final String[] data = inputLine.split("[:]");
 
-					String[][] infoMore = query.getServersRules();
-
-					if (Objects.isNull(infoMore) || Objects.isNull(info))
+					try (final SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1])))
 					{
-						continue;
+						final String[] info = query.getBasicServerInfo();
+
+						final String[][] infoMore = query.getServersRules();
+
+						if (Objects.isNull(infoMore) || Objects.isNull(info))
+						{
+							continue;
+						}
+
+						String weburl = null;
+						String lagcomp = null;
+						String worldtime = null;
+						String version = null;
+						int weather = 0;
+
+						for (int i = 0; infoMore.length > i; i++)
+						{
+							if (infoMore[i][0].equals("lagcomp"))
+							{
+								lagcomp = infoMore[i][1];
+							}
+							else if (infoMore[i][0].equals("weburl"))
+							{
+								weburl = infoMore[i][1];
+							}
+							else if (infoMore[i][0].equals("version"))
+							{
+								version = infoMore[i][1];
+							}
+							else if (infoMore[i][0].equals("worldtime"))
+							{
+								worldtime = infoMore[i][1];
+							}
+							else if (infoMore[i][0].equals("weather"))
+							{
+								weather = Integer.parseInt(infoMore[i][1]);
+							}
+						}
+
+						MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4], info[6], lagcomp, info[5], version, weather, weburl,
+										worldtime);
+						Logging.logger.log(Level.INFO, "Added Server: " + inputLine);
 					}
-
-					String weburl = null;
-					String lagcomp = null;
-					String worldtime = null;
-					String version = null;
-					int weather = 0;
-
-					for (int i = 0; infoMore.length > i; i++)
+					catch (final Exception e)
 					{
-						if (infoMore[i][0].equals("lagcomp"))
-						{
-							lagcomp = infoMore[i][1];
-						}
-						else if (infoMore[i][0].equals("weburl"))
-						{
-							weburl = infoMore[i][1];
-						}
-						else if (infoMore[i][0].equals("version"))
-						{
-							version = infoMore[i][1];
-						}
-						else if (infoMore[i][0].equals("worldtime"))
-						{
-							worldtime = infoMore[i][1];
-						}
-						else if (infoMore[i][0].equals("weather"))
-						{
-							weather = Integer.parseInt(infoMore[i][1]);
-						}
+						Logging.logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
 					}
-
-					query.close();
-
-					MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4], info[6], lagcomp, info[5], version, weather, weburl, worldtime);
-					Logging.logger.log(Level.INFO, "Added Server: " + inputLine);
-				}
-				else
-				{
-					Logging.logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
 				}
 			}
-			in.close();
 		}
-		catch (IOException e)
+		catch (
+
+		final IOException e)
 		{
 			Logging.logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
 		}

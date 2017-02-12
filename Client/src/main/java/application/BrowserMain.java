@@ -31,24 +31,24 @@ public class BrowserMain extends Application
 {
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private static final String	VERSION				= "1.0.13";
+	private static final String	VERSION				= "1.0.15";
 
 	@Override
-	public void start(Stage primaryStage)
+	public void start(final Stage primaryStage)
 	{
 		if (!OSInfo.isWindows())
 		{
-			Alert alert = new Alert(AlertType.WARNING);
+			final Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Launching Application");
 			alert.setHeaderText("Operating System not supported");
 			alert.setContentText("You seem to be not using windows, sorry, but this application does not support other systems than Windows.");
 			alert.showAndWait();
-			Runtime.getRuntime().exit(0);
+			System.exit(0);
 		}
 
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/Main.fxml"));
-		MainController controller = new MainController();
+		final MainController controller = new MainController();
 		loader.setController(controller);
 		try
 		{
@@ -65,7 +65,7 @@ public class BrowserMain extends Application
 			primaryStage.setMaximized(false);
 			controller.init();
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			e.printStackTrace();
 			System.exit(0);
@@ -90,9 +90,9 @@ public class BrowserMain extends Application
 				file.createNewFile();
 				Files.write(Paths.get(file.getPath()), new String("<servers/>").getBytes());
 			}
-			catch (IOException e)
+			catch (final IOException e)
 			{
-				e.printStackTrace();
+				Logging.logger.log(Level.WARNING, e.getMessage(), e);
 			}
 		}
 
@@ -105,9 +105,9 @@ public class BrowserMain extends Application
 				file.createNewFile();
 				Files.write(Paths.get(file.getPath()), new String("<usernames/>").getBytes());
 			}
-			catch (IOException e)
+			catch (final IOException e)
 			{
-				e.printStackTrace();
+				Logging.logger.log(Level.WARNING, e.getMessage(), e);
 			}
 		}
 	}
@@ -116,23 +116,24 @@ public class BrowserMain extends Application
 	{
 		try
 		{
-			URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/version.info");
-			Scanner s = new Scanner(url.toURL().openStream());
-			String versionLatest = s.nextLine();
-			if (!versionLatest.equals(VERSION))
+			final URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/version.info");
+			try (final Scanner s = new Scanner(url.toURL().openStream()))
 			{
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("Launching Application");
-				alert.setHeaderText("Update required");
-				alert.setContentText("The launcher will now update and restart itself, don't do anything.");
-				alert.show();
-				updateLauncher();
+				final String versionLatest = s.nextLine();
+				if (!versionLatest.equals(VERSION))
+				{
+					final Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Launching Application");
+					alert.setHeaderText("Update required");
+					alert.setContentText("The launcher will now update and restart itself, don't do anything.");
+					alert.show();
+					updateLauncher();
+				}
 			}
-			s.close();
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			System.out.println("Couldn't retrieve Update / Update Info.");
+			Logging.logger.log(Level.SEVERE, "Couldn't retrieve Update / Update Info.");
 		}
 	}
 
@@ -141,8 +142,8 @@ public class BrowserMain extends Application
 		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 		try
 		{
-			File f = new File(System.getProperty("java.class.path"));
-			File currentJar = f.getAbsoluteFile();
+			final File f = new File(System.getProperty("java.class.path"));
+			final File currentJar = f.getAbsoluteFile();
 			/* is it a jar file? */
 			if (!currentJar.getName().endsWith(".jar"))
 			{
@@ -159,17 +160,17 @@ public class BrowserMain extends Application
 
 			try
 			{
-				URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/launcher.jar");
+				final URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/launcher.jar");
 				FileUtility.downloadUsingNIO(url.toString(), currentJar.getPath().toString());
 				builder.start();
 				System.exit(0);
 			}
-			catch (IOException e)
+			catch (final IOException e)
 			{
 				e.printStackTrace();
 			}
 		}
-		catch (URISyntaxException e1)
+		catch (final URISyntaxException e1)
 		{
 			e1.printStackTrace();
 		}
@@ -183,9 +184,9 @@ public class BrowserMain extends Application
 			RMISocketFactory.setSocketFactory(new RMISocketFactory()
 			{
 				@Override
-				public Socket createSocket(String host, int port) throws IOException
+				public Socket createSocket(final String host, final int port) throws IOException
 				{
-					Socket socket = new Socket();
+					final Socket socket = new Socket();
 					socket.setSoTimeout(1500);
 					socket.setSoLinger(false, 0);
 					socket.connect(new InetSocketAddress(host, port), 1500);
@@ -193,19 +194,19 @@ public class BrowserMain extends Application
 				}
 
 				@Override
-				public ServerSocket createServerSocket(int port) throws IOException
+				public ServerSocket createServerSocket(final int port) throws IOException
 				{
 					return new ServerSocket(port);
 				}
 			});
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
 			Logging.logger.log(Level.WARNING, "Couldb't set custom RMI Socket Factory.", e);
 		}
 	}
 
-	public static void main(String[] args)
+	public static void main(final String[] args)
 	{
 		checkVersion();
 
