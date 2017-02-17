@@ -2,16 +2,18 @@ package util;
 
 import java.awt.Desktop;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.github.sarxos.winreg.HKey;
+import com.github.sarxos.winreg.RegistryException;
+import com.github.sarxos.winreg.WindowsRegistry;
+
 import data.PastUsernames;
 import javafx.beans.property.SimpleStringProperty;
 import logging.Logging;
-import windows.WinRegistry;
 
 public class GTA
 {
@@ -24,25 +26,28 @@ public class GTA
 
 	public static void setUsername(final String newName)
 	{
+
 		try
 		{
 			username.set(newName);
-			WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\SAMP", "PlayerName", newName);
+			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", newName);
 		}
-		catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e)
+		catch (final RegistryException e)
 		{
 			Logging.logger.log(Level.WARNING, "Couldn't set username.", e);
 		}
+
 	}
 
 	public static String retrieveUsername()
 	{
 		try
 		{
-			return WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\SAMP", "PlayerName");
+			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName");
 		}
-		catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e)
+		catch (final RegistryException e)
 		{
+			Logging.logger.log(Level.WARNING, "Couldn't retrieve Username from registry.", e);
 			return "";
 		}
 	}
@@ -51,11 +56,11 @@ public class GTA
 	{
 		try
 		{
-			return WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", "");
+			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", "");
 		}
-		catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e)
+		catch (final RegistryException e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.WARNING, "Couldn't retrieve GTA path.", e);
 			return null;
 		}
 	}

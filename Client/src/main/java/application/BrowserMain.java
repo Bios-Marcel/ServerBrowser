@@ -11,16 +11,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.server.RMISocketFactory;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Level;
 
 import controllers.MainController;
 import javafx.application.Application;
+import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import logging.Logging;
@@ -122,12 +125,18 @@ public class BrowserMain extends Application
 				final String versionLatest = s.nextLine();
 				if (!versionLatest.equals(VERSION))
 				{
-					final Alert alert = new Alert(AlertType.WARNING);
+					new JFXPanel(); // HACK(MSC) Hacky way to initialize fx toolkit
+					final Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Launching Application");
 					alert.setHeaderText("Update required");
-					alert.setContentText("The launcher will now update and restart itself, don't do anything.");
-					alert.show();
-					updateLauncher();
+					alert.setContentText("The launcher needs an update. Not updating the client might lead to problems. Click 'OK' to update and 'Cancel' to not update.");
+
+					final Optional<ButtonType> result = alert.showAndWait();
+					if (result.get() == ButtonType.OK)
+					{
+						updateLauncher();
+					}
+
 				}
 			}
 		}

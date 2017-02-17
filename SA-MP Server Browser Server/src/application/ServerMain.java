@@ -11,15 +11,22 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
+
+import org.quartz.CronScheduleBuilder;
+import org.quartz.Job;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 
 import data.MySQLConnection;
 import entities.SampServerSerializeable;
@@ -172,24 +179,30 @@ public class ServerMain
 
 	private static void createCronJob()
 	{
-		final TimerTask readSACNRMasterList = new TimerTask()
+		try
 		{
+			final Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+			scheduler.start();
 
-			@Override
-			public void run()
+			class UpdateJob implements Job
 			{
-				updateDBWithMasterlistContent();
+				@Override
+				public void execute(final JobExecutionContext arg0) throws JobExecutionException
+				{
+					updateDBWithMasterlistContent();
+				}
 			}
-		};
 
-		final Timer timer = new Timer();
+			final JobDetail job = JobBuilder.newJob(UpdateJob.class).withIdentity("updateList", "updater").build();
 
-		final Calendar calendar = Calendar.getInstance(Locale.GERMANY);
-		calendar.setTime(new Date());
-		calendar.set(Calendar.HOUR_OF_DAY, 23);
-		calendar.set(Calendar.MINUTE, 59);
-		calendar.set(Calendar.SECOND, 59);
-		timer.schedule(readSACNRMasterList, calendar.getTime(), 7200000);
+			final Trigger trigger = TriggerBuilder.newTrigger().withIdentity("updateTrigger", "updater").startNow().withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 59)).build();
+
+			scheduler.scheduleJob(job, trigger);
+		}
+		catch (final SchedulerException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private static void updateDBWithMasterlistContent()
@@ -200,6 +213,7 @@ public class ServerMain
 		{
 			addToDatabaseFromList("http://monitor.sacnr.com/list/masterlist.txt");
 			addToDatabaseFromList("http://monitor.sacnr.com/list/hostedlist.txt");
+			setServerList();
 		}
 
 		Logging.logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
