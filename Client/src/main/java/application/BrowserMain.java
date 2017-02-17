@@ -17,7 +17,6 @@ import java.util.logging.Level;
 
 import controllers.MainController;
 import javafx.application.Application;
-import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -34,21 +33,24 @@ public class BrowserMain extends Application
 {
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private static final String	VERSION				= "1.0.16";
+	private static final String	VERSION				= "1.0.17";
 
 	@Override
 	public void start(final Stage primaryStage)
 	{
-		if (!OSInfo.isWindows())
-		{
-			final Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Launching Application");
-			alert.setHeaderText("Operating System not supported");
-			alert.setContentText("You seem to be not using windows, sorry, but this application does not support other systems than Windows.");
-			alert.showAndWait();
-			System.exit(0);
-		}
+		checkOperatingSystemCompatibility();
 
+		checkVersion();
+
+		createFilesAndFolders();
+
+		setRMISocketFactory();
+
+		loadUI(primaryStage);
+	}
+
+	private void loadUI(final Stage primaryStage)
+	{
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/views/Main.fxml"));
 		final MainController controller = new MainController();
@@ -70,11 +72,30 @@ public class BrowserMain extends Application
 		}
 		catch (final Exception e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Couldn't load UI", e);
 			System.exit(0);
 		}
 	}
 
+	/**
+	 * Checks if the operating system is windows, if not, the application will shutdown.
+	 */
+	private void checkOperatingSystemCompatibility()
+	{
+		if (!OSInfo.isWindows())
+		{
+			final Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Launching Application");
+			alert.setHeaderText("Operating System not supported");
+			alert.setContentText("You seem to be not using windows, sorry, but this application does not support other systems than Windows.");
+			alert.showAndWait();
+			System.exit(0);
+		}
+	}
+
+	/**
+	 * Creates files and folders that are necessary for the application to run properly.
+	 */
 	private static void createFilesAndFolders()
 	{
 		File file = new File(System.getProperty("user.home") + File.separator + "sampex");
@@ -115,6 +136,10 @@ public class BrowserMain extends Application
 		}
 	}
 
+	/**
+	 * Compares the local version number to the one lying on the server. If an update is
+	 * availbable the user will be asked if he wants to update.
+	 */
 	private static void checkVersion()
 	{
 		try
@@ -125,7 +150,6 @@ public class BrowserMain extends Application
 				final String versionLatest = s.nextLine();
 				if (!versionLatest.equals(VERSION))
 				{
-					new JFXPanel(); // HACK(MSC) Hacky way to initialize fx toolkit
 					final Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Launching Application");
 					alert.setHeaderText("Update required");
@@ -146,44 +170,60 @@ public class BrowserMain extends Application
 		}
 	}
 
+	/**
+	 * Downloads the latest version and restarts the client.
+	 */
 	private static void updateLauncher()
 	{
-		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 		try
 		{
-			final File f = new File(System.getProperty("java.class.path"));
-			final File currentJar = f.getAbsoluteFile();
-			/* is it a jar file? */
-			if (!currentJar.getName().endsWith(".jar"))
-			{
-				return;
-			}
-
-			/* Build command: java -jar application.jar */
-			final ArrayList<String> command = new ArrayList<>();
-			command.add(javaBin);
-			command.add("-jar");
-			command.add(currentJar.getPath());
-
-			final ProcessBuilder builder = new ProcessBuilder(command);
-
-			try
-			{
-				final URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/launcher.jar");
-				FileUtility.downloadUsingNIO(url.toString(), currentJar.getPath().toString());
-				builder.start();
-				System.exit(0);
-			}
-			catch (final IOException e)
-			{
-				e.printStackTrace();
-			}
+			final URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/launcher.jar");
+			FileUtility.downloadUsingNIO(url.toString(), getOwnJarFile().getPath().toString());
+			selfRestart();
 		}
-		catch (final URISyntaxException e1)
+		catch (final IOException | URISyntaxException e)
 		{
-			e1.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Couldn't retrieve update.", e);
+		}
+	}
+
+	/**
+	 * @return a File pointing to the applications own jar file
+	 */
+	private static File getOwnJarFile()
+	{
+		return new File(System.getProperty("java.class.path")).getAbsoluteFile();
+	}
+
+	/**
+	 * Restarts the application.
+	 */
+	private static void selfRestart()
+	{
+		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+		final File currentJar = getOwnJarFile();
+
+		if (!currentJar.getName().endsWith(".jar"))
+		{
+			return;
 		}
 
+		final ArrayList<String> command = new ArrayList<>();
+		command.add(javaBin);
+		command.add("-jar");
+		command.add(currentJar.getPath());
+
+		final ProcessBuilder builder = new ProcessBuilder(command);
+
+		try
+		{
+			builder.start();
+			System.exit(0);
+		}
+		catch (final IOException e)
+		{
+			Logging.logger.log(Level.SEVERE, "Couldn't selfrestart.", e);
+		}
 	}
 
 	private static void setRMISocketFactory()
@@ -217,12 +257,6 @@ public class BrowserMain extends Application
 
 	public static void main(final String[] args)
 	{
-		checkVersion();
-
-		createFilesAndFolders();
-
-		setRMISocketFactory();
-
 		launch(args);
 	}
 }

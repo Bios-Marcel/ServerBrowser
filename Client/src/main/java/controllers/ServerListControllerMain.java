@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
-
 import data.Favourites;
 import data.SampServer;
 import entities.Player;
@@ -100,8 +98,8 @@ public abstract class ServerListControllerMain implements ViewController
 
 	protected int							maxSlots		= 0;
 
-	// HACK(MSC) This is a little hacky, because it needs 3 lists in order to
-	// keep all data, make sorting possible and make filtering possible.
+	/* HACK(MSC) This is a little hacky, because it needs 3 lists in order to
+	 * keep all data, make sorting possible and make filtering possible. */
 	protected ObservableList<SampServer>	servers			= FXCollections.observableArrayList();
 
 	protected FilteredList<SampServer>		filteredServers	= new FilteredList<>(servers);
@@ -170,61 +168,37 @@ public abstract class ServerListControllerMain implements ViewController
 		{
 			final String nameFilterSetting = nameFilter.getText();
 
-			if (!StringUtils.isEmpty(nameFilterSetting))
+			if (!nameFilterSetting.isEmpty())
 			{
-				if (nameFilterSetting.charAt(0) == '!')
+				final boolean negateExpression = nameFilterSetting.charAt(0) == '!';
+
+				if (server.getHostname().toLowerCase().contains(removeExclamationMarkAtStart(nameFilterSetting).toLowerCase()) == negateExpression)
 				{
-					if (server.getHostname().toLowerCase().contains((nameFilterSetting.replace("!", "").toLowerCase())))
-					{
-						return false;
-					}
-				}
-				else
-				{
-					if (!server.getHostname().toLowerCase().contains(nameFilterSetting.toLowerCase()))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 
 			final String modeFilterSetting = modeFilter.getText();
 
-			if (!StringUtils.isEmpty(modeFilterSetting))
+			if (!modeFilterSetting.isEmpty())
 			{
-				if (modeFilterSetting.charAt(0) == '!')
+				final boolean negateExpression = modeFilterSetting.charAt(0) == '!';
+
+				if (server.getMode().toLowerCase().contains(removeExclamationMarkAtStart(modeFilterSetting).toLowerCase()) == negateExpression)
 				{
-					if (server.getMode().toLowerCase().contains((modeFilterSetting.replace("!", "").toLowerCase())))
-					{
-						return false;
-					}
-				}
-				else
-				{
-					if (!server.getMode().toLowerCase().contains(modeFilterSetting.toLowerCase()))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 
 			final String languageFilterSetting = languageFilter.getText();
 
-			if (!StringUtils.isEmpty(languageFilterSetting))
+			if (!languageFilterSetting.isEmpty())
 			{
-				if (languageFilterSetting.charAt(0) == '!')
+				final boolean negateExpression = languageFilterSetting.charAt(0) == '!';
+
+				if (server.getLanguage().toLowerCase().contains(removeExclamationMarkAtStart(languageFilterSetting).toLowerCase()) == negateExpression)
 				{
-					if (server.getLanguage().toLowerCase().contains(languageFilterSetting.replace("!", "").toLowerCase()))
-					{
-						return false;
-					}
-				}
-				else
-				{
-					if (!server.getLanguage().toLowerCase().contains(languageFilterSetting.toLowerCase()))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 
@@ -244,13 +218,38 @@ public abstract class ServerListControllerMain implements ViewController
 		updateTable();
 	}
 
-	private void updateTable()
+	private static String removeExclamationMarkAtStart(final String string)
+	{
+		if (string.charAt(0) == '!')
+		{
+			return string.replaceFirst("!", "");
+		}
+		return string;
+	}
+
+	/**
+	 * Updates and resorts the TableView.
+	 * 
+	 * Since i am using 3 diffrent Collections to keep hold of the data, filter it and sort it. i have to update the table view a little
+	 * tricky.
+	 */
+	public void updateTable()
 	{
 		sortedServers.clear();
 		sortedServers.addAll(filteredServers);
 		tableView.sort();
 	}
 
+	/**
+	 * Displays the context menu for server entries.
+	 * 
+	 * @param serverList
+	 *            The list of servers that the context menu actions will affect
+	 * @param posX
+	 *            X coordinate
+	 * @param posY
+	 *            Y coodrinate
+	 */
 	protected void displayMenu(final List<SampServer> serverList, final double posX, final double posY)
 	{
 		if (Objects.isNull(menu))
@@ -293,23 +292,16 @@ public abstract class ServerListControllerMain implements ViewController
 
 					final String[] serverInfo = query.getBasicServerInfo();
 
-					if (Objects.nonNull(serverInfo))
+					if (Objects.nonNull(serverInfo) && !serverInfo[0].equals("0"))
 					{
-						if (!serverInfo[0].equals("0"))
-						{
-							final TextInputDialog dialog = new TextInputDialog();
-							dialog.setTitle("Connect to Server");
-							dialog.setHeaderText("Enter the servers password.");
+						final TextInputDialog dialog = new TextInputDialog();
+						dialog.setTitle("Connect to Server");
+						dialog.setHeaderText("Enter the servers password.");
 
-							final Optional<String> result = dialog.showAndWait();
-							if (result.isPresent())
-							{
-								GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort(), result.get());
-							}
-						}
-						else
+						final Optional<String> result = dialog.showAndWait();
+						if (result.isPresent())
 						{
-							GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort());
+							GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort(), result.get());
 						}
 					}
 					else
