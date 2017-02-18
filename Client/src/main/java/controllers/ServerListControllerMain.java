@@ -15,6 +15,7 @@ import data.Favourites;
 import data.SampServer;
 import entities.Player;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -44,6 +45,8 @@ public abstract class ServerListControllerMain implements ViewController
 
 	@FXML
 	private TextField						addressTextField;
+
+	private static SimpleStringProperty		serverAddressProperty	= new SimpleStringProperty();
 
 	@FXML
 	protected TableView<SampServer>			tableView;
@@ -102,21 +105,23 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private ComboBox<String>				versionFilter;
 
-	protected int							playersPlaying	= 0;
+	protected int							playersPlaying			= 0;
 
-	protected int							maxSlots		= 0;
+	protected int							maxSlots				= 0;
 
 	/* HACK(MSC) This is a little hacky, because it needs 3 lists in order to
 	 * keep all data, make sorting possible and make filtering possible. */
-	protected ObservableList<SampServer>	servers			= FXCollections.observableArrayList();
+	protected ObservableList<SampServer>	servers					= FXCollections.observableArrayList();
 
-	protected FilteredList<SampServer>		filteredServers	= new FilteredList<>(servers);
+	protected FilteredList<SampServer>		filteredServers			= new FilteredList<>(servers);
 
-	protected ObservableList<SampServer>	sortedServers	= FXCollections.observableArrayList();
+	protected ObservableList<SampServer>	sortedServers			= FXCollections.observableArrayList();
 
 	@Override
 	public void init()
 	{
+		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
+
 		// TODO(MSC) Improve by including MaxPlayers as Secondary sorting
 		// condition
 		columnPlayers.setComparator((o1, o2) ->
