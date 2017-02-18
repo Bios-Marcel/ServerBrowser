@@ -23,7 +23,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="buttonZeroThreeSeven" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
+                  <Button fx:id="buttonZeroThreeSeven"  styleClass="installButton" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -49,7 +49,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="buttonZeroZ" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
+                  <Button fx:id="buttonZeroZ" styleClass="installButton" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -75,7 +75,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="buttonZeroX" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
+                  <Button fx:id="buttonZeroX" styleClass="installButton"  alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -101,7 +101,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="buttonZeroE" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
+                  <Button fx:id="buttonZeroE"  styleClass="installButton" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -127,7 +127,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="buttonZeroD" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
+                  <Button fx:id="buttonZeroD" styleClass="installButton"  alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -153,7 +153,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="buttonZeroC" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
+                  <Button fx:id="buttonZeroC"  styleClass="installButton" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -179,7 +179,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="buttonZeroA" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
+                  <Button fx:id="buttonZeroA" styleClass="installButton"  alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>

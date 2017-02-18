@@ -3,6 +3,7 @@ package data;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -24,9 +25,60 @@ import org.xml.sax.SAXException;
 
 import entities.SampServerSerializeable;
 import logging.Logging;
+import query.SampQuery;
 
 public class Favourites
 {
+
+	public static SampServer addServerToFavourites(final String address, final String port)
+	{
+		final SampServer server = new SampServer(address, port);
+		try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
+
+		{
+			final String[] serverInfo = query.getBasicServerInfo();
+
+			if (Objects.nonNull(serverInfo))
+			{
+				server.setPlayers(Integer.parseInt(serverInfo[1]));
+				server.setMaxPlayers(Integer.parseInt(serverInfo[2]));
+				server.setHostname(serverInfo[3]);
+				server.setMode(serverInfo[4]);
+				server.setLanguage(serverInfo[6]);
+			}
+
+			final String[][] rules = query.getServersRules();
+
+			if (Objects.nonNull(rules))
+			{
+				for (int i = 0; rules.length > i; i++)
+				{
+					if (rules[i][0].equals("weburl"))
+					{
+						server.setWebsite(rules[i][1]);
+					}
+					else if (rules[i][0].equals("version"))
+					{
+						server.setVersion(rules[i][1]);
+					}
+				}
+			}
+		}
+		catch (final Exception e)
+		{
+			Logging.logger.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.");
+			server.setHostname("Unknown");
+			server.setLanguage("Unknown");
+			server.setMode("Unknown");
+			server.setWebsite("Unknown");
+			server.setVersion("Unknown");
+			server.setPlayers(0);
+			server.setMaxPlayers(0);
+		}
+
+		addServerToFavourites(server);
+		return server;
+	}
 
 	public static void addServerToFavourites(final SampServer server)
 	{
@@ -36,7 +88,7 @@ public class Favourites
 
 		for (final SampServer serverExistant : existantData)
 		{
-			if (server.getHostname().equals(serverExistant.getHostname()) && server.getPort().equals(serverExistant.getPort()))
+			if (server.getAddress().equals(serverExistant.getAddress()) && server.getPort().equals(serverExistant.getPort()))
 			{
 				existant = true;
 				break;

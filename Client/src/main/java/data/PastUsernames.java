@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 
 public class PastUsernames
 {
-	public static void addPastUsernames(final String username)
+	public static void addPastUsername(final String username)
 	{
 		if (!getPastUsernames().contains(username))
 		{

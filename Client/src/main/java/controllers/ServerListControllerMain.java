@@ -3,9 +3,13 @@ package controllers;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
 
 import data.Favourites;
 import data.SampServer;
@@ -37,6 +41,10 @@ import util.GTA;
 
 public abstract class ServerListControllerMain implements ViewController
 {
+
+	@FXML
+	private TextField						addressTextField;
+
 	@FXML
 	protected TableView<SampServer>			tableView;
 
@@ -124,6 +132,74 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	@FXML
+	private void onClickAddToFavourites()
+	{
+		final String[] ipAndPort = addressTextField.getText().split("[:]");
+		if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
+		{
+			servers.add(Favourites.addServerToFavourites(ipAndPort[0], ipAndPort[1]));
+			updateTable();
+		}
+		else
+		{
+			final Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Add to Favourites");
+			alert.setHeaderText("Couldn't add server to favourites.");
+			alert.setContentText("The address that you have entered, doesn't seem to be valid.");
+
+			alert.showAndWait();
+		}
+	}
+
+	@FXML
+	public void onClickConnect()
+	{
+		final String[] ipAndPort = addressTextField.getText().split("[:]");
+		if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
+		{
+			tryToConnect(ipAndPort[0], ipAndPort[1]);
+		}
+		else
+		{
+			final Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Connect to Server");
+			alert.setHeaderText("Can't connect to Server");
+			alert.setContentText("The address that you have entered, doesn't seem to be valid.");
+
+			alert.showAndWait();
+		}
+	}
+
+	private boolean validateServerAddress(final String address)
+	{
+		try
+		{
+			InetAddress.getByName(address);
+			return true;
+		}
+		catch (final UnknownHostException e)
+		{
+			return false;
+		}
+	}
+
+	private boolean validatePort(final String port)
+	{
+		if (!StringUtils.isNumeric(port))
+		{
+			return false;
+		}
+
+		final int portNumber = Integer.parseInt(port);
+		if (portNumber <= 0 || portNumber >= 65535)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	@FXML
 	protected void onTableViewMouseReleased(final MouseEvent clicked)
 	{
 		if (Objects.nonNull(menu))
@@ -133,7 +209,7 @@ public abstract class ServerListControllerMain implements ViewController
 
 		final List<SampServer> serverList = tableView.getSelectionModel().getSelectedItems();
 
-		if (Objects.nonNull(serverList))
+		if (!serverList.isEmpty())
 		{
 			if (clicked.getButton().equals(MouseButton.PRIMARY))
 			{
@@ -287,37 +363,7 @@ public abstract class ServerListControllerMain implements ViewController
 			if (clickedItem == connectItem)
 			{
 				final SampServer server = serverList.get(0);
-				try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
-				{
-
-					final String[] serverInfo = query.getBasicServerInfo();
-
-					if (Objects.nonNull(serverInfo) && !serverInfo[0].equals("0"))
-					{
-						final TextInputDialog dialog = new TextInputDialog();
-						dialog.setTitle("Connect to Server");
-						dialog.setHeaderText("Enter the servers password.");
-
-						final Optional<String> result = dialog.showAndWait();
-						if (result.isPresent())
-						{
-							GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort(), result.get());
-						}
-					}
-					else
-					{
-						GTA.connectToServerPerShell(server.getAddress() + ":" + server.getPort());
-					}
-				}
-				catch (final Exception e)
-				{
-					final Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Connect to Server");
-					alert.setHeaderText("Can't connect to Server");
-					alert.setContentText("Server seems to be offline, try again.");
-
-					alert.showAndWait();
-				}
+				tryToConnect(server.getAddress(), server.getPort());
 			}
 			else if (clickedItem == addToFavourites)
 			{
@@ -345,6 +391,50 @@ public abstract class ServerListControllerMain implements ViewController
 		});
 
 		menu.show(tableView, posX, posY);
+	}
+
+	/**
+	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a password. If the server is not reachable
+	 * the user can not connect.
+	 * 
+	 * @param address
+	 *            server ip
+	 * @param port
+	 *            server port
+	 */
+	private void tryToConnect(final String address, final String port)
+	{
+		try (final SampQuery query = new SampQuery(address, Integer.parseInt(port)))
+		{
+
+			final String[] serverInfo = query.getBasicServerInfo();
+
+			if (Objects.nonNull(serverInfo) && !serverInfo[0].equals("0"))
+			{
+				final TextInputDialog dialog = new TextInputDialog();
+				dialog.setTitle("Connect to Server");
+				dialog.setHeaderText("Enter the servers password.");
+
+				final Optional<String> result = dialog.showAndWait();
+				if (result.isPresent())
+				{
+					GTA.connectToServer(address + ":" + port, result.get());
+				}
+			}
+			else
+			{
+				GTA.connectToServer(address + ":" + port);
+			}
+		}
+		catch (final Exception e)
+		{
+			final Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Connect to Server");
+			alert.setHeaderText("Can't connect to Server");
+			alert.setContentText("Server seems to be offline, try again.");
+
+			alert.showAndWait();
+		}
 	}
 
 	protected void updateServerInfo(final SampServer server)

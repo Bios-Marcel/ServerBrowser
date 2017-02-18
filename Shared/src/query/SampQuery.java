@@ -106,6 +106,7 @@ public class SampQuery implements AutoCloseable
 	 *         Index 3: hostname<br />
 	 *         Index 4: gamemode<br />
 	 *         Index 5: map<br />
+	 *         Index 5: language
 	 */
 	public String[] getBasicServerInfo()
 	{

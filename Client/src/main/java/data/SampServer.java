@@ -30,6 +30,12 @@ public class SampServer
 
 	private final StringProperty	versionProperty			= new SimpleStringProperty();
 
+	public SampServer(final String address, final String port)
+	{
+		addressProperty.set(address);
+		portProperty.set(port);
+	}
+
 	public SampServer(final SampServerSerializeable server)
 	{
 		hostnameProperty.set(server.getHostname());

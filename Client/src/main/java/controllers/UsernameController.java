@@ -3,7 +3,6 @@ package controllers;
 import java.util.Objects;
 
 import data.PastUsernames;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
@@ -30,15 +29,7 @@ public class UsernameController
 
 	public void init()
 	{
-		usernameTextField.focusedProperty().addListener((ChangeListener<Boolean>) (arg0, oldPropertyValue, newPropertyValue) ->
-		{
-			if (!newPropertyValue)
-			{
-				GTA.getUsername().set(usernameTextField.getText());
-			}
-		});
-
-		usernameTextField.setText(GTA.getUsername().get());
+		usernameTextField.textProperty().bindBidirectional(GTA.usernameProperty());
 
 		nameList.setItems(FXCollections.observableArrayList(PastUsernames.getPastUsernames()));
 	}

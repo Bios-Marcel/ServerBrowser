@@ -3,6 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -17,6 +18,16 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <HBox spacing="5.0">
+      <children>
+         <TextField fx:id="addressTextField" promptText="Please enter a valid server address (Example: 195.43.123.234:63284)" HBox.hgrow="ALWAYS" />
+         <Button onAction="#onClickConnect" mnemonicParsing="false" text="Connect" />
+         <Button mnemonicParsing="false" onAction="#onClickAddToFavourites" text="Add to Favourites" />
+      </children>
+      <padding>
+         <Insets bottom="5.0" />
+      </padding>
+   </HBox>
 	<TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onTableViewKeyReleased" onMouseReleased="#onTableViewMouseReleased" prefHeight="100.0" VBox.vgrow="ALWAYS">
 		<columns>
 			<TableColumn fx:id="columnHostname" minWidth="20.0" prefWidth="20.0" text="Hostname">

@@ -17,20 +17,22 @@ import logging.Logging;
 
 public class GTA
 {
-	private static SimpleStringProperty username = new SimpleStringProperty(retrieveUsername());
+	private static SimpleStringProperty username = new SimpleStringProperty(retrieveUsernameFromRegistry());
 
-	public static SimpleStringProperty getUsername()
+	public static SimpleStringProperty usernameProperty()
 	{
 		return username;
 	}
 
-	public static void setUsername(final String newName)
+	/**
+	 * Writes the actual username (from registry) into the past usernames list and sets the new name
+	 */
+	public static void applyUsername()
 	{
-
+		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try
 		{
-			username.set(newName);
-			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", newName);
+			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty().get());
 		}
 		catch (final RegistryException e)
 		{
@@ -39,7 +41,7 @@ public class GTA
 
 	}
 
-	public static String retrieveUsername()
+	private static String retrieveUsernameFromRegistry()
 	{
 		try
 		{
@@ -104,11 +106,10 @@ public class GTA
 		return "Unknown Version";
 	}
 
-	private static boolean connectToServer(final String ipAndPort)
+	private static boolean connectToServerUsingProtocol(final String ipAndPort)
 	{
 		try
 		{
-			setUsername(getUsername().get());
 			final Desktop d = Desktop.getDesktop();
 			d.browse(new URI("samp://" + ipAndPort));
 			return true;
@@ -120,9 +121,9 @@ public class GTA
 		}
 	}
 
-	public static void connectToServerPerShell(final String ipAndPort, final String password)
+	public static void connectToServer(final String ipAndPort, final String password)
 	{
-		PastUsernames.addPastUsernames(GTA.getUsername().get());
+		applyUsername();
 		try
 		{
 			final ProcessBuilder builder = new ProcessBuilder(getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);
@@ -133,17 +134,17 @@ public class GTA
 		{
 			if (StringUtils.isEmpty(password))
 			{
-				connectToServer(ipAndPort);
+				connectToServerUsingProtocol(ipAndPort);
 			}
 			else
 			{
-				e.printStackTrace();
+				Logging.logger.log(Level.WARNING, "Couldn't connect to server", e);
 			}
 		}
 	}
 
-	public static void connectToServerPerShell(final String ipAndPort)
+	public static void connectToServer(final String ipAndPort)
 	{
-		connectToServerPerShell(ipAndPort, "");
+		connectToServer(ipAndPort, "");
 	}
 }
