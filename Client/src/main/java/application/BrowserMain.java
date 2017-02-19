@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Level;
 
-import controllers.MainController;
+import gui.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,13 +27,13 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import logging.Logging;
 import util.FileUtility;
-import windows.OSInfo;
+import util.windows.OSInfo;
 
 public class BrowserMain extends Application
 {
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private static final String	VERSION				= "1.0.18";
+	private static final String	VERSION				= "1.0.19";
 
 	@Override
 	public void start(final Stage primaryStage)

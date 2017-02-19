@@ -1,4 +1,4 @@
-package controllers;
+package gui.controllers;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,6 +24,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -92,6 +94,9 @@ public abstract class ServerListControllerMain implements ViewController
 	private MenuItem						connectItem;
 
 	private MenuItem						copyIpAddressAndPort;
+
+	@FXML
+	private CheckBox						regexCheckBox;
 
 	@FXML
 	private TextField						nameFilter;
@@ -236,7 +241,9 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		final SampServer server = tableView.getSelectionModel().getSelectedItem();
 
-		if (released.getCode().equals(KeyCode.DOWN) || released.getCode().equals(KeyCode.KP_DOWN) || released.getCode().equals(KeyCode.KP_UP) || released.getCode().equals(KeyCode.UP))
+		final KeyCode usedKey = released.getCode();
+
+		if (usedKey.equals(KeyCode.DOWN) || usedKey.equals(KeyCode.KP_DOWN) || usedKey.equals(KeyCode.KP_UP) || usedKey.equals(KeyCode.UP))
 		{
 			updateServerInfo(server);
 		}
@@ -247,65 +254,62 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		filteredServers.setPredicate(server ->
 		{
-			final String nameFilterSetting = nameFilter.getText();
-
-			if (!nameFilterSetting.isEmpty())
-			{
-				final boolean negateExpression = nameFilterSetting.charAt(0) == '!';
-
-				if (server.getHostname().toLowerCase().contains(removeExclamationMarkAtStart(nameFilterSetting).toLowerCase()) == negateExpression)
-				{
-					return false;
-				}
-			}
-
-			final String modeFilterSetting = modeFilter.getText();
-
-			if (!modeFilterSetting.isEmpty())
-			{
-				final boolean negateExpression = modeFilterSetting.charAt(0) == '!';
-
-				if (server.getMode().toLowerCase().contains(removeExclamationMarkAtStart(modeFilterSetting).toLowerCase()) == negateExpression)
-				{
-					return false;
-				}
-			}
-
-			final String languageFilterSetting = languageFilter.getText();
-
-			if (!languageFilterSetting.isEmpty())
-			{
-				final boolean negateExpression = languageFilterSetting.charAt(0) == '!';
-
-				if (server.getLanguage().toLowerCase().contains(removeExclamationMarkAtStart(languageFilterSetting).toLowerCase()) == negateExpression)
-				{
-					return false;
-				}
-			}
+			boolean doesNameFilterApply = true;
+			boolean doesModeFilterApply = true;
+			boolean doesLanguageFilterApply = true;
+			boolean doesVersionFilterApply = true;
 
 			if (!versionFilter.getSelectionModel().isEmpty())
 			{
 				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString();
-
-				if (!server.getVersion().toLowerCase().contains(versionFilterSetting.toLowerCase()))
-				{
-					return false;
-				}
+				doesVersionFilterApply = server.getVersion().toLowerCase().contains(versionFilterSetting.toLowerCase());
 			}
 
-			return true;
+			final String nameFilterSetting = nameFilter.getText().toLowerCase();
+			final String modeFilterSetting = modeFilter.getText().toLowerCase();
+			final String languageFilterSetting = languageFilter.getText().toLowerCase();
+
+			final String hostname = server.getHostname().toLowerCase();
+			final String mode = server.getMode().toLowerCase();
+			final String language = server.getLanguage().toLowerCase();
+
+			if (regexCheckBox.isSelected())
+			{
+				doesNameFilterApply = regexFilter(hostname, nameFilterSetting);
+				doesModeFilterApply = regexFilter(mode, modeFilterSetting);
+				doesLanguageFilterApply = regexFilter(language, languageFilterSetting);
+			}
+			else
+			{
+				doesNameFilterApply = hostname.contains(nameFilterSetting);
+				doesModeFilterApply = hostname.contains(modeFilterSetting);
+				doesLanguageFilterApply = hostname.contains(languageFilterSetting);
+			}
+
+			return doesNameFilterApply && doesModeFilterApply && doesVersionFilterApply && doesLanguageFilterApply;
 		});
 
 		updateTable();
 	}
 
-	private static String removeExclamationMarkAtStart(final String string)
+	private boolean regexFilter(final String toFilter, final String filterSetting)
 	{
-		if (string.charAt(0) == '!')
+		if (!filterSetting.isEmpty())
 		{
-			return string.replaceFirst("!", "");
+			try
+			{
+				if (!toFilter.matches(filterSetting))
+				{
+					return false;
+				}
+			}
+			catch (final PatternSyntaxException e)
+			{
+				return false;
+			}
 		}
-		return string;
+
+		return true;
 	}
 
 	/**

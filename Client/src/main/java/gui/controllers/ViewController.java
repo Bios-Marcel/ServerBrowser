@@ -1,4 +1,4 @@
-package controllers;
+package gui.controllers;
 
 public interface ViewController
 {

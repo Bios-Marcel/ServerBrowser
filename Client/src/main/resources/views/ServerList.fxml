@@ -4,8 +4,10 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -18,44 +20,57 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-   <HBox spacing="5.0">
-      <children>
-         <TextField fx:id="addressTextField" promptText="Please enter a valid server address (Example: 195.43.123.234:63284)" HBox.hgrow="ALWAYS" />
-         <Button onAction="#onClickConnect" mnemonicParsing="false" text="Connect" />
-         <Button mnemonicParsing="false" onAction="#onClickAddToFavourites" text="Add to Favourites" />
-      </children>
-      <padding>
-         <Insets bottom="5.0" />
-      </padding>
-   </HBox>
-	<TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#onTableViewKeyReleased" onMouseReleased="#onTableViewMouseReleased" prefHeight="100.0" VBox.vgrow="ALWAYS">
+	<HBox spacing="5.0">
+		<children>
+			<TextField fx:id="addressTextField"
+				promptText="Please enter a valid server address (Example: 195.43.123.234:63284)"
+				HBox.hgrow="ALWAYS" />
+			<Button mnemonicParsing="false" onAction="#onClickConnect"
+				text="Connect" />
+			<Button mnemonicParsing="false" onAction="#onClickAddToFavourites"
+				text="Add to Favourites" />
+		</children>
+		<padding>
+			<Insets bottom="5.0" />
+		</padding>
+	</HBox>
+	<TableView fx:id="tableView" maxHeight="1.7976931348623157E308"
+		maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+		onKeyReleased="#onTableViewKeyReleased" onMouseReleased="#onTableViewMouseReleased"
+		prefHeight="100.0" VBox.vgrow="ALWAYS">
 		<columns>
-			<TableColumn fx:id="columnHostname" minWidth="20.0" prefWidth="20.0" text="Hostname">
+			<TableColumn fx:id="columnHostname" minWidth="20.0"
+				prefWidth="20.0" text="Hostname">
 				<cellValueFactory>
 					<PropertyValueFactory property="hostname" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="columnPlayers" maxWidth="66.0" minWidth="66.0" prefWidth="66.0" text="Players">
+			<TableColumn fx:id="columnPlayers" maxWidth="66.0"
+				minWidth="66.0" prefWidth="66.0" text="Players">
 				<cellValueFactory>
 					<PropertyValueFactory property="playersAndMaxPlayers" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="columnMode" maxWidth="500.0" minWidth="80.0" text="Mode">
+			<TableColumn fx:id="columnMode" maxWidth="500.0"
+				minWidth="80.0" text="Mode">
 				<cellValueFactory>
 					<PropertyValueFactory property="mode" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="columnLanguage" maxWidth="500.0" minWidth="80.0" text="Language">
+			<TableColumn fx:id="columnLanguage" maxWidth="500.0"
+				minWidth="80.0" text="Language">
 				<cellValueFactory>
 					<PropertyValueFactory property="language" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn maxWidth="65.0" minWidth="65.0" prefWidth="65.0" text="Version">
+			<TableColumn maxWidth="65.0" minWidth="65.0" prefWidth="65.0"
+				text="Version">
 				<cellValueFactory>
 					<PropertyValueFactory property="version" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="columnWebsite" minWidth="20.0" prefWidth="200.0" text="Website">
+			<TableColumn fx:id="columnWebsite" minWidth="20.0"
+				prefWidth="200.0" text="Website">
 				<cellValueFactory>
 					<PropertyValueFactory property="website" />
 				</cellValueFactory>
@@ -70,7 +85,8 @@
 			<Insets top="5.0" />
 		</padding>
 		<children>
-			<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="300.0">
+			<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308"
+				maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="300.0">
 				<columns>
 					<TableColumn fx:id="playerName" prefWidth="227.0" text="Player">
 						<cellValueFactory>
@@ -87,91 +103,116 @@
 					<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 				</columnResizePolicy>
 			</TableView>
-			<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Filter Settings" HBox.hgrow="ALWAYS">
+			<TitledPane animated="false" collapsible="false"
+				maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+				text="Filter Settings" HBox.hgrow="ALWAYS">
 				<content>
 					<GridPane maxHeight="1.7976931348623157E308" vgap="5.0">
 						<columnConstraints>
-							<ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="10.0" prefWidth="127.0" />
-							<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="73.0" />
+							<ColumnConstraints hgrow="ALWAYS" />
+							<ColumnConstraints hgrow="ALWAYS"
+								maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="73.0" />
 						</columnConstraints>
 						<rowConstraints>
+							<RowConstraints />
+							<RowConstraints />
 							<RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
-                     <RowConstraints vgrow="ALWAYS" />
-							<!--RowConstraints vgrow="ALWAYS" />
 							<RowConstraints vgrow="ALWAYS" />
-							<RowConstraints vgrow="ALWAYS" /-->
 						</rowConstraints>
 						<children>
-							<TextField fx:id="nameFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-							<TextField fx:id="modeFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
-							<TextField fx:id="languageFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-							<ComboBox fx:id="versionFilter" maxWidth="1.7976931348623157E308" onAction="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
+							<TextField fx:id="nameFilter" maxWidth="1.7976931348623157E308"
+								onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1"
+								GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+							<TextField fx:id="modeFilter" maxWidth="1.7976931348623157E308"
+								onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1"
+								GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+							<TextField fx:id="languageFilter" maxWidth="1.7976931348623157E308"
+								onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1"
+								GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+							<ComboBox fx:id="versionFilter" maxWidth="1.7976931348623157E308"
+								onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
+								GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
 								<items>
-							        <FXCollections fx:factory="observableArrayList">
-							          <String fx:value="0.3.7" />
-							          <String fx:value="0.3z" />
-							          <String fx:value="0.3x" />
-							          <String fx:value="0.3e" />
-							          <String fx:value="0.3e" />
-							          <String fx:value="0.3c" />
-							          <String fx:value="0.3a" />
-							        </FXCollections>
+									<FXCollections fx:factory="observableArrayList">
+										<String fx:value="0.3.7" />
+										<String fx:value="0.3z" />
+										<String fx:value="0.3x" />
+										<String fx:value="0.3e" />
+										<String fx:value="0.3e" />
+										<String fx:value="0.3c" />
+										<String fx:value="0.3a" />
+									</FXCollections>
 								</items>
 							</ComboBox>
-							<Label text="Version" GridPane.rowIndex="3" />
-							<Label text="Name" />
-							<Label text="Mode" GridPane.rowIndex="1" />
-							<Label text="Language" GridPane.rowIndex="2" />
-							<!--Label text="Empty Servers" GridPane.rowIndex="3" />
-							<Label text="Full Servers" GridPane.rowIndex="4" />
-							<Label text="Passworded Servers" GridPane.rowIndex="5" />
-							<CheckBox fx:id="modeFilter" onAction="#onFilterSettingsChange" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-							<CheckBox fx:id="fullFilter" onAction="#onFilterSettingsChange" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-							<CheckBox fx:id="passwordFilter" onAction="#onFilterSettingsChange" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" /-->
+							<Label text="Version" GridPane.rowIndex="5" />
+							<Label text="Name" GridPane.rowIndex="2" />
+							<Label text="Mode" GridPane.rowIndex="3" />
+							<Label text="Language" GridPane.rowIndex="4" />
+							<Label text="Use Regex" />
+							<CheckBox fx:id="regexCheckBox" onAction="#onFilterSettingsChange"
+								mnemonicParsing="false" GridPane.columnIndex="1"
+								GridPane.halignment="CENTER" />
+							<Separator prefWidth="200.0" GridPane.columnSpan="2"
+								GridPane.rowIndex="1" />
 						</children>
 					</GridPane>
 				</content>
 			</TitledPane>
 			<VBox spacing="5.0" HBox.hgrow="NEVER">
 				<children>
-					<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Server Info" VBox.vgrow="ALWAYS">
+					<TitledPane animated="false" collapsible="false"
+						maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+						text="Server Info" VBox.vgrow="ALWAYS">
 						<content>
-							<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="5.0">
+							<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+								vgap="5.0">
 								<columnConstraints>
-									<ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
-									<ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="73.0" />
+									<ColumnConstraints hgrow="SOMETIMES"
+										maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+									<ColumnConstraints hgrow="SOMETIMES"
+										maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="73.0" />
 								</columnConstraints>
 								<rowConstraints>
 									<RowConstraints vgrow="ALWAYS" />
 									<RowConstraints vgrow="ALWAYS" />
 									<RowConstraints vgrow="ALWAYS" />
-                           <RowConstraints vgrow="ALWAYS" />
+									<RowConstraints vgrow="ALWAYS" />
 								</rowConstraints>
 								<children>
 									<Label text="Address:">
-                              <GridPane.margin>
-                                 <Insets />
-                              </GridPane.margin>
-                           </Label>
+										<GridPane.margin>
+											<Insets />
+										</GridPane.margin>
+									</Label>
 									<Label text="lagcomp:" GridPane.rowIndex="1" />
-									<TextField fx:id="serverAddress" editable="false" prefHeight="17.0" prefWidth="140.0" styleClass="copyableLabel" text="" GridPane.columnIndex="1" />
-									<Label fx:id="serverLagcomp" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+									<TextField fx:id="serverAddress" editable="false"
+										prefHeight="17.0" prefWidth="140.0" styleClass="copyableLabel"
+										text="" GridPane.columnIndex="1" />
+									<Label fx:id="serverLagcomp" text=""
+										GridPane.columnIndex="1" GridPane.rowIndex="1" />
 									<Label text="Ping:" GridPane.rowIndex="2" />
-									<Label fx:id="serverPing" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                          			<Label text="Passworded:" GridPane.rowIndex="3" />
-									<Label fx:id="serverPassword" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+									<Label fx:id="serverPing" GridPane.columnIndex="1"
+										GridPane.rowIndex="2" />
+									<Label text="Passworded:" GridPane.rowIndex="3" />
+									<Label fx:id="serverPassword" GridPane.columnIndex="1"
+										GridPane.rowIndex="3" />
 								</children>
 							</GridPane>
 						</content>
 					</TitledPane>
-					<TitledPane animated="false" expanded="false" maxWidth="1.7976931348623157E308" text="Global Statistics" VBox.vgrow="NEVER">
+					<TitledPane animated="false" expanded="false"
+						maxWidth="1.7976931348623157E308" text="Global Statistics"
+						VBox.vgrow="NEVER">
 						<content>
-							<GridPane maxHeight="1.7976931348623157E308" prefHeight="81.0" prefWidth="266.0" vgap="5.0">
+							<GridPane maxHeight="1.7976931348623157E308" prefHeight="81.0"
+								prefWidth="266.0" vgap="5.0">
 								<columnConstraints>
-									<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
-									<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
+									<ColumnConstraints hgrow="ALWAYS"
+										maxWidth="1.7976931348623157E308" />
+									<ColumnConstraints hgrow="ALWAYS"
+										maxWidth="1.7976931348623157E308" />
 								</columnConstraints>
 								<rowConstraints>
 									<RowConstraints vgrow="ALWAYS" />
@@ -183,8 +224,10 @@
 									<Label text="Servers:" />
 									<Label text="Players playing:" GridPane.rowIndex="1" />
 									<Label fx:id="serverCount" text="0" GridPane.columnIndex="1" />
-									<Label fx:id="playerCount" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-									<Label fx:id="slotCount" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+									<Label fx:id="playerCount" text="0" GridPane.columnIndex="1"
+										GridPane.rowIndex="1" />
+									<Label fx:id="slotCount" text="0" GridPane.columnIndex="1"
+										GridPane.rowIndex="2" />
 								</children>
 							</GridPane>
 						</content>

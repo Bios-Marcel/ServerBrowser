@@ -60,7 +60,7 @@
 						</ImageView>
 					</children>
 				</StackPane>
-				<StackPane styleClass="MenuItem" fx:id="menuItemSettings"
+				<StackPane visible="false" styleClass="MenuItem" fx:id="menuItemSettings"
 					onMouseReleased="#onMenuItemClicked">
 					<children>
 						<ImageView fitHeight="48.0" fitWidth="48.0"

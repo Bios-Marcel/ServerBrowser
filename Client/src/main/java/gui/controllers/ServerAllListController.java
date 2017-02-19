@@ -1,4 +1,4 @@
-package controllers;
+package gui.controllers;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
