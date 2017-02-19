@@ -21,6 +21,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+// TODO(MSC) Improve, what i have made here is complete utter crap.
 public class PastUsernames
 {
 	public static void addPastUsername(final String username)
@@ -67,10 +68,10 @@ public class PastUsernames
 	{
 		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
 		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder;
+
 		try
 		{
-			dBuilder = dbFactory.newDocumentBuilder();
+			final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			final Document doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 

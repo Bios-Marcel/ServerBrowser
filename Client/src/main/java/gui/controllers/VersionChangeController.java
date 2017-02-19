@@ -160,13 +160,13 @@ public class VersionChangeController implements ViewController
 				FileUtility.unZipIt(file, GTA.getGtaPath());
 				file.delete();
 				installing = "";
-				Platform.runLater(() ->
+				if (mainController != null)
 				{
-					if (mainController != null)
+					Platform.runLater(() ->
 					{
 						mainController.refreshVersionChangerViewIfDisplayed();
-					}
-				});
+					});
+				}
 
 			}
 			catch (IOException | IllegalArgumentException e)
@@ -177,8 +177,6 @@ public class VersionChangeController implements ViewController
 
 		thread.start();
 	}
-
-	// Codeah died for this code, RIP
 
 	private void disableAllButtons()
 	{

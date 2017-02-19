@@ -20,7 +20,6 @@ public class MySQLConnection
 			connect = DriverManager.getConnection("jdbc:mysql://localhost?useSSL=false&useUnicode=true&characterEncoding=UTF-8", username, password);
 			connect.setCatalog("mp_server_browser");
 			Logging.logger.log(Level.INFO, "Databank connection has been established.");
-
 		}
 		catch (final ClassNotFoundException e)
 		{
@@ -88,7 +87,7 @@ public class MySQLConnection
 		}
 		catch (final SQLException e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.WARNING, e.getMessage(), e);
 		}
 	}
 }

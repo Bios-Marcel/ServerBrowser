@@ -147,8 +147,7 @@ public class BrowserMain extends Application
 			final URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/version.info");
 			try (final Scanner s = new Scanner(url.toURL().openStream()))
 			{
-				final String versionLatest = s.nextLine();
-				if (!versionLatest.equals(VERSION))
+				if (!VERSION.equals(s.nextLine()))
 				{
 					final Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Launching Application");
@@ -160,13 +159,12 @@ public class BrowserMain extends Application
 					{
 						updateLauncher();
 					}
-
 				}
 			}
 		}
 		catch (final Exception e)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't retrieve Update / Update Info.");
+			Logging.logger.log(Level.SEVERE, "Couldn't retrieve Update / Update Info.", e);
 		}
 	}
 

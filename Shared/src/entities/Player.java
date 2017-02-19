@@ -1,31 +1,27 @@
 package entities;
 
-import java.io.Serializable;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Player implements Serializable
+public class Player
 {
-	private static final long	serialVersionUID	= 2770927297609110070L;
+	private final SimpleStringProperty	playerName	= new SimpleStringProperty();
 
-	private final String		playerName;
-
-	private final String		playerScore;
+	private final SimpleStringProperty	playerScore	= new SimpleStringProperty();
 
 	public Player(final String playerName, final String playerScore)
 	{
-		this.playerName = playerName;
-		this.playerScore = playerScore;
+		this.playerName.set(playerName);
+		this.playerScore.set(playerScore);
 	}
 
 	public StringProperty playerNameProperty()
 	{
-		return new SimpleStringProperty(playerName);
+		return playerName;
 	}
 
 	public StringProperty playerScoreProperty()
 	{
-		return new SimpleStringProperty(playerScore);
+		return playerScore;
 	}
 }

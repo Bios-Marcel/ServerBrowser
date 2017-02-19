@@ -13,7 +13,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import util.GTA;
 
-public class UsernameController
+public class UsernameController implements ViewController
 {
 	@FXML
 	private TextField			usernameTextField;
@@ -27,6 +27,7 @@ public class UsernameController
 
 	private MenuItem			removeName;
 
+	@Override
 	public void init()
 	{
 		usernameTextField.textProperty().bindBidirectional(GTA.usernameProperty());

@@ -39,7 +39,6 @@ public class FileUtility
 		}
 		catch (final ZipException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

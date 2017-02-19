@@ -249,6 +249,7 @@ public class ServerMain
 						String version = null;
 						int weather = 0;
 
+						// TODO(MSC) Inspect data response of all server versions and remove loops if possible
 						for (int i = 0; infoMore.length > i; i++)
 						{
 							if (infoMore[i][0].equals("lagcomp"))

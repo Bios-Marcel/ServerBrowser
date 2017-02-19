@@ -201,12 +201,8 @@ public abstract class ServerListControllerMain implements ViewController
 		}
 
 		final int portNumber = Integer.parseInt(port);
-		if (portNumber <= 0 || portNumber >= 65535)
-		{
-			return false;
-		}
 
-		return true;
+		return !(portNumber < 0 || portNumber > 65535);
 	}
 
 	@FXML
@@ -223,11 +219,7 @@ public abstract class ServerListControllerMain implements ViewController
 		{
 			if (clicked.getButton().equals(MouseButton.PRIMARY))
 			{
-				final SampServer server = serverList.get(0);
-				if (Objects.nonNull(server))
-				{
-					updateServerInfo(server);
-				}
+				updateServerInfo(serverList.get(0));
 			}
 			else if (clicked.getButton().equals(MouseButton.SECONDARY))
 			{
@@ -352,18 +344,11 @@ public abstract class ServerListControllerMain implements ViewController
 			menu.getItems().add(copyIpAddressAndPort);
 		}
 
-		if (serverList.size() == 1)
-		{
-			connectItem.setVisible(true);
-			copyIpAddressAndPort.setVisible(true);
-			menu.getItems().get(1).setVisible(true);
-		}
-		else
-		{
-			connectItem.setVisible(false);
-			copyIpAddressAndPort.setVisible(false);
-			menu.getItems().get(1).setVisible(false);
-		}
+		final boolean sizeEqualsOne = (serverList.size() == 1);
+
+		connectItem.setVisible(sizeEqualsOne);
+		copyIpAddressAndPort.setVisible(sizeEqualsOne);
+		menu.getItems().get(1).setVisible(sizeEqualsOne);
 
 		menu.setOnAction(action ->
 		{
@@ -425,10 +410,10 @@ public abstract class ServerListControllerMain implements ViewController
 				dialog.setHeaderText("Enter the servers password.");
 
 				final Optional<String> result = dialog.showAndWait();
-				if (result.isPresent())
+				result.ifPresent(password ->
 				{
-					GTA.connectToServer(address + ":" + port, result.get());
-				}
+					GTA.connectToServer(address + ":" + port, password);
+				});
 			}
 			else
 			{
@@ -470,10 +455,17 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				final String[] serverInfo = query.getBasicServerInfo();
 
+				final String passworded;
+
 				if (Objects.nonNull(serverInfo))
 				{
 					server.setPlayers(Integer.parseInt(serverInfo[1]));
 					server.setMaxPlayers(Integer.parseInt(serverInfo[2]));
+					passworded = serverInfo[0].equals("0") ? "No" : "Yes";
+				}
+				else
+				{
+					passworded = "";
 				}
 
 				final ObservableList<Player> players = FXCollections.observableArrayList();
@@ -486,16 +478,6 @@ public abstract class ServerListControllerMain implements ViewController
 					{
 						players.add(new Player(basicPlayers[i][0], basicPlayers[i][1]));
 					}
-				}
-
-				final String passworded;
-				if (Objects.nonNull(serverInfo))
-				{
-					passworded = serverInfo[0].equals("0") ? "No" : "Yes";
-				}
-				else
-				{
-					passworded = "";
 				}
 
 				final long ping = query.getPing();
@@ -532,13 +514,10 @@ public abstract class ServerListControllerMain implements ViewController
 						if (rules[i][0].equals("lagcomp"))
 						{
 							final String temp = rules[i][1];
-							if (Objects.nonNull(temp) && !temp.isEmpty())
+							Platform.runLater(() ->
 							{
-								Platform.runLater(() ->
-								{
-									serverLagcomp.setText(temp);
-								});
-							}
+								serverLagcomp.setText(temp);
+							});
 							break;
 						}
 					}

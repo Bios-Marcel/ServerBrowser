@@ -1,12 +1,14 @@
 package gui.controllers;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import logging.Logging;
 
 public class MainController implements ViewController
 {
@@ -102,12 +104,14 @@ public class MainController implements ViewController
 			{
 				case VERSION_CHANGER:
 				{
-					loadVersionChanger();
+					loadFXML("/views/Version.fxml", VERSION_CHANGER_TITLE, new VersionChangeController(this));
+					menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
 				case USERNAME_CHANGER:
 				{
-					loadUsernameChanger();
+					loadFXML("/views/Username.fxml", USERNAME_CHANGER_TITLE, new UsernameController());
+					menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
 				case SETTINGS:
@@ -116,12 +120,14 @@ public class MainController implements ViewController
 				}
 				case SERVERS_FAV:
 				{
-					loadSeverListFavourite();
+					loadFXML("/views/ServerList.fxml", SA_MP_SERVERS_FAV_TITLE, new ServerFavouriteListController());
+					menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
 				case SERVERS_ALL:
 				{
-					loadServerListAll();
+					loadFXML("/views/ServerList.fxml", SA_MP_SERVERS_ALL_TITLE, new ServerAllListController());
+					menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
 				default:
@@ -134,79 +140,20 @@ public class MainController implements ViewController
 		}
 	}
 
-	private void loadSeverListFavourite()
+	private void loadFXML(final String fxmlpath, final String title, final ViewController controller)
 	{
 		final FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/views/ServerList.fxml"));
-		final ServerFavouriteListController controller = new ServerFavouriteListController();
+		loader.setLocation(getClass().getResource(fxmlpath));
 		loader.setController(controller);
 		try
 		{
 			activeView.getChildren().add(loader.load());
-			menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
-			headerTitle.setText(SA_MP_SERVERS_FAV_TITLE);
+			headerTitle.setText(title);
 			controller.init();
 		}
 		catch (final IOException e)
 		{
-			e.printStackTrace();
-		}
-	}
-
-	private void loadVersionChanger()
-	{
-		final FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/views/VersionUI.fxml"));
-		final VersionChangeController controller = new VersionChangeController(this);
-		loader.setController(controller);
-		try
-		{
-			activeView.getChildren().add(loader.load());
-			menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
-			headerTitle.setText(VERSION_CHANGER_TITLE);
-			controller.init();
-		}
-		catch (final IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	private void loadServerListAll()
-	{
-		final FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/views/ServerList.fxml"));
-		final ServerAllListController controller = new ServerAllListController();
-		loader.setController(controller);
-		try
-		{
-			activeView.getChildren().add(loader.load());
-			menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
-			headerTitle.setText(SA_MP_SERVERS_ALL_TITLE);
-			controller.init();
-		}
-		catch (final IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	private void loadUsernameChanger()
-	{
-		final FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/views/Username.fxml"));
-		final UsernameController controller = new UsernameController();
-		loader.setController(controller);
-		try
-		{
-			activeView.getChildren().add(loader.load());
-			menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
-			headerTitle.setText(USERNAME_CHANGER_TITLE);
-			controller.init();
-		}
-		catch (final IOException e)
-		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Couldn't load view.", e);
 		}
 	}
 

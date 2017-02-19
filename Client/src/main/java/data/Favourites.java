@@ -27,6 +27,7 @@ import entities.SampServerSerializeable;
 import logging.Logging;
 import query.SampQuery;
 
+// TODO(MSC) Improve, what i have made here is complete utter crap.
 public class Favourites
 {
 

@@ -67,6 +67,7 @@ public class GTA
 		}
 	}
 
+	// TODO(MSC) Quite crappy too, since i can't be sure this works in all cases.
 	public static String getInstalledVersion()
 	{
 		final File file = new File(GTA.getGtaPath() + "samp.dll");
