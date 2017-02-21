@@ -2,7 +2,6 @@ package gui.controllers;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.logging.Level;
 
 import data.Favourites;
@@ -20,7 +19,7 @@ public class ServerFavouriteListController extends ServerListControllerMain
 	{
 		super.init();
 
-		final Set<SampServer> favs = Favourites.getFavourites();
+		final List<SampServer> favs = Favourites.getFavourites();
 		servers.addAll(favs);
 
 		// FIXME(MSC) Okay, that definitly needs improvement ;D
@@ -36,15 +35,14 @@ public class ServerFavouriteListController extends ServerListControllerMain
 			{
 				try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
 				{
-					final String[] serverInfo = query.getBasicServerInfo();
-					if (Objects.nonNull(serverInfo))
+					query.getBasicServerInfo().ifPresent(serverInfo ->
 					{
 						server.setPlayers(Integer.parseInt(serverInfo[1]));
 						server.setMaxPlayers(Integer.parseInt(serverInfo[2]));
 
 						playersPlaying += Integer.parseInt(serverInfo[1]);
 						maxSlots += Integer.parseInt(serverInfo[2]);
-					}
+					});
 				}
 				catch (final NumberFormatException e)
 				{

@@ -2,22 +2,17 @@ package data;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -27,30 +22,24 @@ import entities.SampServerSerializeable;
 import logging.Logging;
 import query.SampQuery;
 
-// TODO(MSC) Improve, what i have made here is complete utter crap.
 public class Favourites
 {
-
 	public static SampServer addServerToFavourites(final String address, final String port)
 	{
 		final SampServer server = new SampServer(address, port);
 		try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
 
 		{
-			final String[] serverInfo = query.getBasicServerInfo();
-
-			if (Objects.nonNull(serverInfo))
+			query.getBasicServerInfo().ifPresent(serverInfo ->
 			{
 				server.setPlayers(Integer.parseInt(serverInfo[1]));
 				server.setMaxPlayers(Integer.parseInt(serverInfo[2]));
 				server.setHostname(serverInfo[3]);
 				server.setMode(serverInfo[4]);
 				server.setLanguage(serverInfo[6]);
-			}
+			});
 
-			final String[][] rules = query.getServersRules();
-
-			if (Objects.nonNull(rules))
+			query.getServersRules().ifPresent(rules ->
 			{
 				for (int i = 0; rules.length > i; i++)
 				{
@@ -63,7 +52,7 @@ public class Favourites
 						server.setVersion(rules[i][1]);
 					}
 				}
-			}
+			});
 		}
 		catch (final Exception e)
 		{
@@ -83,109 +72,50 @@ public class Favourites
 
 	public static void addServerToFavourites(final SampServer server)
 	{
-		final Set<SampServer> existantData = getFavourites();
-
-		boolean existant = false;
-
-		for (final SampServer serverExistant : existantData)
+		if (!getFavourites().contains(server))
 		{
-			if (server.getAddress().equals(serverExistant.getAddress()) && server.getPort().equals(serverExistant.getPort()))
-			{
-				existant = true;
-				break;
-			}
-		}
-		if (!existant)
-		{
-			final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
-			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			try
-			{
-				final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-				Document doc;
-
-				try
-				{
-					doc = dBuilder.parse(xmlFile);
-					doc.getDocumentElement().normalize();
-				}
-				catch (final Exception e)
-				{
-					doc = dBuilder.newDocument();
-				}
-
-				final Element newServer = doc.createElement("server");
-
-				newServer.setAttribute("ip", server.getAddress());
-				newServer.setAttribute("port", server.getPort());
-				newServer.setAttribute("hostname", server.getHostname());
-				newServer.setAttribute("mode", server.getMode());
-				newServer.setAttribute("language", server.getLanguage());
-				newServer.setAttribute("lagcomp", server.getLagcomp());
-				newServer.setAttribute("version", server.getVersion());
-				newServer.setAttribute("maxplayers", server.getMaxPlayers().toString());
-				newServer.setAttribute("players", server.getPlayers().toString());
-				newServer.setAttribute("website", server.getWebsite());
-
-				doc.getElementsByTagName("servers").item(0).appendChild(newServer);
-
-				final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				final Transformer transformer = transformerFactory.newTransformer();
-				final DOMSource source = new DOMSource(doc);
-				final StreamResult result = new StreamResult(xmlFile);
-				transformer.transform(source, result);
-
-			}
-			catch (ParserConfigurationException | TransformerException e)
-			{
-				Logging.logger.log(Level.WARNING, "Couldn't save Server to Favourites (Hostname " + server.getHostname() + " IP: " + server.getAddress() + " Port: " + server.getPort(), e);
-			}
+			String statement =
+							"INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', ''{7}'', ''{8}'', ''{9}'');";
+			statement =
+							MessageFormat.format(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers(), server.getMaxPlayers(),
+											server.getMode(), server.getPort(), server.getVersion(), server.getWebsite());
+			SQLDatabase.execute(statement);
 		}
 	}
 
 	public static void removeServerFromFavourites(final SampServer server)
 	{
-		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
-		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-
-		try
-		{
-			final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			final Document doc = dBuilder.parse(xmlFile);
-			doc.getDocumentElement().normalize();
-
-			// <server ip='" + ip + "' port='" + port + "'/>
-			final NodeList list = doc.getElementsByTagName("server");
-
-			for (int i = 0; i < list.getLength(); i++)
-			{
-
-				final Node node = list.item(i);
-				final NamedNodeMap attr = node.getAttributes();
-				final Node ipNode = attr.getNamedItem("ip");;
-				final Node portNode = attr.getNamedItem("port");
-
-				if (portNode.getTextContent().equals(server.getPort()) && ipNode.getTextContent().equals(server.getAddress()))
-				{
-					doc.getElementsByTagName("servers").item(0).removeChild(node);
-				}
-			}
-
-			final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			final Transformer transformer = transformerFactory.newTransformer();
-			final DOMSource source = new DOMSource(doc);
-			final StreamResult result = new StreamResult(xmlFile);
-			transformer.transform(source, result);
-		}
-		catch (ParserConfigurationException | SAXException | IOException | TransformerException e)
-		{
-			e.printStackTrace();
-		}
+		String statement = "DELETE FROM favourite WHERE ip = ''{0}'' AND port = ''{1}'';";
+		statement = MessageFormat.format(statement, server.getAddress(), server.getPort());
+		SQLDatabase.execute(statement);
 	}
 
-	public static Set<SampServer> getFavourites()
+	public static List<SampServer> getFavourites()
 	{
-		final Set<SampServer> servers = new HashSet<>();
+		final List<SampServer> servers = new ArrayList<>();
+
+		SQLDatabase.executeGetResult("SELECT * FROM favourite;").ifPresent(resultSet ->
+		{
+			try
+			{
+				while (resultSet.next())
+				{
+					servers.add(new SampServer(new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip"), resultSet.getInt("port") + "", resultSet.getInt("players"), resultSet.getInt("maxplayers"),
+									resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"), resultSet.getString("website"), resultSet.getString("version"))));
+				}
+			}
+			catch (final SQLException e)
+			{
+				e.printStackTrace();
+			}
+		});
+
+		return servers;
+	}
+
+	public static List<SampServer> getFavouritesFromXML()
+	{
+		final List<SampServer> servers = new ArrayList<>();
 
 		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
 		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

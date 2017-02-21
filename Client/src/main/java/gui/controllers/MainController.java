@@ -3,6 +3,8 @@ package gui.controllers;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import data.properties.ClientProperties;
+import data.properties.PropertyIds;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -21,15 +23,15 @@ public class MainController implements ViewController
 
 	private static final String	SA_MP_SERVERS_ALL_TITLE	= "Servers | All";
 
-	private static final int	VERSION_CHANGER			= 1;
+	private static final int	VERSION_CHANGER			= 4;
 
-	private static final int	USERNAME_CHANGER		= 2;
+	private static final int	USERNAME_CHANGER		= 3;
 
-	private static final int	SETTINGS				= 3;
+	private static final int	SETTINGS				= 5;
 
-	private static final int	SERVERS_FAV				= 4;
+	private static final int	SERVERS_FAV				= 1;
 
-	private static final int	SERVERS_ALL				= 5;
+	private static final int	SERVERS_ALL				= 2;
 
 	@FXML
 	private StackPane			menuItemFav;
@@ -57,7 +59,7 @@ public class MainController implements ViewController
 	@Override
 	public void init()
 	{
-		loadView(SERVERS_FAV);
+		loadView(ClientProperties.getPropertyAsInt(PropertyIds.LAST_VIEW));
 	}
 
 	@FXML
@@ -168,5 +170,10 @@ public class MainController implements ViewController
 	private int getActiveViewID()
 	{
 		return activeViewId;
+	}
+
+	public void onClose()
+	{
+		ClientProperties.setProperty(PropertyIds.LAST_VIEW, activeViewId);
 	}
 }

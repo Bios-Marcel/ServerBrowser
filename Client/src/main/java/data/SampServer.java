@@ -51,6 +51,11 @@ public class SampServer
 		updatePlayersAndMaxPlayers();
 	}
 
+	public boolean equals(final SampServer compare)
+	{
+		return getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
+	}
+
 	public StringProperty hostnameProperty()
 	{
 		return hostnameProperty;

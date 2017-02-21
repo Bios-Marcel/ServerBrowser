@@ -7,14 +7,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.rmi.server.RMISocketFactory;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Level;
 
+import data.Favourites;
+import data.PastUsernames;
+import data.SQLDatabase;
+import data.SampServer;
 import gui.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -42,7 +44,7 @@ public class BrowserMain extends Application
 
 		checkVersion();
 
-		createFilesAndFolders();
+		prepareData();
 
 		setRMISocketFactory();
 
@@ -69,6 +71,11 @@ public class BrowserMain extends Application
 			primaryStage.setIconified(false);
 			primaryStage.setMaximized(false);
 			controller.init();
+
+			primaryStage.setOnCloseRequest(close ->
+			{
+				controller.onClose();
+			});
 		}
 		catch (final Exception e)
 		{
@@ -96,7 +103,7 @@ public class BrowserMain extends Application
 	/**
 	 * Creates files and folders that are necessary for the application to run properly.
 	 */
-	private static void createFilesAndFolders()
+	private static void prepareData()
 	{
 		File file = new File(System.getProperty("user.home") + File.separator + "sampex");
 
@@ -105,34 +112,29 @@ public class BrowserMain extends Application
 			file.mkdir();
 		}
 
+		SQLDatabase.init();
+
 		file = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
 
-		if (!file.exists())
+		// Migration from XML to SQLLite
+		if (file.exists())
 		{
-			try
+			for (final SampServer server : Favourites.getFavouritesFromXML())
 			{
-				file.createNewFile();
-				Files.write(Paths.get(file.getPath()), new String("<servers/>").getBytes());
+				Favourites.addServerToFavourites(server);
 			}
-			catch (final IOException e)
-			{
-				Logging.logger.log(Level.WARNING, e.getMessage(), e);
-			}
+			file.delete();
 		}
 
 		file = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
 
-		if (!file.exists())
+		if (file.exists())
 		{
-			try
+			for (final String username : PastUsernames.getPastUsernamesFromXML())
 			{
-				file.createNewFile();
-				Files.write(Paths.get(file.getPath()), new String("<usernames/>").getBytes());
+				PastUsernames.addPastUsername(username);
 			}
-			catch (final IOException e)
-			{
-				Logging.logger.log(Level.WARNING, e.getMessage(), e);
-			}
+			file.delete();
 		}
 	}
 

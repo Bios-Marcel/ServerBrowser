@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -234,49 +235,51 @@ public class ServerMain
 
 					try (final SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1])))
 					{
-						final String[] info = query.getBasicServerInfo();
+						final Optional<String[]> infoOptional = query.getBasicServerInfo();
 
-						final String[][] infoMore = query.getServersRules();
+						final Optional<String[][]> infoMoreOptional = query.getServersRules();
 
-						if (Objects.isNull(infoMore) || Objects.isNull(info))
+						if (infoOptional.isPresent() && infoMoreOptional.isPresent())
 						{
-							continue;
+
+							final String[] info = infoOptional.get();
+							final String[][] infoMore = infoMoreOptional.get();
+
+							String weburl = null;
+							String lagcomp = null;
+							String worldtime = null;
+							String version = null;
+							int weather = 0;
+
+							// TODO(MSC) Inspect data response of all server versions and remove loops if possible
+							for (int i = 0; infoMore.length > i; i++)
+							{
+								if (infoMore[i][0].equals("lagcomp"))
+								{
+									lagcomp = infoMore[i][1];
+								}
+								else if (infoMore[i][0].equals("weburl"))
+								{
+									weburl = infoMore[i][1];
+								}
+								else if (infoMore[i][0].equals("version"))
+								{
+									version = infoMore[i][1];
+								}
+								else if (infoMore[i][0].equals("worldtime"))
+								{
+									worldtime = infoMore[i][1];
+								}
+								else if (infoMore[i][0].equals("weather"))
+								{
+									weather = Integer.parseInt(infoMore[i][1]);
+								}
+							}
+
+							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4], info[6], lagcomp, info[5], version, weather, weburl,
+											worldtime);
+							Logging.logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
-
-						String weburl = null;
-						String lagcomp = null;
-						String worldtime = null;
-						String version = null;
-						int weather = 0;
-
-						// TODO(MSC) Inspect data response of all server versions and remove loops if possible
-						for (int i = 0; infoMore.length > i; i++)
-						{
-							if (infoMore[i][0].equals("lagcomp"))
-							{
-								lagcomp = infoMore[i][1];
-							}
-							else if (infoMore[i][0].equals("weburl"))
-							{
-								weburl = infoMore[i][1];
-							}
-							else if (infoMore[i][0].equals("version"))
-							{
-								version = infoMore[i][1];
-							}
-							else if (infoMore[i][0].equals("worldtime"))
-							{
-								worldtime = infoMore[i][1];
-							}
-							else if (infoMore[i][0].equals("weather"))
-							{
-								weather = Integer.parseInt(infoMore[i][1]);
-							}
-						}
-
-						MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4], info[6], lagcomp, info[5], version, weather, weburl,
-										worldtime);
-						Logging.logger.log(Level.INFO, "Added Server: " + inputLine);
 					}
 					catch (final Exception e)
 					{

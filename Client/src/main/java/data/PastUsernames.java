@@ -2,106 +2,65 @@ package data;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-// TODO(MSC) Improve, what i have made here is complete utter crap.
 public class PastUsernames
 {
 	public static void addPastUsername(final String username)
 	{
 		if (!getPastUsernames().contains(username))
 		{
-			final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
-			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			try
-			{
-				final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-
-				Document doc;
-				try
-				{
-					doc = dBuilder.parse(xmlFile);
-					doc.getDocumentElement().normalize();
-				}
-				catch (final Exception e)
-				{
-					doc = dBuilder.newDocument();
-				}
-
-				final Element newPastUsername = doc.createElement("username");
-
-				newPastUsername.setAttribute("name", username);
-
-				doc.getElementsByTagName("usernames").item(0).appendChild(newPastUsername);
-
-				final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				final Transformer transformer = transformerFactory.newTransformer();
-				final DOMSource source = new DOMSource(doc);
-				final StreamResult result = new StreamResult(xmlFile);
-				transformer.transform(source, result);
-			}
-			catch (ParserConfigurationException | TransformerException e)
-			{
-				e.printStackTrace();
-			}
+			String statement = "INSERT INTO username (username) VALUES (''{0}'');";
+			statement = MessageFormat.format(statement, username);
+			SQLDatabase.execute(statement);
 		}
 	}
 
 	public static void removePastUsername(final String username)
 	{
-		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
-		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-
-		try
-		{
-			final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			final Document doc = dBuilder.parse(xmlFile);
-			doc.getDocumentElement().normalize();
-
-			final NodeList list = doc.getElementsByTagName("username");
-
-			for (int i = 0; i < list.getLength(); i++)
-			{
-				final Node node = list.item(i);
-				final NamedNodeMap attr = node.getAttributes();
-				final Node nameNode = attr.getNamedItem("name");;
-
-				if (nameNode.getTextContent().equals(username))
-				{
-					doc.getElementsByTagName("usernames").item(0).removeChild(node);
-				}
-			}
-
-			final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			final Transformer transformer = transformerFactory.newTransformer();
-			final DOMSource source = new DOMSource(doc);
-			final StreamResult result = new StreamResult(xmlFile);
-			transformer.transform(source, result);
-		}
-		catch (ParserConfigurationException | SAXException | IOException | TransformerException e)
-		{
-			e.printStackTrace();
-		}
+		String statement = "DELETE FROM username WHERE username = ''{0}'';";
+		statement = MessageFormat.format(statement, username);
+		SQLDatabase.execute(statement);
 	}
 
-	public static Set<String> getPastUsernames()
+	public static List<String> getPastUsernames()
+	{
+		final List<String> usernames = new ArrayList<>();
+
+		SQLDatabase.executeGetResult("SELECT username FROM username;").ifPresent(resultSet ->
+		{
+			try
+			{
+				while (resultSet.next())
+				{
+					usernames.add(resultSet.getString("username"));
+				}
+			}
+			catch (final SQLException e)
+			{
+				e.printStackTrace();
+			}
+		});
+
+		return usernames;
+	}
+
+	public static Set<String> getPastUsernamesFromXML()
 	{
 		final Set<String> usernames = new HashSet<>();
 

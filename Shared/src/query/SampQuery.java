@@ -108,7 +108,7 @@ public class SampQuery implements AutoCloseable
 	 *         Index 5: map<br />
 	 *         Index 5: language
 	 */
-	public String[] getBasicServerInfo()
+	public Optional<String[]> getBasicServerInfo()
 	{
 		if (send(PAKCET_GET_SERVERINFO))
 		{
@@ -172,10 +172,10 @@ public class SampQuery implements AutoCloseable
 				}
 				serverInfo[6] = Encoding.encodeUsingCharsetIfPossible(language, encoding);
 
-				return serverInfo;
+				return Optional.of(serverInfo);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class SampQuery implements AutoCloseable
 	 *         Index Data 1: = score<br />
 	 * @see getDetailedPlayers
 	 */
-	public String[][] getBasicPlayerInfo()
+	public Optional<String[][]> getBasicPlayerInfo()
 	{
 		if (send(PACKET_GET_BASIC_PLAYERINFO))
 		{
@@ -217,11 +217,11 @@ public class SampQuery implements AutoCloseable
 						// TODO(MSC) Fix ...
 					}
 				}
-				return players;
+				return Optional.of(players);
 			}
 
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**
@@ -234,7 +234,7 @@ public class SampQuery implements AutoCloseable
 	 *         players[2] = score<br />
 	 * @see getBasicPlayers
 	 */
-	public String[][] getDetailedPlayerInfo()
+	public Optional<String[][]> getDetailedPlayerInfo()
 	{
 		if (send(PACKET_GET_DETAILED_PLAYERINFO))
 		{
@@ -259,10 +259,10 @@ public class SampQuery implements AutoCloseable
 					players[i][1] = new String(playerName);
 					players[i][2] = "" + buffer.getInt();
 				}
-				return players;
+				return Optional.of(players);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class SampQuery implements AutoCloseable
 	 * 
 	 * @return String[Rulename][Rulevalue]
 	 */
-	public String[][] getServersRules()
+	public Optional<String[][]> getServersRules()
 	{
 		if (send(PACKET_GET_RULES))
 		{
@@ -304,10 +304,10 @@ public class SampQuery implements AutoCloseable
 					rules[i][1] = new String(ruleValue);
 				}
 
-				return rules;
+				return Optional.of(rules);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	private ByteBuffer wrapReply(final byte[] reply)

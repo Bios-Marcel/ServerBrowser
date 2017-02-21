@@ -82,18 +82,18 @@ public abstract class ServerListControllerMain implements ViewController
 
 	private static Thread					threadGetPlayers;
 
+	protected MenuItem						addToFavourites			= new MenuItem("Add to Favourites");
+
+	protected MenuItem						removeFromFavourites	= new MenuItem("Remove from Favourites");
+
+	private final MenuItem					connectItem				= new MenuItem("Connect to Server");
+
+	private final MenuItem					copyIpAddressAndPort	= new MenuItem("Copy IP Address and Port");
+
 	/**
 	 * The menu that will be dsiplayed, when a user selects 1 .. n servers and right clicks the table
 	 */
-	protected ContextMenu					menu;
-
-	protected MenuItem						addToFavourites;
-
-	protected MenuItem						removeFromFavourites;
-
-	private MenuItem						connectItem;
-
-	private MenuItem						copyIpAddressAndPort;
+	protected ContextMenu					menu					= new ContextMenu(connectItem, new SeparatorMenuItem(), addToFavourites, removeFromFavourites, copyIpAddressAndPort);
 
 	@FXML
 	private CheckBox						regexCheckBox;
@@ -208,10 +208,7 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	protected void onTableViewMouseReleased(final MouseEvent clicked)
 	{
-		if (Objects.nonNull(menu))
-		{
-			menu.hide();
-		}
+		menu.hide();
 
 		final List<SampServer> serverList = tableView.getSelectionModel().getSelectedItems();
 
@@ -329,21 +326,6 @@ public abstract class ServerListControllerMain implements ViewController
 	 */
 	protected void displayMenu(final List<SampServer> serverList, final double posX, final double posY)
 	{
-		if (Objects.isNull(menu))
-		{
-			menu = new ContextMenu();
-			connectItem = new MenuItem("Connect to Server");
-			addToFavourites = new MenuItem("Add to Favourites");
-			removeFromFavourites = new MenuItem("Remove from Favourites");
-			copyIpAddressAndPort = new MenuItem("Copy IP Address and Port");
-
-			menu.getItems().add(connectItem);
-			menu.getItems().add(new SeparatorMenuItem());
-			menu.getItems().add(addToFavourites);
-			menu.getItems().add(removeFromFavourites);
-			menu.getItems().add(copyIpAddressAndPort);
-		}
-
 		final boolean sizeEqualsOne = (serverList.size() == 1);
 
 		connectItem.setVisible(sizeEqualsOne);
@@ -401,9 +383,9 @@ public abstract class ServerListControllerMain implements ViewController
 		try (final SampQuery query = new SampQuery(address, Integer.parseInt(port)))
 		{
 
-			final String[] serverInfo = query.getBasicServerInfo();
+			final Optional<String[]> serverInfo = query.getBasicServerInfo();
 
-			if (Objects.nonNull(serverInfo) && !serverInfo[0].equals("0"))
+			if (serverInfo.isPresent() && !serverInfo.get()[0].equals("0"))
 			{
 				final TextInputDialog dialog = new TextInputDialog();
 				dialog.setTitle("Connect to Server");
@@ -453,12 +435,14 @@ public abstract class ServerListControllerMain implements ViewController
 			try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
 
 			{
-				final String[] serverInfo = query.getBasicServerInfo();
+				final Optional<String[]> serverInfoOptional = query.getBasicServerInfo();
 
 				final String passworded;
 
-				if (Objects.nonNull(serverInfo))
+				if (serverInfoOptional.isPresent())
 				{
+					final String[] serverInfo = serverInfoOptional.get();
+
 					server.setPlayers(Integer.parseInt(serverInfo[1]));
 					server.setMaxPlayers(Integer.parseInt(serverInfo[2]));
 					passworded = serverInfo[0].equals("0") ? "No" : "Yes";
@@ -470,15 +454,13 @@ public abstract class ServerListControllerMain implements ViewController
 
 				final ObservableList<Player> players = FXCollections.observableArrayList();
 
-				final String[][] basicPlayers = query.getBasicPlayerInfo();
-
-				if (Objects.nonNull(basicPlayers))
+				query.getBasicPlayerInfo().ifPresent(basicPlayers ->
 				{
 					for (int i = 0; i < basicPlayers.length; i++)
 					{
 						players.add(new Player(basicPlayers[i][0], basicPlayers[i][1]));
 					}
-				}
+				});
 
 				final long ping = query.getPing();
 
@@ -505,9 +487,7 @@ public abstract class ServerListControllerMain implements ViewController
 					}
 				});
 
-				final String[][] rules = query.getServersRules();
-
-				if (Objects.nonNull(rules))
+				query.getServersRules().ifPresent(rules ->
 				{
 					for (int i = 0; rules.length > i; i++)
 					{
@@ -521,7 +501,7 @@ public abstract class ServerListControllerMain implements ViewController
 							break;
 						}
 					}
-				}
+				});
 
 				Platform.runLater(() ->
 				{
