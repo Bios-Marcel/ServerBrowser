@@ -1,16 +1,22 @@
 package gui.controllers;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import data.SampServer;
+import entities.SampServerSerializeable;
 import interfaces.DataServiceInterface;
 import logging.Logging;
 
@@ -33,15 +39,41 @@ public class ServerAllListController extends ServerListControllerMain
 		}
 	}
 
+	private static Object deserialzieAndDecompress(final byte[] data)
+	{
+		try
+		{
+			System.out.println(data.length);
+			final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+			final GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
+			final ObjectInputStream objectInputStream = new ObjectInputStream(gzipInputStream);
+			final Object object = objectInputStream.readObject();
+			objectInputStream.close();
+			return object;
+		}
+		catch (final IOException | ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	@Override
 	public void init()
 	{
+		final long start1 = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
+
 		super.init();
 
 		try
 		{
 			servers.clear();
-			servers.addAll(remoteDataService.getAllServers().stream().map(server ->
+
+			final Set<SampServerSerializeable> serializedServers = (Set<SampServerSerializeable>) deserialzieAndDecompress(remoteDataService.getAllServers());
+			System.out.println("Receiving and decompressing data in ms: " + (System.currentTimeMillis() - start));
+			start = System.currentTimeMillis();
+			servers.addAll(serializedServers.stream().map(server ->
 			{
 				final SampServer newServer = new SampServer(server);
 				playersPlaying += newServer.getPlayers();
@@ -51,9 +83,12 @@ public class ServerAllListController extends ServerListControllerMain
 				newServer.setMode(StringEscapeUtils.unescapeHtml4(newServer.getMode()));
 				return newServer;
 			}).collect(Collectors.toSet()));
+			System.out.println("Editing data in ms: " + (System.currentTimeMillis() - start));
+			start = System.currentTimeMillis();
 
 			sortedServers.clear();
 			sortedServers.addAll(filteredServers);
+			System.out.println("adding data in ms: " + (System.currentTimeMillis() - start));
 		}
 		catch (final RemoteException e)
 		{
@@ -63,6 +98,7 @@ public class ServerAllListController extends ServerListControllerMain
 		serverCount.setText(sortedServers.size() + "");
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(maxSlots - playersPlaying + "");
+		System.out.println("Overall data in ms: " + (System.currentTimeMillis() - start1));
 	}
 
 	@Override
