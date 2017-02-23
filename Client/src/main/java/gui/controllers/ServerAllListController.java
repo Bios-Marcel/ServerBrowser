@@ -31,7 +31,7 @@ public class ServerAllListController extends ServerListControllerMain
 		try
 		{
 			registry = LocateRegistry.getRegistry("ts3.das-chat.xyz");
-			remoteDataService = (DataServiceInterface) registry.lookup("DataServiceInterface");
+			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
 		}
 		catch (RemoteException | NotBoundException e)
 		{
@@ -61,9 +61,6 @@ public class ServerAllListController extends ServerListControllerMain
 	@Override
 	public void init()
 	{
-		final long start1 = System.currentTimeMillis();
-		long start = System.currentTimeMillis();
-
 		super.init();
 
 		try
@@ -71,8 +68,6 @@ public class ServerAllListController extends ServerListControllerMain
 			servers.clear();
 
 			final Set<SampServerSerializeable> serializedServers = (Set<SampServerSerializeable>) deserialzieAndDecompress(remoteDataService.getAllServers());
-			System.out.println("Receiving and decompressing data in ms: " + (System.currentTimeMillis() - start));
-			start = System.currentTimeMillis();
 			servers.addAll(serializedServers.stream().map(server ->
 			{
 				final SampServer newServer = new SampServer(server);
@@ -83,12 +78,9 @@ public class ServerAllListController extends ServerListControllerMain
 				newServer.setMode(StringEscapeUtils.unescapeHtml4(newServer.getMode()));
 				return newServer;
 			}).collect(Collectors.toSet()));
-			System.out.println("Editing data in ms: " + (System.currentTimeMillis() - start));
-			start = System.currentTimeMillis();
 
 			sortedServers.clear();
 			sortedServers.addAll(filteredServers);
-			System.out.println("adding data in ms: " + (System.currentTimeMillis() - start));
 		}
 		catch (final RemoteException e)
 		{
@@ -98,7 +90,6 @@ public class ServerAllListController extends ServerListControllerMain
 		serverCount.setText(sortedServers.size() + "");
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(maxSlots - playersPlaying + "");
-		System.out.println("Overall data in ms: " + (System.currentTimeMillis() - start1));
 	}
 
 	@Override

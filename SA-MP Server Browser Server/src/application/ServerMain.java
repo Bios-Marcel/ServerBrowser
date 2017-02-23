@@ -99,7 +99,7 @@ public class ServerMain
 			registry = LocateRegistry.createRegistry(1099);
 			dataService = new DataServiceServerImplementation();
 			stub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
-			registry.rebind("DataServiceInterface", stub);
+			registry.rebind(DataServiceInterface.INTERFACE_NAME, stub);
 			Logging.logger.log(Level.INFO, "RMI has been initialized.");
 		}
 		catch (final Exception e)

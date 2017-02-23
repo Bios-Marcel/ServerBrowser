@@ -40,6 +40,8 @@ public class ClientProperties
 
 	public static Integer getPropertyAsInt(final PropertyIds id)
 	{
+		checkDataType(id, Integer.class);
+
 		Integer value = 0;
 
 		final String originalValue = getPropertyAsString(id);
@@ -56,25 +58,67 @@ public class ClientProperties
 		return value;
 	}
 
+	public static Float getPropertyAsFloat(final PropertyIds id)
+	{
+		checkDataType(id, Float.class);
+
+		Float value = 0.0F;
+
+		final String originalValue = getPropertyAsString(id);
+
+		try
+		{
+			value = Float.parseFloat(originalValue);
+		}
+		catch (final NumberFormatException e)
+		{
+			Logging.logger.log(Level.SEVERE, "Invalid property value, property: " + id, e);
+		}
+
+		return value;
+	}
+
 	public static Boolean getPropertyAsBoolean(final PropertyIds id)
 	{
+		checkDataType(id, Boolean.class);
+
 		return Boolean.parseBoolean(getPropertyAsString(id));
 	}
 
-	public static void setProperty(final PropertyIds id, final String value)
+	private static void checkDataType(final PropertyIds id, final Class<?> datatype)
 	{
+		if (!id.datatype().equals(datatype))
+		{
+			throw new IllegalArgumentException("Datatype is " + datatype.getName() + " ; Expected: " + id.datatype().getName());
+		}
+	}
+
+	public static void setProperty(final PropertyIds id, final Object value)
+	{
+		checkDataType(id, value.getClass());
+
 		String statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, ''{1}'');";
 		statement = MessageFormat.format(statement, id.value(), value);
 		SQLDatabase.execute(statement);
 	}
 
+	public static void setProperty(final PropertyIds id, final Float value)
+	{
+		setProperty(id, (Object) value);
+	}
+
 	public static void setProperty(final PropertyIds id, final Integer value)
 	{
-		setProperty(id, value.toString());
+		setProperty(id, (Object) value);
 	}
 
 	public static void setProperty(final PropertyIds id, final Boolean value)
 	{
-		setProperty(id, value.toString());
+		setProperty(id, (Object) value);
+	}
+
+	public static void setProperty(final PropertyIds id, final String value)
+	{
+		setProperty(id, (Object) value);
 	}
 }
