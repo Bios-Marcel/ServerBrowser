@@ -69,7 +69,7 @@ public class SampQuery implements AutoCloseable
 	 */
 	public SampQuery(final String serverAddress, final int serverPort) throws Exception
 	{
-		this(serverAddress, serverPort, 250);
+		this(serverAddress, serverPort, 1250);
 	}
 
 	/**
@@ -105,7 +105,6 @@ public class SampQuery implements AutoCloseable
 	 *         Index 2: maxplayers<br />
 	 *         Index 3: hostname<br />
 	 *         Index 4: gamemode<br />
-	 *         Index 5: map<br />
 	 *         Index 5: language
 	 */
 	public Optional<String[]> getBasicServerInfo()

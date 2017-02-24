@@ -210,7 +210,7 @@ public class ServerMain
 				{
 					final String[] data = inputLine.split("[:]");
 
-					try (final SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1]), 800))
+					try (final SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1])))
 					{
 						final Optional<String[]> infoOptional = query.getBasicServerInfo();
 

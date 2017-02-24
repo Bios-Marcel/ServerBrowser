@@ -51,11 +51,6 @@ public class SampServer
 		updatePlayersAndMaxPlayers();
 	}
 
-	public boolean equals(final SampServer compare)
-	{
-		return getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
-	}
-
 	public StringProperty hostnameProperty()
 	{
 		return hostnameProperty;
@@ -216,5 +211,18 @@ public class SampServer
 	public void setWebsite(final String website)
 	{
 		websiteProperty.set(website);
+	}
+
+	@Override
+	public boolean equals(final Object obj)
+	{
+		final SampServer compare = (SampServer) obj;
+		return getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return (getAddress() + getPort()).hashCode();
 	}
 }

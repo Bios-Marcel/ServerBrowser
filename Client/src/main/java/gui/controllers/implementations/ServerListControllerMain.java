@@ -80,7 +80,7 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private Label							serverPassword;
 
-	private static Thread					threadGetPlayers;
+	private static Thread					serverInfoUpdateThread;
 
 	protected MenuItem						addToFavourites			= new MenuItem("Add to Favourites");
 
@@ -144,20 +144,27 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private void onClickAddToFavourites()
 	{
-		final String[] ipAndPort = addressTextField.getText().split("[:]");
-		if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
+		if (Objects.nonNull(addressTextField.getText()))
 		{
-			servers.add(Favourites.addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1])));
-			updateTable();
-		}
-		else
-		{
-			final Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Add to Favourites");
-			alert.setHeaderText("Couldn't add server to favourites.");
-			alert.setContentText("The address that you have entered, doesn't seem to be valid.");
+			final String[] ipAndPort = addressTextField.getText().split("[:]");
+			if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
+			{
+				final SampServer newServer = Favourites.addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
+				if (!servers.contains(newServer))
+				{
+					servers.add(newServer);
+					updateTable();
+				}
+			}
+			else
+			{
+				final Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Add to Favourites");
+				alert.setHeaderText("Couldn't add server to favourites.");
+				alert.setContentText("The address that you have entered, doesn't seem to be valid.");
 
-			alert.showAndWait();
+				alert.showAndWait();
+			}
 		}
 	}
 
@@ -384,7 +391,6 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		try (final SampQuery query = new SampQuery(address, port))
 		{
-
 			final Optional<String[]> serverInfo = query.getBasicServerInfo();
 
 			if (serverInfo.isPresent() && !serverInfo.get()[0].equals("0"))
@@ -427,83 +433,98 @@ public abstract class ServerListControllerMain implements ViewController
 		serverPing.setText("Retrieving ...");
 		serverPassword.setText("Retrieving ...");
 
-		if (Objects.nonNull(threadGetPlayers))
+		if (Objects.nonNull(serverInfoUpdateThread))
 		{
-			threadGetPlayers.interrupt();
+			serverInfoUpdateThread.interrupt();
 		}
 
-		threadGetPlayers = new Thread(() ->
+		serverInfoUpdateThread = new Thread(() ->
 		{
 			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort()))
-
 			{
-				final Optional<String[]> serverInfoOptional = query.getBasicServerInfo();
 
-				final String passworded;
+				final Optional<String[]> infoOptional = query.getBasicServerInfo();
 
-				if (serverInfoOptional.isPresent())
+				final Optional<String[][]> infoMoreOptional = query.getServersRules();
+
+				if (infoOptional.isPresent() && infoMoreOptional.isPresent())
 				{
-					final String[] serverInfo = serverInfoOptional.get();
+					final String[] info = infoOptional.get();
+					final String[][] infoMore = infoMoreOptional.get();
 
-					server.setPlayers(Integer.parseInt(serverInfo[1]));
-					server.setMaxPlayers(Integer.parseInt(serverInfo[2]));
-					passworded = serverInfo[0].equals("0") ? "No" : "Yes";
-				}
-				else
-				{
-					passworded = "";
-				}
+					final int players = Integer.parseInt(info[1]);
+					final int maxPlayers = Integer.parseInt(info[2]);
 
-				final ObservableList<Player> players = FXCollections.observableArrayList();
+					String weburl = null;
+					String lagcomp = null;
+					String version = null;
 
-				query.getBasicPlayerInfo().ifPresent(basicPlayers ->
-				{
-					for (int i = 0; i < basicPlayers.length; i++)
+					// TODO(MSC) Inspect data response of all server versions and remove loops if possible
+					for (int i = 0; infoMore.length > i; i++)
 					{
-						players.add(new Player(basicPlayers[i][0], basicPlayers[i][1]));
-					}
-				});
-
-				final long ping = query.getPing();
-
-				Platform.runLater(() ->
-				{
-					serverPassword.setText(passworded);
-					serverPing.setText("" + ping);
-
-					if (!players.isEmpty())
-					{
-						playerTable.setItems(players);
-					}
-					else
-					{
-						playerTable.setPlaceholder(new Label("Currently, noone is playing on this server."));
-					}
-
-					if (playerTable.getItems().isEmpty() && server.getPlayers() >= 100)
-					{
-						final Label label = new Label("Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
-						label.setWrapText(true);
-						label.setAlignment(Pos.CENTER);
-						playerTable.setPlaceholder(label);
-					}
-				});
-
-				query.getServersRules().ifPresent(rules ->
-				{
-					for (int i = 0; rules.length > i; i++)
-					{
-						if (rules[i][0].equals("lagcomp"))
+						if (infoMore[i][0].equals("lagcomp"))
 						{
-							final String temp = rules[i][1];
-							Platform.runLater(() ->
-							{
-								serverLagcomp.setText(temp);
-							});
-							break;
+							lagcomp = infoMore[i][1];
+						}
+						else if (infoMore[i][0].equals("weburl"))
+						{
+							weburl = infoMore[i][1];
+						}
+						else if (infoMore[i][0].equals("version"))
+						{
+							version = infoMore[i][1];
 						}
 					}
-				});
+
+					server.setPlayers(players);
+					server.setMaxPlayers(maxPlayers);
+					server.setHostname(info[3]);
+					server.setMode(info[4]);
+					server.setLanguage(info[5]);
+
+					server.setWebsite(weburl);
+					server.setVersion(version);
+					server.setLagcomp(lagcomp);
+
+					final ObservableList<Player> playerList = FXCollections.observableArrayList();
+
+					query.getBasicPlayerInfo().ifPresent(basicPlayers ->
+					{
+						for (int i = 0; i < basicPlayers.length; i++)
+						{
+							playerList.add(new Player(basicPlayers[i][0], basicPlayers[i][1]));
+						}
+					});
+
+					final long ping = query.getPing();
+
+					Platform.runLater(() ->
+					{
+						serverPassword.setText(info[0].equals("0") ? "No" : "Yes");
+						serverPing.setText("" + ping);
+
+						if (!playerList.isEmpty())
+						{
+							playerTable.setItems(playerList);
+						}
+						else
+						{
+							playerTable.setPlaceholder(new Label("Currently, noone is playing on this server."));
+						}
+
+						if (playerTable.getItems().isEmpty() && server.getPlayers() >= 100)
+						{
+							final Label label = new Label("Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
+							label.setWrapText(true);
+							label.setAlignment(Pos.CENTER);
+							playerTable.setPlaceholder(label);
+						}
+
+						serverLagcomp.setText(server.getLagcomp());
+					});
+
+					Favourites.updateServerData(server);
+				}
 
 				Platform.runLater(() ->
 				{
@@ -521,7 +542,7 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 		});
 
-		threadGetPlayers.start();
+		serverInfoUpdateThread.start();
 	}
 
 	private void updateGlobalInfo()

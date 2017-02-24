@@ -75,18 +75,28 @@ public class Favourites
 		if (!getFavourites().contains(server))
 		{
 			String statement =
-							"INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', ''{7}'', ''{8}'', ''{9}'');";
+							"INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
 			statement =
-							MessageFormat.format(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers(), server.getMaxPlayers(),
-											server.getMode(), server.getPort(), server.getVersion(), server.getWebsite());
+							MessageFormat.format(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(),
+											server.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
 			SQLDatabase.execute(statement);
 		}
+	}
+
+	public static void updateServerData(final SampServer server)
+	{
+		String statement =
+						"UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
+		statement =
+						MessageFormat.format(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server.getMaxPlayers().toString(),
+										server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
+		SQLDatabase.execute(statement);
 	}
 
 	public static void removeServerFromFavourites(final SampServer server)
 	{
 		String statement = "DELETE FROM favourite WHERE ip = ''{0}'' AND port = ''{1}'';";
-		statement = MessageFormat.format(statement, server.getAddress(), server.getPort());
+		statement = MessageFormat.format(statement, server.getAddress(), server.getPort().toString());
 		SQLDatabase.execute(statement);
 	}
 

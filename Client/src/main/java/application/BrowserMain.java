@@ -35,7 +35,7 @@ public class BrowserMain extends Application
 {
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private static final String	VERSION				= "1.1.02";
+	private static final String	VERSION				= "1.1.04";
 
 	@Override
 	public void start(final Stage primaryStage)
