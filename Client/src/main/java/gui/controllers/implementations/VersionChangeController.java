@@ -1,9 +1,10 @@
-package gui.controllers;
+package gui.controllers.implementations;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+import gui.controllers.interfaces.ViewController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -155,7 +156,7 @@ public class VersionChangeController implements ViewController
 		{
 			try
 			{
-				FileUtility.downloadUsingNIO("http://ts3.das-chat.xyz/sampversion/" + version + ".zip", OUTPUT_ZIP);
+				FileUtility.downloadUsingNIO("http://164.132.193.101/sampversion/" + version + ".zip", OUTPUT_ZIP);
 				final File file = new File(OUTPUT_ZIP);
 				FileUtility.unZipIt(file, GTA.getGtaPath());
 				file.delete();

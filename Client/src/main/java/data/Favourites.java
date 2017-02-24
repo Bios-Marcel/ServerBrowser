@@ -24,10 +24,10 @@ import query.SampQuery;
 
 public class Favourites
 {
-	public static SampServer addServerToFavourites(final String address, final String port)
+	public static SampServer addServerToFavourites(final String address, final Integer port)
 	{
 		final SampServer server = new SampServer(address, port);
-		try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
+		try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort()))
 
 		{
 			query.getBasicServerInfo().ifPresent(serverInfo ->
@@ -100,8 +100,9 @@ public class Favourites
 			{
 				while (resultSet.next())
 				{
-					servers.add(new SampServer(new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip"), resultSet.getInt("port") + "", resultSet.getInt("players"), resultSet.getInt("maxplayers"),
-									resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"), resultSet.getString("website"), resultSet.getString("version"))));
+					servers.add(new SampServer(new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip"), resultSet.getInt("port"), resultSet.getInt("players"),
+									resultSet.getInt("maxplayers"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"), resultSet.getString("website"),
+									resultSet.getString("version"))));
 				}
 			}
 			catch (final SQLException e)
@@ -145,7 +146,7 @@ public class Favourites
 					final Node playersNode = attr.getNamedItem("players");
 					final Node maxplayersNode = attr.getNamedItem("maxplayers");
 
-					servers.add(new SampServer(new SampServerSerializeable(hostnameNode.getTextContent(), ipNode.getTextContent(), portNode.getTextContent(),
+					servers.add(new SampServer(new SampServerSerializeable(hostnameNode.getTextContent(), ipNode.getTextContent(), Integer.parseInt(portNode.getTextContent()),
 									Integer.parseInt(playersNode.getTextContent()), Integer.parseInt(maxplayersNode.getTextContent()), modeNode.getTextContent(), languageNode.getTextContent(),
 									lagcompNode.getTextContent(), websiteNode.getTextContent(), versionNode.getTextContent())));
 				}

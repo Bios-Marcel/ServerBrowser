@@ -1,4 +1,4 @@
-package gui.controllers;
+package gui.controllers.implementations;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -10,13 +10,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.commons.lang3.StringUtils;
-
 import data.Favourites;
 import data.SampServer;
 import entities.Player;
+import gui.controllers.interfaces.ViewController;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -48,7 +48,7 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private TextField						addressTextField;
 
-	private static SimpleStringProperty		serverAddressProperty	= new SimpleStringProperty();
+	private static StringProperty			serverAddressProperty	= new SimpleStringProperty();
 
 	@FXML
 	protected TableView<SampServer>			tableView;
@@ -147,7 +147,7 @@ public abstract class ServerListControllerMain implements ViewController
 		final String[] ipAndPort = addressTextField.getText().split("[:]");
 		if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
 		{
-			servers.add(Favourites.addServerToFavourites(ipAndPort[0], ipAndPort[1]));
+			servers.add(Favourites.addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1])));
 			updateTable();
 		}
 		else
@@ -167,7 +167,7 @@ public abstract class ServerListControllerMain implements ViewController
 		final String[] ipAndPort = addressTextField.getText().split("[:]");
 		if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
 		{
-			tryToConnect(ipAndPort[0], ipAndPort[1]);
+			tryToConnect(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 		}
 		else
 		{
@@ -195,14 +195,16 @@ public abstract class ServerListControllerMain implements ViewController
 
 	private boolean validatePort(final String port)
 	{
-		if (!StringUtils.isNumeric(port))
+		try
+		{
+			final int portNumber = Integer.parseInt(port);
+
+			return !(portNumber < 0 || portNumber > 65535);
+		}
+		catch (final NumberFormatException e)
 		{
 			return false;
 		}
-
-		final int portNumber = Integer.parseInt(port);
-
-		return !(portNumber < 0 || portNumber > 65535);
 	}
 
 	@FXML
@@ -378,9 +380,9 @@ public abstract class ServerListControllerMain implements ViewController
 	 * @param port
 	 *            server port
 	 */
-	private void tryToConnect(final String address, final String port)
+	private void tryToConnect(final String address, final Integer port)
 	{
-		try (final SampQuery query = new SampQuery(address, Integer.parseInt(port)))
+		try (final SampQuery query = new SampQuery(address, port))
 		{
 
 			final Optional<String[]> serverInfo = query.getBasicServerInfo();
@@ -432,7 +434,7 @@ public abstract class ServerListControllerMain implements ViewController
 
 		threadGetPlayers = new Thread(() ->
 		{
-			try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
+			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort()))
 
 			{
 				final Optional<String[]> serverInfoOptional = query.getBasicServerInfo();
@@ -524,8 +526,8 @@ public abstract class ServerListControllerMain implements ViewController
 
 	private void updateGlobalInfo()
 	{
-		int playersPlaying = 0;
-		int maxSlots = 0;
+		playersPlaying = 0;
+		maxSlots = 0;
 
 		for (final SampServer server : sortedServers)
 		{

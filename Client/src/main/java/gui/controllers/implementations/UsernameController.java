@@ -1,6 +1,7 @@
-package gui.controllers;
+package gui.controllers.implementations;
 
 import data.PastUsernames;
+import gui.controllers.interfaces.ViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,9 +22,9 @@ public class UsernameController implements ViewController
 	@FXML
 	private ListView<String>	nameList;
 
-	private final MenuItem		setName		= new MenuItem("Use Username");;
+	private final MenuItem		setName		= new MenuItem("Use Username");
 
-	private final MenuItem		removeName	= new MenuItem("Remove username");;
+	private final MenuItem		removeName	= new MenuItem("Remove username");
 
 	private final ContextMenu	menu		= new ContextMenu(setName, removeName);
 

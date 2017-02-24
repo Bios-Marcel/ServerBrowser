@@ -1,10 +1,11 @@
-package gui.controllers;
+package gui.controllers.implementations;
 
 import java.io.IOException;
 import java.util.logging.Level;
 
 import data.properties.ClientProperties;
 import data.properties.PropertyIds;
+import gui.controllers.interfaces.ViewController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -122,13 +123,13 @@ public class MainController implements ViewController
 				}
 				case SERVERS_FAV:
 				{
-					loadFXML("/views/ServerList.fxml", SA_MP_SERVERS_FAV_TITLE, new ServerFavouriteListController());
+					loadFXML("/views/ServerList.fxml", SA_MP_SERVERS_FAV_TITLE, new ServerListFavController());
 					menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
 				case SERVERS_ALL:
 				{
-					loadFXML("/views/ServerList.fxml", SA_MP_SERVERS_ALL_TITLE, new ServerAllListController());
+					loadFXML("/views/ServerList.fxml", SA_MP_SERVERS_ALL_TITLE, new ServerListAllController());
 					menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}

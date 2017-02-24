@@ -1,4 +1,4 @@
-package gui.controllers;
+package gui.controllers.implementations;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,7 +10,7 @@ import javafx.application.Platform;
 import logging.Logging;
 import query.SampQuery;
 
-public class ServerFavouriteListController extends ServerListControllerMain
+public class ServerListFavController extends ServerListControllerMain
 {
 	private static Thread queryThread;
 
@@ -33,7 +33,7 @@ public class ServerFavouriteListController extends ServerListControllerMain
 		{
 			for (final SampServer server : favs)
 			{
-				try (final SampQuery query = new SampQuery(server.getAddress(), Integer.parseInt(server.getPort())))
+				try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort()))
 				{
 					query.getBasicServerInfo().ifPresent(serverInfo ->
 					{
@@ -73,9 +73,9 @@ public class ServerFavouriteListController extends ServerListControllerMain
 	}
 
 	@Override
-	protected void displayMenu(final List<SampServer> servers, final double posX, final double posY)
+	protected void displayMenu(final List<SampServer> selectedServers, final double posX, final double posY)
 	{
-		super.displayMenu(servers, posX, posY);
+		super.displayMenu(selectedServers, posX, posY);
 
 		addToFavourites.setVisible(false);
 		removeFromFavourites.setVisible(true);

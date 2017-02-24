@@ -3,9 +3,8 @@ package util;
 import java.awt.Desktop;
 import java.io.File;
 import java.net.URI;
+import java.util.Objects;
 import java.util.logging.Level;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
@@ -13,13 +12,14 @@ import com.github.sarxos.winreg.WindowsRegistry;
 
 import data.PastUsernames;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import logging.Logging;
 
 public class GTA
 {
-	private static SimpleStringProperty username = new SimpleStringProperty(retrieveUsernameFromRegistry());
+	private static StringProperty username = new SimpleStringProperty(retrieveUsernameFromRegistry());
 
-	public static SimpleStringProperty usernameProperty()
+	public static StringProperty usernameProperty()
 	{
 		return username;
 	}
@@ -133,7 +133,7 @@ public class GTA
 		}
 		catch (final Exception e)
 		{
-			if (StringUtils.isEmpty(password))
+			if (Objects.isNull(password) || password.isEmpty())
 			{
 				connectToServerUsingProtocol(ipAndPort);
 			}

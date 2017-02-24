@@ -10,7 +10,7 @@ public class SampServerSerializeable implements Serializable
 
 	private String				address;
 
-	private String				port;
+	private Integer				port;
 
 	private Integer				players;
 
@@ -26,7 +26,7 @@ public class SampServerSerializeable implements Serializable
 
 	private String				version;
 
-	public SampServerSerializeable(final String hostname, final String address, final String port, final int players, final int maxPlayers, final String mode, final String language,
+	public SampServerSerializeable(final String hostname, final String address, final Integer port, final int players, final int maxPlayers, final String mode, final String language,
 					final String lagcomp, final String website, final String version)
 	{
 		this.hostname = hostname;
@@ -71,7 +71,7 @@ public class SampServerSerializeable implements Serializable
 		return mode;
 	}
 
-	public String getPort()
+	public Integer getPort()
 	{
 		return port;
 	}
@@ -101,7 +101,7 @@ public class SampServerSerializeable implements Serializable
 		this.hostname = hostname;
 	}
 
-	public void setPort(final String port)
+	public void setPort(final Integer port)
 	{
 		this.port = port;
 	}
@@ -140,4 +140,10 @@ public class SampServerSerializeable implements Serializable
 	{
 		this.website = website;
 	}
+
+	public boolean equals(final SampServerSerializeable compare)
+	{
+		return getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
+	}
+
 }

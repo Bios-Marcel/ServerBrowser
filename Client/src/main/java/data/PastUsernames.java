@@ -66,11 +66,10 @@ public class PastUsernames
 
 		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
 		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder;
 
 		try
 		{
-			dBuilder = dbFactory.newDocumentBuilder();
+			final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			final Document doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 

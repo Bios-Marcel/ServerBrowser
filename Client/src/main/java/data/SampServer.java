@@ -12,7 +12,7 @@ public class SampServer
 
 	private final StringProperty	addressProperty			= new SimpleStringProperty();
 
-	private final StringProperty	portProperty			= new SimpleStringProperty();
+	private final IntegerProperty	portProperty			= new SimpleIntegerProperty();
 
 	private final IntegerProperty	playersProperty			= new SimpleIntegerProperty();
 
@@ -30,7 +30,7 @@ public class SampServer
 
 	private final StringProperty	versionProperty			= new SimpleStringProperty();
 
-	public SampServer(final String address, final String port)
+	public SampServer(final String address, final Integer port)
 	{
 		addressProperty.set(address);
 		portProperty.set(port);
@@ -61,7 +61,7 @@ public class SampServer
 		return hostnameProperty;
 	}
 
-	public StringProperty portProperty()
+	public IntegerProperty portProperty()
 	{
 		return portProperty;
 	}
@@ -146,7 +146,7 @@ public class SampServer
 		return modeProperty.get();
 	}
 
-	public String getPort()
+	public Integer getPort()
 	{
 		return portProperty.get();
 	}
@@ -176,7 +176,7 @@ public class SampServer
 		hostnameProperty.set(hostname);
 	}
 
-	public void setPort(final String port)
+	public void setPort(final Integer port)
 	{
 		portProperty.set(port);
 	}

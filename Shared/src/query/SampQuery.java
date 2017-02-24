@@ -116,7 +116,7 @@ public class SampQuery implements AutoCloseable
 			if (Objects.nonNull(reply))
 			{
 				final ByteBuffer buffer = wrapReply(reply);
-				final String[] serverInfo = new String[7];
+				final String[] serverInfo = new String[6];
 				final String encoding = Encoding.getEncoding(reply);
 
 				// Password Yes / No
@@ -152,25 +152,15 @@ public class SampQuery implements AutoCloseable
 				}
 				serverInfo[4] = Encoding.encodeUsingCharsetIfPossible(gamemode, encoding);
 
-				// Map
-				len = buffer.getInt();
-				final byte[] map = new byte[len];
-
-				for (int i = 0; i < len; i++)
-				{
-					map[i] = buffer.get();
-				}
-				serverInfo[5] = Encoding.encodeUsingCharsetIfPossible(map, encoding);
-
 				// Language
 				len = buffer.getInt();
 				final byte[] language = new byte[len];
 
 				for (int i = 0; i < len; i++)
 				{
-					map[i] = buffer.get();
+					language[i] = buffer.get();
 				}
-				serverInfo[6] = Encoding.encodeUsingCharsetIfPossible(language, encoding);
+				serverInfo[5] = Encoding.encodeUsingCharsetIfPossible(language, encoding);
 
 				return Optional.of(serverInfo);
 			}

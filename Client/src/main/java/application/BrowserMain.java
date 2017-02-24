@@ -17,7 +17,7 @@ import data.Favourites;
 import data.PastUsernames;
 import data.SQLDatabase;
 import data.SampServer;
-import gui.controllers.MainController;
+import gui.controllers.implementations.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,7 +35,7 @@ public class BrowserMain extends Application
 {
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private static final String	VERSION				= "1.1.01";
+	private static final String	VERSION				= "1.1.02";
 
 	@Override
 	public void start(final Stage primaryStage)
@@ -146,7 +146,7 @@ public class BrowserMain extends Application
 	{
 		try
 		{
-			final URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/version.info");
+			final URI url = new URI("http://164.132.193.101/sampversion/launcher/version.info");
 			try (final Scanner s = new Scanner(url.toURL().openStream()))
 			{
 				if (!VERSION.equals(s.nextLine()))
@@ -177,7 +177,7 @@ public class BrowserMain extends Application
 	{
 		try
 		{
-			final URI url = new URI("http://ts3.das-chat.xyz/sampversion/launcher/launcher.jar");
+			final URI url = new URI("http://164.132.193.101/sampversion/launcher/launcher.jar");
 			FileUtility.downloadUsingNIO(url.toString(), getOwnJarFile().getPath().toString());
 			selfRestart();
 		}

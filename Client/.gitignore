@@ -4,3 +4,4 @@ bin/
 bin/*
 /bin/*
 /target/
+/cleanup.xml

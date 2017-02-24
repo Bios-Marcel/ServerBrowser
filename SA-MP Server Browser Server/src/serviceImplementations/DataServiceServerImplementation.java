@@ -4,9 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 import entities.SampServerSerializeable;
@@ -14,7 +14,7 @@ import interfaces.DataServiceInterface;
 
 public class DataServiceServerImplementation implements DataServiceInterface
 {
-	private static Set<SampServerSerializeable> servers = new HashSet<>();
+	private static List<SampServerSerializeable> servers = new ArrayList<>();
 
 	public static void clearList()
 	{

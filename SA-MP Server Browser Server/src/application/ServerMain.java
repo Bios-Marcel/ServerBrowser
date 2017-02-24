@@ -11,10 +11,10 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Level;
 
 import org.quartz.CronScheduleBuilder;
@@ -125,46 +125,23 @@ public class ServerMain
 		{
 			DataServiceServerImplementation.clearList();
 
-			final Set<String> ipAndPorts = new HashSet<>();
+			final Statement statement = MySQLConnection.connect.createStatement();
 
-			Statement statement = MySQLConnection.connect.createStatement();
-			// Result set get the result of the SQL query
-			ResultSet resultSet = statement.executeQuery("SELECT version, ip_address, id, port, hostname, players, lagcomp, max_players, mode, version, weburl, language FROM internet_offline;");
+			// TODO(MSC) Convert field in database instead of casting.
+			final ResultSet resultSet =
+							statement.executeQuery(
+											"SELECT version, ip_address, id, CONVERT(port, SIGNED INTEGER) as portNumber, hostname, players, lagcomp, max_players, mode, version, weburl, language FROM internet_offline;");
 
-			final Set<SampServerSerializeable> servers = new HashSet<>();
-
-			while (resultSet.next())
-			{
-				final String ipAndPort = resultSet.getString("ip_address") + ":" + resultSet.getString("port");
-				if (!ipAndPorts.contains(ipAndPort))
-				{
-					ipAndPorts.add(ipAndPort);
-
-					final SampServerSerializeable server =
-									new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getString("port"), resultSet.getInt("players"),
-													resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"),
-													resultSet.getString("weburl"), resultSet.getString("version"));
-
-					servers.add(server);
-				}
-			}
-
-			statement = MySQLConnection.connect.createStatement();
-
-			resultSet = statement.executeQuery("SELECT version, ip_address, id, port, hostname, players, lagcomp, max_players, mode, version, weburl, language FROM internet_online;");
+			final List<SampServerSerializeable> servers = new ArrayList<>();
 
 			while (resultSet.next())
 			{
-				final String ipAndPort = resultSet.getString("ip_address") + ":" + resultSet.getString("port");
-				if (!ipAndPorts.contains(ipAndPort))
+				final SampServerSerializeable server =
+								new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getInt("portNumber"), resultSet.getInt("players"),
+												resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"),
+												resultSet.getString("weburl"), resultSet.getString("version"));
+				if (!servers.contains(server))
 				{
-					ipAndPorts.add(ipAndPort);
-
-					final SampServerSerializeable server =
-									new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getString("port"), resultSet.getInt("players"),
-													resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"),
-													resultSet.getString("weburl"), resultSet.getString("version"));
-
 					servers.add(server);
 				}
 			}
@@ -188,7 +165,7 @@ public class ServerMain
 			class UpdateJob implements Job
 			{
 				@Override
-				public void execute(final JobExecutionContext arg0) throws JobExecutionException
+				public void execute(@SuppressWarnings("unused") final JobExecutionContext arg0) throws JobExecutionException
 				{
 					updateDBWithMasterlistContent();
 				}
@@ -233,7 +210,7 @@ public class ServerMain
 				{
 					final String[] data = inputLine.split("[:]");
 
-					try (final SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1])))
+					try (final SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1]), 800))
 					{
 						final Optional<String[]> infoOptional = query.getBasicServerInfo();
 
@@ -249,6 +226,7 @@ public class ServerMain
 							String lagcomp = null;
 							String worldtime = null;
 							String version = null;
+							String map = null;
 							int weather = 0;
 
 							// TODO(MSC) Inspect data response of all server versions and remove loops if possible
@@ -274,9 +252,13 @@ public class ServerMain
 								{
 									weather = Integer.parseInt(infoMore[i][1]);
 								}
+								else if (infoMore[i][0].equals("mapname"))
+								{
+									map = infoMore[i][1];
+								}
 							}
 
-							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4], info[6], lagcomp, info[5], version, weather, weburl,
+							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4], info[5], lagcomp, map, version, weather, weburl,
 											worldtime);
 							Logging.logger.log(Level.INFO, "Added Server: " + inputLine);
 						}

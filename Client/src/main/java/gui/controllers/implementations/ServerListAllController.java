@@ -1,4 +1,4 @@
-package gui.controllers;
+package gui.controllers.implementations;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -8,19 +8,16 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import data.SampServer;
 import entities.SampServerSerializeable;
 import interfaces.DataServiceInterface;
 import logging.Logging;
 
-public class ServerAllListController extends ServerListControllerMain
+public class ServerListAllController extends ServerListControllerMain
 {
 	private static Registry				registry;
 
@@ -30,7 +27,7 @@ public class ServerAllListController extends ServerListControllerMain
 	{
 		try
 		{
-			registry = LocateRegistry.getRegistry("ts3.das-chat.xyz");
+			registry = LocateRegistry.getRegistry("164.132.193.101");
 			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
 		}
 		catch (RemoteException | NotBoundException e)
@@ -43,7 +40,6 @@ public class ServerAllListController extends ServerListControllerMain
 	{
 		try
 		{
-			System.out.println(data.length);
 			final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
 			final GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
 			final ObjectInputStream objectInputStream = new ObjectInputStream(gzipInputStream);
@@ -67,15 +63,12 @@ public class ServerAllListController extends ServerListControllerMain
 		{
 			servers.clear();
 
-			final Set<SampServerSerializeable> serializedServers = (Set<SampServerSerializeable>) deserialzieAndDecompress(remoteDataService.getAllServers());
+			final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(remoteDataService.getAllServers());
 			servers.addAll(serializedServers.stream().map(server ->
 			{
 				final SampServer newServer = new SampServer(server);
 				playersPlaying += newServer.getPlayers();
 				maxSlots += newServer.getMaxPlayers();
-				newServer.setHostname(StringEscapeUtils.unescapeHtml4(newServer.getHostname()));
-				newServer.setLanguage(StringEscapeUtils.unescapeHtml4(newServer.getLanguage()));
-				newServer.setMode(StringEscapeUtils.unescapeHtml4(newServer.getMode()));
 				return newServer;
 			}).collect(Collectors.toSet()));
 
@@ -89,13 +82,13 @@ public class ServerAllListController extends ServerListControllerMain
 
 		serverCount.setText(sortedServers.size() + "");
 		playerCount.setText(playersPlaying + "");
-		slotCount.setText(maxSlots - playersPlaying + "");
+		slotCount.setText((maxSlots - playersPlaying) + "");
 	}
 
 	@Override
-	protected void displayMenu(final List<SampServer> servers, final double posX, final double posY)
+	protected void displayMenu(final List<SampServer> selectedServers, final double posX, final double posY)
 	{
-		super.displayMenu(servers, posX, posY);
+		super.displayMenu(selectedServers, posX, posY);
 
 		addToFavourites.setVisible(true);
 		removeFromFavourites.setVisible(false);
