@@ -1,0 +1,20 @@
+.table-view
+{
+	-fx-border-width: 0;
+	-fx-border-insets: -1;
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0;
+}
+
+.table-view .placeholder
+{
+	-fx-background-color: #F2F2F0;
+}
+
+.table-column .column-header-background
+{
+	-fx-background-color: #639BE0;
+	-fx-border-width: 0 1 0 0;
+	-fx-border-color: #5588DD;
+}

@@ -28,28 +28,6 @@
 	-fx-border-radius: 0 !important;
 }
 
-.table-view
-{
-	-fx-border-width: 0;
-	-fx-border-insets: -1;
-    -fx-background-color: -fx-box-border, -fx-control-inner-background;
-    -fx-background-insets: 0, 1;
-    -fx-background-radius: 0;
-}
-
-.table-view .placeholder
-{
-	-fx-background-color: #F2F2F0;
-}
-
-.table-column .column-header-background
-{
-	-fx-background-color: #639BE0;
-	-fx-border-width: 0 1 0 0;
-	-fx-border-color: #5588DD;
-}
-
-
 #tabpane
 {
 	-fx-background-color: #538ED7;
@@ -79,20 +57,6 @@
 .clickedItem
 {
 	-fx-background-color: #1F5FAE; 
-}
-
-.installButton
-{
-	-fx-background-color: #639BE0;
-	-fx-background-radius: 0;
-	-fx-border-radius: 0;
-}
-
-.installEntry
-{
-	-fx-border-width: 0 0 1 0;
-	-fx-border-insets: 10;
-	-fx-border-color: #E2E2E1;
 }
 
 .copyableLabel, .copyableLabel:focused 

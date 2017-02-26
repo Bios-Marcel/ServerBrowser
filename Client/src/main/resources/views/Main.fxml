@@ -85,7 +85,7 @@
 						<Insets bottom="24.0" left="35.0" top="23.0" />
 					</padding>
 				</Label>
-				<StackPane fx:id="activeView" maxHeight="1.7976931348623157E308"
+				<StackPane fx:id="activeViewContainer" maxHeight="1.7976931348623157E308"
 					maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
 			</children>
 		</VBox>

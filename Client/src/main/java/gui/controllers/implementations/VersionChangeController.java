@@ -14,37 +14,30 @@ import util.GTA;
 
 public class VersionChangeController implements ViewController
 {
-	public static final String		OUTPUT_ZIP	= System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
+	public static final String	OUTPUT_ZIP	= System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
 
-	private static String			installing	= "";
-
-	@FXML
-	private Button					buttonZeroThreeSeven;
+	private static String		installing	= "";
 
 	@FXML
-	private Button					buttonZeroZ;
+	private Button				buttonZeroThreeSeven;
 
 	@FXML
-	private Button					buttonZeroX;
+	private Button				buttonZeroZ;
 
 	@FXML
-	private Button					buttonZeroD;
+	private Button				buttonZeroX;
 
 	@FXML
-	private Button					buttonZeroE;
+	private Button				buttonZeroD;
 
 	@FXML
-	private Button					buttonZeroC;
+	private Button				buttonZeroE;
 
 	@FXML
-	private Button					buttonZeroA;
+	private Button				buttonZeroC;
 
-	private final MainController	mainController;
-
-	public VersionChangeController(final MainController mainController)
-	{
-		this.mainController = mainController;
-	}
+	@FXML
+	private Button				buttonZeroA;
 
 	private Button getButtonForVersion(final String version)
 	{
@@ -105,7 +98,7 @@ public class VersionChangeController implements ViewController
 			if (Objects.nonNull(installingButton))
 			{
 				installingButton.setText("Installing ...");
-				disableAllButtons();
+				setAllButtonsDisabled(true);
 			}
 		}
 
@@ -116,7 +109,7 @@ public class VersionChangeController implements ViewController
 	{
 		final Button clicked = (Button) e.getTarget();
 
-		disableAllButtons();
+		setAllButtonsDisabled(true);
 		clicked.setText("Installing ...");
 
 		if (clicked.equals(buttonZeroThreeSeven))
@@ -157,18 +150,22 @@ public class VersionChangeController implements ViewController
 			try
 			{
 				FileUtility.downloadUsingNIO("http://164.132.193.101/sampversion/" + version + ".zip", OUTPUT_ZIP);
-				final File file = new File(OUTPUT_ZIP);
-				FileUtility.unZipIt(file, GTA.getGtaPath());
-				file.delete();
+				FileUtility.unZipIt(OUTPUT_ZIP, GTA.getGtaPath());
+				new File(OUTPUT_ZIP).delete();
 				installing = "";
-				if (mainController != null)
-				{
-					Platform.runLater(() ->
-					{
-						mainController.refreshVersionChangerViewIfDisplayed();
-					});
-				}
 
+				Platform.runLater(() ->
+				{
+					setAllButtonsDisabled(false);
+
+					final Button versionButton = getButtonForVersion(GTA.getInstalledVersion());
+
+					if (Objects.nonNull(versionButton))
+					{
+						versionButton.setDisable(true);
+						versionButton.setText("Installed");
+					}
+				});
 			}
 			catch (IOException | IllegalArgumentException e)
 			{
@@ -179,14 +176,14 @@ public class VersionChangeController implements ViewController
 		thread.start();
 	}
 
-	private void disableAllButtons()
+	private void setAllButtonsDisabled(final boolean enabled)
 	{
-		buttonZeroThreeSeven.setDisable(true);
-		buttonZeroZ.setDisable(true);
-		buttonZeroX.setDisable(true);
-		buttonZeroE.setDisable(true);
-		buttonZeroD.setDisable(true);
-		buttonZeroC.setDisable(true);
-		buttonZeroA.setDisable(true);
+		buttonZeroThreeSeven.setDisable(enabled);
+		buttonZeroZ.setDisable(enabled);
+		buttonZeroX.setDisable(enabled);
+		buttonZeroE.setDisable(enabled);
+		buttonZeroD.setDisable(enabled);
+		buttonZeroC.setDisable(enabled);
+		buttonZeroA.setDisable(enabled);
 	}
 }

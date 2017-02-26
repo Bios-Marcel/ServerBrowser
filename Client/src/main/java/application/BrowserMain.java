@@ -35,7 +35,7 @@ public class BrowserMain extends Application
 {
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private static final String	VERSION				= "1.1.04";
+	private static final String	VERSION				= "1.1.05";
 
 	@Override
 	public void start(final Stage primaryStage)
@@ -62,7 +62,7 @@ public class BrowserMain extends Application
 			final Parent root = loader.load();
 			final Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
-			primaryStage.getScene().getStylesheets().add(getClass().getResource("/views/style.css").toExternalForm());
+			primaryStage.getScene().getStylesheets().add(getClass().getResource("/views/stylesheets/mainStyle.css").toExternalForm());
 			primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/icons/icon.png")));
 			primaryStage.setTitle(APPLICATION_NAME);
 			primaryStage.show();

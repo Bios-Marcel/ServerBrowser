@@ -5,6 +5,7 @@ import java.util.logging.Level;
 
 import data.properties.ClientProperties;
 import data.properties.PropertyIds;
+import gui.Views;
 import gui.controllers.interfaces.ViewController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,52 +16,33 @@ import logging.Logging;
 
 public class MainController implements ViewController
 {
-
-	private static final String	VERSION_CHANGER_TITLE	= "Version Changer";
-
-	private static final String	USERNAME_CHANGER_TITLE	= "Username Changer";
-
-	private static final String	SA_MP_SERVERS_FAV_TITLE	= "Servers | Favourites";
-
-	private static final String	SA_MP_SERVERS_ALL_TITLE	= "Servers | All";
-
-	private static final int	VERSION_CHANGER			= 4;
-
-	private static final int	USERNAME_CHANGER		= 3;
-
-	private static final int	SETTINGS				= 5;
-
-	private static final int	SERVERS_FAV				= 1;
-
-	private static final int	SERVERS_ALL				= 2;
+	@FXML
+	private StackPane	menuItemFav;
 
 	@FXML
-	private StackPane			menuItemFav;
+	private StackPane	menuItemAll;
 
 	@FXML
-	private StackPane			menuItemAll;
+	private StackPane	menuItemUser;
 
 	@FXML
-	private StackPane			menuItemUser;
+	private StackPane	menuItemSettings;
 
 	@FXML
-	private StackPane			menuItemSettings;
+	private StackPane	menuItemVersion;
 
 	@FXML
-	private StackPane			menuItemVersion;
+	private StackPane	activeViewContainer;
+
+	private Views		activeView;
 
 	@FXML
-	private StackPane			activeView;
-
-	private int					activeViewId			= 0;
-
-	@FXML
-	private Label				headerTitle;
+	private Label		headerTitle;
 
 	@Override
 	public void init()
 	{
-		loadView(ClientProperties.getPropertyAsInt(PropertyIds.LAST_VIEW));
+		loadView(Views.valueOf(ClientProperties.getPropertyAsInt(PropertyIds.LAST_VIEW)));
 	}
 
 	@FXML
@@ -70,30 +52,30 @@ public class MainController implements ViewController
 
 		if (clicked.equals(menuItemFav))
 		{
-			loadView(SERVERS_FAV);
+			loadView(Views.SERVERS_FAV);
 		}
 		else if (clicked.equals(menuItemAll))
 		{
-			loadView(SERVERS_ALL);
-		}
-		else if (clicked.equals(menuItemVersion))
-		{
-			loadView(VERSION_CHANGER);
+			loadView(Views.SERVERS_ALL);
 		}
 		else if (clicked.equals(menuItemUser))
 		{
-			loadView(USERNAME_CHANGER);
+			loadView(Views.USERNAME_CHANGER);
+		}
+		else if (clicked.equals(menuItemVersion))
+		{
+			loadView(Views.VERSION_CHANGER);
 		}
 	}
 
-	private void loadView(final int viewId)
+	private void loadView(final Views view)
 	{
-		loadView(viewId, false);
+		loadView(view, false);
 	}
 
-	private void loadView(final int viewId, final boolean refresh)
+	private void loadView(final Views view, final boolean refresh)
 	{
-		if (refresh || viewId != activeViewId)
+		if (refresh || view != activeView)
 		{
 			menuItemFav.setStyle("-fx-background-color: #538ED7;");
 			menuItemSettings.setStyle("-fx-background-color: #538ED7;");
@@ -101,19 +83,17 @@ public class MainController implements ViewController
 			menuItemAll.setStyle("-fx-background-color: #538ED7;");
 			menuItemVersion.setStyle("-fx-background-color: #538ED7;");
 
-			activeView.getChildren().clear();
-
-			switch (viewId)
+			switch (view)
 			{
 				case VERSION_CHANGER:
 				{
-					loadFXML("/views/Version.fxml", VERSION_CHANGER_TITLE, new VersionChangeController(this));
+					loadFXML(view);
 					menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
 				case USERNAME_CHANGER:
 				{
-					loadFXML("/views/Username.fxml", USERNAME_CHANGER_TITLE, new UsernameController());
+					loadFXML(view);
 					menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
@@ -123,13 +103,13 @@ public class MainController implements ViewController
 				}
 				case SERVERS_FAV:
 				{
-					loadFXML("/views/ServerList.fxml", SA_MP_SERVERS_FAV_TITLE, new ServerListFavController());
+					loadFXML(view);
 					menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
 				case SERVERS_ALL:
 				{
-					loadFXML("/views/ServerList.fxml", SA_MP_SERVERS_ALL_TITLE, new ServerListAllController());
+					loadFXML(view);
 					menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
 					break;
 				}
@@ -139,42 +119,45 @@ public class MainController implements ViewController
 				}
 			}
 
-			activeViewId = viewId;
+			activeView = view;
 		}
 	}
 
-	private void loadFXML(final String fxmlpath, final String title, final ViewController controller)
+	private void loadFXML(final Views view)
 	{
-		final FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource(fxmlpath));
-		loader.setController(controller);
 		try
 		{
-			activeView.getChildren().add(loader.load());
-			headerTitle.setText(title);
+			final FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource(view.getFXMLPath()));
+			final ViewController controller = view.getControllerType().newInstance();
+			loader.setController(controller);
+			activeViewContainer.getChildren().clear();
+			activeViewContainer.getChildren().add(loader.load());
+			activeViewContainer.getStylesheets().setAll(view.getStylesheetPath());
+			headerTitle.setText(view.getTitle());
 			controller.init();
 		}
-		catch (final IOException e)
+		catch (final IOException | InstantiationException | IllegalAccessException e)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't load view.", e);
+			Logging.logger.log(Level.SEVERE, "Couldn't load view.", e.getStackTrace());
 		}
 	}
 
-	public void refreshVersionChangerViewIfDisplayed()
+	public void refreshViewIfDisplayed(final Views viewToRefresh)
 	{
-		if (getActiveViewID() == VERSION_CHANGER)
+		if (getActiveViewID() == viewToRefresh)
 		{
-			loadView(VERSION_CHANGER, true);
+			loadView(viewToRefresh, true);
 		}
 	}
 
-	private int getActiveViewID()
+	private Views getActiveViewID()
 	{
-		return activeViewId;
+		return activeView;
 	}
 
 	public void onClose()
 	{
-		ClientProperties.setProperty(PropertyIds.LAST_VIEW, activeViewId);
+		ClientProperties.setProperty(PropertyIds.LAST_VIEW, activeView.getId());
 	}
 }

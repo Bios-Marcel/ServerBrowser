@@ -1,6 +1,5 @@
 package util;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -30,11 +29,11 @@ public class FileUtility
 	 * @param output
 	 *            zip file output folder
 	 */
-	public static void unZipIt(final File file, final String outputLocation)
+	public static void unZipIt(final String file, final String outputLocation)
 	{
 		try
 		{
-			final ZipFile zipFile = new ZipFile(file.toString());
+			final ZipFile zipFile = new ZipFile(file);
 			zipFile.extractAll(outputLocation);
 		}
 		catch (final ZipException e)

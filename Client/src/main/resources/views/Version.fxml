@@ -15,185 +15,73 @@
          <children>
             <HBox styleClass="installEntry" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="235.0" text="SA-MP Version 0.3.7" HBox.hgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="buttonZeroThreeSeven"  styleClass="installButton" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
+                  <Label styleClass="installLabel" maxWidth="1.7976931348623157E308" text="SA-MP Version 0.3.7" HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="buttonZeroThreeSeven" styleClass="installButton" mnemonicParsing="false" onAction="#clickVersion" text="Install">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
                   </Button>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
             </HBox>
             <HBox styleClass="installEntry" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="235.0" text="SA-MP Version 0.3z" HBox.hgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="buttonZeroZ" styleClass="installButton" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
+                  <Label styleClass="installLabel" maxWidth="1.7976931348623157E308" text="SA-MP Version 0.3z" HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="buttonZeroZ" styleClass="installButton" mnemonicParsing="false" onAction="#clickVersion" text="Install">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
                   </Button>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
             </HBox>
             <HBox styleClass="installEntry" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="235.0" text="SA-MP Version 0.3x" HBox.hgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="buttonZeroX" styleClass="installButton"  alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
+                  <Label styleClass="installLabel" maxWidth="1.7976931348623157E308" text="SA-MP Version 0.3x" HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="buttonZeroX" styleClass="installButton"  mnemonicParsing="false" onAction="#clickVersion" text="Install">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
                   </Button>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
             </HBox>
             <HBox styleClass="installEntry" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="235.0" text="SA-MP Version 0.3e" HBox.hgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="buttonZeroE"  styleClass="installButton" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
+                  <Label styleClass="installLabel" maxWidth="1.7976931348623157E308" text="SA-MP Version 0.3e" HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="buttonZeroE"  styleClass="installButton" mnemonicParsing="false" onAction="#clickVersion" text="Install">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
                   </Button>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
             </HBox>
             <HBox styleClass="installEntry" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="235.0" text="SA-MP Version 0.3d" HBox.hgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="buttonZeroD" styleClass="installButton"  alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
+                  <Label styleClass="installLabel" maxWidth="1.7976931348623157E308" text="SA-MP Version 0.3d" HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="buttonZeroD" styleClass="installButton"  mnemonicParsing="false" onAction="#clickVersion" text="Install">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
                   </Button>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
             </HBox>
             <HBox styleClass="installEntry" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="235.0" text="SA-MP Version 0.3c" HBox.hgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="buttonZeroC"  styleClass="installButton" alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
+                  <Label styleClass="installLabel" maxWidth="1.7976931348623157E308" text="SA-MP Version 0.3c" HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="buttonZeroC"  styleClass="installButton" mnemonicParsing="false" onAction="#clickVersion" text="Install">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
                   </Button>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
             </HBox>
             <HBox styleClass="installEntry" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="235.0" text="SA-MP Version 0.3a" HBox.hgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="buttonZeroA" styleClass="installButton"  alignment="CENTER" contentDisplay="CENTER" minWidth="100.0" mnemonicParsing="false" onAction="#clickVersion" prefWidth="100.0" text="Install" textFill="WHITE">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
+                  <Label styleClass="installLabel" maxWidth="1.7976931348623157E308" text="SA-MP Version 0.3a" HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="buttonZeroA" styleClass="installButton" mnemonicParsing="false" onAction="#clickVersion" text="Install">
                      <HBox.margin>
                         <Insets top="8.0" />
                      </HBox.margin>
                   </Button>
                </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
             </HBox>
          </children>
       </VBox>

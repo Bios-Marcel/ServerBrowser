@@ -141,9 +141,17 @@ public class SampServerSerializeable implements Serializable
 		this.website = website;
 	}
 
-	public boolean equals(final SampServerSerializeable compare)
+	@Override
+	public boolean equals(final Object obj)
 	{
+		final SampServerSerializeable compare = (SampServerSerializeable) obj;
 		return getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return (getAddress() + getPort()).hashCode();
 	}
 
 }
