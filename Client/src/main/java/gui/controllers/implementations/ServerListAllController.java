@@ -3,40 +3,19 @@ package gui.controllers.implementations;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
+import application.Client;
 import data.SampServer;
-import data.rmi.CustomRMIClientSocketFactory;
 import entities.SampServerSerializeable;
-import interfaces.DataServiceInterface;
 import logging.Logging;
 
 public class ServerListAllController extends ServerListControllerMain
 {
-	private static Registry				registry;
-
-	private static DataServiceInterface	remoteDataService;
-
-	static
-	{
-		try
-		{
-			registry = LocateRegistry.getRegistry("164.132.193.101", 1099, new CustomRMIClientSocketFactory());
-			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
-		}
-		catch (RemoteException | NotBoundException e)
-		{
-			Logging.logger.log(Level.SEVERE, "Couldn't connect to RMI Server.", e);
-		}
-	}
-
 	private static Object deserialzieAndDecompress(final byte[] data)
 	{
 		try (final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data); final GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
@@ -61,7 +40,7 @@ public class ServerListAllController extends ServerListControllerMain
 		{
 			servers.clear();
 
-			final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(remoteDataService.getAllServers());
+			final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(Client.remoteDataService.getAllServers());
 			servers.addAll(serializedServers.stream().map(server ->
 			{
 				final SampServer newServer = new SampServer(server);

@@ -4,16 +4,22 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.logging.Level;
 
 import data.Favourites;
 import data.PastUsernames;
 import data.SQLDatabase;
 import data.SampServer;
+import data.rmi.CustomRMIClientSocketFactory;
 import gui.controllers.implementations.MainController;
+import interfaces.DataServiceInterface;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,18 +36,37 @@ import util.windows.OSInfo;
 
 public class Client extends Application
 {
-	public static final String APPLICATION_NAME = "SA-MP Client Extension";
+	public static final String			APPLICATION_NAME	= "SA-MP Client Extension";
+
+	public static Registry				registry;
+
+	public static DataServiceInterface	remoteDataService;
 
 	@Override
 	public void start(final Stage primaryStage)
 	{
 		checkOperatingSystemCompatibility();
 
+		establishConnection();
+
 		checkVersion();
 
 		prepareData();
 
 		loadUI(primaryStage);
+	}
+
+	private void establishConnection()
+	{
+		try
+		{
+			registry = LocateRegistry.getRegistry("164.132.193.101", 1099, new CustomRMIClientSocketFactory());
+			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
+		}
+		catch (RemoteException | NotBoundException e)
+		{
+			Logging.logger.log(Level.SEVERE, "Couldn't connect to RMI Server.", e);
+		}
 	}
 
 	private void loadUI(final Stage primaryStage)
@@ -139,10 +164,11 @@ public class Client extends Application
 	{
 		try
 		{
-			final URI url = new URI("http://164.132.193.101/sampversion/launcher/version.info");
-			try (final Scanner s = new Scanner(url.toURL().openStream()))
+			if (Objects.nonNull(remoteDataService))
 			{
-				if (!Hashing.verifyChecksum(getOwnJarFile().toString()).equals(s.nextLine()))
+				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
+				final String remoteVersion = remoteDataService.getLatestVersionChecksum();
+				if (!localVersion.equals(remoteVersion))
 				{
 					final Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Launching Application");

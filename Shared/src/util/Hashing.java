@@ -34,7 +34,9 @@ public class Hashing
 				sb.append(Integer.toString((hashBytes[i] & 0xff) + 0x100, 16).substring(1));
 			}
 
-			return sb.toString();
+			final String checksum = sb.toString();
+
+			return checksum;
 		}
 		catch (IOException | NoSuchAlgorithmException e)
 		{
