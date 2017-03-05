@@ -36,7 +36,7 @@ import logging.Logging;
 import query.SampQuery;
 import serviceImplementations.DataServiceServerImplementation;
 
-public class ServerMain
+public class Server
 {
 	private static Registry				registry;
 

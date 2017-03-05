@@ -2,12 +2,8 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.rmi.server.RMISocketFactory;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -29,13 +25,12 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import logging.Logging;
 import util.FileUtility;
+import util.Hashing;
 import util.windows.OSInfo;
 
-public class BrowserMain extends Application
+public class Client extends Application
 {
-	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
-
-	private static final String	VERSION				= "1.1.05";
+	public static final String APPLICATION_NAME = "SA-MP Client Extension";
 
 	@Override
 	public void start(final Stage primaryStage)
@@ -45,8 +40,6 @@ public class BrowserMain extends Application
 		checkVersion();
 
 		prepareData();
-
-		setRMISocketFactory();
 
 		loadUI(primaryStage);
 	}
@@ -149,7 +142,7 @@ public class BrowserMain extends Application
 			final URI url = new URI("http://164.132.193.101/sampversion/launcher/version.info");
 			try (final Scanner s = new Scanner(url.toURL().openStream()))
 			{
-				if (!VERSION.equals(s.nextLine()))
+				if (!Hashing.verifyChecksum(getOwnJarFile().toString()).equals(s.nextLine()))
 				{
 					final Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Launching Application");
@@ -223,35 +216,6 @@ public class BrowserMain extends Application
 		catch (final IOException e)
 		{
 			Logging.logger.log(Level.SEVERE, "Couldn't selfrestart.", e);
-		}
-	}
-
-	private static void setRMISocketFactory()
-	{
-		try
-		{
-			RMISocketFactory.setSocketFactory(new RMISocketFactory()
-			{
-				@Override
-				public Socket createSocket(final String host, final int port) throws IOException
-				{
-					final Socket socket = new Socket();
-					socket.setSoTimeout(1500);
-					socket.setSoLinger(false, 0);
-					socket.connect(new InetSocketAddress(host, port), 1500);
-					return socket;
-				}
-
-				@Override
-				public ServerSocket createServerSocket(final int port) throws IOException
-				{
-					return new ServerSocket(port);
-				}
-			});
-		}
-		catch (final IOException e)
-		{
-			Logging.logger.log(Level.WARNING, "Couldb't set custom RMI Socket Factory.", e);
 		}
 	}
 

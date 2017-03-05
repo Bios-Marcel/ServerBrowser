@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 import data.SampServer;
+import data.rmi.CustomRMIClientSocketFactory;
 import entities.SampServerSerializeable;
 import interfaces.DataServiceInterface;
 import logging.Logging;
@@ -27,7 +28,7 @@ public class ServerListAllController extends ServerListControllerMain
 	{
 		try
 		{
-			registry = LocateRegistry.getRegistry("164.132.193.101");
+			registry = LocateRegistry.getRegistry("164.132.193.101", 1099, new CustomRMIClientSocketFactory());
 			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
 		}
 		catch (RemoteException | NotBoundException e)
@@ -38,20 +39,17 @@ public class ServerListAllController extends ServerListControllerMain
 
 	private static Object deserialzieAndDecompress(final byte[] data)
 	{
-		try
+		try (final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data); final GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
+						final ObjectInputStream objectInputStream = new ObjectInputStream(gzipInputStream);)
 		{
-			final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
-			final GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
-			final ObjectInputStream objectInputStream = new ObjectInputStream(gzipInputStream);
 			final Object object = objectInputStream.readObject();
-			objectInputStream.close();
 			return object;
 		}
 		catch (final IOException | ClassNotFoundException e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Error deserializing and decompressing data", e);
+			return null;
 		}
-		return null;
 	}
 
 	@Override

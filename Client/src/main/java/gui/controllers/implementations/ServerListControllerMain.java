@@ -127,8 +127,6 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
 
-		// TODO(MSC) Improve by including MaxPlayers as Secondary sorting
-		// condition
 		columnPlayers.setComparator((o1, o2) ->
 		{
 			final int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));

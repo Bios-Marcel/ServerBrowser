@@ -36,7 +36,7 @@ public class SampQuery implements AutoCloseable
 	private int					serverPort						= 0;
 
 	/**
-	 * Configures the socket and the address.
+	 * Configures the socket and the address that will be used for doing the queries.
 	 * 
 	 * @param serverAddress
 	 *            hostname / ip

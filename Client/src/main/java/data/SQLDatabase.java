@@ -36,6 +36,10 @@ public class SQLDatabase
 
 				final String createTableSettings = "CREATE TABLE IF NOT EXISTS setting (id integer UNIQUE, value text);";
 				statement.execute(createTableSettings);
+
+				final String createTableServerHistory =
+								"CREATE TABLE IF NOT EXISTS favourite (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
+				statement.execute(createTableServerHistory);
 			}
 
 		}

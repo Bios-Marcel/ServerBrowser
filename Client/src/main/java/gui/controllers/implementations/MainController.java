@@ -70,57 +70,49 @@ public class MainController implements ViewController
 
 	private void loadView(final Views view)
 	{
-		loadView(view, false);
-	}
+		menuItemFav.setStyle("-fx-background-color: #538ED7;");
+		menuItemSettings.setStyle("-fx-background-color: #538ED7;");
+		menuItemUser.setStyle("-fx-background-color: #538ED7;");
+		menuItemAll.setStyle("-fx-background-color: #538ED7;");
+		menuItemVersion.setStyle("-fx-background-color: #538ED7;");
 
-	private void loadView(final Views view, final boolean refresh)
-	{
-		if (refresh || view != activeView)
+		switch (view)
 		{
-			menuItemFav.setStyle("-fx-background-color: #538ED7;");
-			menuItemSettings.setStyle("-fx-background-color: #538ED7;");
-			menuItemUser.setStyle("-fx-background-color: #538ED7;");
-			menuItemAll.setStyle("-fx-background-color: #538ED7;");
-			menuItemVersion.setStyle("-fx-background-color: #538ED7;");
-
-			switch (view)
+			case VERSION_CHANGER:
 			{
-				case VERSION_CHANGER:
-				{
-					loadFXML(view);
-					menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
-					break;
-				}
-				case USERNAME_CHANGER:
-				{
-					loadFXML(view);
-					menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
-					break;
-				}
-				case SETTINGS:
-				{
-					break;
-				}
-				case SERVERS_FAV:
-				{
-					loadFXML(view);
-					menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
-					break;
-				}
-				case SERVERS_ALL:
-				{
-					loadFXML(view);
-					menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
-					break;
-				}
-				default:
-				{
-					throw new IllegalArgumentException("Invalid View");
-				}
+				loadFXML(view);
+				menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
+				break;
 			}
-
-			activeView = view;
+			case USERNAME_CHANGER:
+			{
+				loadFXML(view);
+				menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
+				break;
+			}
+			case SETTINGS:
+			{
+				break;
+			}
+			case SERVERS_FAV:
+			{
+				loadFXML(view);
+				menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
+				break;
+			}
+			case SERVERS_ALL:
+			{
+				loadFXML(view);
+				menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
+				break;
+			}
+			default:
+			{
+				throw new IllegalArgumentException("Invalid View");
+			}
 		}
+
+		activeView = view;
 	}
 
 	private void loadFXML(final Views view)
@@ -145,13 +137,13 @@ public class MainController implements ViewController
 
 	public void refreshViewIfDisplayed(final Views viewToRefresh)
 	{
-		if (getActiveViewID() == viewToRefresh)
+		if (getActiveView() == viewToRefresh)
 		{
-			loadView(viewToRefresh, true);
+			loadView(viewToRefresh);
 		}
 	}
 
-	private Views getActiveViewID()
+	private Views getActiveView()
 	{
 		return activeView;
 	}

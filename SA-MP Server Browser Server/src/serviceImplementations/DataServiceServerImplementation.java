@@ -11,6 +11,7 @@ import java.util.zip.GZIPOutputStream;
 
 import entities.SampServerSerializeable;
 import interfaces.DataServiceInterface;
+import util.Hashing;
 
 public class DataServiceServerImplementation implements DataServiceInterface
 {
@@ -47,5 +48,11 @@ public class DataServiceServerImplementation implements DataServiceInterface
 		{
 			throw new RemoteException("Couldn't serialize and compress data", e);
 		}
+	}
+
+	@Override
+	public String getLatestVersionChecksum() throws RemoteException
+	{
+		return Hashing.verifyChecksum("/var/www/html/sampversion/launcher/launcher.jar");
 	}
 }
