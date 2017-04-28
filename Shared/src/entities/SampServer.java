@@ -1,6 +1,5 @@
-package data;
+package entities;
 
-import entities.SampServerSerializeable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -8,27 +7,27 @@ import javafx.beans.property.StringProperty;
 
 public class SampServer
 {
-	private final StringProperty	hostnameProperty		= new SimpleStringProperty();
+	private final StringProperty hostnameProperty = new SimpleStringProperty();
 
-	private final StringProperty	addressProperty			= new SimpleStringProperty();
+	private final StringProperty addressProperty = new SimpleStringProperty();
 
-	private final IntegerProperty	portProperty			= new SimpleIntegerProperty();
+	private final IntegerProperty portProperty = new SimpleIntegerProperty();
 
-	private final IntegerProperty	playersProperty			= new SimpleIntegerProperty();
+	private final IntegerProperty playersProperty = new SimpleIntegerProperty();
 
-	private final IntegerProperty	maxPlayersProperty		= new SimpleIntegerProperty();
+	private final IntegerProperty maxPlayersProperty = new SimpleIntegerProperty();
 
-	private final StringProperty	actualPlayersProperty	= new SimpleStringProperty();
+	private final StringProperty actualPlayersProperty = new SimpleStringProperty();
 
-	private final StringProperty	modeProperty			= new SimpleStringProperty();
+	private final StringProperty modeProperty = new SimpleStringProperty();
 
-	private final StringProperty	languageProperty		= new SimpleStringProperty();
+	private final StringProperty languageProperty = new SimpleStringProperty();
 
-	private final StringProperty	lagcompProperty			= new SimpleStringProperty();
+	private final StringProperty lagcompProperty = new SimpleStringProperty();
 
-	private final StringProperty	websiteProperty			= new SimpleStringProperty();
+	private final StringProperty websiteProperty = new SimpleStringProperty();
 
-	private final StringProperty	versionProperty			= new SimpleStringProperty();
+	private final StringProperty versionProperty = new SimpleStringProperty();
 
 	public SampServer(final String address, final Integer port)
 	{
@@ -217,7 +216,7 @@ public class SampServer
 	public boolean equals(final Object obj)
 	{
 		final SampServer compare = (SampServer) obj;
-		return getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
+		return compare == obj || getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
 	}
 
 	@Override

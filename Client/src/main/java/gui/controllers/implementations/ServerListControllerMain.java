@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.regex.PatternSyntaxException;
 
 import data.Favourites;
-import data.SampServer;
 import entities.Player;
+import entities.SampServer;
 import gui.controllers.interfaces.ViewController;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -46,84 +46,87 @@ public abstract class ServerListControllerMain implements ViewController
 {
 
 	@FXML
-	private TextField						addressTextField;
+	private TextField addressTextField;
 
-	private static StringProperty			serverAddressProperty	= new SimpleStringProperty();
-
-	@FXML
-	protected TableView<SampServer>			tableView;
+	private static StringProperty serverAddressProperty = new SimpleStringProperty();
 
 	@FXML
-	private TableColumn<SampServer, String>	columnPlayers;
+	protected TableView<SampServer> tableView;
 
 	@FXML
-	private TableView<Player>				playerTable;
+	private TableColumn<SampServer, String> columnPlayers;
 
 	@FXML
-	protected Label							playerCount;
+	private TableView<Player> playerTable;
 
 	@FXML
-	protected Label							slotCount;
+	protected Label playerCount;
 
 	@FXML
-	protected Label							serverCount;
+	protected Label slotCount;
 
 	@FXML
-	private TextField						serverAddress;
+	protected Label serverCount;
 
 	@FXML
-	private Label							serverLagcomp;
+	private TextField serverAddress;
 
 	@FXML
-	private Label							serverPing;
+	private Label serverLagcomp;
 
 	@FXML
-	private Label							serverPassword;
+	private Label serverPing;
 
-	private static Thread					serverInfoUpdateThread;
+	@FXML
+	private Label serverPassword;
 
-	protected MenuItem						addToFavourites			= new MenuItem("Add to Favourites");
+	private static Thread serverInfoUpdateThread;
 
-	protected MenuItem						removeFromFavourites	= new MenuItem("Remove from Favourites");
+	protected MenuItem addToFavourites = new MenuItem("Add to Favourites");
 
-	private final MenuItem					connectItem				= new MenuItem("Connect to Server");
+	protected MenuItem removeFromFavourites = new MenuItem("Remove from Favourites");
 
-	private final MenuItem					copyIpAddressAndPort	= new MenuItem("Copy IP Address and Port");
+	private final MenuItem connectItem = new MenuItem("Connect to Server");
+
+	private final MenuItem copyIpAddressAndPort = new MenuItem("Copy IP Address and Port");
 
 	/**
-	 * The menu that will be dsiplayed, when a user selects 1 .. n servers and right clicks the table
+	 * The menu that will be dsiplayed, when a user selects 1 .. n servers and right clicks the
+	 * table
 	 */
-	protected ContextMenu					menu					= new ContextMenu(connectItem, new SeparatorMenuItem(), addToFavourites, removeFromFavourites, copyIpAddressAndPort);
+	protected ContextMenu menu = new ContextMenu(connectItem, new SeparatorMenuItem(), addToFavourites, removeFromFavourites, copyIpAddressAndPort);
 
 	@FXML
-	private CheckBox						regexCheckBox;
+	private CheckBox regexCheckBox;
 
 	@FXML
-	private TextField						nameFilter;
+	private TextField nameFilter;
 
 	@FXML
-	private TextField						modeFilter;
+	private TextField modeFilter;
 
 	@FXML
-	private TextField						languageFilter;
+	private TextField languageFilter;
 
 	@FXML
-	private ComboBox<String>				versionFilter;
+	private ComboBox<String> versionFilter;
 
-	protected int							playersPlaying			= 0;
+	protected int playersPlaying = 0;
 
-	protected int							maxSlots				= 0;
+	protected int maxSlots = 0;
 
-	/* HACK(MSC) This is a little hacky, because it needs 3 lists in order to
-	 * keep all data, make sorting possible and make filtering possible. */
-	protected ObservableList<SampServer>	servers					= FXCollections.observableArrayList();
+	/*
+	 * HACK(MSC) This is a little hacky, because it needs 3 lists in order to keep all data, make
+	 * sorting possible and make filtering possible.
+	 */
+	protected ObservableList<SampServer> servers = FXCollections.observableArrayList();
 
-	protected FilteredList<SampServer>		filteredServers			= new FilteredList<>(servers);
+	protected FilteredList<SampServer> filteredServers = new FilteredList<>(servers);
 
-	protected ObservableList<SampServer>	sortedServers			= FXCollections.observableArrayList();
+	protected ObservableList<SampServer> sortedServers = FXCollections.observableArrayList();
 
 	@Override
-	public void init()
+	public void initialize()
 	{
 		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
 
@@ -309,10 +312,8 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	/**
-	 * Updates and resorts the TableView.
-	 * 
-	 * Since i am using 3 diffrent Collections to keep hold of the data, filter it and sort it. i have to update the table view a little
-	 * tricky.
+	 * Updates and resorts the TableView. Since i am using 3 diffrent Collections to keep hold of
+	 * the data, filter it and sort it. i have to update the table view a little tricky.
 	 */
 	public void updateTable()
 	{
@@ -323,7 +324,7 @@ public abstract class ServerListControllerMain implements ViewController
 
 	/**
 	 * Displays the context menu for server entries.
-	 * 
+	 *
 	 * @param serverList
 	 *            The list of servers that the context menu actions will affect
 	 * @param posX
@@ -333,7 +334,7 @@ public abstract class ServerListControllerMain implements ViewController
 	 */
 	protected void displayMenu(final List<SampServer> serverList, final double posX, final double posY)
 	{
-		final boolean sizeEqualsOne = (serverList.size() == 1);
+		final boolean sizeEqualsOne = serverList.size() == 1;
 
 		connectItem.setVisible(sizeEqualsOne);
 		copyIpAddressAndPort.setVisible(sizeEqualsOne);
@@ -377,9 +378,9 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	/**
-	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a password. If the server is not reachable
-	 * the user can not connect.
-	 * 
+	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a
+	 * password. If the server is not reachable the user can not connect.
+	 *
 	 * @param address
 	 *            server ip
 	 * @param port
@@ -457,20 +458,21 @@ public abstract class ServerListControllerMain implements ViewController
 					String lagcomp = null;
 					String version = null;
 
-					// TODO(MSC) Inspect data response of all server versions and remove loops if possible
-					for (int i = 0; infoMore.length > i; i++)
+					// TODO(MSC) Inspect data response of all server versions and remove loops if
+					// possible
+					for (final String[] element : infoMore)
 					{
-						if (infoMore[i][0].equals("lagcomp"))
+						if (element[0].equals("lagcomp"))
 						{
-							lagcomp = infoMore[i][1];
+							lagcomp = element[1];
 						}
-						else if (infoMore[i][0].equals("weburl"))
+						else if (element[0].equals("weburl"))
 						{
-							weburl = infoMore[i][1];
+							weburl = element[1];
 						}
-						else if (infoMore[i][0].equals("version"))
+						else if (element[0].equals("version"))
 						{
-							version = infoMore[i][1];
+							version = element[1];
 						}
 					}
 
@@ -488,9 +490,9 @@ public abstract class ServerListControllerMain implements ViewController
 
 					query.getBasicPlayerInfo().ifPresent(basicPlayers ->
 					{
-						for (int i = 0; i < basicPlayers.length; i++)
+						for (final String[] basicPlayer : basicPlayers)
 						{
-							playerList.add(new Player(basicPlayers[i][0], basicPlayers[i][1]));
+							playerList.add(new Player(basicPlayer[0], basicPlayer[1]));
 						}
 					});
 

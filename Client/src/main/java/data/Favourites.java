@@ -18,7 +18,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import entities.SampServerSerializeable;
+import entities.SampServer;
+import entities.SampServerBuilder;
 import logging.Logging;
 import query.SampQuery;
 
@@ -77,8 +78,10 @@ public class Favourites
 			String statement =
 							"INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
 			statement =
-							MessageFormat.format(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(),
-											server.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
+							MessageFormat.format(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(),
+											server.getPlayers().toString(),
+											server.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(),
+											server.getWebsite());
 			SQLDatabase.execute(statement);
 		}
 	}
@@ -88,7 +91,8 @@ public class Favourites
 		String statement =
 						"UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
 		statement =
-						MessageFormat.format(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server.getMaxPlayers().toString(),
+						MessageFormat.format(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(),
+										server.getPlayers().toString(), server.getMaxPlayers().toString(),
 										server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
 		SQLDatabase.execute(statement);
 	}
@@ -110,9 +114,16 @@ public class Favourites
 			{
 				while (resultSet.next())
 				{
-					servers.add(new SampServer(new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip"), resultSet.getInt("port"), resultSet.getInt("players"),
-									resultSet.getInt("maxplayers"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"), resultSet.getString("website"),
-									resultSet.getString("version"))));
+					servers.add(new SampServerBuilder(resultSet.getString("ip"), resultSet.getInt("port"))
+									.setHostname(resultSet.getString("hostname"))
+									.setPlayers(resultSet.getInt("players"))
+									.setMaxPlayers(resultSet.getInt("maxplayers"))
+									.setMode(resultSet.getString("mode"))
+									.setLanguage(resultSet.getString("language"))
+									.setWebsite(resultSet.getString("website"))
+									.setLagcomp(resultSet.getString("lagcomp"))
+									.setVersion(resultSet.getString("version"))
+									.build());
 				}
 			}
 			catch (final SQLException e)
@@ -156,9 +167,16 @@ public class Favourites
 					final Node playersNode = attr.getNamedItem("players");
 					final Node maxplayersNode = attr.getNamedItem("maxplayers");
 
-					servers.add(new SampServer(new SampServerSerializeable(hostnameNode.getTextContent(), ipNode.getTextContent(), Integer.parseInt(portNode.getTextContent()),
-									Integer.parseInt(playersNode.getTextContent()), Integer.parseInt(maxplayersNode.getTextContent()), modeNode.getTextContent(), languageNode.getTextContent(),
-									lagcompNode.getTextContent(), websiteNode.getTextContent(), versionNode.getTextContent())));
+					servers.add(new SampServerBuilder(ipNode.getTextContent(), Integer.parseInt(portNode.getTextContent()))
+									.setHostname(hostnameNode.getTextContent())
+									.setPlayers(Integer.parseInt(playersNode.getTextContent()))
+									.setMaxPlayers(Integer.parseInt(maxplayersNode.getTextContent()))
+									.setMode(modeNode.getTextContent())
+									.setLanguage(languageNode.getTextContent())
+									.setWebsite(websiteNode.getTextContent())
+									.setLagcomp(lagcompNode.getTextContent())
+									.setVersion(versionNode.getTextContent())
+									.build());
 				}
 				catch (final NullPointerException e)
 				{

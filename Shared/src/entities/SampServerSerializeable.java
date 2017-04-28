@@ -4,30 +4,31 @@ import java.io.Serializable;
 
 public class SampServerSerializeable implements Serializable
 {
-	private static final long	serialVersionUID	= 4910435015362133564L;
+	private static final long serialVersionUID = 4910435015362133564L;
 
-	private String				hostname;
+	private String hostname;
 
-	private String				address;
+	private String address;
 
-	private Integer				port;
+	private Integer port;
 
-	private Integer				players;
+	private Integer players;
 
-	private Integer				maxPlayers;
+	private Integer maxPlayers;
 
-	private String				mode;
+	private String mode;
 
-	private String				language;
+	private String language;
 
-	private String				lagcomp;
+	private String lagcomp;
 
-	private String				website;
+	private String website;
 
-	private String				version;
+	private String version;
 
-	public SampServerSerializeable(final String hostname, final String address, final Integer port, final int players, final int maxPlayers, final String mode, final String language,
-					final String lagcomp, final String website, final String version)
+	public SampServerSerializeable(final String hostname, final String address, final Integer port, final int players, final int maxPlayers,
+			final String mode, final String language,
+			final String lagcomp, final String website, final String version)
 	{
 		this.hostname = hostname;
 		this.address = address;
@@ -141,11 +142,16 @@ public class SampServerSerializeable implements Serializable
 		this.website = website;
 	}
 
+	public SampServer toSampServer()
+	{
+		return new SampServer(this);
+	}
+
 	@Override
 	public boolean equals(final Object obj)
 	{
 		final SampServerSerializeable compare = (SampServerSerializeable) obj;
-		return getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
+		return compare == this || getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
 	}
 
 	@Override

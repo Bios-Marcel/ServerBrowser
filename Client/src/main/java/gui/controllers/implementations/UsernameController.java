@@ -17,19 +17,19 @@ import util.GTA;
 public class UsernameController implements ViewController
 {
 	@FXML
-	private TextField			usernameTextField;
+	private TextField usernameTextField;
 
 	@FXML
-	private ListView<String>	nameList;
+	private ListView<String> nameList;
 
-	private final MenuItem		setName		= new MenuItem("Use Username");
+	private final MenuItem setName = new MenuItem("Use Username");
 
-	private final MenuItem		removeName	= new MenuItem("Remove username");
+	private final MenuItem removeName = new MenuItem("Remove username");
 
-	private final ContextMenu	menu		= new ContextMenu(setName, removeName);
+	private final ContextMenu menu = new ContextMenu(setName, removeName);
 
 	@Override
-	public void init()
+	public void initialize()
 	{
 		usernameTextField.textProperty().bindBidirectional(GTA.usernameProperty());
 

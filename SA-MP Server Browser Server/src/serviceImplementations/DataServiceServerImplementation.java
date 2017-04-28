@@ -1,9 +1,11 @@
 package serviceImplementations;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -51,7 +53,7 @@ public class DataServiceServerImplementation implements DataServiceInterface
 	}
 
 	@Override
-	public String getLatestVersionChecksum() throws RemoteException
+	public String getLatestVersionChecksum() throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException
 	{
 		return Hashing.verifyChecksum("/var/www/html/sampversion/launcher/launcher.jar");
 	}

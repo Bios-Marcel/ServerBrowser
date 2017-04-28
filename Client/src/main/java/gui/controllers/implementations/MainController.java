@@ -17,30 +17,30 @@ import logging.Logging;
 public class MainController implements ViewController
 {
 	@FXML
-	private StackPane	menuItemFav;
+	private StackPane menuItemFav;
 
 	@FXML
-	private StackPane	menuItemAll;
+	private StackPane menuItemAll;
 
 	@FXML
-	private StackPane	menuItemUser;
+	private StackPane menuItemUser;
 
 	@FXML
-	private StackPane	menuItemSettings;
+	private StackPane menuItemSettings;
 
 	@FXML
-	private StackPane	menuItemVersion;
+	private StackPane menuItemVersion;
 
 	@FXML
-	private StackPane	activeViewContainer;
+	private StackPane activeViewContainer;
 
-	private Views		activeView;
+	private Views activeView;
 
 	@FXML
-	private Label		headerTitle;
+	private Label headerTitle;
 
 	@Override
-	public void init()
+	public void initialize()
 	{
 		loadView(Views.valueOf(ClientProperties.getPropertyAsInt(PropertyIds.LAST_VIEW)));
 	}
@@ -78,38 +78,38 @@ public class MainController implements ViewController
 
 		switch (view)
 		{
-			case VERSION_CHANGER:
-			{
-				loadFXML(view);
-				menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
-				break;
-			}
-			case USERNAME_CHANGER:
-			{
-				loadFXML(view);
-				menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
-				break;
-			}
-			case SETTINGS:
-			{
-				break;
-			}
-			case SERVERS_FAV:
-			{
-				loadFXML(view);
-				menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
-				break;
-			}
-			case SERVERS_ALL:
-			{
-				loadFXML(view);
-				menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
-				break;
-			}
-			default:
-			{
-				throw new IllegalArgumentException("Invalid View");
-			}
+		case VERSION_CHANGER:
+		{
+			loadFXML(view);
+			menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
+			break;
+		}
+		case USERNAME_CHANGER:
+		{
+			loadFXML(view);
+			menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
+			break;
+		}
+		case SETTINGS:
+		{
+			break;
+		}
+		case SERVERS_FAV:
+		{
+			loadFXML(view);
+			menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
+			break;
+		}
+		case SERVERS_ALL:
+		{
+			loadFXML(view);
+			menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
+			break;
+		}
+		default:
+		{
+			throw new IllegalArgumentException("Invalid View");
+		}
 		}
 
 		activeView = view;
@@ -127,7 +127,6 @@ public class MainController implements ViewController
 			activeViewContainer.getChildren().add(loader.load());
 			activeViewContainer.getStylesheets().setAll(view.getStylesheetPath());
 			headerTitle.setText(view.getTitle());
-			controller.init();
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException e)
 		{

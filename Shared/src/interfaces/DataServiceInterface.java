@@ -1,7 +1,10 @@
 package interfaces;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
 
 public interface DataServiceInterface extends Remote
 {
@@ -9,5 +12,5 @@ public interface DataServiceInterface extends Remote
 
 	public byte[] getAllServers() throws RemoteException;
 
-	public String getLatestVersionChecksum() throws RemoteException;
+	public String getLatestVersionChecksum() throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException;
 }

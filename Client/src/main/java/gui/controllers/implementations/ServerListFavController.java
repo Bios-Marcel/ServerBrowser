@@ -3,16 +3,16 @@ package gui.controllers.implementations;
 import java.util.List;
 
 import data.Favourites;
-import data.SampServer;
+import entities.SampServer;
 
 public class ServerListFavController extends ServerListControllerMain
 {
 	// private static Thread queryThread;
 
 	@Override
-	public void init()
+	public void initialize()
 	{
-		super.init();
+		super.initialize();
 
 		final List<SampServer> favs = Favourites.getFavourites();
 		servers.addAll(favs);

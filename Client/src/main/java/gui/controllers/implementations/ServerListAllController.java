@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 import application.Client;
-import data.SampServer;
+import entities.SampServer;
 import entities.SampServerSerializeable;
 import logging.Logging;
 
@@ -18,8 +18,9 @@ public class ServerListAllController extends ServerListControllerMain
 {
 	private static Object deserialzieAndDecompress(final byte[] data)
 	{
-		try (final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data); final GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
-						final ObjectInputStream objectInputStream = new ObjectInputStream(gzipInputStream);)
+		try (final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+				final GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
+				final ObjectInputStream objectInputStream = new ObjectInputStream(gzipInputStream);)
 		{
 			final Object object = objectInputStream.readObject();
 			return object;
@@ -32,15 +33,17 @@ public class ServerListAllController extends ServerListControllerMain
 	}
 
 	@Override
-	public void init()
+	public void initialize()
 	{
-		super.init();
+		super.initialize();
 
 		try
 		{
 			servers.clear();
 
-			final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(Client.remoteDataService.getAllServers());
+			@SuppressWarnings("unchecked")
+			final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(Client.remoteDataService
+					.getAllServers());
 			servers.addAll(serializedServers.stream().map(server ->
 			{
 				final SampServer newServer = new SampServer(server);
@@ -59,7 +62,7 @@ public class ServerListAllController extends ServerListControllerMain
 
 		serverCount.setText(sortedServers.size() + "");
 		playerCount.setText(playersPlaying + "");
-		slotCount.setText((maxSlots - playersPlaying) + "");
+		slotCount.setText(maxSlots - playersPlaying + "");
 	}
 
 	@Override

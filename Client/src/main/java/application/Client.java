@@ -8,16 +8,16 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.logging.Level;
 
 import data.Favourites;
 import data.PastUsernames;
 import data.SQLDatabase;
-import data.SampServer;
 import data.rmi.CustomRMIClientSocketFactory;
+import entities.SampServer;
 import gui.controllers.implementations.MainController;
 import interfaces.DataServiceInterface;
 import javafx.application.Application;
@@ -36,11 +36,11 @@ import util.windows.OSInfo;
 
 public class Client extends Application
 {
-	public static final String			APPLICATION_NAME	= "SA-MP Client Extension";
+	public static final String APPLICATION_NAME = "SA-MP Client Extension";
 
-	public static Registry				registry;
+	public static Registry registry;
 
-	public static DataServiceInterface	remoteDataService;
+	public static DataServiceInterface remoteDataService;
 
 	@Override
 	public void start(final Stage primaryStage)
@@ -88,8 +88,6 @@ public class Client extends Application
 			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setIconified(false);
 			primaryStage.setMaximized(false);
-			controller.init();
-
 			primaryStage.setOnCloseRequest(close ->
 			{
 				controller.onClose();
@@ -157,17 +155,18 @@ public class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an update is
-	 * availbable the user will be asked if he wants to update.
+	 * Compares the local version number to the one lying on the server. If an update is availbable
+	 * the user will be asked if he wants to update.
 	 */
 	private static void checkVersion()
 	{
-		try
+		if (Objects.nonNull(remoteDataService))
 		{
-			if (Objects.nonNull(remoteDataService))
+			try
 			{
 				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
 				final String remoteVersion = remoteDataService.getLatestVersionChecksum();
+
 				if (!localVersion.equals(remoteVersion))
 				{
 					final Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -175,17 +174,19 @@ public class Client extends Application
 					alert.setHeaderText("Update required");
 					alert.setContentText("The launcher needs an update. Not updating the client might lead to problems. Click 'OK' to update and 'Cancel' to not update.");
 
-					final Optional<ButtonType> result = alert.showAndWait();
-					if (result.get() == ButtonType.OK)
+					alert.showAndWait().ifPresent(result ->
 					{
-						updateLauncher();
-					}
+						if (result == ButtonType.OK)
+						{
+							updateLauncher();
+						}
+					});
 				}
 			}
-		}
-		catch (final Exception e)
-		{
-			Logging.logger.log(Level.SEVERE, "Couldn't retrieve Update / Update Info.", e);
+			catch (final NoSuchAlgorithmException | IOException updateException)
+			{
+				Logging.logger.log(Level.SEVERE, "Couldn't retrieve Update Info.", updateException);
+			}
 		}
 	}
 
@@ -197,7 +198,7 @@ public class Client extends Application
 		try
 		{
 			final URI url = new URI("http://164.132.193.101/sampversion/launcher/launcher.jar");
-			FileUtility.downloadUsingNIO(url.toString(), getOwnJarFile().getPath().toString());
+			FileUtility.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
 			selfRestart();
 		}
 		catch (final IOException | URISyntaxException e)

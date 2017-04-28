@@ -9,77 +9,77 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import net.lingala.zip4j.exception.ZipException;
 import util.FileUtility;
 import util.GTA;
 
 public class VersionChangeController implements ViewController
 {
-	public static final String	OUTPUT_ZIP	= System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
+	public static final String OUTPUT_ZIP = System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
 
-	private static String		installing	= "";
-
-	@FXML
-	private Button				buttonZeroThreeSeven;
+	private static String installing = "";
 
 	@FXML
-	private Button				buttonZeroZ;
+	private Button buttonZeroThreeSeven;
 
 	@FXML
-	private Button				buttonZeroX;
+	private Button buttonZeroZ;
 
 	@FXML
-	private Button				buttonZeroD;
+	private Button buttonZeroX;
 
 	@FXML
-	private Button				buttonZeroE;
+	private Button buttonZeroD;
 
 	@FXML
-	private Button				buttonZeroC;
+	private Button buttonZeroE;
 
 	@FXML
-	private Button				buttonZeroA;
+	private Button buttonZeroC;
+
+	@FXML
+	private Button buttonZeroA;
 
 	private Button getButtonForVersion(final String version)
 	{
 		switch (version)
 		{
-			case "0.3.7":
-			{
-				return buttonZeroThreeSeven;
-			}
-			case "0.3z":
-			{
-				return buttonZeroZ;
-			}
-			case "0.3x":
-			{
-				return buttonZeroX;
-			}
-			case "0.3e":
-			{
-				return buttonZeroE;
-			}
-			case "0.3d":
-			{
-				return buttonZeroD;
-			}
-			case "0.3c":
-			{
-				return buttonZeroC;
-			}
-			case "0.3a":
-			{
-				return buttonZeroA;
-			}
-			default:
-			{
-				return null;
-			}
+		case "0.3.7":
+		{
+			return buttonZeroThreeSeven;
+		}
+		case "0.3z":
+		{
+			return buttonZeroZ;
+		}
+		case "0.3x":
+		{
+			return buttonZeroX;
+		}
+		case "0.3e":
+		{
+			return buttonZeroE;
+		}
+		case "0.3d":
+		{
+			return buttonZeroD;
+		}
+		case "0.3c":
+		{
+			return buttonZeroC;
+		}
+		case "0.3a":
+		{
+			return buttonZeroA;
+		}
+		default:
+		{
+			return null;
+		}
 		}
 	}
 
-	@Override
-	public void init()
+	public void initialize()
 	{
 		final String version = GTA.getInstalledVersion();
 
@@ -105,7 +105,7 @@ public class VersionChangeController implements ViewController
 	}
 
 	@FXML
-	public void clickVersion(final ActionEvent e)
+	private void clickVersion(final ActionEvent e)
 	{
 		final Button clicked = (Button) e.getTarget();
 
@@ -147,11 +147,11 @@ public class VersionChangeController implements ViewController
 		installing = version;
 		final Thread thread = new Thread(() ->
 		{
+			File downloadedFile = null;
 			try
 			{
-				FileUtility.downloadUsingNIO("http://164.132.193.101/sampversion/" + version + ".zip", OUTPUT_ZIP);
-				FileUtility.unZipIt(OUTPUT_ZIP, GTA.getGtaPath());
-				new File(OUTPUT_ZIP).delete();
+				downloadedFile = FileUtility.downloadFile("http://164.132.193.101/sampversion/" + version + ".zip", OUTPUT_ZIP);
+				FileUtility.unzip(OUTPUT_ZIP, GTA.getGtaPath());
 				installing = "";
 
 				Platform.runLater(() ->
@@ -167,9 +167,16 @@ public class VersionChangeController implements ViewController
 					}
 				});
 			}
-			catch (IOException | IllegalArgumentException e)
+			catch (ZipException | IOException | IllegalArgumentException e)
 			{
 				e.printStackTrace();
+			}
+			finally
+			{
+				if (Objects.nonNull(downloadedFile))
+				{
+					downloadedFile.delete();
+				}
 			}
 		});
 

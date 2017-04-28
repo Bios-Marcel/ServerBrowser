@@ -31,6 +31,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import data.MySQLConnection;
 import entities.SampServerSerializeable;
+import entities.SampServerSerializeableBuilder;
 import interfaces.DataServiceInterface;
 import logging.Logging;
 import query.SampQuery;
@@ -136,10 +137,19 @@ public class Server
 
 			while (resultSet.next())
 			{
-				final SampServerSerializeable server =
-								new SampServerSerializeable(resultSet.getString("hostname"), resultSet.getString("ip_address"), resultSet.getInt("portNumber"), resultSet.getInt("players"),
-												resultSet.getInt("max_players"), resultSet.getString("mode"), resultSet.getString("language"), resultSet.getString("lagcomp"),
-												resultSet.getString("weburl"), resultSet.getString("version"));
+				final SampServerSerializeable server = new SampServerSerializeableBuilder()
+								.setHostname(resultSet.getString("hostname"))
+								.setAddress(resultSet.getString("ip_address"))
+								.setPort(resultSet.getInt("portNumber"))
+								.setPlayers(resultSet.getInt("players"))
+								.setMaxPlayers(resultSet.getInt("max_players"))
+								.setMode(resultSet.getString("mode"))
+								.setLanguage(resultSet.getString("language"))
+								.setLagcomp(resultSet.getString("lagcomp"))
+								.setWebsite(resultSet.getString("weburl"))
+								.setVersion(resultSet.getString("version"))
+								.build();
+
 				if (!servers.contains(server))
 				{
 					servers.add(server);
@@ -173,7 +183,9 @@ public class Server
 
 			final JobDetail job = JobBuilder.newJob(UpdateJob.class).withIdentity("updateList", "updater").build();
 
-			final Trigger trigger = TriggerBuilder.newTrigger().withIdentity("updateTrigger", "updater").startNow().withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 59)).build();
+			final Trigger trigger =
+							TriggerBuilder.newTrigger().withIdentity("updateTrigger", "updater").startNow()
+											.withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 59)).build();
 
 			scheduler.scheduleJob(job, trigger);
 		}
@@ -258,7 +270,8 @@ public class Server
 								}
 							}
 
-							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4], info[5], lagcomp, map, version, weather, weburl,
+							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4],
+											info[5], lagcomp, map, version, weather, weburl,
 											worldtime);
 							Logging.logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
