@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.regex.PatternSyntaxException;
 
 import data.Favourites;
@@ -15,11 +16,14 @@ import entities.Player;
 import entities.SampServer;
 import gui.controllers.interfaces.ViewController;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -44,6 +48,7 @@ import util.GTA;
 
 public abstract class ServerListControllerMain implements ViewController
 {
+	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
 
 	@FXML
 	private TextField addressTextField;
@@ -51,7 +56,7 @@ public abstract class ServerListControllerMain implements ViewController
 	private static StringProperty serverAddressProperty = new SimpleStringProperty();
 
 	@FXML
-	protected TableView<SampServer> tableView;
+	protected TableView<SampServer> serverTable;
 
 	@FXML
 	private TableColumn<SampServer, String> columnPlayers;
@@ -115,19 +120,21 @@ public abstract class ServerListControllerMain implements ViewController
 
 	protected int maxSlots = 0;
 
-	/*
-	 * HACK(MSC) This is a little hacky, because it needs 3 lists in order to keep all data, make
-	 * sorting possible and make filtering possible.
-	 */
 	protected ObservableList<SampServer> servers = FXCollections.observableArrayList();
-
-	protected FilteredList<SampServer> filteredServers = new FilteredList<>(servers);
-
-	protected ObservableList<SampServer> sortedServers = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize()
 	{
+		final FilteredList<SampServer> filteredServers = new FilteredList<>(servers);
+		filteredServers.predicateProperty().bind(filterProperty);
+
+		final SortedList<SampServer> sortedServers = new SortedList<>(filteredServers);
+		serverTable.comparatorProperty().addListener(changed ->
+		{
+			sortedServers.setComparator(serverTable.comparatorProperty().get());
+			serverTable.refresh();
+		});
+
 		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
 
 		columnPlayers.setComparator((o1, o2) ->
@@ -137,9 +144,9 @@ public abstract class ServerListControllerMain implements ViewController
 			return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
 		});
 
-		tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		serverTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-		tableView.setItems(sortedServers);
+		serverTable.setItems(sortedServers);
 	}
 
 	@FXML
@@ -154,7 +161,6 @@ public abstract class ServerListControllerMain implements ViewController
 				if (!servers.contains(newServer))
 				{
 					servers.add(newServer);
-					updateTable();
 				}
 			}
 			else
@@ -170,7 +176,7 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	@FXML
-	public void onClickConnect()
+	private void onClickConnect()
 	{
 		final String[] ipAndPort = addressTextField.getText().split("[:]");
 		if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
@@ -220,7 +226,7 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		menu.hide();
 
-		final List<SampServer> serverList = tableView.getSelectionModel().getSelectedItems();
+		final List<SampServer> serverList = serverTable.getSelectionModel().getSelectedItems();
 
 		if (!serverList.isEmpty())
 		{
@@ -238,7 +244,7 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	protected void onTableViewKeyReleased(final KeyEvent released)
 	{
-		final SampServer server = tableView.getSelectionModel().getSelectedItem();
+		final SampServer server = serverTable.getSelectionModel().getSelectedItem();
 
 		final KeyCode usedKey = released.getCode();
 
@@ -249,9 +255,9 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	@FXML
-	public void onFilterSettingsChange()
+	private void onFilterSettingsChange()
 	{
-		filteredServers.setPredicate(server ->
+		filterProperty.set(server ->
 		{
 			boolean doesNameFilterApply = true;
 			boolean doesModeFilterApply = true;
@@ -288,7 +294,7 @@ public abstract class ServerListControllerMain implements ViewController
 			return doesNameFilterApply && doesModeFilterApply && doesVersionFilterApply && doesLanguageFilterApply;
 		});
 
-		updateTable();
+		updateGlobalInfo();
 	}
 
 	private boolean regexFilter(final String toFilter, final String filterSetting)
@@ -309,17 +315,6 @@ public abstract class ServerListControllerMain implements ViewController
 		}
 
 		return true;
-	}
-
-	/**
-	 * Updates and resorts the TableView. Since i am using 3 diffrent Collections to keep hold of
-	 * the data, filter it and sort it. i have to update the table view a little tricky.
-	 */
-	public void updateTable()
-	{
-		sortedServers.clear();
-		sortedServers.addAll(filteredServers);
-		tableView.sort();
 	}
 
 	/**
@@ -363,7 +358,6 @@ public abstract class ServerListControllerMain implements ViewController
 					Favourites.removeServerFromFavourites(serverItem);
 				}
 				servers.removeAll(serverList);
-				updateTable();
 			}
 			else if (clickedItem == copyIpAddressAndPort)
 			{
@@ -374,7 +368,7 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 		});
 
-		menu.show(tableView, posX, posY);
+		menu.show(serverTable, posX, posY);
 	}
 
 	/**
@@ -525,11 +519,6 @@ public abstract class ServerListControllerMain implements ViewController
 
 					Favourites.updateServerData(server);
 				}
-
-				Platform.runLater(() ->
-				{
-					updateGlobalInfo();
-				});
 			}
 			catch (final Exception e)
 			{
@@ -550,7 +539,7 @@ public abstract class ServerListControllerMain implements ViewController
 		playersPlaying = 0;
 		maxSlots = 0;
 
-		for (final SampServer server : sortedServers)
+		for (final SampServer server : servers)
 		{
 			playersPlaying += server.getPlayers();
 			maxSlots += server.getMaxPlayers();
@@ -558,7 +547,7 @@ public abstract class ServerListControllerMain implements ViewController
 
 		final int freeSlots = maxSlots - playersPlaying;
 
-		serverCount.setText(sortedServers.size() + "");
+		serverCount.setText(serverTable.getItems().size() + "");
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(freeSlots + "");
 	}

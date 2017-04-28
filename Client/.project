@@ -26,4 +26,11 @@
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>resources</name>
+			<type>2</type>
+			<location>C:/Users/Marcel/git/ServerBrowser/Client/src/main/resources</location>
+		</link>
+	</linkedResources>
 </projectDescription>

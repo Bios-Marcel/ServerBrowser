@@ -14,10 +14,7 @@ public class ServerListFavController extends ServerListControllerMain
 	{
 		super.initialize();
 
-		final List<SampServer> favs = Favourites.getFavourites();
-		servers.addAll(favs);
-
-		updateTable();
+		servers.addAll(Favourites.getFavourites());
 	}
 
 	@Override

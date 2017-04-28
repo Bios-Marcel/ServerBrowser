@@ -44,23 +44,22 @@ public class ServerListAllController extends ServerListControllerMain
 			@SuppressWarnings("unchecked")
 			final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(Client.remoteDataService
 					.getAllServers());
-			servers.addAll(serializedServers.stream().map(server ->
-			{
-				final SampServer newServer = new SampServer(server);
-				playersPlaying += newServer.getPlayers();
-				maxSlots += newServer.getMaxPlayers();
-				return newServer;
-			}).collect(Collectors.toSet()));
-
-			sortedServers.clear();
-			sortedServers.addAll(filteredServers);
+			servers.addAll(serializedServers.stream()
+					.map(server ->
+					{
+						final SampServer newServer = new SampServer(server);
+						playersPlaying += newServer.getPlayers();
+						maxSlots += newServer.getMaxPlayers();
+						return newServer;
+					})
+					.collect(Collectors.toSet()));
 		}
 		catch (final RemoteException e)
 		{
 			e.printStackTrace();
 		}
 
-		serverCount.setText(sortedServers.size() + "");
+		serverCount.setText(serverTable.getItems() + "");
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(maxSlots - playersPlaying + "");
 	}
