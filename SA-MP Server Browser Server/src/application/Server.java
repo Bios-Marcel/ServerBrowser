@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
@@ -33,17 +34,18 @@ import data.MySQLConnection;
 import entities.SampServerSerializeable;
 import entities.SampServerSerializeableBuilder;
 import interfaces.DataServiceInterface;
-import logging.Logging;
 import query.SampQuery;
 import serviceImplementations.DataServiceServerImplementation;
 
 public class Server
 {
-	private static Registry				registry;
+	private static final Logger logger = Logger.getLogger("Server");
 
-	private static DataServiceInterface	dataService;
+	private static Registry registry;
 
-	private static DataServiceInterface	stub;
+	private static DataServiceInterface dataService;
+
+	private static DataServiceInterface stub;
 
 	public static void main(final String[] args)
 	{
@@ -59,7 +61,8 @@ public class Server
 				{
 					recreatedb = true;
 				}
-				// TODO(msc) Think about changing this into a passsword input request (would be saver)
+				// TODO(msc) Think about changing this into a passsword input request (would be
+				// saver)
 				else if (args[i].equals("-p") || args[i].equals("-password"))
 				{
 					if (args.length >= i + 2)
@@ -89,7 +92,7 @@ public class Server
 
 		if (Objects.isNull(username) || Objects.isNull(password))
 		{
-			Logging.logger.log(Level.SEVERE, "Please enter a Username and a Password for your Database");
+			logger.log(Level.SEVERE, "Please enter a Username and a Password for your Database");
 			System.exit(0);
 		}
 
@@ -101,11 +104,11 @@ public class Server
 			dataService = new DataServiceServerImplementation();
 			stub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
 			registry.rebind(DataServiceInterface.INTERFACE_NAME, stub);
-			Logging.logger.log(Level.INFO, "RMI has been initialized.");
+			logger.log(Level.INFO, "RMI has been initialized.");
 		}
 		catch (final Exception e)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
+			logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
 			System.exit(0);
 		}
 
@@ -129,26 +132,25 @@ public class Server
 			final Statement statement = MySQLConnection.connect.createStatement();
 
 			// TODO(MSC) Convert field in database instead of casting.
-			final ResultSet resultSet =
-							statement.executeQuery(
-											"SELECT version, ip_address, id, CONVERT(port, SIGNED INTEGER) as portNumber, hostname, players, lagcomp, max_players, mode, version, weburl, language FROM internet_offline;");
+			final ResultSet resultSet = statement
+					.executeQuery("SELECT version, ip_address, id, CONVERT(port, SIGNED INTEGER) as portNumber, hostname, players, lagcomp, max_players, mode, version, weburl, language FROM internet_offline;");
 
 			final List<SampServerSerializeable> servers = new ArrayList<>();
 
 			while (resultSet.next())
 			{
 				final SampServerSerializeable server = new SampServerSerializeableBuilder()
-								.setHostname(resultSet.getString("hostname"))
-								.setAddress(resultSet.getString("ip_address"))
-								.setPort(resultSet.getInt("portNumber"))
-								.setPlayers(resultSet.getInt("players"))
-								.setMaxPlayers(resultSet.getInt("max_players"))
-								.setMode(resultSet.getString("mode"))
-								.setLanguage(resultSet.getString("language"))
-								.setLagcomp(resultSet.getString("lagcomp"))
-								.setWebsite(resultSet.getString("weburl"))
-								.setVersion(resultSet.getString("version"))
-								.build();
+						.setHostname(resultSet.getString("hostname"))
+						.setAddress(resultSet.getString("ip_address"))
+						.setPort(resultSet.getInt("portNumber"))
+						.setPlayers(resultSet.getInt("players"))
+						.setMaxPlayers(resultSet.getInt("max_players"))
+						.setMode(resultSet.getString("mode"))
+						.setLanguage(resultSet.getString("language"))
+						.setLagcomp(resultSet.getString("lagcomp"))
+						.setWebsite(resultSet.getString("weburl"))
+						.setVersion(resultSet.getString("version"))
+						.build();
 
 				if (!servers.contains(server))
 				{
@@ -183,9 +185,8 @@ public class Server
 
 			final JobDetail job = JobBuilder.newJob(UpdateJob.class).withIdentity("updateList", "updater").build();
 
-			final Trigger trigger =
-							TriggerBuilder.newTrigger().withIdentity("updateTrigger", "updater").startNow()
-											.withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 59)).build();
+			final Trigger trigger = TriggerBuilder.newTrigger().withIdentity("updateTrigger", "updater").startNow()
+					.withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 59)).build();
 
 			scheduler.scheduleJob(job, trigger);
 		}
@@ -197,7 +198,7 @@ public class Server
 
 	private static void updateDBWithMasterlistContent()
 	{
-		Logging.logger.log(Level.INFO, "Starting to update Database.");
+		logger.log(Level.INFO, "Starting to update Database.");
 
 		if (MySQLConnection.truncate())
 		{
@@ -206,7 +207,7 @@ public class Server
 			setServerList();
 		}
 
-		Logging.logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
+		logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
 	}
 
 	private static void addToDatabaseFromList(final String url)
@@ -241,44 +242,44 @@ public class Server
 							String map = null;
 							int weather = 0;
 
-							// TODO(MSC) Inspect data response of all server versions and remove loops if possible
-							for (int i = 0; infoMore.length > i; i++)
+							// TODO(MSC) Inspect data response of all server versions and remove
+							// loops if possible
+							for (final String[] element : infoMore)
 							{
-								if (infoMore[i][0].equals("lagcomp"))
+								if (element[0].equals("lagcomp"))
 								{
-									lagcomp = infoMore[i][1];
+									lagcomp = element[1];
 								}
-								else if (infoMore[i][0].equals("weburl"))
+								else if (element[0].equals("weburl"))
 								{
-									weburl = infoMore[i][1];
+									weburl = element[1];
 								}
-								else if (infoMore[i][0].equals("version"))
+								else if (element[0].equals("version"))
 								{
-									version = infoMore[i][1];
+									version = element[1];
 								}
-								else if (infoMore[i][0].equals("worldtime"))
+								else if (element[0].equals("worldtime"))
 								{
-									worldtime = infoMore[i][1];
+									worldtime = element[1];
 								}
-								else if (infoMore[i][0].equals("weather"))
+								else if (element[0].equals("weather"))
 								{
-									weather = Integer.parseInt(infoMore[i][1]);
+									weather = Integer.parseInt(element[1]);
 								}
-								else if (infoMore[i][0].equals("mapname"))
+								else if (element[0].equals("mapname"))
 								{
-									map = infoMore[i][1];
+									map = element[1];
 								}
 							}
 
-							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer.parseInt(info[2]), info[4],
-											info[5], lagcomp, map, version, weather, weburl,
-											worldtime);
-							Logging.logger.log(Level.INFO, "Added Server: " + inputLine);
+							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer
+									.parseInt(info[2]), info[4], info[5], lagcomp, map, version, weather, weburl, worldtime);
+							logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
 					}
 					catch (final Exception e)
 					{
-						Logging.logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
+						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
 					}
 				}
 			}
@@ -287,7 +288,7 @@ public class Server
 
 		final IOException e)
 		{
-			Logging.logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
+			logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
 		}
 	}
 }

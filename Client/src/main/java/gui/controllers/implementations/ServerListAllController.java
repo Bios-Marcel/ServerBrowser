@@ -59,7 +59,7 @@ public class ServerListAllController extends ServerListControllerMain
 			e.printStackTrace();
 		}
 
-		serverCount.setText(serverTable.getItems() + "");
+		serverCount.setText(serverTable.getItems().size() + "");
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(maxSlots - playersPlaying + "");
 	}
