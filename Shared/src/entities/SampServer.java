@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.Objects;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -215,8 +217,13 @@ public class SampServer
 	@Override
 	public boolean equals(final Object obj)
 	{
+		if (Objects.isNull(obj) || !obj.getClass().equals(SampServer.class))
+		{
+			return false;
+		}
+
 		final SampServer compare = (SampServer) obj;
-		return compare == obj || getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
+		return compare == this || getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
 	}
 
 	@Override

@@ -5,9 +5,9 @@ import javafx.beans.property.StringProperty;
 
 public class Player
 {
-	private final StringProperty	playerName	= new SimpleStringProperty();
+	private final StringProperty playerName = new SimpleStringProperty();
 
-	private final StringProperty	playerScore	= new SimpleStringProperty();
+	private final StringProperty playerScore = new SimpleStringProperty();
 
 	public Player(final String playerName, final String playerScore)
 	{

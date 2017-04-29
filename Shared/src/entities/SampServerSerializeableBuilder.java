@@ -4,25 +4,25 @@ import java.util.Arrays;
 
 public class SampServerSerializeableBuilder
 {
-	private String	hostname;
+	private String hostname;
 
-	private String	address;
+	private String address;
 
-	private Integer	port;
+	private Integer port;
 
-	private Integer	players;
+	private Integer players;
 
-	private Integer	maxPlayers;
+	private Integer maxPlayers;
 
-	private String	mode;
+	private String mode;
 
-	private String	language;
+	private String language;
 
-	private String	lagcomp;
+	private String lagcomp;
 
-	private String	website;
+	private String website;
 
-	private String	version;
+	private String version;
 
 	public SampServerSerializeableBuilder setHostname(final String hostname)
 	{

@@ -22,7 +22,7 @@ public class ServerListFavController extends ServerListControllerMain
 	{
 		super.displayMenu(selectedServers, posX, posY);
 
-		addToFavourites.setVisible(false);
-		removeFromFavourites.setVisible(true);
+		addToFavouritesMenuItem.setVisible(false);
+		removeFromFavouritesMenuItem.setVisible(true);
 	}
 }

@@ -17,33 +17,31 @@ import util.Encoding;
 public class SampQuery implements AutoCloseable
 {
 
-	private static final String	PAKCET_GET_SERVERINFO			= "i";
+	private static final String PAKCET_GET_SERVERINFO = "i";
 
-	private static final String	PACKET_GET_BASIC_PLAYERINFO		= "c";
+	private static final String PACKET_GET_BASIC_PLAYERINFO = "c";
 
-	private static final String	PACKET_GET_DETAILED_PLAYERINFO	= "d";
+	private static final String PACKET_GET_DETAILED_PLAYERINFO = "d";
 
-	private static final String	PACKET_GET_RULES				= "r";
+	private static final String PACKET_GET_RULES = "r";
 
-	private static final String	PACKET_MIRROR_CHARACTERS		= "p0101";
+	private static final String PACKET_MIRROR_CHARACTERS = "p0101";
 
-	private DatagramSocket		socket							= null;
+	private DatagramSocket socket = null;
 
-	private InetAddress			server							= null;
+	private InetAddress server = null;
 
-	private String				serverAddress					= "";
+	private String serverAddress = "";
 
-	private int					serverPort						= 0;
+	private int serverPort = 0;
 
 	/**
 	 * Configures the socket and the address that will be used for doing the queries.
 	 * 
 	 * @param serverAddress
 	 *            hostname / ip
-	 * 
 	 * @param serverPort
 	 *            port
-	 * 
 	 * @throws Exception
 	 *             Thrown if the connection is closed unexpectedly / has never beenopened properly
 	 */
@@ -62,7 +60,6 @@ public class SampQuery implements AutoCloseable
 	 * 
 	 * @param serverAddress
 	 *            hostname / ip
-	 * 
 	 * @param serverPort
 	 *            port
 	 * @throws Exception
@@ -79,7 +76,8 @@ public class SampQuery implements AutoCloseable
 	 */
 	private void checkConnection() throws Exception
 	{
-		// TODO(MSC) Check if server deactivated querying, since this will only tell fi the server is online, but will still work with
+		// TODO(MSC) Check if server deactivated querying, since this will only tell fi the server
+		// is online, but will still work with
 		// deactivated quering
 		send(PACKET_MIRROR_CHARACTERS);
 		final String reply = receive();
@@ -330,7 +328,7 @@ public class SampQuery implements AutoCloseable
 
 			while (tok.hasMoreTokens())
 			{
-				packetData += (char) (Integer.parseInt(tok.nextToken()));
+				packetData += (char) Integer.parseInt(tok.nextToken());
 			}
 
 			packetData += (char) (serverPort & 0xFF);

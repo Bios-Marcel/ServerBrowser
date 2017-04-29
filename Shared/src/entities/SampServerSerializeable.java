@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class SampServerSerializeable implements Serializable
 {
@@ -150,6 +151,11 @@ public class SampServerSerializeable implements Serializable
 	@Override
 	public boolean equals(final Object obj)
 	{
+		if (Objects.isNull(obj) || !obj.getClass().equals(SampServerSerializeable.class))
+		{
+			return false;
+		}
+
 		final SampServerSerializeable compare = (SampServerSerializeable) obj;
 		return compare == this || getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
 	}

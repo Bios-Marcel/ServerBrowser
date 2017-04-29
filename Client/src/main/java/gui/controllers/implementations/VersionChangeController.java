@@ -44,41 +44,42 @@ public class VersionChangeController implements ViewController
 	{
 		switch (version)
 		{
-		case "0.3.7":
-		{
-			return buttonZeroThreeSeven;
-		}
-		case "0.3z":
-		{
-			return buttonZeroZ;
-		}
-		case "0.3x":
-		{
-			return buttonZeroX;
-		}
-		case "0.3e":
-		{
-			return buttonZeroE;
-		}
-		case "0.3d":
-		{
-			return buttonZeroD;
-		}
-		case "0.3c":
-		{
-			return buttonZeroC;
-		}
-		case "0.3a":
-		{
-			return buttonZeroA;
-		}
-		default:
-		{
-			return null;
-		}
+			case "0.3.7":
+			{
+				return buttonZeroThreeSeven;
+			}
+			case "0.3z":
+			{
+				return buttonZeroZ;
+			}
+			case "0.3x":
+			{
+				return buttonZeroX;
+			}
+			case "0.3e":
+			{
+				return buttonZeroE;
+			}
+			case "0.3d":
+			{
+				return buttonZeroD;
+			}
+			case "0.3c":
+			{
+				return buttonZeroC;
+			}
+			case "0.3a":
+			{
+				return buttonZeroA;
+			}
+			default:
+			{
+				return null;
+			}
 		}
 	}
 
+	@Override
 	public void initialize()
 	{
 		final String version = GTA.getInstalledVersion();

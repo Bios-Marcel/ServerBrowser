@@ -16,7 +16,8 @@ public class Logging
 		logger.setLevel(Level.INFO);
 		try
 		{
-			final FileHandler filehandler = new FileHandler(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "Log.log");
+			final FileHandler filehandler = new FileHandler(System.getProperty("user.home") + File.separator + "sampex" + File.separator
+					+ "Log.log");
 			final SimpleFormatter formatter = new SimpleFormatter();
 			filehandler.setFormatter(formatter);
 			logger.addHandler(filehandler);

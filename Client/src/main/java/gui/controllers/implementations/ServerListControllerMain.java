@@ -53,74 +53,57 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private TextField addressTextField;
 
-	private static StringProperty serverAddressProperty = new SimpleStringProperty();
+	private final static StringProperty serverAddressProperty = new SimpleStringProperty();
 
 	@FXML
-	protected TableView<SampServer> serverTable;
+	protected TableView<SampServer>	serverTable;
+	@FXML
+	protected Label					playerCount;
+	@FXML
+	protected Label					slotCount;
+	@FXML
+	protected Label					serverCount;
+	@FXML
+	private TextField				serverAddress;
+	@FXML
+	private Label					serverLagcomp;
+	@FXML
+	private Label					serverPing;
+	@FXML
+	private Label					serverPassword;
 
 	@FXML
-	private TableColumn<SampServer, String> columnPlayers;
-
+	private TableView<Player>				playerTable;
 	@FXML
-	private TableView<Player> playerTable;
-
-	@FXML
-	protected Label playerCount;
-
-	@FXML
-	protected Label slotCount;
-
-	@FXML
-	protected Label serverCount;
-
-	@FXML
-	private TextField serverAddress;
-
-	@FXML
-	private Label serverLagcomp;
-
-	@FXML
-	private Label serverPing;
-
-	@FXML
-	private Label serverPassword;
-
-	private static Thread serverInfoUpdateThread;
-
-	protected MenuItem addToFavourites = new MenuItem("Add to Favourites");
-
-	protected MenuItem removeFromFavourites = new MenuItem("Remove from Favourites");
-
-	private final MenuItem connectItem = new MenuItem("Connect to Server");
-
-	private final MenuItem copyIpAddressAndPort = new MenuItem("Copy IP Address and Port");
+	private TableColumn<SampServer, String>	columnPlayers;
 
 	/**
 	 * The menu that will be dsiplayed, when a user selects 1 .. n servers and right clicks the
 	 * table
 	 */
-	protected ContextMenu menu = new ContextMenu(connectItem, new SeparatorMenuItem(), addToFavourites, removeFromFavourites, copyIpAddressAndPort);
+	protected MenuItem		addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
+	protected MenuItem		removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
+	private final MenuItem	connectMenuItem					= new MenuItem("Connect to Server");
+	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
+	protected ContextMenu	menu							= new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem);
 
 	@FXML
-	private CheckBox regexCheckBox;
-
+	private CheckBox			regexCheckBox;
 	@FXML
-	private TextField nameFilter;
-
+	private TextField			nameFilter;
 	@FXML
-	private TextField modeFilter;
-
+	private TextField			modeFilter;
 	@FXML
-	private TextField languageFilter;
-
+	private TextField			languageFilter;
 	@FXML
-	private ComboBox<String> versionFilter;
+	private ComboBox<String>	versionFilter;
 
-	protected int playersPlaying = 0;
-
-	protected int maxSlots = 0;
+	protected int	playersPlaying	= 0;
+	protected int	maxSlots		= 0;
 
 	protected ObservableList<SampServer> servers = FXCollections.observableArrayList();
+
+	private static Thread serverInfoUpdateThread;
 
 	@Override
 	public void initialize()
@@ -207,13 +190,19 @@ public abstract class ServerListControllerMain implements ViewController
 		}
 	}
 
+	/**
+	 * Validates the given port.
+	 *
+	 * @param port
+	 *            the ort to be validated
+	 * @return true if it is an int and between 0 and 65535
+	 */
 	private boolean validatePort(final String port)
 	{
 		try
 		{
 			final int portNumber = Integer.parseInt(port);
-
-			return !(portNumber < 0 || portNumber > 65535);
+			return portNumber >= 0 && portNumber <= 65535;
 		}
 		catch (final NumberFormatException e)
 		{
@@ -331,27 +320,27 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		final boolean sizeEqualsOne = serverList.size() == 1;
 
-		connectItem.setVisible(sizeEqualsOne);
-		copyIpAddressAndPort.setVisible(sizeEqualsOne);
+		connectMenuItem.setVisible(sizeEqualsOne);
+		copyIpAddressAndPortMenuItem.setVisible(sizeEqualsOne);
 		menu.getItems().get(1).setVisible(sizeEqualsOne);
 
 		menu.setOnAction(action ->
 		{
 			final MenuItem clickedItem = (MenuItem) action.getTarget();
 
-			if (clickedItem == connectItem)
+			if (clickedItem == connectMenuItem)
 			{
 				final SampServer server = serverList.get(0);
 				tryToConnect(server.getAddress(), server.getPort());
 			}
-			else if (clickedItem == addToFavourites)
+			else if (clickedItem == addToFavouritesMenuItem)
 			{
 				for (final SampServer serverItem : serverList)
 				{
 					Favourites.addServerToFavourites(serverItem);
 				}
 			}
-			else if (clickedItem == removeFromFavourites)
+			else if (clickedItem == removeFromFavouritesMenuItem)
 			{
 				for (final SampServer serverItem : serverList)
 				{
@@ -359,7 +348,7 @@ public abstract class ServerListControllerMain implements ViewController
 				}
 				servers.removeAll(serverList);
 			}
-			else if (clickedItem == copyIpAddressAndPort)
+			else if (clickedItem == copyIpAddressAndPortMenuItem)
 			{
 				final SampServer server = serverList.get(0);
 				final StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
@@ -475,7 +464,6 @@ public abstract class ServerListControllerMain implements ViewController
 					server.setHostname(info[3]);
 					server.setMode(info[4]);
 					server.setLanguage(info[5]);
-
 					server.setWebsite(weburl);
 					server.setVersion(version);
 					server.setLagcomp(lagcomp);
@@ -534,7 +522,7 @@ public abstract class ServerListControllerMain implements ViewController
 		serverInfoUpdateThread.start();
 	}
 
-	private void updateGlobalInfo()
+	void updateGlobalInfo()
 	{
 		playersPlaying = 0;
 		maxSlots = 0;
@@ -545,10 +533,8 @@ public abstract class ServerListControllerMain implements ViewController
 			maxSlots += server.getMaxPlayers();
 		}
 
-		final int freeSlots = maxSlots - playersPlaying;
-
 		serverCount.setText(serverTable.getItems().size() + "");
 		playerCount.setText(playersPlaying + "");
-		slotCount.setText(freeSlots + "");
+		slotCount.setText(maxSlots - playersPlaying + "");
 	}
 }

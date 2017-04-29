@@ -46,7 +46,7 @@ public class MainController implements ViewController
 	}
 
 	@FXML
-	public void onMenuItemClicked(final MouseEvent event)
+	private void onMenuItemClicked(final MouseEvent event)
 	{
 		final StackPane clicked = (StackPane) event.getSource();
 
@@ -78,38 +78,38 @@ public class MainController implements ViewController
 
 		switch (view)
 		{
-		case VERSION_CHANGER:
-		{
-			loadFXML(view);
-			menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
-			break;
-		}
-		case USERNAME_CHANGER:
-		{
-			loadFXML(view);
-			menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
-			break;
-		}
-		case SETTINGS:
-		{
-			break;
-		}
-		case SERVERS_FAV:
-		{
-			loadFXML(view);
-			menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
-			break;
-		}
-		case SERVERS_ALL:
-		{
-			loadFXML(view);
-			menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
-			break;
-		}
-		default:
-		{
-			throw new IllegalArgumentException("Invalid View");
-		}
+			case VERSION_CHANGER:
+			{
+				loadFXML(view);
+				menuItemVersion.setStyle("-fx-background-color: #1F5FAE;");
+				break;
+			}
+			case USERNAME_CHANGER:
+			{
+				loadFXML(view);
+				menuItemUser.setStyle("-fx-background-color: #1F5FAE;");
+				break;
+			}
+			case SETTINGS:
+			{
+				break;
+			}
+			case SERVERS_FAV:
+			{
+				loadFXML(view);
+				menuItemFav.setStyle("-fx-background-color: #1F5FAE;");
+				break;
+			}
+			case SERVERS_ALL:
+			{
+				loadFXML(view);
+				menuItemAll.setStyle("-fx-background-color: #1F5FAE;");
+				break;
+			}
+			default:
+			{
+				throw new IllegalArgumentException("Invalid View");
+			}
 		}
 
 		activeView = view;
@@ -119,18 +119,18 @@ public class MainController implements ViewController
 	{
 		try
 		{
+			headerTitle.setText(view.getTitle());
+
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
-			final ViewController controller = view.getControllerType().newInstance();
-			loader.setController(controller);
+			loader.setController(view.getControllerType().newInstance());
 			activeViewContainer.getChildren().clear();
 			activeViewContainer.getChildren().add(loader.load());
 			activeViewContainer.getStylesheets().setAll(view.getStylesheetPath());
-			headerTitle.setText(view.getTitle());
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException e)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't load view.", e.getStackTrace());
+			Logging.logger.log(Level.SEVERE, "Couldn't load view.", e);
 		}
 	}
 

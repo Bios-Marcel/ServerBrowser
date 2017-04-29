@@ -18,17 +18,16 @@ public enum Views
 	// Not set yet, since that view doesn't exist yet.
 	SETTINGS(5, "Settings", null, null, null);
 
-	private final int							id;
+	private final int id;
 
-	private final String						title;
+	private final String title;
 
-	private Class<? extends ViewController>		necessaryController;
+	private Class<? extends ViewController> necessaryController;
 
-	private String								stylesheetPath;
+	private String	stylesheetPath;
+	private String	fxmlPath;
 
-	private String								fxmlPath;
-
-	private final static Map<Integer, Views>	idMapping	= new HashMap<>();
+	private final static Map<Integer, Views> idMapping = new HashMap<>();
 
 	static
 	{
@@ -38,7 +37,8 @@ public enum Views
 		}
 	}
 
-	private Views(final int id, final String title, final Class<? extends ViewController> necessaryController, final String fxmlPath, final String stylesheetPath)
+	private Views(final int id, final String title, final Class<? extends ViewController> necessaryController, final String fxmlPath,
+			final String stylesheetPath)
 	{
 		this.id = id;
 		this.title = title;

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
@@ -12,6 +13,7 @@ import java.util.zip.GZIPInputStream;
 import application.Client;
 import entities.SampServer;
 import entities.SampServerSerializeable;
+import javafx.scene.control.Label;
 import logging.Logging;
 
 public class ServerListAllController extends ServerListControllerMain
@@ -32,36 +34,35 @@ public class ServerListAllController extends ServerListControllerMain
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize()
 	{
 		super.initialize();
 
-		try
+		if (Objects.nonNull(Client.remoteDataService))
 		{
-			servers.clear();
+			try
+			{
+				final byte[] serializedData = Client.remoteDataService.getAllServers();
+				final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(serializedData);
 
-			@SuppressWarnings("unchecked")
-			final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(Client.remoteDataService
-					.getAllServers());
-			servers.addAll(serializedServers.stream()
-					.map(server ->
-					{
-						final SampServer newServer = new SampServer(server);
-						playersPlaying += newServer.getPlayers();
-						maxSlots += newServer.getMaxPlayers();
-						return newServer;
-					})
-					.collect(Collectors.toSet()));
+				servers.addAll(serializedServers.stream()
+						.map(server -> new SampServer(server))
+						.collect(Collectors.toSet()));
+			}
+			catch (final RemoteException e)
+			{
+				Logging.logger.log(Level.SEVERE, "Couldn't retrieve data from server.", e);
+				serverTable.setPlaceholder(new Label("Server connection couldn't be established."));
+			}
 		}
-		catch (final RemoteException e)
+		else
 		{
-			e.printStackTrace();
+			serverTable.setPlaceholder(new Label("Server connection couldn't be established."));
 		}
 
-		serverCount.setText(serverTable.getItems().size() + "");
-		playerCount.setText(playersPlaying + "");
-		slotCount.setText(maxSlots - playersPlaying + "");
+		updateGlobalInfo();
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class ServerListAllController extends ServerListControllerMain
 	{
 		super.displayMenu(selectedServers, posX, posY);
 
-		addToFavourites.setVisible(true);
-		removeFromFavourites.setVisible(false);
+		addToFavouritesMenuItem.setVisible(true);
+		removeFromFavouritesMenuItem.setVisible(false);
 	}
 }

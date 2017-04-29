@@ -27,7 +27,7 @@ public class PastUsernames
 		{
 			String statement = "INSERT INTO username (username) VALUES (''{0}'');";
 			statement = MessageFormat.format(statement, username);
-			SQLDatabase.execute(statement);
+			SQLDatabase.getInstance().execute(statement);
 		}
 	}
 
@@ -35,14 +35,14 @@ public class PastUsernames
 	{
 		String statement = "DELETE FROM username WHERE username = ''{0}'';";
 		statement = MessageFormat.format(statement, username);
-		SQLDatabase.execute(statement);
+		SQLDatabase.getInstance().execute(statement);
 	}
 
 	public static List<String> getPastUsernames()
 	{
 		final List<String> usernames = new ArrayList<>();
 
-		SQLDatabase.executeGetResult("SELECT username FROM username;").ifPresent(resultSet ->
+		SQLDatabase.getInstance().executeGetResult("SELECT username FROM username;").ifPresent(resultSet ->
 		{
 			try
 			{

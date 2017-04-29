@@ -25,6 +25,15 @@ import query.SampQuery;
 
 public class Favourites
 {
+	/**
+	 * Adds a new server to the favourites and downloads its information.
+	 *
+	 * @param address
+	 *            the address of the server
+	 * @param port
+	 *            the port of the server
+	 * @return the server object that was created
+	 */
 	public static SampServer addServerToFavourites(final String address, final Integer port)
 	{
 		final SampServer server = new SampServer(address, port);
@@ -42,15 +51,15 @@ public class Favourites
 
 			query.getServersRules().ifPresent(rules ->
 			{
-				for (int i = 0; rules.length > i; i++)
+				for (final String[] rule : rules)
 				{
-					if (rules[i][0].equals("weburl"))
+					if (rule[0].equals("weburl"))
 					{
-						server.setWebsite(rules[i][1]);
+						server.setWebsite(rule[1]);
 					}
-					else if (rules[i][0].equals("version"))
+					else if (rule[0].equals("version"))
 					{
-						server.setVersion(rules[i][1]);
+						server.setVersion(rule[1]);
 					}
 				}
 			});
@@ -71,59 +80,95 @@ public class Favourites
 		return server;
 	}
 
+	/**
+	 * Adds a server to the favourites.
+	 *
+	 * @param server
+	 *            the server to add to the favourites
+	 */
 	public static void addServerToFavourites(final SampServer server)
 	{
-		if (!getFavourites().contains(server))
+		if (!isFavourite(server))
 		{
-			String statement =
-							"INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
-			statement =
-							MessageFormat.format(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(),
-											server.getPlayers().toString(),
-											server.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(),
-											server.getWebsite());
-			SQLDatabase.execute(statement);
+			String statement = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
+			statement = MessageFormat
+					.format(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server
+							.getPlayers().toString(), server.getMaxPlayers()
+									.toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
+			SQLDatabase.getInstance().execute(statement);
+		}
+		else
+		{
+			Logging.logger.info("Server wasn't added, because it already is a favourite.");
 		}
 	}
 
-	public static void updateServerData(final SampServer server)
+	/**
+	 * Checks wether a server is favourite.
+	 *
+	 * @param server
+	 *            server to check if it is a favourite
+	 * @return true if it is, false otherwise
+	 */
+	public static boolean isFavourite(final SampServer server)
 	{
-		String statement =
-						"UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
-		statement =
-						MessageFormat.format(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(),
-										server.getPlayers().toString(), server.getMaxPlayers().toString(),
-										server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
-		SQLDatabase.execute(statement);
+		return getFavourites().contains(server);
 	}
 
+	/**
+	 * Updates a servers info(data) in the database.
+	 *
+	 * @param server
+	 *            the server to update
+	 */
+	public static void updateServerData(final SampServer server)
+	{
+		String statement = "UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
+		statement = MessageFormat
+				.format(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
+						.getMaxPlayers().toString(), server
+								.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
+		SQLDatabase.getInstance().execute(statement);
+	}
+
+	/**
+	 * Removes a server from favourites.
+	 *
+	 * @param server
+	 *            the server to remove from favourites
+	 */
 	public static void removeServerFromFavourites(final SampServer server)
 	{
 		String statement = "DELETE FROM favourite WHERE ip = ''{0}'' AND port = ''{1}'';";
 		statement = MessageFormat.format(statement, server.getAddress(), server.getPort().toString());
-		SQLDatabase.execute(statement);
+		SQLDatabase.getInstance().execute(statement);
 	}
 
+	/**
+	 * Returns a {@link List} of favourite servers.
+	 *
+	 * @return {@link List} of favourite servers
+	 */
 	public static List<SampServer> getFavourites()
 	{
 		final List<SampServer> servers = new ArrayList<>();
 
-		SQLDatabase.executeGetResult("SELECT * FROM favourite;").ifPresent(resultSet ->
+		SQLDatabase.getInstance().executeGetResult("SELECT * FROM favourite;").ifPresent(resultSet ->
 		{
 			try
 			{
 				while (resultSet.next())
 				{
 					servers.add(new SampServerBuilder(resultSet.getString("ip"), resultSet.getInt("port"))
-									.setHostname(resultSet.getString("hostname"))
-									.setPlayers(resultSet.getInt("players"))
-									.setMaxPlayers(resultSet.getInt("maxplayers"))
-									.setMode(resultSet.getString("mode"))
-									.setLanguage(resultSet.getString("language"))
-									.setWebsite(resultSet.getString("website"))
-									.setLagcomp(resultSet.getString("lagcomp"))
-									.setVersion(resultSet.getString("version"))
-									.build());
+							.setHostname(resultSet.getString("hostname"))
+							.setPlayers(resultSet.getInt("players"))
+							.setMaxPlayers(resultSet.getInt("maxplayers"))
+							.setMode(resultSet.getString("mode"))
+							.setLanguage(resultSet.getString("language"))
+							.setWebsite(resultSet.getString("website"))
+							.setLagcomp(resultSet.getString("lagcomp"))
+							.setVersion(resultSet.getString("version"))
+							.build());
 				}
 			}
 			catch (final SQLException e)
@@ -135,6 +180,11 @@ public class Favourites
 		return servers;
 	}
 
+	/**
+	 * Returns a {@link List} of favourites from the old xml files.
+	 *
+	 * @return {@link List} of favourite servers
+	 */
 	public static List<SampServer> getFavouritesFromXML()
 	{
 		final List<SampServer> servers = new ArrayList<>();
@@ -168,15 +218,15 @@ public class Favourites
 					final Node maxplayersNode = attr.getNamedItem("maxplayers");
 
 					servers.add(new SampServerBuilder(ipNode.getTextContent(), Integer.parseInt(portNode.getTextContent()))
-									.setHostname(hostnameNode.getTextContent())
-									.setPlayers(Integer.parseInt(playersNode.getTextContent()))
-									.setMaxPlayers(Integer.parseInt(maxplayersNode.getTextContent()))
-									.setMode(modeNode.getTextContent())
-									.setLanguage(languageNode.getTextContent())
-									.setWebsite(websiteNode.getTextContent())
-									.setLagcomp(lagcompNode.getTextContent())
-									.setVersion(versionNode.getTextContent())
-									.build());
+							.setHostname(hostnameNode.getTextContent())
+							.setPlayers(Integer.parseInt(playersNode.getTextContent()))
+							.setMaxPlayers(Integer.parseInt(maxplayersNode.getTextContent()))
+							.setMode(modeNode.getTextContent())
+							.setLanguage(languageNode.getTextContent())
+							.setWebsite(websiteNode.getTextContent())
+							.setLagcomp(lagcompNode.getTextContent())
+							.setVersion(versionNode.getTextContent())
+							.build());
 				}
 				catch (final NullPointerException e)
 				{
