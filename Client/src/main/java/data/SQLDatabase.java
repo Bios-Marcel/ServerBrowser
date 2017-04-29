@@ -8,14 +8,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
+
+import logging.Logging;
 
 public class SQLDatabase
 {
-	private static final String	DB_LOCATION	= System.getProperty("user.home") + File.separator + "sampex" + File.separator + "samp.db";
+	private static final String DB_LOCATION = System.getProperty("user.home") + File.separator + "sampex" + File.separator + "samp.db";
 
-	private static Connection	sqlConnection;
+	private Connection sqlConnection;
 
-	public static void init()
+	private static SQLDatabase instance;
+
+	public static SQLDatabase getInstance()
+	{
+		if (Objects.isNull(instance))
+		{
+			instance = new SQLDatabase();
+		}
+		return instance;
+	}
+
+	static
+	{
+		SQLDatabase.getInstance().init();
+	}
+
+	private void init()
 	{
 		try
 		{
@@ -25,10 +44,7 @@ public class SQLDatabase
 			{
 				final Statement statement = sqlConnection.createStatement();
 
-				System.out.println("Creating Tables if neccessary:");
-
-				final String createTableFavourites =
-								"CREATE TABLE IF NOT EXISTS favourite (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
+				final String createTableFavourites = "CREATE TABLE IF NOT EXISTS favourite (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
 				statement.execute(createTableFavourites);
 
 				final String createTableUsernames = "CREATE TABLE IF NOT EXISTS username (id integer PRIMARY KEY, username text NOT NULL);";
@@ -37,19 +53,18 @@ public class SQLDatabase
 				final String createTableSettings = "CREATE TABLE IF NOT EXISTS setting (id integer UNIQUE, value text);";
 				statement.execute(createTableSettings);
 
-				final String createTableServerHistory =
-								"CREATE TABLE IF NOT EXISTS favourite (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
+				final String createTableServerHistory = "CREATE TABLE IF NOT EXISTS favourite (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
 				statement.execute(createTableServerHistory);
 			}
 
 		}
 		catch (final SQLException e)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Error while initializing local Database connection.", e);
 		}
 	}
 
-	public static boolean execute(final String statement)
+	public boolean execute(final String statement)
 	{
 		try
 		{
@@ -62,7 +77,7 @@ public class SQLDatabase
 		}
 	}
 
-	public static Optional<ResultSet> executeGetResult(final String statement)
+	public Optional<ResultSet> executeGetResult(final String statement)
 	{
 		try
 		{
