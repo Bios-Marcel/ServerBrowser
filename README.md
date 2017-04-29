@@ -8,4 +8,4 @@ In addition to that it includes a Version Changer (0.3a - 0.3.7) and a list of p
 You can help by reporting bugs, recommend new features or creating pull requests.
 
 ## You need help?
-Either use the "[Contact](https://sa-mpservers.com/contact.php)" section of our website or directly send us an E-Mail [support@sa-mpservers.com](mailto:support@sa-mpservers.com).
+Either use the "[Contact](https://sa-mpservers.com/contact.php)" section of our website.
