@@ -1,6 +1,6 @@
 # ServerBrowser
 
-![Travis Build Status](https://travis-ci.org/Bios-Marcel/ServerBrowser.svg?branch=master])
+[![Build Status](https://travis-ci.org/Bios-Marcel/ServerBrowser.svg?branch=master)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
 
 ## Description
 This program enables you to access a list of over 1000 SA-MP Servers, join them, save them as your favourites or search for specific servers.
