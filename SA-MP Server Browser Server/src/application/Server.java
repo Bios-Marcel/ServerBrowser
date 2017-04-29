@@ -1,6 +1,7 @@
 package application;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -49,31 +50,22 @@ public class Server
 
 	public static void main(final String[] args)
 	{
-		boolean recreatedb = false;
-		String username = null;
-		String password = null;
 
-		if (args.length >= 1)
+		if (args.length == 0)
 		{
+			System.out.println("Usage: java -jar Server.jar -u/-username [NAME]");
+			System.out.println("Optionally, append a -recreatedb/-updatedb to force updating the server list.");
+		}
+		else if (args.length >= 1)
+		{
+			boolean recreatedb = false;
+			String username = null;
+
 			for (int i = 0; i < args.length; i++)
 			{
 				if (args[i].equals("-recreatedb") || args[i].equals("-updatedb"))
 				{
 					recreatedb = true;
-				}
-				// TODO(msc) Think about changing this into a passsword input request (would be
-				// saver)
-				else if (args[i].equals("-p") || args[i].equals("-password"))
-				{
-					if (args.length >= i + 2)
-					{
-						password = args[i + 1];
-					}
-					else
-					{
-						System.out.println("You must enter a password to access the MySQL database.");
-						System.exit(0);
-					}
 				}
 				else if (args[i].equals("-u") || args[i].equals("-username"))
 				{
@@ -88,38 +80,41 @@ public class Server
 					}
 				}
 			}
+
+			final Console console = System.console();
+			final String password = new String(console.readPassword("Enter your database password: "));
+
+			if (Objects.isNull(username))
+			{
+				System.out.println("Please enter a Username for your Database");
+				System.exit(0);
+			}
+
+			MySQLConnection.init(username, password);
+
+			try
+			{
+				registry = LocateRegistry.createRegistry(1099);
+				dataService = new DataServiceServerImplementation();
+				stub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
+				registry.rebind(DataServiceInterface.INTERFACE_NAME, stub);
+				logger.log(Level.INFO, "RMI has been initialized.");
+			}
+			catch (final Exception e)
+			{
+				logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
+				System.exit(0);
+			}
+
+			if (recreatedb)
+			{
+				updateDBWithMasterlistContent();
+			}
+
+			setServerList();
+
+			createCronJob();
 		}
-
-		if (Objects.isNull(username) || Objects.isNull(password))
-		{
-			logger.log(Level.SEVERE, "Please enter a Username and a Password for your Database");
-			System.exit(0);
-		}
-
-		MySQLConnection.init(username, password);
-
-		try
-		{
-			registry = LocateRegistry.createRegistry(1099);
-			dataService = new DataServiceServerImplementation();
-			stub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
-			registry.rebind(DataServiceInterface.INTERFACE_NAME, stub);
-			logger.log(Level.INFO, "RMI has been initialized.");
-		}
-		catch (final Exception e)
-		{
-			logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
-			System.exit(0);
-		}
-
-		if (recreatedb)
-		{
-			updateDBWithMasterlistContent();
-		}
-
-		setServerList();
-
-		createCronJob();
 
 	}
 
