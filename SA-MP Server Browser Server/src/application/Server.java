@@ -54,18 +54,31 @@ public class Server
 		if (args.length == 0)
 		{
 			System.out.println("Usage: java -jar Server.jar -u/-username [NAME]");
+			System.out.println("To set a password using the arguments use -p/-password [password]");
 			System.out.println("Optionally, append a -recreatedb/-updatedb to force updating the server list.");
 		}
 		else if (args.length >= 1)
 		{
 			boolean recreatedb = false;
 			String username = null;
+			String password = null;
 
 			for (int i = 0; i < args.length; i++)
 			{
 				if (args[i].equals("-recreatedb") || args[i].equals("-updatedb"))
 				{
 					recreatedb = true;
+				}
+				else if (args[i].equals("-p") || args[i].equals("-password"))
+				{
+					if (args.length >= i + 2)
+					{// Password was given
+						password = args[i + 1];
+					}
+					else
+					{// Empty password
+						password = "";
+					}
 				}
 				else if (args[i].equals("-u") || args[i].equals("-username"))
 				{
@@ -81,13 +94,16 @@ public class Server
 				}
 			}
 
-			final Console console = System.console();
-			final String password = new String(console.readPassword("Enter your database password: "));
-
 			if (Objects.isNull(username))
-			{
+			{// Username patameter wasn't used
 				System.out.println("Please enter a Username for your Database");
 				System.exit(0);
+			}
+
+			if (Objects.isNull(password))
+			{// Password parameter wasn't used
+				final Console console = System.console();
+				password = new String(console.readPassword("Enter your database password: "));
 			}
 
 			MySQLConnection.init(username, password);
