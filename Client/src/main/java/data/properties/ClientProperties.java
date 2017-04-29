@@ -17,7 +17,7 @@ public class ClientProperties
 
 		String statement = "SELECT value FROM setting WHERE id = {0};";
 		statement = MessageFormat.format(statement, id.value());
-		final Optional<ResultSet> resultSetOptional = SQLDatabase.executeGetResult(statement);
+		final Optional<ResultSet> resultSetOptional = SQLDatabase.getInstance().executeGetResult(statement);
 		if (resultSetOptional.isPresent())
 		{
 			try
@@ -99,7 +99,7 @@ public class ClientProperties
 
 		String statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, ''{1}'');";
 		statement = MessageFormat.format(statement, id.value(), value);
-		SQLDatabase.execute(statement);
+		SQLDatabase.getInstance().execute(statement);
 	}
 
 	public static void setProperty(final PropertyIds id, final Float value)
