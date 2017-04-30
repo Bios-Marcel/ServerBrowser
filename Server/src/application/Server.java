@@ -175,9 +175,9 @@ public class Server
 	private static void createCronJob()
 	{
 		final Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.HOUR, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
 		calendar.set(Calendar.MILLISECOND, 0);
 
 		final TimerTask updateTask = new TimerTask() {
