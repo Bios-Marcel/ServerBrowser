@@ -13,23 +13,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.quartz.CronScheduleBuilder;
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
 
 import data.MySQLConnection;
 import entities.SampServerSerializeable;
@@ -178,33 +169,28 @@ public class Server
 		}
 	}
 
+	/**
+	 * Creates a scheduled {@link TimerTask} that updates the server list every night at 12pm.
+	 */
 	private static void createCronJob()
 	{
-		try
-		{
-			final Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-			scheduler.start();
+		final Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 
-			class UpdateJob implements Job
+		final TimerTask updateTask = new TimerTask() {
+			@Override
+			public void run()
 			{
-				@Override
-				public void execute(@SuppressWarnings("unused") final JobExecutionContext arg0) throws JobExecutionException
-				{
-					updateDBWithMasterlistContent();
-				}
+				updateDBWithMasterlistContent();
 			}
+		};
 
-			final JobDetail job = JobBuilder.newJob(UpdateJob.class).withIdentity("updateList", "updater").build();
-
-			final Trigger trigger = TriggerBuilder.newTrigger().withIdentity("updateTrigger", "updater").startNow()
-					.withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 59)).build();
-
-			scheduler.scheduleJob(job, trigger);
-		}
-		catch (final SchedulerException e)
-		{
-			e.printStackTrace();
-		}
+		final Timer timer = new Timer();
+		final int wholeDayAsMillis = 1000 * 60 * 60 * 24;
+		timer.schedule(updateTask, calendar.getTime(), wholeDayAsMillis);
 	}
 
 	private static void updateDBWithMasterlistContent()
@@ -295,9 +281,7 @@ public class Server
 				}
 			}
 		}
-		catch (
-
-		final IOException e)
+		catch (final IOException e)
 		{
 			logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
 		}
