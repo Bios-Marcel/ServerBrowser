@@ -3,7 +3,6 @@ package data.properties;
 public enum PropertyIds
 {
 	LAST_VIEW(0, "1", Integer.class),
-	ICONIFIED(1, "false", Boolean.class),
 	MAXIMIZED(2, "false", Boolean.class),
 	FULLSCREEN(3, "false", Boolean.class); // Not yet supported, but who knows.
 

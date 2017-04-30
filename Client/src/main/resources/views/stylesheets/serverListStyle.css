@@ -10,6 +10,7 @@
 .table-view .placeholder
 {
 	-fx-background-color: #F2F2F0;
+	-fx-padding: 15;
 }
 
 .table-column .column-header-background

@@ -113,12 +113,10 @@ public class Client extends Application
 			primaryStage.setMinWidth(primaryStage.getWidth());
 			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(PropertyIds.MAXIMIZED));
-			primaryStage.setIconified(ClientProperties.getPropertyAsBoolean(PropertyIds.ICONIFIED));
 			primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(PropertyIds.FULLSCREEN));
 			primaryStage.setOnCloseRequest(close ->
 			{
 				controller.onClose();
-				ClientProperties.setProperty(PropertyIds.ICONIFIED, primaryStage.isIconified());
 				ClientProperties.setProperty(PropertyIds.MAXIMIZED, primaryStage.isMaximized());
 				ClientProperties.setProperty(PropertyIds.FULLSCREEN, primaryStage.isFullScreen());
 			});
