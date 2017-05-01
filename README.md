@@ -7,5 +7,9 @@ In addition to that it includes a Version Changer (0.3a - 0.3.7) and a list of p
 ## You want to help?
 You can help by [reporting bugs](https://github.com/Bios-Marcel/ServerBrowser/issues), [recommending new features](https://github.com/Bios-Marcel/ServerBrowser/issues) or [creating pull requests](https://github.com/Bios-Marcel/ServerBrowser/pulls).
 
+## Dependencies
+
+As of now, all necessary dependencies, except [JKeel](https://github.com/Bios-Marcel/JKeel), are within the repository.
+
 ## You need help?
 Use the "[Contact](https://sa-mpservers.com/contact.php)" section of our website.
