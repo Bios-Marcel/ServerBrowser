@@ -16,7 +16,6 @@ import util.Encoding;
 
 public class SampQuery implements AutoCloseable
 {
-
 	private static final String PAKCET_GET_SERVERINFO = "i";
 
 	private static final String PACKET_GET_BASIC_PLAYERINFO = "c";
@@ -27,17 +26,17 @@ public class SampQuery implements AutoCloseable
 
 	private static final String PACKET_MIRROR_CHARACTERS = "p0101";
 
-	private DatagramSocket socket = null;
+	private final DatagramSocket socket;
 
-	private InetAddress server = null;
+	private final InetAddress server;
 
-	private String serverAddress = "";
+	private final String serverAddress;
 
-	private int serverPort = 0;
+	private final int serverPort;
 
 	/**
 	 * Configures the socket and the address that will be used for doing the queries.
-	 * 
+	 *
 	 * @param serverAddress
 	 *            hostname / ip
 	 * @param serverPort
@@ -57,7 +56,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Configures the socket and the address.
-	 * 
+	 *
 	 * @param serverAddress
 	 *            hostname / ip
 	 * @param serverPort
@@ -71,7 +70,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Returns whether a successful connection was made.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	private void checkConnection() throws Exception
@@ -95,8 +94,8 @@ public class SampQuery implements AutoCloseable
 	}
 
 	/**
-	 * Returns a String array , containing information about the server.
-	 * 
+	 * Returns a String array, containing information about the server.
+	 *
 	 * @return String[]:<br />
 	 *         Index 0: password (0 or 1)<br />
 	 *         Index 1: players<br />
@@ -167,7 +166,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Returns a multidimensional String array of basic player information.
-	 * 
+	 *
 	 * @return String[indexPlayer][indexData]:<br />
 	 *         Index Data 0: playername<br />
 	 *         Index Data 1: = score<br />
@@ -213,7 +212,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Returns a multidimensional String array of detailed player information.
-	 * 
+	 *
 	 * @return String[][]:<br />
 	 *         String[][0]:<br />
 	 *         players[0] = playerid<br />
@@ -254,7 +253,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Returns a multidimensional String array of server rules.
-	 * 
+	 *
 	 * @return String[Rulename][Rulevalue]
 	 */
 	public Optional<String[][]> getServersRules()
@@ -307,7 +306,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Returns the server's ping.
-	 * 
+	 *
 	 * @return ping
 	 */
 	public long getPing()
@@ -348,7 +347,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Sends a packet to te server
-	 * 
+	 *
 	 * @param packet
 	 *            that is supposed to be sent
 	 */
@@ -372,7 +371,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Reseives a package from the server
-	 * 
+	 *
 	 * @return the package data as a string
 	 */
 	private String receive()
@@ -387,7 +386,7 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Reseives a package from the server
-	 * 
+	 *
 	 * @return the package data as a byte array or null on fail
 	 */
 	private byte[] receiveBytes()
