@@ -276,8 +276,8 @@ public abstract class ServerListControllerMain implements ViewController
 			else
 			{
 				doesNameFilterApply = hostname.contains(nameFilterSetting);
-				doesModeFilterApply = hostname.contains(modeFilterSetting);
-				doesLanguageFilterApply = hostname.contains(languageFilterSetting);
+				doesModeFilterApply = mode.contains(modeFilterSetting);
+				doesLanguageFilterApply = language.contains(languageFilterSetting);
 			}
 
 			return doesNameFilterApply && doesModeFilterApply && doesVersionFilterApply && doesLanguageFilterApply;
