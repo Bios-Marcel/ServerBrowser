@@ -22,6 +22,7 @@ import data.rmi.CustomRMIClientSocketFactory;
 import entities.SampServer;
 import gui.controllers.implementations.MainController;
 import interfaces.DataServiceInterface;
+import interfaces.UpdateServiceInterface;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -45,7 +46,8 @@ public class Client extends Application
 
 	public static Registry registry;
 
-	public static DataServiceInterface remoteDataService;
+	public static DataServiceInterface		remoteDataService;
+	public static UpdateServiceInterface	remoteUpdateService;
 
 	private Stage stage;
 
@@ -53,13 +55,13 @@ public class Client extends Application
 
 	public static Client getInstance()
 	{
-		return Client.instance;
+		return instance;
 	}
 
 	@Override
 	public void start(final Stage primaryStage)
 	{
-		Client.instance = this;
+		instance = this;
 
 		checkOperatingSystemCompatibility();
 
@@ -79,8 +81,9 @@ public class Client extends Application
 	{
 		try
 		{
-			Client.registry = LocateRegistry.getRegistry("164.132.193.101", 1099, new CustomRMIClientSocketFactory());
-			Client.remoteDataService = (DataServiceInterface) Client.registry.lookup(DataServiceInterface.INTERFACE_NAME);
+			registry = LocateRegistry.getRegistry("164.132.193.101", 1099, new CustomRMIClientSocketFactory());
+			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
+			remoteUpdateService = (UpdateServiceInterface) registry.lookup(UpdateServiceInterface.INTERFACE_NAME);
 		}
 		catch (RemoteException | NotBoundException e)
 		{
@@ -107,8 +110,8 @@ public class Client extends Application
 			final Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/views/stylesheets/mainStyle.css").toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.getIcons().add(Client.applicationIcon);
-			primaryStage.setTitle(Client.APPLICATION_NAME);
+			primaryStage.getIcons().add(applicationIcon);
+			primaryStage.setTitle(APPLICATION_NAME);
 			primaryStage.show();
 			primaryStage.setMinWidth(primaryStage.getWidth());
 			primaryStage.setMinHeight(primaryStage.getHeight());
@@ -161,7 +164,7 @@ public class Client extends Application
 
 	private void setAlertIcon(final Alert alert)
 	{
-		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(Client.applicationIcon);
+		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(applicationIcon);
 	}
 
 	/**
@@ -206,12 +209,12 @@ public class Client extends Application
 	 */
 	private void checkVersion()
 	{
-		if (Objects.nonNull(Client.remoteDataService))
+		if (Objects.nonNull(remoteDataService))
 		{
 			try
 			{
 				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
-				final String remoteVersion = Client.remoteDataService.getLatestVersionChecksum();
+				final String remoteVersion = remoteDataService.getLatestVersionChecksum();
 
 				if (!localVersion.equals(remoteVersion))
 				{
@@ -252,9 +255,10 @@ public class Client extends Application
 	{
 		try
 		{
-			final URI url = new URI("http://164.132.193.101/sampversion/launcher/launcher.jar");
+			final URI url = new URI(remoteUpdateService.getLatestVersionURL());
 			FileUtility.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
 			selfRestart();
+
 		}
 		catch (final IOException | URISyntaxException e)
 		{

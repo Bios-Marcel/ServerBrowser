@@ -40,11 +40,11 @@ public class ClientProperties
 
 	public static Integer getPropertyAsInt(final PropertyIds id)
 	{
-		ClientProperties.checkDataType(id, Integer.class);
+		checkDataType(id, Integer.class);
 
 		Integer value = 0;
 
-		final String originalValue = ClientProperties.getPropertyAsString(id);
+		final String originalValue = getPropertyAsString(id);
 
 		try
 		{
@@ -60,11 +60,11 @@ public class ClientProperties
 
 	public static Float getPropertyAsFloat(final PropertyIds id)
 	{
-		ClientProperties.checkDataType(id, Float.class);
+		checkDataType(id, Float.class);
 
 		Float value = 0.0F;
 
-		final String originalValue = ClientProperties.getPropertyAsString(id);
+		final String originalValue = getPropertyAsString(id);
 
 		try
 		{
@@ -80,9 +80,9 @@ public class ClientProperties
 
 	public static Boolean getPropertyAsBoolean(final PropertyIds id)
 	{
-		ClientProperties.checkDataType(id, Boolean.class);
+		checkDataType(id, Boolean.class);
 
-		return Boolean.parseBoolean(ClientProperties.getPropertyAsString(id));
+		return Boolean.parseBoolean(getPropertyAsString(id));
 	}
 
 	private static void checkDataType(final PropertyIds id, final Class<?> datatype)
@@ -95,7 +95,7 @@ public class ClientProperties
 
 	public static void setProperty(final PropertyIds id, final Object value)
 	{
-		ClientProperties.checkDataType(id, value.getClass());
+		checkDataType(id, value.getClass());
 
 		String statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, ''{1}'');";
 		statement = MessageFormat.format(statement, id.value(), value);
@@ -104,21 +104,21 @@ public class ClientProperties
 
 	public static void setProperty(final PropertyIds id, final Float value)
 	{
-		ClientProperties.setProperty(id, (Object) value);
+		setProperty(id, (Object) value);
 	}
 
 	public static void setProperty(final PropertyIds id, final Integer value)
 	{
-		ClientProperties.setProperty(id, (Object) value);
+		setProperty(id, (Object) value);
 	}
 
 	public static void setProperty(final PropertyIds id, final Boolean value)
 	{
-		ClientProperties.setProperty(id, (Object) value);
+		setProperty(id, (Object) value);
 	}
 
 	public static void setProperty(final PropertyIds id, final String value)
 	{
-		ClientProperties.setProperty(id, (Object) value);
+		setProperty(id, (Object) value);
 	}
 }

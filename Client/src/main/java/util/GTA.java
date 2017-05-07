@@ -17,11 +17,11 @@ import logging.Logging;
 
 public class GTA
 {
-	private static StringProperty username = new SimpleStringProperty(GTA.retrieveUsernameFromRegistry());
+	private static StringProperty username = new SimpleStringProperty(retrieveUsernameFromRegistry());
 
 	public static StringProperty usernameProperty()
 	{
-		return GTA.username;
+		return username;
 	}
 
 	/**
@@ -29,10 +29,10 @@ public class GTA
 	 */
 	public static void applyUsername()
 	{
-		PastUsernames.addPastUsername(GTA.retrieveUsernameFromRegistry());
+		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try
 		{
-			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", GTA.usernameProperty().get());
+			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty().get());
 		}
 		catch (final RegistryException e)
 		{
@@ -70,7 +70,7 @@ public class GTA
 	// TODO(MSC) Quite crappy too, since i can't be sure this works in all cases.
 	public static String getInstalledVersion()
 	{
-		final File file = new File(GTA.getGtaPath() + "samp.dll");
+		final File file = new File(getGtaPath() + "samp.dll");
 
 		switch ((int) file.length())
 		{
@@ -124,18 +124,18 @@ public class GTA
 
 	public static void connectToServer(final String ipAndPort, final String password)
 	{
-		GTA.applyUsername();
+		applyUsername();
 		try
 		{
-			final ProcessBuilder builder = new ProcessBuilder(GTA.getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);
-			builder.directory(new File(GTA.getGtaPath()));
+			final ProcessBuilder builder = new ProcessBuilder(getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);
+			builder.directory(new File(getGtaPath()));
 			builder.start();
 		}
 		catch (final Exception e)
 		{
 			if (Objects.isNull(password) || password.isEmpty())
 			{
-				GTA.connectToServerUsingProtocol(ipAndPort);
+				connectToServerUsingProtocol(ipAndPort);
 			}
 			else
 			{
@@ -146,6 +146,6 @@ public class GTA
 
 	public static void connectToServer(final String ipAndPort)
 	{
-		GTA.connectToServer(ipAndPort, "");
+		connectToServer(ipAndPort, "");
 	}
 }

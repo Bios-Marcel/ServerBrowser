@@ -26,8 +26,10 @@ import data.MySQLConnection;
 import entities.SampServerSerializeable;
 import entities.SampServerSerializeableBuilder;
 import interfaces.DataServiceInterface;
+import interfaces.UpdateServiceInterface;
 import query.SampQuery;
 import serviceImplementations.DataServiceServerImplementation;
+import serviceImplementations.UpdateServiceServerImplementation;
 
 public class Server
 {
@@ -35,16 +37,18 @@ public class Server
 
 	private static Registry registry;
 
-	private static DataServiceInterface dataService;
+	private static UpdateServiceInterface	updateService;
+	private static UpdateServiceInterface	updateServiceStub;
 
-	private static DataServiceInterface stub;
+	private static DataServiceInterface	dataService;
+	private static DataServiceInterface	dataServiceStub;
 
 	public static void main(final String[] args)
 	{
 
 		if (args.length == 0)
 		{
-			System.out.println("Usage: java -jar Server.jar -u/-username [NAME]");
+			System.out.println("Usage: java -jar jar -u/-username [NAME]");
 			System.out.println("To set a password using the arguments use -p/-password [password]");
 			System.out.println("Optionally, append a -recreatedb/-updatedb to force updating the server list.");
 		}
@@ -101,26 +105,29 @@ public class Server
 
 			try
 			{
-				Server.registry = LocateRegistry.createRegistry(1099);
-				Server.dataService = new DataServiceServerImplementation();
-				Server.stub = (DataServiceInterface) UnicastRemoteObject.exportObject(Server.dataService, 0);
-				Server.registry.rebind(DataServiceInterface.INTERFACE_NAME, Server.stub);
-				Server.logger.log(Level.INFO, "RMI has been initialized.");
+				registry = LocateRegistry.createRegistry(1099);
+				dataService = new DataServiceServerImplementation();
+				updateService = new UpdateServiceServerImplementation();
+				dataServiceStub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
+				updateServiceStub = (UpdateServiceInterface) UnicastRemoteObject.exportObject(updateService, 0);
+				registry.rebind(DataServiceInterface.INTERFACE_NAME, dataServiceStub);
+				registry.rebind(UpdateServiceInterface.INTERFACE_NAME, updateServiceStub);
+				logger.log(Level.INFO, "RMI has been initialized.");
 			}
 			catch (final Exception e)
 			{
-				Server.logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
+				logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
 				System.exit(0);
 			}
 
 			if (recreatedb)
 			{
-				Server.updateDBWithMasterlistContent();
+				updateDBWithMasterlistContent();
 			}
 
-			Server.setServerList();
+			setServerList();
 
-			Server.createCronJob();
+			createCronJob();
 		}
 
 	}
@@ -184,7 +191,7 @@ public class Server
 			@Override
 			public void run()
 			{
-				Server.updateDBWithMasterlistContent();
+				updateDBWithMasterlistContent();
 			}
 		};
 
@@ -195,16 +202,16 @@ public class Server
 
 	private static void updateDBWithMasterlistContent()
 	{
-		Server.logger.log(Level.INFO, "Starting to update Database.");
+		logger.log(Level.INFO, "Starting to update Database.");
 
 		if (MySQLConnection.truncate())
 		{
-			Server.addToDatabaseFromList("http://monitor.sacnr.com/list/masterlist.txt");
-			Server.addToDatabaseFromList("http://monitor.sacnr.com/list/hostedlist.txt");
-			Server.setServerList();
+			addToDatabaseFromList("http://monitor.sacnr.com/list/masterlist.txt");
+			addToDatabaseFromList("http://monitor.sacnr.com/list/hostedlist.txt");
+			setServerList();
 		}
 
-		Server.logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
+		logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
 	}
 
 	private static void addToDatabaseFromList(final String url)
@@ -271,19 +278,19 @@ public class Server
 
 							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer
 									.parseInt(info[2]), info[4], info[5], lagcomp, map, version, weather, weburl, worldtime);
-							Server.logger.log(Level.INFO, "Added Server: " + inputLine);
+							logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
 					}
 					catch (final Exception e)
 					{
-						Server.logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
+						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
 					}
 				}
 			}
 		}
 		catch (final IOException e)
 		{
-			Server.logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
+			logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
 		}
 	}
 }

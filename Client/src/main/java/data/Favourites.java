@@ -76,7 +76,7 @@ public class Favourites
 			server.setMaxPlayers(0);
 		}
 
-		Favourites.addServerToFavourites(server);
+		addServerToFavourites(server);
 		return server;
 	}
 
@@ -88,7 +88,7 @@ public class Favourites
 	 */
 	public static void addServerToFavourites(final SampServer server)
 	{
-		if (!Favourites.isFavourite(server))
+		if (!isFavourite(server))
 		{
 			String statement = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
 			statement = MessageFormat
@@ -112,7 +112,7 @@ public class Favourites
 	 */
 	public static boolean isFavourite(final SampServer server)
 	{
-		return Favourites.getFavourites().contains(server);
+		return getFavourites().contains(server);
 	}
 
 	/**

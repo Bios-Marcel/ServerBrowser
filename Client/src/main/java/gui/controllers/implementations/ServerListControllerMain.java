@@ -118,7 +118,7 @@ public abstract class ServerListControllerMain implements ViewController
 			serverTable.refresh();
 		});
 
-		addressTextField.textProperty().bindBidirectional(ServerListControllerMain.serverAddressProperty);
+		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
 
 		columnPlayers.setComparator((o1, o2) ->
 		{
@@ -415,12 +415,12 @@ public abstract class ServerListControllerMain implements ViewController
 		serverPing.setText("Retrieving ...");
 		serverPassword.setText("Retrieving ...");
 
-		if (Objects.nonNull(ServerListControllerMain.serverInfoUpdateThread))
+		if (Objects.nonNull(serverInfoUpdateThread))
 		{
-			ServerListControllerMain.serverInfoUpdateThread.interrupt();
+			serverInfoUpdateThread.interrupt();
 		}
 
-		ServerListControllerMain.serverInfoUpdateThread = new Thread(() ->
+		serverInfoUpdateThread = new Thread(() ->
 		{
 			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort()))
 			{
@@ -519,7 +519,7 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 		});
 
-		ServerListControllerMain.serverInfoUpdateThread.start();
+		serverInfoUpdateThread.start();
 	}
 
 	void updateGlobalInfo()

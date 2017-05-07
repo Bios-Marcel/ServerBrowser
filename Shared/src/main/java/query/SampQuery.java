@@ -78,7 +78,7 @@ public class SampQuery implements AutoCloseable
 		// TODO(MSC) Check if server deactivated querying, since this will only tell fi the server
 		// is online, but will still work with
 		// deactivated quering
-		send(SampQuery.PACKET_MIRROR_CHARACTERS);
+		send(PACKET_MIRROR_CHARACTERS);
 		final String reply = receive();
 		// Removed the checks if the reply was valid, i think its not even necessary
 		if (Objects.isNull(reply))
@@ -106,7 +106,7 @@ public class SampQuery implements AutoCloseable
 	 */
 	public Optional<String[]> getBasicServerInfo()
 	{
-		if (send(SampQuery.PAKCET_GET_SERVERINFO))
+		if (send(PAKCET_GET_SERVERINFO))
 		{
 			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
@@ -174,7 +174,7 @@ public class SampQuery implements AutoCloseable
 	 */
 	public Optional<String[][]> getBasicPlayerInfo()
 	{
-		if (send(SampQuery.PACKET_GET_BASIC_PLAYERINFO))
+		if (send(PACKET_GET_BASIC_PLAYERINFO))
 		{
 			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
@@ -222,7 +222,7 @@ public class SampQuery implements AutoCloseable
 	 */
 	public Optional<String[][]> getDetailedPlayerInfo()
 	{
-		if (send(SampQuery.PACKET_GET_DETAILED_PLAYERINFO))
+		if (send(PACKET_GET_DETAILED_PLAYERINFO))
 		{
 			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
@@ -258,7 +258,7 @@ public class SampQuery implements AutoCloseable
 	 */
 	public Optional<String[][]> getServersRules()
 	{
-		if (send(SampQuery.PACKET_GET_RULES))
+		if (send(PACKET_GET_RULES))
 		{
 			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
@@ -312,7 +312,7 @@ public class SampQuery implements AutoCloseable
 	public long getPing()
 	{
 		final long beforeSend = System.currentTimeMillis();
-		send(SampQuery.PACKET_MIRROR_CHARACTERS);
+		send(PACKET_MIRROR_CHARACTERS);
 		receiveBytes();
 		return System.currentTimeMillis() - beforeSend;
 	}
