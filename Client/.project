@@ -11,26 +11,19 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
-		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>resources</name>
-			<type>2</type>
-			<location>C:/Users/Marcel/git/ServerBrowser/Client/src/main/resources</location>
-		</link>
-	</linkedResources>
 </projectDescription>

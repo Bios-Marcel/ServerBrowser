@@ -1,0 +1,15 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'Client'
+version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'com.github.sarxos', name: 'windows-registry-util', version:'0.3'
+}
