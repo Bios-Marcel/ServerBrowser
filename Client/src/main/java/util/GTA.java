@@ -17,11 +17,11 @@ import logging.Logging;
 
 public class GTA
 {
-	private static StringProperty username = new SimpleStringProperty(retrieveUsernameFromRegistry());
+	private static StringProperty username = new SimpleStringProperty(GTA.retrieveUsernameFromRegistry());
 
 	public static StringProperty usernameProperty()
 	{
-		return username;
+		return GTA.username;
 	}
 
 	/**
@@ -29,10 +29,10 @@ public class GTA
 	 */
 	public static void applyUsername()
 	{
-		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
+		PastUsernames.addPastUsername(GTA.retrieveUsernameFromRegistry());
 		try
 		{
-			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty().get());
+			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", GTA.usernameProperty().get());
 		}
 		catch (final RegistryException e)
 		{
@@ -124,18 +124,18 @@ public class GTA
 
 	public static void connectToServer(final String ipAndPort, final String password)
 	{
-		applyUsername();
+		GTA.applyUsername();
 		try
 		{
-			final ProcessBuilder builder = new ProcessBuilder(getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);
-			builder.directory(new File(getGtaPath()));
+			final ProcessBuilder builder = new ProcessBuilder(GTA.getGtaPath() + File.separator + "samp.exe ", ipAndPort, password);
+			builder.directory(new File(GTA.getGtaPath()));
 			builder.start();
 		}
 		catch (final Exception e)
 		{
 			if (Objects.isNull(password) || password.isEmpty())
 			{
-				connectToServerUsingProtocol(ipAndPort);
+				GTA.connectToServerUsingProtocol(ipAndPort);
 			}
 			else
 			{
@@ -146,6 +146,6 @@ public class GTA
 
 	public static void connectToServer(final String ipAndPort)
 	{
-		connectToServer(ipAndPort, "");
+		GTA.connectToServer(ipAndPort, "");
 	}
 }

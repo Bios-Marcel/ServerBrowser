@@ -92,9 +92,9 @@ public class VersionChangeController implements ViewController
 			versionButton.setText("Installed");
 		}
 
-		if (!installing.equals(""))
+		if (!VersionChangeController.installing.equals(""))
 		{
-			final Button installingButton = getButtonForVersion(installing);
+			final Button installingButton = getButtonForVersion(VersionChangeController.installing);
 
 			if (Objects.nonNull(installingButton))
 			{
@@ -145,15 +145,15 @@ public class VersionChangeController implements ViewController
 
 	private void startVersionChanging(final String version)
 	{
-		installing = version;
+		VersionChangeController.installing = version;
 		final Thread thread = new Thread(() ->
 		{
 			File downloadedFile = null;
 			try
 			{
-				downloadedFile = FileUtility.downloadFile("http://164.132.193.101/sampversion/" + version + ".zip", OUTPUT_ZIP);
-				FileUtility.unzip(OUTPUT_ZIP, GTA.getGtaPath());
-				installing = "";
+				downloadedFile = FileUtility.downloadFile("http://164.132.193.101/sampversion/" + version + ".zip", VersionChangeController.OUTPUT_ZIP);
+				FileUtility.unzip(VersionChangeController.OUTPUT_ZIP, GTA.getGtaPath());
+				VersionChangeController.installing = "";
 
 				Platform.runLater(() ->
 				{

@@ -101,26 +101,26 @@ public class Server
 
 			try
 			{
-				registry = LocateRegistry.createRegistry(1099);
-				dataService = new DataServiceServerImplementation();
-				stub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
-				registry.rebind(DataServiceInterface.INTERFACE_NAME, stub);
-				logger.log(Level.INFO, "RMI has been initialized.");
+				Server.registry = LocateRegistry.createRegistry(1099);
+				Server.dataService = new DataServiceServerImplementation();
+				Server.stub = (DataServiceInterface) UnicastRemoteObject.exportObject(Server.dataService, 0);
+				Server.registry.rebind(DataServiceInterface.INTERFACE_NAME, Server.stub);
+				Server.logger.log(Level.INFO, "RMI has been initialized.");
 			}
 			catch (final Exception e)
 			{
-				logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
+				Server.logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
 				System.exit(0);
 			}
 
 			if (recreatedb)
 			{
-				updateDBWithMasterlistContent();
+				Server.updateDBWithMasterlistContent();
 			}
 
-			setServerList();
+			Server.setServerList();
 
-			createCronJob();
+			Server.createCronJob();
 		}
 
 	}
@@ -184,7 +184,7 @@ public class Server
 			@Override
 			public void run()
 			{
-				updateDBWithMasterlistContent();
+				Server.updateDBWithMasterlistContent();
 			}
 		};
 
@@ -195,16 +195,16 @@ public class Server
 
 	private static void updateDBWithMasterlistContent()
 	{
-		logger.log(Level.INFO, "Starting to update Database.");
+		Server.logger.log(Level.INFO, "Starting to update Database.");
 
 		if (MySQLConnection.truncate())
 		{
-			addToDatabaseFromList("http://monitor.sacnr.com/list/masterlist.txt");
-			addToDatabaseFromList("http://monitor.sacnr.com/list/hostedlist.txt");
-			setServerList();
+			Server.addToDatabaseFromList("http://monitor.sacnr.com/list/masterlist.txt");
+			Server.addToDatabaseFromList("http://monitor.sacnr.com/list/hostedlist.txt");
+			Server.setServerList();
 		}
 
-		logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
+		Server.logger.log(Level.INFO, "Database update is over, check past message to see if it was successful.");
 	}
 
 	private static void addToDatabaseFromList(final String url)
@@ -271,19 +271,19 @@ public class Server
 
 							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer
 									.parseInt(info[2]), info[4], info[5], lagcomp, map, version, weather, weburl, worldtime);
-							logger.log(Level.INFO, "Added Server: " + inputLine);
+							Server.logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
 					}
 					catch (final Exception e)
 					{
-						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
+						Server.logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
 					}
 				}
 			}
 		}
 		catch (final IOException e)
 		{
-			logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
+			Server.logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
 		}
 	}
 }

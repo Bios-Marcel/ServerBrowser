@@ -22,11 +22,11 @@ public class SQLDatabase
 
 	public static SQLDatabase getInstance()
 	{
-		if (Objects.isNull(instance))
+		if (Objects.isNull(SQLDatabase.instance))
 		{
-			instance = new SQLDatabase();
+			SQLDatabase.instance = new SQLDatabase();
 		}
-		return instance;
+		return SQLDatabase.instance;
 	}
 
 	static
@@ -38,7 +38,7 @@ public class SQLDatabase
 	{
 		try
 		{
-			sqlConnection = DriverManager.getConnection("jdbc:sqlite:" + DB_LOCATION);
+			sqlConnection = DriverManager.getConnection("jdbc:sqlite:" + SQLDatabase.DB_LOCATION);
 
 			if (Objects.nonNull(sqlConnection))
 			{

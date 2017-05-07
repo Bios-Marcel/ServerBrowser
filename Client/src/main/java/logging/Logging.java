@@ -13,18 +13,18 @@ public class Logging
 
 	static
 	{
-		logger.setLevel(Level.INFO);
+		Logging.logger.setLevel(Level.INFO);
 		try
 		{
 			final FileHandler filehandler = new FileHandler(System.getProperty("user.home") + File.separator + "sampex" + File.separator
 					+ "Log.log");
 			final SimpleFormatter formatter = new SimpleFormatter();
 			filehandler.setFormatter(formatter);
-			logger.addHandler(filehandler);
+			Logging.logger.addHandler(filehandler);
 		}
 		catch (SecurityException | IOException e)
 		{
-			logger.log(Level.SEVERE, "Couldn't configure logger properly", e);
+			Logging.logger.log(Level.SEVERE, "Couldn't configure logger properly", e);
 		}
 
 	}

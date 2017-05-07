@@ -53,13 +53,13 @@ public class Client extends Application
 
 	public static Client getInstance()
 	{
-		return instance;
+		return Client.instance;
 	}
 
 	@Override
 	public void start(final Stage primaryStage)
 	{
-		instance = this;
+		Client.instance = this;
 
 		checkOperatingSystemCompatibility();
 
@@ -79,8 +79,8 @@ public class Client extends Application
 	{
 		try
 		{
-			registry = LocateRegistry.getRegistry("164.132.193.101", 1099, new CustomRMIClientSocketFactory());
-			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
+			Client.registry = LocateRegistry.getRegistry("164.132.193.101", 1099, new CustomRMIClientSocketFactory());
+			Client.remoteDataService = (DataServiceInterface) Client.registry.lookup(DataServiceInterface.INTERFACE_NAME);
 		}
 		catch (RemoteException | NotBoundException e)
 		{
@@ -107,8 +107,8 @@ public class Client extends Application
 			final Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/views/stylesheets/mainStyle.css").toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.getIcons().add(applicationIcon);
-			primaryStage.setTitle(APPLICATION_NAME);
+			primaryStage.getIcons().add(Client.applicationIcon);
+			primaryStage.setTitle(Client.APPLICATION_NAME);
 			primaryStage.show();
 			primaryStage.setMinWidth(primaryStage.getWidth());
 			primaryStage.setMinHeight(primaryStage.getHeight());
@@ -161,7 +161,7 @@ public class Client extends Application
 
 	private void setAlertIcon(final Alert alert)
 	{
-		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(applicationIcon);
+		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(Client.applicationIcon);
 	}
 
 	/**
@@ -206,12 +206,12 @@ public class Client extends Application
 	 */
 	private void checkVersion()
 	{
-		if (Objects.nonNull(remoteDataService))
+		if (Objects.nonNull(Client.remoteDataService))
 		{
 			try
 			{
 				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
-				final String remoteVersion = remoteDataService.getLatestVersionChecksum();
+				final String remoteVersion = Client.remoteDataService.getLatestVersionChecksum();
 
 				if (!localVersion.equals(remoteVersion))
 				{
@@ -303,6 +303,6 @@ public class Client extends Application
 
 	public static void main(final String[] args)
 	{
-		launch(args);
+		Application.launch(args);
 	}
 }

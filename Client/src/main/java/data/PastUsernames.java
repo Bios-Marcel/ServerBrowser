@@ -23,7 +23,7 @@ public class PastUsernames
 {
 	public static void addPastUsername(final String username)
 	{
-		if (!getPastUsernames().contains(username))
+		if (!PastUsernames.getPastUsernames().contains(username))
 		{
 			String statement = "INSERT INTO username (username) VALUES (''{0}'');";
 			statement = MessageFormat.format(statement, username);

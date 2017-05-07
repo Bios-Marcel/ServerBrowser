@@ -12,6 +12,6 @@ public class OSInfo
 	 */
 	public static boolean isWindows()
 	{
-		return OS.startsWith("windows");
+		return OSInfo.OS.startsWith("windows");
 	}
 }

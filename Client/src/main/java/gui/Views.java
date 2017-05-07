@@ -31,9 +31,9 @@ public enum Views
 
 	static
 	{
-		for (final Views view : values())
+		for (final Views view : Views.values())
 		{
-			idMapping.put(view.getId(), view);
+			Views.idMapping.put(view.getId(), view);
 		}
 	}
 
@@ -74,6 +74,6 @@ public enum Views
 
 	public static Views valueOf(final int idToGet)
 	{
-		return idMapping.get(idToGet);
+		return Views.idMapping.get(idToGet);
 	}
 }

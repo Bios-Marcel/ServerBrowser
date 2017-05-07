@@ -45,7 +45,7 @@ public class ServerListAllController extends ServerListControllerMain
 			try
 			{
 				final byte[] serializedData = Client.remoteDataService.getAllServers();
-				final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(serializedData);
+				final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) ServerListAllController.deserialzieAndDecompress(serializedData);
 
 				servers.addAll(serializedServers.stream()
 						.map(server -> new SampServer(server))

@@ -21,18 +21,18 @@ public class DataServiceServerImplementation implements DataServiceInterface
 
 	public static void clearList()
 	{
-		servers.clear();
+		DataServiceServerImplementation.servers.clear();
 	}
 
 	public static void addToServers(final Collection<SampServerSerializeable> list)
 	{
-		servers.addAll(list);
+		DataServiceServerImplementation.servers.addAll(list);
 	}
 
 	@Override
 	public byte[] getAllServers() throws RemoteException
 	{
-		return convertToCompressedBytes(servers);
+		return convertToCompressedBytes(DataServiceServerImplementation.servers);
 	}
 
 	private byte[] convertToCompressedBytes(final Object object) throws RemoteException

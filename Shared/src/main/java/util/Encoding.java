@@ -27,11 +27,11 @@ public class Encoding
 
 	public static String getEncoding(final byte[] data)
 	{
-		detector.handleData(data, 0, data.length - 1);
-		detector.dataEnd();
+		Encoding.detector.handleData(data, 0, data.length - 1);
+		Encoding.detector.dataEnd();
 
-		final String charset = detector.getDetectedCharset();
-		detector.reset();
+		final String charset = Encoding.detector.getDetectedCharset();
+		Encoding.detector.reset();
 		if (charset != null)
 		{
 			return charset;

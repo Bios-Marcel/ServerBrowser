@@ -18,19 +18,19 @@ public class MySQLConnection
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			connect = DriverManager
+			MySQLConnection.connect = DriverManager
 					.getConnection("jdbc:mysql://localhost?useSSL=false&useUnicode=true&characterEncoding=UTF-8", username, password);
-			connect.setCatalog("mp_server_browser");
-			logger.log(Level.INFO, "Databank connection has been established.");
+			MySQLConnection.connect.setCatalog("mp_server_browser");
+			MySQLConnection.logger.log(Level.INFO, "Databank connection has been established.");
 		}
 		catch (final ClassNotFoundException e)
 		{
-			logger.log(Level.SEVERE, "Couldn't load MySQL Driver.", e);
+			MySQLConnection.logger.log(Level.SEVERE, "Couldn't load MySQL Driver.", e);
 			System.exit(0);
 		}
 		catch (final SQLException e)
 		{
-			logger.log(Level.SEVERE, "Couldn't connect to Database.", e);
+			MySQLConnection.logger.log(Level.SEVERE, "Couldn't connect to Database.", e);
 			System.exit(0);
 		}
 	}
@@ -39,13 +39,13 @@ public class MySQLConnection
 	{
 		try
 		{
-			connect.createStatement().executeUpdate("TRUNCATE TABLE internet_offline;");
-			logger.log(Level.INFO, "Table has been successfully truncated.");
+			MySQLConnection.connect.createStatement().executeUpdate("TRUNCATE TABLE internet_offline;");
+			MySQLConnection.logger.log(Level.INFO, "Table has been successfully truncated.");
 			return true;
 		}
 		catch (final SQLException e)
 		{
-			logger.log(Level.SEVERE, "Couldn't truncate table.", e);
+			MySQLConnection.logger.log(Level.SEVERE, "Couldn't truncate table.", e);
 			return false;
 		}
 	}
@@ -57,7 +57,7 @@ public class MySQLConnection
 		try
 		{
 			// TODO(MSC) Fix Encoding problems and escaping
-			final Statement statement = connect.createStatement();
+			final Statement statement = MySQLConnection.connect.createStatement();
 			statement.setEscapeProcessing(true);
 			statement
 					.executeUpdate("INSERT INTO internet_offline (ip_address, port, hostname, players, max_players, mode, language, lagcomp, mapname, version, weather, weburl, worldtime) VALUES("
@@ -91,7 +91,7 @@ public class MySQLConnection
 		}
 		catch (final SQLException e)
 		{
-			logger.log(Level.WARNING, e.getMessage(), e);
+			MySQLConnection.logger.log(Level.WARNING, e.getMessage(), e);
 		}
 	}
 }
