@@ -57,6 +57,7 @@ public class Server
 			boolean recreatedb = false;
 			String username = null;
 			String password = null;
+			String database = "mp_server_browser";
 
 			for (int i = 0; i < args.length; i++)
 			{
@@ -87,6 +88,13 @@ public class Server
 						System.exit(0);
 					}
 				}
+				else if (args[i].equals("-d") || args[i].equals("-database"))
+				{
+					if (args.length >= i + 2)
+					{
+						database = args[i + 1];
+					}
+				}
 			}
 
 			if (Objects.isNull(username))
@@ -101,7 +109,7 @@ public class Server
 				password = new String(console.readPassword("Enter your database password: "));
 			}
 
-			MySQLConnection.init(username, password);
+			MySQLConnection.init(username, password, database);
 
 			try
 			{
@@ -114,9 +122,9 @@ public class Server
 				registry.rebind(UpdateServiceInterface.INTERFACE_NAME, updateServiceStub);
 				logger.log(Level.INFO, "RMI has been initialized.");
 			}
-			catch (final Exception e)
+			catch (final Exception exception)
 			{
-				logger.log(Level.SEVERE, "Couldn't initialize RMI", e);
+				logger.log(Level.SEVERE, "Couldn't initialize RMI", exception);
 				System.exit(0);
 			}
 
@@ -170,9 +178,9 @@ public class Server
 			DataServiceServerImplementation.addToServers(servers);
 
 		}
-		catch (final SQLException e)
+		catch (final SQLException exception)
 		{
-			e.printStackTrace();
+			exception.printStackTrace();
 		}
 	}
 
@@ -181,6 +189,7 @@ public class Server
 	 */
 	private static void createCronJob()
 	{
+		// TODO(MSC) This shit kinda doesn't work i think :D
 		final Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR, 23);
 		calendar.set(Calendar.MINUTE, 59);
@@ -219,6 +228,7 @@ public class Server
 		try
 		{
 			final URLConnection openConnection = new URL(url).openConnection();
+			// TODO(MSC) Is setting a specific User Agent necessary at all?
 			openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 			try (final BufferedReader in = new BufferedReader(new InputStreamReader(openConnection.getInputStream())))
 			{
@@ -230,7 +240,6 @@ public class Server
 					try (final SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1])))
 					{
 						final Optional<String[]> infoOptional = query.getBasicServerInfo();
-
 						final Optional<String[][]> infoMoreOptional = query.getServersRules();
 
 						if (infoOptional.isPresent() && infoMoreOptional.isPresent())
@@ -246,8 +255,6 @@ public class Server
 							String map = null;
 							int weather = 0;
 
-							// TODO(MSC) Inspect data response of all server versions and remove
-							// loops if possible
 							for (final String[] element : infoMore)
 							{
 								if (element[0].equals("lagcomp"))
@@ -281,16 +288,16 @@ public class Server
 							logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
 					}
-					catch (final Exception e)
+					catch (final Exception exception)
 					{
 						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
 					}
 				}
 			}
 		}
-		catch (final IOException e)
+		catch (final IOException exception)
 		{
-			logger.log(Level.SEVERE, "Failed to add data from server lists.", e);
+			logger.log(Level.SEVERE, "Failed to add data from server lists.", exception);
 		}
 	}
 }

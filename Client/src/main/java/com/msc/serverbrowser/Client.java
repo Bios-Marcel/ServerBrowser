@@ -11,6 +11,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -41,6 +42,8 @@ import javafx.stage.Stage;
 
 public class Client extends Application
 {
+	private static Boolean sendStatistics = true;
+
 	/**
 	 * Default public IP, can be changed on startup using <code>-s</code> / <code>-server</code>
 	 * followed by a domain, IP or hostname.
@@ -73,9 +76,10 @@ public class Client extends Application
 		instance = this;
 		checkOperatingSystemCompatibility();
 		initClient();
-		establishConnection();
 		loadUI(primaryStage);
-		checkVersion();
+		establishConnection();
+
+		new Thread(() -> checkVersion()).start();
 	}
 
 	/*
@@ -88,6 +92,12 @@ public class Client extends Application
 			registry = LocateRegistry.getRegistry(serverToConnectTo, 1099, new CustomRMIClientSocketFactory());
 			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
 			remoteUpdateService = (UpdateServiceInterface) registry.lookup(UpdateServiceInterface.INTERFACE_NAME);
+
+			if (sendStatistics)
+			{
+				System.out.println("Sending statistic");
+				remoteDataService.tellServerThatYouUseTheApp(Locale.getDefault().toString());
+			}
 		}
 		catch (RemoteException | NotBoundException exception)
 		{
@@ -243,11 +253,11 @@ public class Client extends Application
 	private void checkVersion()
 	{
 		if (Objects.nonNull(remoteDataService))
-		{
+		{// Connection with server was not sucessful
 			try
 			{
 				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
-				final String remoteVersion = remoteDataService.getLatestVersionChecksum();
+				final String remoteVersion = remoteUpdateService.getLatestVersionChecksum();
 
 				if (!localVersion.equals(remoteVersion))
 				{
@@ -292,11 +302,10 @@ public class Client extends Application
 			FileUtility.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
 			ClientProperties.setProperty(PropertyIds.SHOW_CHANGELOG, true);
 			selfRestart();
-
 		}
-		catch (final IOException | URISyntaxException e)
+		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't retrieve update.", e);
+			Logging.logger.log(Level.SEVERE, "Couldn't retrieve update.", exception);
 		}
 	}
 
@@ -349,6 +358,10 @@ public class Client extends Application
 				if (arg.equals("-s") || arg.equals("-server"))
 				{
 					serverToConnectTo = args[i + 1];
+				}
+				else if (arg.equals("-nostatistic"))
+				{
+					sendStatistics = false;
 				}
 			}
 		}

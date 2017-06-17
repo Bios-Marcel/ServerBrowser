@@ -188,7 +188,7 @@ public class VersionChangeController implements ViewController
 				finally
 				{
 					installing = NOT_INSTALLING;
-					downloadedFile.ifPresent(file -> file.delete());
+					downloadedFile.ifPresent(File::delete);
 				}
 			});
 

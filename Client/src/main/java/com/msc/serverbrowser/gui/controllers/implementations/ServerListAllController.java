@@ -54,7 +54,7 @@ public class ServerListAllController extends ServerListControllerMain
 					final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(serializedData);
 
 					servers.addAll(serializedServers.stream()
-							.map(server -> new SampServer(server))
+							.map(SampServer::new)
 							.collect(Collectors.toSet()));
 				}
 				catch (final RemoteException e)

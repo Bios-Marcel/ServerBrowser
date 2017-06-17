@@ -1,11 +1,9 @@
 package com.msc.serverbrowser.serviceImplementations;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.zip.GZIPOutputStream;
 
 import com.msc.sampbrowser.entities.SampServerSerializeable;
 import com.msc.sampbrowser.interfaces.DataServiceInterface;
-import com.msc.sampbrowser.util.Hashing;
+import com.msc.serverbrowser.data.MySQLConnection;
 
 public class DataServiceServerImplementation implements DataServiceInterface
 {
@@ -53,14 +51,8 @@ public class DataServiceServerImplementation implements DataServiceInterface
 	}
 
 	@Override
-	public String getLatestVersionChecksum() throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException
+	public void tellServerThatYouUseTheApp(final String country) throws RemoteException
 	{
-		return Hashing.verifyChecksum("/var/www/html/sampversion/launcher/launcher.jar");
+		MySQLConnection.addStatistic(country);
 	}
-
-	// @Override
-	// public void tellServerThatYouUseTheApp()
-	// {
-	// TODO(MSC) I should do this at some time
-	// }
 }

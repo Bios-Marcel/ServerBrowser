@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,14 +14,14 @@ public class MySQLConnection
 
 	public static Connection connect = null;
 
-	public static void init(final String username, final String password)
+	public static void init(final String username, final String password, final String database)
 	{
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager
 					.getConnection("jdbc:mysql://localhost?useSSL=false&useUnicode=true&characterEncoding=UTF-8", username, password);
-			connect.setCatalog("mp_server_browser");
+			connect.setCatalog(database);
 			logger.log(Level.INFO, "Databank connection has been established.");
 		}
 		catch (final ClassNotFoundException exception)
@@ -88,6 +89,20 @@ public class MySQLConnection
 							+ "', '"
 							+ worldtime
 							+ "');");
+		}
+		catch (final SQLException exception)
+		{
+			logger.log(Level.WARNING, exception.getMessage(), exception);
+		}
+	}
+
+	public static void addStatistic(final String country)
+	{
+		try
+		{
+			final Statement statement = connect.createStatement();
+			statement.setEscapeProcessing(true);
+			statement.executeUpdate("INSERT INTO statistics (Date, Country) VALUES('" + new Date().toString() + "', '" + country + "');");
 		}
 		catch (final SQLException exception)
 		{
