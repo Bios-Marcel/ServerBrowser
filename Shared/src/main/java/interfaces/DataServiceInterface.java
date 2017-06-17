@@ -13,4 +13,6 @@ public interface DataServiceInterface extends Remote
 	public byte[] getAllServers() throws RemoteException;
 
 	public String getLatestVersionChecksum() throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException;
+
+	// public void tellServerThatYouUseTheApp();
 }

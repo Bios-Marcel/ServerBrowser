@@ -40,7 +40,7 @@ import util.windows.OSInfo;
 
 public class Client extends Application
 {
-	private static final Image applicationIcon = new Image(Client.class.getResourceAsStream("/icons/icon.png"));
+	public static final Image APPLICATION_ICON = new Image(Client.class.getResourceAsStream("/icons/icon.png"));
 
 	public static final String APPLICATION_NAME = "SA-MP Client Extension";
 
@@ -62,15 +62,10 @@ public class Client extends Application
 	public void start(final Stage primaryStage)
 	{
 		instance = this;
-
 		checkOperatingSystemCompatibility();
-
 		initClient();
-
 		establishConnection();
-
 		loadUI(primaryStage);
-
 		checkVersion();
 	}
 
@@ -93,6 +88,14 @@ public class Client extends Application
 	}
 
 	/**
+	 * @return {@link #stage}
+	 */
+	public Stage getStage()
+	{
+		return stage;
+	}
+
+	/**
 	 * Loads the main UI.
 	 *
 	 * @param primaryStage
@@ -110,7 +113,7 @@ public class Client extends Application
 			final Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/views/stylesheets/mainStyle.css").toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.getIcons().add(applicationIcon);
+			primaryStage.getIcons().add(APPLICATION_ICON);
 			primaryStage.setTitle(APPLICATION_NAME);
 			primaryStage.show();
 			primaryStage.setMinWidth(primaryStage.getWidth());
@@ -125,6 +128,27 @@ public class Client extends Application
 			});
 
 			stage = primaryStage;
+
+			if (ClientProperties.getPropertyAsBoolean(PropertyIds.SHOW_CHANGELOG))
+			{
+				final Alert alert = new Alert(AlertType.INFORMATION);
+				setAlertIcon(alert);
+				alert.initOwner(stage);
+				alert.initModality(Modality.APPLICATION_MODAL);
+				alert.setTitle(APPLICATION_NAME);
+				alert.setHeaderText("Your client has been updated");
+
+				final StringBuilder updateText = new StringBuilder();
+				updateText.append("- Selection in Server Table has been fixed");
+				updateText.append(System.lineSeparator());
+				updateText.append("- Version Changer now gives info if there is no SA-MP installed / it can't be found");
+				updateText.append(System.lineSeparator());
+				updateText.append("- New Changelog Dialog ;D");
+
+				alert.setContentText(updateText.toString());
+				alert.show();
+				ClientProperties.setProperty(PropertyIds.SHOW_CHANGELOG, false);
+			}
 		}
 		catch (final Exception e)
 		{
@@ -162,9 +186,9 @@ public class Client extends Application
 		alert.showAndWait();
 	}
 
-	private void setAlertIcon(final Alert alert)
+	public static void setAlertIcon(final Alert alert)
 	{
-		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(applicationIcon);
+		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(APPLICATION_ICON);
 	}
 
 	/**
@@ -257,6 +281,7 @@ public class Client extends Application
 		{
 			final URI url = new URI(remoteUpdateService.getLatestVersionURL());
 			FileUtility.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
+			ClientProperties.setProperty(PropertyIds.SHOW_CHANGELOG, true);
 			selfRestart();
 
 		}

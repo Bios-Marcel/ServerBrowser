@@ -5,3 +5,4 @@ bin/*
 /bin/*
 /target/
 /cleanup.xml
+/.gradle/

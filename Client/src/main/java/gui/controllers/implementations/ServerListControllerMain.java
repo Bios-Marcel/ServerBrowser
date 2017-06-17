@@ -5,6 +5,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +37,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -125,6 +127,44 @@ public abstract class ServerListControllerMain implements ViewController
 			final int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));
 			final int p2 = Integer.parseInt(o2.replaceAll("[/](.*)", ""));
 			return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
+		});
+
+		serverTable.setRowFactory(facotry ->
+		{
+			final TableRow<SampServer> row = new TableRow<>();
+
+			row.setOnMouseClicked(clicked ->
+			{
+				menu.hide();
+				final List<SampServer> serverList = serverTable.getSelectionModel().getSelectedItems();
+				final SampServer rowItem = row.getItem();
+
+				if (!serverTable.getSelectionModel().getSelectedIndices().contains(row.getIndex()))
+				{
+					if (rowItem != null)
+					{
+						serverTable.getSelectionModel().select(rowItem);
+						if (clicked.getButton().equals(MouseButton.SECONDARY))
+						{
+							displayMenu(Arrays.asList(rowItem), clicked.getScreenX(), clicked.getScreenY());
+						}
+					}
+					else
+					{
+						serverTable.getSelectionModel().clearSelection();
+					}
+				}
+				else
+				{
+					if (!serverList.isEmpty() && clicked.getButton().equals(MouseButton.SECONDARY))
+					{
+						displayMenu(serverList, clicked.getScreenX(), clicked.getScreenY());
+					}
+				}
+
+			});
+
+			return row;
 		});
 
 		serverTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -223,10 +263,6 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				updateServerInfo(serverList.get(0));
 			}
-			else if (clicked.getButton().equals(MouseButton.SECONDARY))
-			{
-				displayMenu(serverList, clicked.getScreenX(), clicked.getScreenY());
-			}
 		}
 	}
 
@@ -234,7 +270,6 @@ public abstract class ServerListControllerMain implements ViewController
 	protected void onTableViewKeyReleased(final KeyEvent released)
 	{
 		final SampServer server = serverTable.getSelectionModel().getSelectedItem();
-
 		final KeyCode usedKey = released.getCode();
 
 		if (usedKey.equals(KeyCode.DOWN) || usedKey.equals(KeyCode.KP_DOWN) || usedKey.equals(KeyCode.KP_UP) || usedKey.equals(KeyCode.UP))
@@ -335,17 +370,11 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 			else if (clickedItem == addToFavouritesMenuItem)
 			{
-				for (final SampServer serverItem : serverList)
-				{
-					Favourites.addServerToFavourites(serverItem);
-				}
+				serverList.forEach(Favourites::addServerToFavourites);
 			}
 			else if (clickedItem == removeFromFavouritesMenuItem)
 			{
-				for (final SampServer serverItem : serverList)
-				{
-					Favourites.removeServerFromFavourites(serverItem);
-				}
+				serverList.forEach(Favourites::removeServerFromFavourites);
 				servers.removeAll(serverList);
 			}
 			else if (clickedItem == copyIpAddressAndPortMenuItem)

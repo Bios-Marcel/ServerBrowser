@@ -3,21 +3,30 @@ package gui.controllers.implementations;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.logging.Level;
 
+import application.Client;
 import gui.controllers.interfaces.ViewController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.stage.Modality;
+import logging.Logging;
 import net.lingala.zip4j.exception.ZipException;
 import util.FileUtility;
 import util.GTA;
 
 public class VersionChangeController implements ViewController
 {
+	private static final String NOT_INSTALLING = "NOT_INSTALLING";
+
 	public static final String OUTPUT_ZIP = System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
 
-	private static String installing = "";
+	private static String installing = NOT_INSTALLING;
 
 	@FXML
 	private Button buttonZeroThreeSeven;
@@ -82,26 +91,30 @@ public class VersionChangeController implements ViewController
 	@Override
 	public void initialize()
 	{
-		final String version = GTA.getInstalledVersion();
-
-		final Button versionButton = getButtonForVersion(version);
-
-		if (Objects.nonNull(versionButton))
+		setAllButtonsDisabled(true);
+		final Optional<String> version = GTA.getInstalledVersion();
+		version.ifPresent(ver ->
 		{
-			versionButton.setDisable(true);
-			versionButton.setText("Installed");
-		}
+			setAllButtonsDisabled(false);
+			final Button versionButton = getButtonForVersion(ver);
 
-		if (!installing.equals(""))
-		{
-			final Button installingButton = getButtonForVersion(installing);
-
-			if (Objects.nonNull(installingButton))
+			if (Objects.nonNull(versionButton))
 			{
-				installingButton.setText("Installing ...");
-				setAllButtonsDisabled(true);
+				versionButton.setDisable(true);
+				versionButton.setText("Installed");
 			}
-		}
+
+			if (!installing.equals(NOT_INSTALLING))
+			{
+				final Button installingButton = getButtonForVersion(installing);
+
+				if (Objects.nonNull(installingButton))
+				{
+					installingButton.setText("Installing ...");
+					setAllButtonsDisabled(true);
+				}
+			}
+		});
 
 	}
 
@@ -143,45 +156,66 @@ public class VersionChangeController implements ViewController
 		}
 	}
 
-	private void startVersionChanging(final String version)
+	private void startVersionChanging(final String versionToBeInstalled)
 	{
-		installing = version;
-		final Thread thread = new Thread(() ->
+		installing = versionToBeInstalled;
+		final Optional<String> installedVersion = GTA.getInstalledVersion();
+
+		if (installedVersion.isPresent())
 		{
-			File downloadedFile = null;
-			try
+			final Button oldVersionButton = getButtonForVersion(installedVersion.get());
+			final Button newVersionButton = getButtonForVersion(versionToBeInstalled);
+			final Thread thread = new Thread(() ->
 			{
-				downloadedFile = FileUtility.downloadFile("http://164.132.193.101/sampversion/" + version + ".zip", OUTPUT_ZIP);
-				FileUtility.unzip(OUTPUT_ZIP, GTA.getGtaPath());
-				installing = "";
-
-				Platform.runLater(() ->
+				Optional<File> downloadedFile = Optional.empty();
+				try
 				{
-					setAllButtonsDisabled(false);
+					final Optional<String> gtaPath = GTA.getGtaPath();
+					downloadedFile = Optional.of(FileUtility.downloadFile("http://164.132.193.101/sampversion/" + versionToBeInstalled + ".zip", OUTPUT_ZIP));
+					FileUtility.unzip(OUTPUT_ZIP, gtaPath.get());
 
-					final Button versionButton = getButtonForVersion(GTA.getInstalledVersion());
-
-					if (Objects.nonNull(versionButton))
-					{
-						versionButton.setDisable(true);
-						versionButton.setText("Installed");
-					}
-				});
-			}
-			catch (ZipException | IOException | IllegalArgumentException e)
-			{
-				e.printStackTrace();
-			}
-			finally
-			{
-				if (Objects.nonNull(downloadedFile))
-				{
-					downloadedFile.delete();
+					updateInstallationState(newVersionButton, oldVersionButton);
 				}
-			}
-		});
+				catch (final ZipException | IOException | IllegalArgumentException exception)
+				{
+					Logging.logger.log(Level.SEVERE, "Error Updating client.", exception);
 
-		thread.start();
+					updateInstallationState(oldVersionButton, newVersionButton);
+				}
+				finally
+				{
+					installing = NOT_INSTALLING;
+					downloadedFile.ifPresent(file -> file.delete());
+				}
+			});
+
+			thread.start();
+		}
+		else
+		{
+			final Alert alert = new Alert(AlertType.ERROR);
+			Client.setAlertIcon(alert);
+			alert.initOwner(Client.getInstance().getStage());
+			alert.initModality(Modality.APPLICATION_MODAL);
+			alert.setTitle("Installing SA-MP Version " + versionToBeInstalled);
+			alert.setHeaderText("GTA couldn't be located");
+			alert.setContentText("It seems like your don't have GTA installed.");
+			alert.showAndWait();
+		}
+	}
+
+	private void updateInstallationState(final Button buttonToSetAsInstalled, final Button buttonToSetAsCanbeInstalled)
+	{
+		Platform.runLater(() ->
+		{
+			setAllButtonsDisabled(false);
+
+			buttonToSetAsInstalled.setDisable(true);
+			buttonToSetAsInstalled.setText("Installed");
+
+			buttonToSetAsCanbeInstalled.setDisable(false);
+			buttonToSetAsCanbeInstalled.setText("Install");
+		});
 	}
 
 	private void setAllButtonsDisabled(final boolean enabled)

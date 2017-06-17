@@ -46,9 +46,9 @@ public class DataServiceServerImplementation implements DataServiceInterface
 			objectOutputStream.close();
 			return byteArrayOutputStream.toByteArray();
 		}
-		catch (final IOException e)
+		catch (final IOException exception)
 		{
-			throw new RemoteException("Couldn't serialize and compress data", e);
+			throw new RemoteException("Couldn't serialize and compress data", exception);
 		}
 	}
 
@@ -57,4 +57,10 @@ public class DataServiceServerImplementation implements DataServiceInterface
 	{
 		return Hashing.verifyChecksum("/var/www/html/sampversion/launcher/launcher.jar");
 	}
+
+	// @Override
+	// public void tellServerThatYouUseTheApp()
+	// {
+	// TODO(MSC) I should do this at some time
+	// }
 }

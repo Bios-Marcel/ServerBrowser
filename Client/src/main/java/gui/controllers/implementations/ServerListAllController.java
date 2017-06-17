@@ -13,6 +13,7 @@ import java.util.zip.GZIPInputStream;
 import application.Client;
 import entities.SampServer;
 import entities.SampServerSerializeable;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import logging.Logging;
 
@@ -40,29 +41,35 @@ public class ServerListAllController extends ServerListControllerMain
 	{
 		super.initialize();
 
-		if (Objects.nonNull(Client.remoteDataService))
-		{
-			try
-			{
-				final byte[] serializedData = Client.remoteDataService.getAllServers();
-				final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(serializedData);
+		serverTable.setPlaceholder(new Label("Loading server list, please wait a moment."));
 
-				servers.addAll(serializedServers.stream()
-						.map(server -> new SampServer(server))
-						.collect(Collectors.toSet()));
-			}
-			catch (final RemoteException e)
-			{
-				Logging.logger.log(Level.SEVERE, "Couldn't retrieve data from server.", e);
-				serverTable.setPlaceholder(new Label("Server connection couldn't be established."));
-			}
-		}
-		else
+		final Thread thread = new Thread(() ->
 		{
-			serverTable.setPlaceholder(new Label("Server connection couldn't be established."));
-		}
+			if (Objects.nonNull(Client.remoteDataService))
+			{
+				try
+				{
+					final byte[] serializedData = Client.remoteDataService.getAllServers();
+					final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(serializedData);
 
-		updateGlobalInfo();
+					servers.addAll(serializedServers.stream()
+							.map(server -> new SampServer(server))
+							.collect(Collectors.toSet()));
+				}
+				catch (final RemoteException e)
+				{
+					Logging.logger.log(Level.SEVERE, "Couldn't retrieve data from server.", e);
+					Platform.runLater(() -> serverTable.setPlaceholder(new Label("Server connection couldn't be established.")));
+				}
+			}
+			else
+			{
+				Platform.runLater(() -> serverTable.setPlaceholder(new Label("Server connection couldn't be established.")));
+			}
+
+			Platform.runLater(() -> updateGlobalInfo());
+		});
+		thread.start();
 	}
 
 	@Override
