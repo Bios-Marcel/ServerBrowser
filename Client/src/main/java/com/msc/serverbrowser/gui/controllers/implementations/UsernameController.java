@@ -23,9 +23,8 @@ public class UsernameController implements ViewController
 	@FXML
 	private ListView<String> nameList;
 
-	private final MenuItem setName = new MenuItem("Use Username");
-
-	private final MenuItem removeName = new MenuItem("Remove username");
+	private final MenuItem	setName		= new MenuItem("Use Username");
+	private final MenuItem	removeName	= new MenuItem("Remove username");
 
 	private final ContextMenu menu = new ContextMenu(setName, removeName);
 
@@ -49,7 +48,7 @@ public class UsernameController implements ViewController
 		if (e.getButton().equals(MouseButton.SECONDARY))
 		{
 			if (usernames.size() == 1)
-			{
+			{// If only one item is selected
 				final String name = usernames.get(0);
 
 				setName.setVisible(true);
@@ -60,6 +59,7 @@ public class UsernameController implements ViewController
 					if (clickedItem.equals(setName))
 					{
 						usernameTextField.setText(name);
+						applyUsername();
 					}
 					else
 					{
@@ -71,7 +71,7 @@ public class UsernameController implements ViewController
 				menu.show(nameList, e.getScreenX(), e.getScreenY());
 			}
 			else if (usernames.size() > 1)
-			{
+			{// if more than one item is selected
 				setName.setVisible(false);
 				menu.setOnAction(click ->
 				{
@@ -92,4 +92,10 @@ public class UsernameController implements ViewController
 		}
 	}
 
+	@FXML
+	private void applyUsername()
+	{
+		GTA.applyUsername();
+		nameList.setItems(FXCollections.observableArrayList(PastUsernames.getPastUsernames()));
+	}
 }

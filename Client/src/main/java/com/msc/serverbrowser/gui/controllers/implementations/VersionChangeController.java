@@ -164,6 +164,8 @@ public class VersionChangeController implements ViewController
 
 		if (installedVersion.isPresent())
 		{
+			GTA.killSamp();
+
 			final Button oldVersionButton = getButtonForVersion(installedVersion.get());
 			final Button newVersionButton = getButtonForVersion(versionToBeInstalled);
 			final Thread thread = new Thread(() ->

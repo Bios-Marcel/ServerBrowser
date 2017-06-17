@@ -26,7 +26,7 @@ import com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtility;
-import com.msc.serverbrowser.util.windows.OSInfo;
+import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -170,7 +170,7 @@ public class Client extends Application
 	 */
 	private void checkOperatingSystemCompatibility()
 	{
-		if (!OSInfo.isWindows())
+		if (!OSUtil.isWindows())
 		{
 			final Alert alert = new Alert(AlertType.WARNING);
 			setAlertIcon(alert);

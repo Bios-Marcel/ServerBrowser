@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -9,10 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0"
-	xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<HBox maxWidth="1.7976931348623157E308">
+		<HBox maxWidth="1.7976931348623157E308" spacing="5.0">
 			<children>
 				<Label maxWidth="1.7976931348623157E308" text="Username" HBox.hgrow="ALWAYS">
 					<padding>
@@ -27,16 +27,19 @@
 						<Insets top="15.0" />
 					</HBox.margin>
 				</TextField>
+            <Button mnemonicParsing="false" onAction="#applyUsername" text="Apply">
+               <HBox.margin>
+                  <Insets top="15.0" />
+               </HBox.margin>
+            </Button>
 			</children>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 			</padding>
 		</HBox>
-		<TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Past Usernames"
-			VBox.vgrow="ALWAYS">
+		<TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Past Usernames" VBox.vgrow="ALWAYS">
 			<content>
-				<ListView onMouseReleased="#onUsernameClicked" fx:id="nameList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-					prefHeight="100.0" />
+				<ListView fx:id="nameList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseReleased="#onUsernameClicked" prefHeight="100.0" />
 			</content>
 		</TitledPane>
 	</children>

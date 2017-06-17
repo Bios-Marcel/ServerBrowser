@@ -18,6 +18,7 @@ import com.msc.sampbrowser.query.SampQuery;
 import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.GTA;
+import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -86,9 +87,10 @@ public abstract class ServerListControllerMain implements ViewController
 	 */
 	protected MenuItem		addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
 	protected MenuItem		removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
+	private final MenuItem	visitWebsiteMenuItem			= new MenuItem("Visit Website");
 	private final MenuItem	connectMenuItem					= new MenuItem("Connect to Server");
 	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
-	protected ContextMenu	menu							= new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem);
+	protected ContextMenu	menu							= new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	@FXML
 	private CheckBox			regexCheckBox;
@@ -357,8 +359,9 @@ public abstract class ServerListControllerMain implements ViewController
 		final boolean sizeEqualsOne = serverList.size() == 1;
 
 		connectMenuItem.setVisible(sizeEqualsOne);
+		menu.getItems().get(1).setVisible(sizeEqualsOne); // Separator
 		copyIpAddressAndPortMenuItem.setVisible(sizeEqualsOne);
-		menu.getItems().get(1).setVisible(sizeEqualsOne);
+		visitWebsiteMenuItem.setVisible(sizeEqualsOne);
 
 		menu.setOnAction(action ->
 		{
@@ -368,6 +371,11 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				final SampServer server = serverList.get(0);
 				tryToConnect(server.getAddress(), server.getPort());
+			}
+			else if (clickedItem == visitWebsiteMenuItem)
+			{
+				final SampServer server = serverList.get(0);
+				OSUtil.browse(server.getWebsite());
 			}
 			else if (clickedItem == addToFavouritesMenuItem)
 			{

@@ -2,6 +2,7 @@ package com.msc.serverbrowser.util;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class GTA
 	 */
 	public static void applyUsername()
 	{
+		killSamp();
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try
 		{
@@ -125,6 +127,18 @@ public class GTA
 		{
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	public static void killSamp()
+	{
+		try
+		{
+			Runtime.getRuntime().exec("taskkill /F /IM samp.exe");
+		}
+		catch (final IOException exception)
+		{
+			Logging.logger.log(Level.SEVERE, "Couldn't kill SAMP", exception);
 		}
 	}
 
