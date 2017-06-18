@@ -30,6 +30,7 @@ import com.msc.serverbrowser.util.FileUtility;
 import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -255,24 +256,27 @@ public class Client extends Application
 
 				if (!localVersion.equals(remoteVersion))
 				{
-					final Alert alert = new Alert(AlertType.CONFIRMATION);
-					setAlertIcon(alert);
-					alert.setTitle("Launching Application");
-					alert.setHeaderText("Update required");
-					alert.setContentText("The launcher needs an update. Not updating the client might lead to problems. Click 'OK' to update and 'Cancel' to not update.");
-
-					alert.showAndWait().ifPresent(result ->
+					Platform.runLater(() ->
 					{
-						if (result == ButtonType.OK)
+						final Alert alert = new Alert(AlertType.CONFIRMATION);
+						setAlertIcon(alert);
+						alert.setTitle("Launching Application");
+						alert.setHeaderText("Update required");
+						alert.setContentText("The launcher needs an update. Not updating the client might lead to problems. Click 'OK' to update and 'Cancel' to not update.");
+
+						alert.showAndWait().ifPresent(result ->
 						{
-							updateLauncher();
-						}
+							if (result == ButtonType.OK)
+							{
+								updateLauncher();
+							}
+						});
 					});
 				}
 			}
 			catch (final FileNotFoundException notFound)
 			{
-				Logging.logger.log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.");
+				Logging.logger.log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.", notFound);
 			}
 			catch (final NoSuchAlgorithmException nonExistentAlgorithm)
 			{
@@ -344,6 +348,18 @@ public class Client extends Application
 
 	public static void main(final String[] args)
 	{
+		if (args.length >= 2)
+		{
+			for (int i = 0; i < args.length; i++)
+			{
+				final String arg = args[i];
+				if (arg.equals("-s") || arg.equals("-server"))
+				{
+					serverToConnectTo = args[i + 1];
+				}
+			}
+		}
+
 		Application.launch(args);
 	}
 }

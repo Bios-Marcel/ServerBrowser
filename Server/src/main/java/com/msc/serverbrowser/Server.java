@@ -142,16 +142,12 @@ public class Server
 
 	private static void setServerList()
 	{
-		try
+		DataServiceServerImplementation.clearList();
+
+		try (final Statement statement = MySQLConnection.connect.createStatement();
+				final ResultSet resultSet = statement
+						.executeQuery("SELECT version, ip_address, id, CONVERT(port, SIGNED INTEGER) as portNumber, hostname, players, lagcomp, max_players, mode, version, weburl, language FROM internet_offline;");)
 		{
-			DataServiceServerImplementation.clearList();
-
-			final Statement statement = MySQLConnection.connect.createStatement();
-
-			// TODO(MSC) Convert field in database instead of casting.
-			final ResultSet resultSet = statement
-					.executeQuery("SELECT version, ip_address, id, CONVERT(port, SIGNED INTEGER) as portNumber, hostname, players, lagcomp, max_players, mode, version, weburl, language FROM internet_offline;");
-
 			final List<SampServerSerializeable> servers = new ArrayList<>();
 
 			while (resultSet.next())
@@ -288,7 +284,7 @@ public class Server
 							logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
 					}
-					catch (final Exception exception)
+					catch (@SuppressWarnings("unused") final Exception exception)
 					{
 						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
 					}

@@ -197,7 +197,7 @@ public class SampQuery implements AutoCloseable
 						players[i][0] = new String(playerName);
 						players[i][1] = "" + buffer.getInt();
 					}
-					catch (final BufferUnderflowException e)
+					catch (final BufferUnderflowException exception)
 					{
 						// TODO(MSC) Fix ...
 					}
@@ -338,7 +338,7 @@ public class SampQuery implements AutoCloseable
 			final DatagramPacket sendPacket = new DatagramPacket(data, data.length, server, serverPort);
 			return Optional.ofNullable(sendPacket);
 		}
-		catch (final Exception e)
+		catch (@SuppressWarnings("unused") final Exception exception)
 		{
 			return Optional.empty();
 		}
@@ -360,7 +360,7 @@ public class SampQuery implements AutoCloseable
 				socket.send(packet.get());
 				return true;
 			}
-			catch (final IOException e)
+			catch (@SuppressWarnings("unused") final IOException exception)
 			{
 				return false;
 			}
@@ -397,7 +397,7 @@ public class SampQuery implements AutoCloseable
 			socket.receive(receivedPacket);
 			return receivedPacket.getData();
 		}
-		catch (final IOException e)
+		catch (@SuppressWarnings("unused") final IOException exception)
 		{
 			return null;
 		}

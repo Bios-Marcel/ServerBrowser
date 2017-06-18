@@ -40,10 +40,8 @@ public class SQLDatabase
 		{
 			sqlConnection = DriverManager.getConnection("jdbc:sqlite:" + DB_LOCATION);
 
-			if (Objects.nonNull(sqlConnection))
+			try (final Statement statement = sqlConnection.createStatement())
 			{
-				final Statement statement = sqlConnection.createStatement();
-
 				final String createTableFavourites = "CREATE TABLE IF NOT EXISTS favourite (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
 				statement.execute(createTableFavourites);
 
@@ -56,7 +54,6 @@ public class SQLDatabase
 				final String createTableServerHistory = "CREATE TABLE IF NOT EXISTS favourite (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
 				statement.execute(createTableServerHistory);
 			}
-
 		}
 		catch (final SQLException e)
 		{

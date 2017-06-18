@@ -54,10 +54,9 @@ public class MySQLConnection
 	public static void addServer(final String ip, final String port, final String hostname, final int players, final int maxPlayers, final String mode,
 			final String language, final String lagcomp, final String map, final String version, final int weather, final String weburl, final String time)
 	{
-		try
+		// TODO(MSC) Fix Encoding problems and escaping
+		try (final Statement statement = connect.createStatement())
 		{
-			// TODO(MSC) Fix Encoding problems and escaping
-			final Statement statement = connect.createStatement();
 			statement.setEscapeProcessing(true);
 			statement
 					.executeUpdate("INSERT INTO internet_offline (ip_address, port, hostname, players, max_players, mode, language, lagcomp, mapname, version, weather, weburl, worldtime) VALUES("
@@ -97,9 +96,8 @@ public class MySQLConnection
 
 	public static void addStatistic(final String country)
 	{
-		try
+		try (final Statement statement = connect.createStatement())
 		{
-			final Statement statement = connect.createStatement();
 			statement.setEscapeProcessing(true);
 			statement.executeUpdate("INSERT INTO statistics (Date, Country) VALUES('" + new Date().toString() + "', '" + country + "');");
 		}

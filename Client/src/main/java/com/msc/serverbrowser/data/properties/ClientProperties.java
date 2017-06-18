@@ -28,9 +28,8 @@ public class ClientProperties
 		final Optional<ResultSet> resultSetOptional = SQLDatabase.getInstance().executeGetResult(statement);
 		if (resultSetOptional.isPresent())
 		{
-			try
+			try (final ResultSet resultSet = resultSetOptional.get();)
 			{
-				final ResultSet resultSet = resultSetOptional.get();
 				while (resultSet.next())
 				{
 					value = resultSet.getString("value");
