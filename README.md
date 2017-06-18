@@ -9,7 +9,13 @@ You can help by [reporting bugs](https://github.com/Bios-Marcel/ServerBrowser/is
 
 ## Dependencies
 
-As of now, all necessary dependencies, except [JKeel](https://github.com/Bios-Marcel/JKeel), are within the repository.
+As of now, all necessary dependencies are within the repository / retrieved by maven.
+
+## Troubleshooting
+
+If your Client isn't able to connect to the server anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).
+
+The second thing you might want to check, is your firewall. Make sure you haven't blocked port 1099 or the application itself.
 
 ## You need help?
-Use the "[Contact](https://sa-mpservers.com/contact.php)" section of our website.
+[Send me an E-Mail](mailto:marceloschr@gmail.com)
