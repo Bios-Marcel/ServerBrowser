@@ -1,7 +1,8 @@
 package com.msc.sampbrowser.util;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import org.mozilla.universalchardet.UniversalDetector;
 
@@ -11,32 +12,23 @@ public class Encoding
 
 	public static String encodeUsingCharsetIfPossible(final byte[] toEncode, final String charset)
 	{
-		if (Objects.nonNull(charset))
+		try
 		{
-			try
-			{
-				return new String(toEncode, charset);
-			}
-			catch (final UnsupportedEncodingException e)
-			{
-				// DO NTHN
-			}
+			return new String(toEncode, charset);
 		}
-		return new String(toEncode);
+		catch (final UnsupportedEncodingException exception)
+		{
+			return new String(toEncode, StandardCharsets.UTF_8);
+		}
 	}
 
-	public static String getEncoding(final byte[] data)
+	public static Optional<String> getEncoding(final byte[] data)
 	{
 		detector.handleData(data, 0, data.length - 1);
 		detector.dataEnd();
 
 		final String charset = detector.getDetectedCharset();
 		detector.reset();
-		if (charset != null)
-		{
-			return charset;
-		}
-
-		return null;
+		return Optional.ofNullable(charset);
 	}
 }

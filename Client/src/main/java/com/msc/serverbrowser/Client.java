@@ -22,7 +22,7 @@ import com.msc.sampbrowser.util.Hashing;
 import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientProperties;
-import com.msc.serverbrowser.data.properties.PropertyIds;
+import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.logging.Logging;
@@ -42,13 +42,11 @@ import javafx.stage.Stage;
 
 public class Client extends Application
 {
-	private static Boolean sendStatistics = true;
-
 	/**
 	 * Default public IP, can be changed on startup using <code>-s</code> / <code>-server</code>
 	 * followed by a domain, IP or hostname.
 	 */
-	private static String serverToConnectTo = "164.132.193.101";
+	private static String serverToConnectTo = "ts3.sa-mpservers.com";
 
 	/**
 	 * Application icon that can be used everywhere where necessary.
@@ -93,9 +91,8 @@ public class Client extends Application
 			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
 			remoteUpdateService = (UpdateServiceInterface) registry.lookup(UpdateServiceInterface.INTERFACE_NAME);
 
-			if (sendStatistics)
+			if (ClientProperties.getPropertyAsBoolean(Property.NOTIFY_SERVER_ON_STARTUP))
 			{
-				System.out.println("Sending statistic");
 				remoteDataService.tellServerThatYouUseTheApp(Locale.getDefault().toString());
 			}
 		}
@@ -137,18 +134,18 @@ public class Client extends Application
 			primaryStage.show();
 			primaryStage.setMinWidth(primaryStage.getWidth());
 			primaryStage.setMinHeight(primaryStage.getHeight());
-			primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(PropertyIds.MAXIMIZED));
-			primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(PropertyIds.FULLSCREEN));
+			primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
+			primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
 			primaryStage.setOnCloseRequest(close ->
 			{
 				controller.onClose();
-				ClientProperties.setProperty(PropertyIds.MAXIMIZED, primaryStage.isMaximized());
-				ClientProperties.setProperty(PropertyIds.FULLSCREEN, primaryStage.isFullScreen());
+				ClientProperties.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
+				ClientProperties.setProperty(Property.FULLSCREEN, primaryStage.isFullScreen());
 			});
 
 			stage = primaryStage;
 
-			if (ClientProperties.getPropertyAsBoolean(PropertyIds.SHOW_CHANGELOG))
+			if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
 			{
 				final Alert alert = new Alert(AlertType.INFORMATION);
 				setAlertIcon(alert);
@@ -158,14 +155,11 @@ public class Client extends Application
 				alert.setHeaderText("Your client has been updated");
 
 				final StringBuilder updateText = new StringBuilder();
-				updateText.append("- Minor Refactoring of Code");
-				updateText.append(System.lineSeparator());
-				updateText.append("- You can connect to custom servers using -s / -server followed by an address on startup arguments");
-				updateText.append(System.lineSeparator());
+				updateText.append("- Settings Page has been added");
 
 				alert.setContentText(updateText.toString());
 				alert.show();
-				ClientProperties.setProperty(PropertyIds.SHOW_CHANGELOG, false);
+				ClientProperties.setProperty(Property.SHOW_CHANGELOG, false);
 			}
 		}
 		catch (final Exception e)
@@ -300,7 +294,7 @@ public class Client extends Application
 		{
 			final URI url = new URI(remoteUpdateService.getLatestVersionURL());
 			FileUtility.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
-			ClientProperties.setProperty(PropertyIds.SHOW_CHANGELOG, true);
+			ClientProperties.setProperty(Property.SHOW_CHANGELOG, true);
 			selfRestart();
 		}
 		catch (final IOException | URISyntaxException exception)
@@ -342,30 +336,14 @@ public class Client extends Application
 			builder.start();
 			System.exit(0);
 		}
-		catch (final IOException e)
+		catch (final IOException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't selfrestart.", e);
+			Logging.logger.log(Level.SEVERE, "Couldn't selfrestart.", exception);
 		}
 	}
 
 	public static void main(final String[] args)
 	{
-		if (args.length >= 2)
-		{
-			for (int i = 0; i < args.length; i++)
-			{
-				final String arg = args[i];
-				if (arg.equals("-s") || arg.equals("-server"))
-				{
-					serverToConnectTo = args[i + 1];
-				}
-				else if (arg.equals("-nostatistic"))
-				{
-					sendStatistics = false;
-				}
-			}
-		}
-
 		Application.launch(args);
 	}
 }

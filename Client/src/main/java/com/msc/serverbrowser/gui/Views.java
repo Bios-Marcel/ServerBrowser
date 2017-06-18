@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.msc.serverbrowser.gui.controllers.implementations.ServerListAllController;
 import com.msc.serverbrowser.gui.controllers.implementations.ServerListFavController;
+import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
 import com.msc.serverbrowser.gui.controllers.implementations.UsernameController;
 import com.msc.serverbrowser.gui.controllers.implementations.VersionChangeController;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
@@ -15,7 +16,7 @@ public enum Views
 	SERVERS_ALL(2, "Servers | All", ServerListAllController.class, "/com/msc/serverbrowser/views/ServerList.fxml", "/com/msc/serverbrowser/views/stylesheets/serverListStyle.css"),
 	USERNAME_CHANGER(3, "Username Changer", UsernameController.class, "/com/msc/serverbrowser/views/Username.fxml", "/com/msc/serverbrowser/views/stylesheets/usernameStyle.css"),
 	VERSION_CHANGER(4, "Version Changer", VersionChangeController.class, "/com/msc/serverbrowser/views/Version.fxml", "/com/msc/serverbrowser/views/stylesheets/versionStyle.css"),
-	SETTINGS(5, "Settings", null, null, null); // Not set yet, since that view doesn't exist yet.
+	SETTINGS(5, "Settings", SettingsController.class, "/com/msc/serverbrowser/views/Settings.fxml", "/com/msc/serverbrowser/views/stylesheets/settingsStyle.css");
 
 	private final int id;
 

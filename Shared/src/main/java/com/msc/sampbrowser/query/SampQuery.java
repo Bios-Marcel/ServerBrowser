@@ -112,7 +112,7 @@ public class SampQuery implements AutoCloseable
 			{
 				final ByteBuffer buffer = wrapReply(reply);
 				final String[] serverInfo = new String[6];
-				final String encoding = Encoding.getEncoding(reply);
+				final String encoding = Encoding.getEncoding(reply).orElse(StandardCharsets.UTF_8.toString());
 
 				// Password Yes / No
 				final short password = buffer.get();

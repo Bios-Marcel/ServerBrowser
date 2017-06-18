@@ -70,9 +70,9 @@ public class SQLDatabase
 		{
 			return sqlConnection.createStatement().execute(statement);
 		}
-		catch (final SQLException e)
+		catch (final SQLException exception)
 		{
-			e.printStackTrace();
+			Logging.logger.log(Level.SEVERE, "Couldn't execute query.", exception);
 			return false;
 		}
 	}

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.data.properties.ClientProperties;
-import com.msc.serverbrowser.data.properties.PropertyIds;
+import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.Views;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
@@ -40,7 +40,14 @@ public class MainController implements ViewController
 	@Override
 	public void initialize()
 	{
-		loadView(Views.valueOf(ClientProperties.getPropertyAsInt(PropertyIds.LAST_VIEW)));
+		if (ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
+		{
+			loadView(Views.valueOf(ClientProperties.getPropertyAsInt(Property.LAST_VIEW)));
+		}
+		else
+		{
+			loadView(Views.valueOf(ClientProperties.getDefaultAsInt(Property.LAST_VIEW)));
+		}
 	}
 
 	@FXML
@@ -67,6 +74,12 @@ public class MainController implements ViewController
 		loadView(Views.VERSION_CHANGER);
 	}
 
+	@FXML
+	private void onSettingsMenuItemClicked()
+	{
+		loadView(Views.SETTINGS);
+	}
+
 	private void loadView(final Views view)
 	{
 		menuItemFav.setStyle(MENUITEM_UNSELECTED_COLOR);
@@ -79,35 +92,32 @@ public class MainController implements ViewController
 		{
 			case VERSION_CHANGER:
 			{
-				loadFXML(view);
 				menuItemVersion.setStyle(MENUITEM_SELECTED_COLOR);
 				break;
 			}
 			case USERNAME_CHANGER:
 			{
-				loadFXML(view);
 				menuItemUser.setStyle(MENUITEM_SELECTED_COLOR);
 				break;
 			}
 			case SETTINGS:
 			{
-				// TODO(MSC) Implement
+				menuItemSettings.setStyle(MENUITEM_SELECTED_COLOR);
 				break;
 			}
 			case SERVERS_FAV:
 			{
-				loadFXML(view);
 				menuItemFav.setStyle(MENUITEM_SELECTED_COLOR);
 				break;
 			}
 			case SERVERS_ALL:
 			{
-				loadFXML(view);
 				menuItemAll.setStyle(MENUITEM_SELECTED_COLOR);
 				break;
 			}
 		}
 
+		loadFXML(view);
 		activeView = view;
 	}
 
@@ -131,6 +141,6 @@ public class MainController implements ViewController
 
 	public void onClose()
 	{
-		ClientProperties.setProperty(PropertyIds.LAST_VIEW, activeView.getId());
+		ClientProperties.setProperty(Property.LAST_VIEW, activeView.getId());
 	}
 }

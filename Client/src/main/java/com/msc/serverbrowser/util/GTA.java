@@ -13,6 +13,8 @@ import com.github.sarxos.winreg.RegistryException;
 import com.github.sarxos.winreg.WindowsRegistry;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.PastUsernames;
+import com.msc.serverbrowser.data.properties.ClientProperties;
+import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.logging.Logging;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -63,14 +65,31 @@ public class GTA
 
 	public static Optional<String> getGtaPath()
 	{
+		String property = ClientProperties.getPropertyAsString(Property.SAMP_PATH);
+		property = Objects.isNull(property) || property.isEmpty() ? null : property;
+		if (Objects.nonNull(property) && !property.endsWith("\\"))
+		{
+			property = property + "\\";
+		}
+
+		return Optional.ofNullable(property);
+	}
+
+	/**
+	 * Should only be used if necessary.
+	 *
+	 * @return String of the GTA Path or null.
+	 */
+	public static String getGtaPathUnsafe()
+	{
 		try
 		{
-			return Optional.of(WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", ""));
+			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", "");
 		}
-		catch (final RegistryException e)
+		catch (final RegistryException exception)
 		{
-			Logging.logger.log(Level.WARNING, "Couldn't retrieve GTA path.", e);
-			return Optional.empty();
+			Logging.logger.log(Level.WARNING, "Couldn't retrieve GTA path.", exception);
+			return null;
 		}
 	}
 
@@ -117,39 +136,57 @@ public class GTA
 
 	private static boolean connectToServerUsingProtocol(final String ipAndPort)
 	{
+		Logging.logger.log(Level.INFO, "Connecting using protocol.");
 		try
 		{
 			final Desktop d = Desktop.getDesktop();
 			d.browse(new URI("samp://" + ipAndPort));
 			return true;
 		}
-		catch (final Exception e)
+		catch (final Exception exception)
 		{
-			e.printStackTrace();
+			exception.printStackTrace();
 			return false;
 		}
 	}
 
+	/**
+	 * Kills SA-MP using the command line.
+	 */
 	public static void killSamp()
+	{
+		kill("samp.exe");
+	}
+
+	/**
+	 * Kills GTA using the command line.
+	 */
+	public static void killGTA()
+	{
+		kill("gta_sa.exe");
+	}
+
+	private static void kill(final String application)
 	{
 		try
 		{
-			Runtime.getRuntime().exec("taskkill /F /IM samp.exe");
+			Runtime.getRuntime().exec("taskkill /F /IM " + application);
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't kill SAMP", exception);
+			Logging.logger.log(Level.SEVERE, "Couldn't kill " + application, exception);
 		}
 	}
 
 	public static void connectToServer(final String ipAndPort, final String password)
 	{
-		applyUsername();
+		killGTA();
 		final Optional<String> gtaPath = getGtaPath();
 		if (gtaPath.isPresent())
 		{
 			try
 			{
+				Logging.logger.log(Level.INFO, "Connecting using executeable.");
 				final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
 				builder.directory(new File(gtaPath.get()));
 				builder.start();
@@ -174,7 +211,7 @@ public class GTA
 			alert.initModality(Modality.APPLICATION_MODAL);
 			alert.setTitle("Connecting to server");
 			alert.setHeaderText("GTA couldn't be located");
-			alert.setContentText("It seems like your don't have GTA installed.");
+			alert.setContentText("It seems like you don't have GTA installed.");
 			alert.showAndWait();
 		}
 	}

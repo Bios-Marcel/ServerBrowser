@@ -420,10 +420,7 @@ public abstract class ServerListControllerMain implements ViewController
 				dialog.setHeaderText("Enter the servers password (Leave empty if u think there is none).");
 
 				final Optional<String> result = dialog.showAndWait();
-				result.ifPresent(password ->
-				{
-					GTA.connectToServer(address + ":" + port, password);
-				});
+				result.ifPresent(password -> GTA.connectToServer(address + ":" + port, password));
 			}
 			else
 			{

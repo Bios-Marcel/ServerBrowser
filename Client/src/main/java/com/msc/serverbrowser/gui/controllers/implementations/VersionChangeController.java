@@ -92,7 +92,6 @@ public class VersionChangeController implements ViewController
 	@Override
 	public void initialize()
 	{
-		setAllButtonsDisabled(true);
 		final Optional<String> version = GTA.getInstalledVersion();
 		version.ifPresent(ver ->
 		{
@@ -165,6 +164,7 @@ public class VersionChangeController implements ViewController
 		if (installedVersion.isPresent())
 		{
 			GTA.killSamp();
+			GTA.killGTA();
 
 			final Button oldVersionButton = getButtonForVersion(installedVersion.get());
 			final Button newVersionButton = getButtonForVersion(versionToBeInstalled);
@@ -202,7 +202,7 @@ public class VersionChangeController implements ViewController
 			alert.initModality(Modality.APPLICATION_MODAL);
 			alert.setTitle("Installing SA-MP Version " + versionToBeInstalled);
 			alert.setHeaderText("GTA couldn't be located");
-			alert.setContentText("It seems like your don't have GTA installed.");
+			alert.setContentText("It seems like you don't have GTA installed.");
 			alert.showAndWait();
 		}
 	}

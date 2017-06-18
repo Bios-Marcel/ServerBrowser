@@ -14,10 +14,11 @@ public interface UpdateServiceInterface extends Remote
 	 * Queries GitHub to retrieve the direct link to download the latest release.
 	 *
 	 * @return GitHub download url
-	 * @throws IOException
-	 * @throws RemoteException
 	 */
 	String getLatestVersionURL() throws IOException, RemoteException;
 
+	/**
+	 * Returns the SHA256 Checksum of the latest Client jar file.
+	 */
 	String getLatestVersionChecksum() throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException;
 }

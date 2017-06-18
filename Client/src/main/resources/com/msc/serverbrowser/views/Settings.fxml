@@ -12,39 +12,45 @@
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane fitToWidth="true" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-   <content>
-      <VBox spacing="10.0">
-         <children>
-            <TitledPane text="General">
-               <content>
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" />
-                      <ColumnConstraints hgrow="SOMETIMES" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label text="Custom SA-MP Path" />
-                        <TextField GridPane.columnIndex="1" />
-                     </children>
-                  </GridPane>
-               </content>
-            </TitledPane>
-            <TitledPane text="Connection">
-               <content>
-                  <VBox>
-                     <children>
-                        <CheckBox fx:id="settingAskName" mnemonicParsing="false" text="Always ask for Username when connecting to a server" />
-                     </children>
-                  </VBox>
-               </content>
-            </TitledPane>
-         </children>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </VBox>
-   </content>
+	<content>
+		<VBox spacing="10.0">
+			<children>
+				<TitledPane fx:id="generalPane" text="General">
+					<content>
+						<GridPane hgap="10.0" vgap="5.0">
+							<columnConstraints>
+								<ColumnConstraints hgrow="NEVER" />
+								<ColumnConstraints hgrow="SOMETIMES" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<Label text="SA-MP Path" />
+								<TextField fx:id="sampPathTextField" promptText="WIll automatically be detected if left empty" GridPane.columnIndex="1" />
+								<Label text="Notify Server on startup" GridPane.rowIndex="1" />
+								<CheckBox fx:id="notifyServerOnStartupCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+								<Label text="Remember last view" GridPane.rowIndex="2" />
+								<CheckBox fx:id="rememberLastViewCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+							</children>
+						</GridPane>
+					</content>
+				</TitledPane>
+				<TitledPane fx:id="connectionPane" text="Connection">
+					<content>
+						<VBox>
+							<children>
+								<CheckBox fx:id="askForUsernameOnConnectCheckBox" mnemonicParsing="false" text="Always ask for Username when connecting to a server" />
+							</children>
+						</VBox>
+					</content>
+				</TitledPane>
+			</children>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</VBox>
+	</content>
 </ScrollPane>

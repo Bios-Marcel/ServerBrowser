@@ -51,9 +51,8 @@ public class MySQLConnection
 		}
 	}
 
-	public static void addServer(final String ip, final String port, final String hostname, final int players, final int max_players,
-			final String mode, final String language, final String lagcomp,
-			final String mapname, final String version, final int weather, final String weburl, final String worldtime)
+	public static void addServer(final String ip, final String port, final String hostname, final int players, final int maxPlayers, final String mode,
+			final String language, final String lagcomp, final String map, final String version, final int weather, final String weburl, final String time)
 	{
 		try
 		{
@@ -71,7 +70,7 @@ public class MySQLConnection
 							+ "', "
 							+ players
 							+ ", "
-							+ max_players
+							+ maxPlayers
 							+ ", '"
 							+ mode
 							+ "', '"
@@ -79,7 +78,7 @@ public class MySQLConnection
 							+ "', '"
 							+ lagcomp
 							+ "', '"
-							+ mapname
+							+ map
 							+ "', '"
 							+ version
 							+ "', "
@@ -87,7 +86,7 @@ public class MySQLConnection
 							+ ", '"
 							+ weburl
 							+ "', '"
-							+ worldtime
+							+ time
 							+ "');");
 		}
 		catch (final SQLException exception)

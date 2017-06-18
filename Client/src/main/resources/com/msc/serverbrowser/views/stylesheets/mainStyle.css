@@ -1,8 +1,6 @@
 .scroll-pane
 {
-	-fx-focus-color: transparent;
-	-fx-faint-focus-color: transparent;
-	-fx-effect: null;
+	-fx-background-insets: 0
 }
 
 .scroll-bar .thumb
