@@ -14,25 +14,24 @@ import java.util.StringTokenizer;
 
 import com.msc.sampbrowser.util.Encoding;
 
+/**
+ * Provides Methods for retrieving information from a SA-MP Server.
+ *
+ * @author Marcel
+ * @see <a href="http://wiki.sa-mp.com/wiki/Query_Mechanism">Wiki SA-MP - Query Mechanism</a>
+ */
 public class SampQuery implements AutoCloseable
 {
-	private static final String PAKCET_GET_SERVERINFO = "i";
+	private static final String	PAKCET_GET_SERVERINFO			= "i";
+	private static final String	PACKET_GET_RULES				= "r";
+	private static final String	PACKET_MIRROR_CHARACTERS		= "p0101";
+	private static final String	PACKET_GET_BASIC_PLAYERINFO		= "c";
+	private static final String	PACKET_GET_DETAILED_PLAYERINFO	= "d";
 
-	private static final String PACKET_GET_BASIC_PLAYERINFO = "c";
-
-	private static final String PACKET_GET_DETAILED_PLAYERINFO = "d";
-
-	private static final String PACKET_GET_RULES = "r";
-
-	private static final String PACKET_MIRROR_CHARACTERS = "p0101";
-
-	private final DatagramSocket socket;
-
-	private final InetAddress server;
-
-	private final String serverAddress;
-
-	private final int serverPort;
+	private final DatagramSocket	socket;
+	private final InetAddress		server;
+	private final String			serverAddress;
+	private final int				serverPort;
 
 	/**
 	 * Configures the socket and the address that will be used for doing the queries.
@@ -47,7 +46,7 @@ public class SampQuery implements AutoCloseable
 	public SampQuery(final String serverAddress, final int serverPort, final int timeout) throws Exception
 	{
 		this.serverAddress = serverAddress;
-		this.server = InetAddress.getByName(this.serverAddress);
+		this.server = InetAddress.getByName(serverAddress);
 		socket = new DatagramSocket();
 		socket.setSoTimeout(timeout);
 		this.serverPort = serverPort;
@@ -199,6 +198,7 @@ public class SampQuery implements AutoCloseable
 					}
 					catch (final BufferUnderflowException exception)
 					{
+						exception.printStackTrace();
 						// TODO(MSC) Fix ...
 					}
 				}

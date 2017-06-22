@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.rmi.RemoteException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -12,6 +13,7 @@ import java.util.zip.GZIPInputStream;
 
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.entities.SampServerSerializeable;
+import com.msc.sampbrowser.util.ServerUtil;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.logging.Logging;
 
@@ -56,6 +58,9 @@ public class ServerListAllController extends ServerListControllerMain
 					servers.addAll(serializedServers.stream()
 							.map(SampServer::new)
 							.collect(Collectors.toSet()));
+					final HashSet<SampServer> toAdd = new HashSet<>();
+					toAdd.addAll(ServerUtil.getServers("0.3.7"));
+					servers.addAll(toAdd);
 				}
 				catch (final RemoteException e)
 				{
