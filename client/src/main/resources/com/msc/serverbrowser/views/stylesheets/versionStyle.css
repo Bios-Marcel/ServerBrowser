@@ -1,0 +1,30 @@
+.installEntry
+{
+	-fx-border-width: 0 0 1 0;
+	-fx-border-insets: 10;
+	-fx-border-color: #E2E2E1;
+	-fx-padding: 10;
+}
+
+.installLabel
+{
+	-fx-padding: 10;
+	-fx-font-size: 24;
+	-fx-pref-height: 23;
+	-fx-pref-width: 235;
+}
+
+.installButton
+{
+	-fx-background-color: #639BE0;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+	-fx-padding: 10;
+	-fx-font-size: 14;
+	-fx-font-weight: bold;
+	-fx-min-width: 100;
+	-fx-pref-width: 100;
+	-fx-content-display: center;
+	-fx-alignment: center;
+	-fx-text-fill: white;
+}

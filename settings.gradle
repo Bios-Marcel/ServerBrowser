@@ -1,0 +1,4 @@
+rootProject.name = 'SAMPServerBrowser'
+include 'client'
+include 'shared'
+include 'server'
