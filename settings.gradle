@@ -1,4 +1,4 @@
-rootProject.name = 'SAMPServerBrowser'
+rootProject.name = 'ServerBrowser'
 include 'client'
 include 'shared'
 include 'server'
