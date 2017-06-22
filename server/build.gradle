@@ -1,0 +1,10 @@
+apply plugin: 'application'
+
+mainClassName = "com.msc.serverbrowser.Server"
+
+dependencies {
+		compile 'mysql:mysql-connector-java:6.0.6'
+		compile 'org.kohsuke:github-api:1.85'
+		
+		compile project(':shared')
+}

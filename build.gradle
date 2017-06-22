@@ -1,0 +1,22 @@
+allprojects{
+	apply plugin: 'eclipse'
+	apply plugin: 'java'
+	
+  group = 'me.marcelschr.samp'
+  version = '1.0'
+
+	repositories {
+	    jcenter()
+	}
+
+	task wrapper(type: Wrapper) {
+	  	gradleVersion = '4.0' //version required
+	}
+}
+
+
+subprojects {
+    dependencies {
+        testCompile "junit:junit:4.12"
+    }
+}
