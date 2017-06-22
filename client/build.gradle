@@ -1,0 +1,17 @@
+apply plugin: 'application'
+
+mainClassName = "com.msc.serverbrowser.Client"
+
+dependencies {
+		compile 'com.github.sarxos:windows-registry-util:0.3'
+		compile 'org.xerial:sqlite-jdbc:3.18.0'
+		compile 'net.lingala.zip4j:zip4j:1.3.2'
+		
+		compile project(':shared')
+}
+
+jar {
+		//Exlude good OSes.
+    exclude('org/sqlite/native/**')   
+    include('org/sqlite/native/Windows/**')  
+}
