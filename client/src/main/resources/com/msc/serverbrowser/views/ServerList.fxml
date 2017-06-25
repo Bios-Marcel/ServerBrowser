@@ -46,8 +46,6 @@
 		maxWidth="1.7976931348623157E308"
 		minHeight="-Infinity"
 		minWidth="-Infinity"
-		onKeyReleased="#onTableViewKeyReleased"
-		onMouseReleased="#onTableViewMouseReleased"
 		prefHeight="100.0"
 		VBox.vgrow="ALWAYS">
 		<columns>

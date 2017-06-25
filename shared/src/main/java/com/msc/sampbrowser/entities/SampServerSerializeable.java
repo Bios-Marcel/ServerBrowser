@@ -27,14 +27,18 @@ public class SampServerSerializeable implements Serializable
 
 	private String version;
 
-	public SampServerSerializeable(final String hostname, final String address, final Integer port, final int players, final int maxPlayers,
-			final String mode, final String language,
-			final String lagcomp, final String website, final String version)
+	public SampServerSerializeable(final String address, final Integer port)
 	{
-		this.hostname = hostname;
 		this.address = address;
-		this.players = players;
 		this.port = port;
+	}
+
+	public SampServerSerializeable(final String hostname, final String address, final Integer port, final int players, final int maxPlayers,
+			final String mode, final String language, final String lagcomp, final String website, final String version)
+	{
+		this(address, port);
+		this.hostname = hostname;
+		this.players = players;
 		this.maxPlayers = maxPlayers;
 		this.mode = mode;
 		this.language = language;

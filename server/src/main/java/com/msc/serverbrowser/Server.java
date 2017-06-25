@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Timer;
@@ -213,6 +214,7 @@ public class Server
 		{
 			addToDatabaseFromList("http://monitor.sacnr.com/list/masterlist.txt");
 			addToDatabaseFromList("http://monitor.sacnr.com/list/hostedlist.txt");
+			addToDatabaseFromList("http://lists.sa-mp.com/0.3.7/servers");
 			setServerList();
 		}
 
@@ -236,51 +238,25 @@ public class Server
 					try (final SampQuery query = new SampQuery(data[0], Integer.parseInt(data[1])))
 					{
 						final Optional<String[]> infoOptional = query.getBasicServerInfo();
-						final Optional<String[][]> infoMoreOptional = query.getServersRules();
+						final Optional<Map<String, String>> serverRulesOptional = query.getServersRules();
 
-						if (infoOptional.isPresent() && infoMoreOptional.isPresent())
+						if (infoOptional.isPresent() && serverRulesOptional.isPresent())
 						{
 
 							final String[] info = infoOptional.get();
-							final String[][] infoMore = infoMoreOptional.get();
+							final Map<String, String> serverRules = serverRulesOptional.get();
 
-							String weburl = null;
-							String lagcomp = null;
-							String worldtime = null;
-							String version = null;
-							String map = null;
-							int weather = 0;
+							final String lagcomp = serverRules.get("lagcomp");
+							final String map = serverRules.get("map");
+							final String version = serverRules.get("version");
+							final String weather = serverRules.get("weather");
+							final String weburl = serverRules.get("weburl");
+							final String worldtime = serverRules.get("worldtime");
 
-							for (final String[] element : infoMore)
-							{
-								if (element[0].equals("lagcomp"))
-								{
-									lagcomp = element[1];
-								}
-								else if (element[0].equals("weburl"))
-								{
-									weburl = element[1];
-								}
-								else if (element[0].equals("version"))
-								{
-									version = element[1];
-								}
-								else if (element[0].equals("worldtime"))
-								{
-									worldtime = element[1];
-								}
-								else if (element[0].equals("weather"))
-								{
-									weather = Integer.parseInt(element[1]);
-								}
-								else if (element[0].equals("mapname"))
-								{
-									map = element[1];
-								}
-							}
+							final int players = Integer.parseInt(info[1]);
+							final int maxPlayers = Integer.parseInt(info[2]);
 
-							MySQLConnection.addServer(data[0], data[1], info[3], Integer.parseInt(info[1]), Integer
-									.parseInt(info[2]), info[4], info[5], lagcomp, map, version, weather, weburl, worldtime);
+							MySQLConnection.addServer(data[0], data[1], info[3], players, maxPlayers, info[4], info[5], lagcomp, map, version, weather, weburl, worldtime);
 							logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
 					}

@@ -2,8 +2,8 @@ allprojects{
 	apply plugin: 'eclipse'
 	apply plugin: 'java'
 	
-  group = 'me.marcelschr.samp'
-  version = '1.0'
+    group = 'me.marcelschr.samp'
+    version = '1.0'
 
 	repositories {
 	    jcenter()

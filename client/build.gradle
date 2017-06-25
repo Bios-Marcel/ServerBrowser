@@ -11,7 +11,7 @@ dependencies {
 }
 
 jar {
-		//Exlude good OSes.
+	//Exlude good OSes.
     exclude('org/sqlite/native/**')   
     include('org/sqlite/native/Windows/**')  
 }

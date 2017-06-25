@@ -52,7 +52,7 @@ public class MySQLConnection
 	}
 
 	public static void addServer(final String ip, final String port, final String hostname, final int players, final int maxPlayers, final String mode,
-			final String language, final String lagcomp, final String map, final String version, final int weather, final String weburl, final String time)
+			final String language, final String lagcomp, final String map, final String version, final String weather, final String weburl, final String time)
 	{
 		// TODO(MSC) Fix Encoding problems and escaping
 		try (final Statement statement = connect.createStatement())
