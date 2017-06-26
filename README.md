@@ -61,7 +61,7 @@ $ ./gradlew client:run
 
 Typically, when you import a gradle project into eclipse, it takes care of creating the eclipse project files via the plugin [buildship](https://github.com/eclipse/buildship).
 
-However, if you want to be extra sure, don´t want to use the plugin or need to fix some synchronisation issue between eclipse and gradle; It is useful to know how to manually do it:
+However, if you want to be extra sure, don´t want to use the plugin or need to fix some synchronization issue between eclipse and gradle; It is useful to know how to manually do it:
 
 From the parent project run:
 
