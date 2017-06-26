@@ -4,25 +4,42 @@ import java.util.Objects;
 
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * Special StringProperty Class, that automatically removes all LineBreaks of the content and trims
+ * it.
+ *
+ * @author Marcel
+ * @since 25.06.2017
+ */
 public class OneLineStringProperty extends SimpleStringProperty
 {
-	@Override
-	public void setValue(final String v)
+	public OneLineStringProperty()
 	{
-		final String toSet = replaceLineBreaks(v);
+		super();
+	}
+
+	public OneLineStringProperty(final String initialValue)
+	{
+		super(replaceLineBreaks(initialValue));
+	}
+
+	@Override
+	public void setValue(final String value)
+	{
+		final String toSet = replaceLineBreaks(value);
 		super.setValue(toSet);
 	}
 
 	@Override
-	public void set(final String newValue)
+	public void set(final String value)
 	{
-		final String toSet = replaceLineBreaks(newValue);
+		final String toSet = replaceLineBreaks(value);
 		super.set(toSet);
 	}
 
-	private String replaceLineBreaks(final String v)
+	private static String replaceLineBreaks(final String v)
 	{
-		final String toSet = Objects.isNull(v) ? null : v.replaceAll(System.lineSeparator(), " ");
+		final String toSet = Objects.isNull(v) ? null : v.replaceAll(System.lineSeparator(), " ").trim();
 		return toSet;
 	}
 }

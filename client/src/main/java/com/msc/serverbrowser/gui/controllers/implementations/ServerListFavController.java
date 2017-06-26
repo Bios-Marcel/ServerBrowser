@@ -7,8 +7,6 @@ import com.msc.serverbrowser.data.Favourites;
 
 public class ServerListFavController extends ServerListControllerMain
 {
-	// private static Thread queryThread;
-
 	@Override
 	public void initialize()
 	{

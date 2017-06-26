@@ -25,30 +25,24 @@ public class VersionChangeController implements ViewController
 {
 	private static final String NOT_INSTALLING = "NOT_INSTALLING";
 
-	public static final String OUTPUT_ZIP = System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
+	private static final String OUTPUT_ZIP = System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
 
 	private static String installing = NOT_INSTALLING;
 
 	@FXML
-	private Button buttonZeroThreeSeven;
-
+	private Button	buttonZeroThreeSeven;
 	@FXML
-	private Button buttonZeroZ;
-
+	private Button	buttonZeroZ;
 	@FXML
-	private Button buttonZeroX;
-
+	private Button	buttonZeroX;
 	@FXML
-	private Button buttonZeroD;
-
+	private Button	buttonZeroD;
 	@FXML
-	private Button buttonZeroE;
-
+	private Button	buttonZeroE;
 	@FXML
-	private Button buttonZeroC;
-
+	private Button	buttonZeroC;
 	@FXML
-	private Button buttonZeroA;
+	private Button	buttonZeroA;
 
 	private Button getButtonForVersion(final String version)
 	{
@@ -84,7 +78,7 @@ public class VersionChangeController implements ViewController
 			}
 			default:
 			{
-				return null;
+				throw new IllegalArgumentException("The passed version (" + version + ") doesn't exist or isn't supported.");
 			}
 		}
 	}
@@ -92,11 +86,11 @@ public class VersionChangeController implements ViewController
 	@Override
 	public void initialize()
 	{
-		final Optional<String> version = GTA.getInstalledVersion();
-		version.ifPresent(ver ->
+		final Optional<String> versionOptional = GTA.getInstalledVersion();
+		versionOptional.ifPresent(version ->
 		{
 			setAllButtonsDisabled(false);
-			final Button versionButton = getButtonForVersion(ver);
+			final Button versionButton = getButtonForVersion(version);
 
 			if (Objects.nonNull(versionButton))
 			{
@@ -122,9 +116,6 @@ public class VersionChangeController implements ViewController
 	private void clickVersion(final ActionEvent e)
 	{
 		final Button clicked = (Button) e.getTarget();
-
-		setAllButtonsDisabled(true);
-		clicked.setText("Installing ...");
 
 		if (clicked.equals(buttonZeroThreeSeven))
 		{
@@ -168,6 +159,10 @@ public class VersionChangeController implements ViewController
 
 			final Button oldVersionButton = getButtonForVersion(installedVersion.get());
 			final Button newVersionButton = getButtonForVersion(versionToBeInstalled);
+
+			setAllButtonsDisabled(true);
+			newVersionButton.setText("Installing ...");
+
 			final Thread thread = new Thread(() ->
 			{
 				Optional<File> downloadedFile = Optional.empty();

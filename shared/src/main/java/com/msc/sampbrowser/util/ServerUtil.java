@@ -5,17 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.msc.sampbrowser.entities.SampServer;
 
 public class ServerUtil
 {
-	public static Collection<SampServer> getServers(final String version)
+	public static List<SampServer> getServers(final String version)
 	{
-		final Set<SampServer> servers = new HashSet<>();
+		final List<SampServer> servers = new ArrayList<>();
 		try
 		{
 			final URLConnection openConnection = new URL("http://lists.sa-mp.com/" + version + "/servers").openConnection();
@@ -26,7 +25,11 @@ public class ServerUtil
 				while ((inputLine = in.readLine()) != null)
 				{
 					final String[] data = inputLine.split(":");
-					servers.add(new SampServer(data[0], Integer.parseInt(data[1])));
+					final SampServer server = new SampServer(data[0], Integer.parseInt(data[1]));
+					if (!servers.contains(server))
+					{
+						servers.add(server);
+					}
 				}
 			}
 		}
