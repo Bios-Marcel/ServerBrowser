@@ -1,3 +1,4 @@
+apply from : 'packager.gradle'
 apply plugin: 'application'
 
 mainClassName = "com.msc.serverbrowser.Server"

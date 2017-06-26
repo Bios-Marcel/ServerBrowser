@@ -1,0 +1,10 @@
+apply plugin: 'javafx-gradle-plugin'
+
+
+jfx {
+	verbose = true
+    mainClass = 'com.msc.serverbrowser.Server'
+    vendor = 'Bios-Marcel'
+    // Not sure how to start the server, why a username?
+    runAppParameter = "-u test -p test"
+}

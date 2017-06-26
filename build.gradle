@@ -1,3 +1,16 @@
+/*
+* Since both the client and the server needs this plugin, we set it up globally.
+* The 'javafx-gradle-plugin' can generate executable JARs, Exe, Deb, RPM and DMG files.
+*/
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
+    repositories {
+		jcenter()
+    }
+}
+
 allprojects{
 	apply plugin: 'eclipse'
 	apply plugin: 'java'
@@ -10,7 +23,7 @@ allprojects{
 	}
 
 	task wrapper(type: Wrapper) {
-	  	gradleVersion = '4.0' //version required
+	  	gradleVersion = '4.0'
 	}
 }
 
