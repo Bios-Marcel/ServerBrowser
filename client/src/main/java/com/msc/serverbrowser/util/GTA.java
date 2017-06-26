@@ -56,10 +56,10 @@ public class GTA
 		{
 			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName");
 		}
-		catch (final RegistryException e)
+		catch (final Exception exception)
 		{
-			Logging.logger.log(Level.WARNING, "Couldn't retrieve Username from registry.", e);
-			return "";
+			Logging.logger.log(Level.WARNING, "Couldn't retrieve Username from registry.", exception);
+			return "404 Name not found";
 		}
 	}
 

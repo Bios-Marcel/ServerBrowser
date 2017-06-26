@@ -73,10 +73,9 @@ public class Client extends Application
 	public void start(final Stage primaryStage)
 	{
 		instance = this;
-		checkOperatingSystemCompatibility();
+		establishConnection();
 		initClient();
 		loadUI(primaryStage);
-		establishConnection();
 
 		new Thread(() -> checkVersion()).start();
 	}
@@ -84,23 +83,26 @@ public class Client extends Application
 	/*
 	 * + Establishes the connection with the rmi server.
 	 */
-	private void establishConnection()
+	public void establishConnection()
 	{
-		try
+		if (Objects.isNull(remoteDataService) || Objects.isNull(remoteUpdateService))
 		{
-			registry = LocateRegistry.getRegistry(serverToConnectTo, 1099, new CustomRMIClientSocketFactory());
-			remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
-			remoteUpdateService = (UpdateServiceInterface) registry.lookup(UpdateServiceInterface.INTERFACE_NAME);
-
-			if (ClientProperties.getPropertyAsBoolean(Property.NOTIFY_SERVER_ON_STARTUP))
+			try
 			{
-				remoteDataService.tellServerThatYouUseTheApp(Locale.getDefault().toString());
+				registry = LocateRegistry.getRegistry(serverToConnectTo, 1099, new CustomRMIClientSocketFactory());
+				remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
+				remoteUpdateService = (UpdateServiceInterface) registry.lookup(UpdateServiceInterface.INTERFACE_NAME);
+
+				if (ClientProperties.getPropertyAsBoolean(Property.NOTIFY_SERVER_ON_STARTUP))
+				{
+					remoteDataService.tellServerThatYouUseTheApp(Locale.getDefault().toString());
+				}
 			}
-		}
-		catch (RemoteException | NotBoundException exception)
-		{
-			Logging.logger.log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
-			displayNoConnectionDialog();
+			catch (RemoteException | NotBoundException exception)
+			{
+				Logging.logger.log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
+				Platform.runLater(() -> displayNoConnectionDialog());
+			}
 		}
 	}
 
@@ -166,23 +168,6 @@ public class Client extends Application
 		catch (final Exception e)
 		{
 			Logging.logger.log(Level.SEVERE, "Couldn't load UI", e);
-			System.exit(0);
-		}
-	}
-
-	/**
-	 * Checks if the operating system is windows, if not, the application will shutdown.
-	 */
-	private void checkOperatingSystemCompatibility()
-	{
-		if (!OSUtil.isWindows())
-		{
-			final Alert alert = new Alert(AlertType.WARNING);
-			setAlertIcon(alert);
-			alert.setTitle("Launching Application");
-			alert.setHeaderText("Operating System not supported");
-			alert.setContentText("You seem to be not using windows, sorry, but this application does not support other systems than Windows.");
-			alert.showAndWait();
 			System.exit(0);
 		}
 	}

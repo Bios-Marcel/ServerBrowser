@@ -6,4 +6,6 @@ public interface ViewController
 	 * This method is called by the FXMLLoaderafter loading the FXML File.
 	 */
 	public void initialize();
+
+	void onClose();
 }

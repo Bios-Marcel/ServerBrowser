@@ -4,35 +4,35 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
 import com.msc.sampbrowser.util.Encoding;
 
+/**
+ * Provides Methods for retrieving information from a SA-MP Server.
+ *
+ * @author Marcel
+ * @see <a href="http://wiki.sa-mp.com/wiki/Query_Mechanism">Wiki SA-MP - Query Mechanism</a>
+ */
 public class SampQuery implements AutoCloseable
 {
-	private static final String PAKCET_GET_SERVERINFO = "i";
+	private static final String	PACKET_GET_SERVERINFO			= "i";
+	private static final String	PACKET_GET_RULES				= "r";
+	private static final String	PACKET_MIRROR_CHARACTERS		= "p0101";
+	private static final String	PACKET_GET_BASIC_PLAYERINFO		= "c";
+	private static final String	PACKET_GET_DETAILED_PLAYERINFO	= "d";
 
-	private static final String PACKET_GET_BASIC_PLAYERINFO = "c";
-
-	private static final String PACKET_GET_DETAILED_PLAYERINFO = "d";
-
-	private static final String PACKET_GET_RULES = "r";
-
-	private static final String PACKET_MIRROR_CHARACTERS = "p0101";
-
-	private final DatagramSocket socket;
-
-	private final InetAddress server;
-
-	private final String serverAddress;
-
-	private final int serverPort;
+	private final DatagramSocket	socket;
+	private final InetAddress		server;
+	private final String			serverAddress;
+	private final int				serverPort;
 
 	/**
 	 * Configures the socket and the address that will be used for doing the queries.
@@ -47,7 +47,7 @@ public class SampQuery implements AutoCloseable
 	public SampQuery(final String serverAddress, final int serverPort, final int timeout) throws Exception
 	{
 		this.serverAddress = serverAddress;
-		this.server = InetAddress.getByName(this.serverAddress);
+		this.server = InetAddress.getByName(serverAddress);
 		socket = new DatagramSocket();
 		socket.setSoTimeout(timeout);
 		this.serverPort = serverPort;
@@ -105,7 +105,7 @@ public class SampQuery implements AutoCloseable
 	 */
 	public Optional<String[]> getBasicServerInfo()
 	{
-		if (send(PAKCET_GET_SERVERINFO))
+		if (send(PACKET_GET_SERVERINFO))
 		{
 			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply))
@@ -164,12 +164,21 @@ public class SampQuery implements AutoCloseable
 	}
 
 	/**
-	 * Returns a multidimensional String array of basic player information.
-	 *
-	 * @return String[indexPlayer][indexData]:<br />
-	 *         Index Data 0: playername<br />
-	 *         Index Data 1: = score<br />
-	 * @see getDetailedPlayers
+	 * <p>
+	 * Returns a two dimensional String array of basic player information.
+	 * </p>
+	 * <p>
+	 * Every entry in the first dimension equals one player. If you were to retrieve one of those,
+	 * the rest would look the following:
+	 * </p>
+	 * <code>
+	 * String[] playerOne = basicInfo[0];<br>
+	 * String name = playerOne[0] //playername<br>
+	 * String score = playerOne[1] //score
+	 * </code>
+	 * 
+	 * @return a two dimensional array containg the basic player information
+	 * @see #getDetailedPlayerInfo()
 	 */
 	public Optional<String[][]> getBasicPlayerInfo()
 	{
@@ -184,23 +193,16 @@ public class SampQuery implements AutoCloseable
 
 				for (int i = 0; players.length > i; i++)
 				{
-					try
-					{
-						final byte len = buffer.get();
-						final byte[] playerName = new byte[len];
+					final byte len = buffer.get();
+					final byte[] playerName = new byte[len];
 
-						for (int j = 0; j < len; j++)
-						{
-							playerName[j] = buffer.get();
-						}
-
-						players[i][0] = new String(playerName);
-						players[i][1] = "" + buffer.getInt();
-					}
-					catch (final BufferUnderflowException exception)
+					for (int j = 0; j < len; j++)
 					{
-						// TODO(MSC) Fix ...
+						playerName[j] = buffer.get();
 					}
+
+					players[i][0] = new String(playerName);
+					players[i][1] = "" + buffer.getInt();
 				}
 				return Optional.of(players);
 			}
@@ -210,14 +212,22 @@ public class SampQuery implements AutoCloseable
 	}
 
 	/**
-	 * Returns a multidimensional String array of detailed player information.
-	 *
-	 * @return String[][]:<br />
-	 *         String[][0]:<br />
-	 *         players[0] = playerid<br />
-	 *         players[1] = playername<br />
-	 *         players[2] = score<br />
-	 * @see getBasicPlayers
+	 * <p>
+	 * Returns a two dimensional String array of detailed player information.
+	 * </p>
+	 * <p>
+	 * Every entry in the first dimension equals one player. If you were to retrieve one of those,
+	 * the rest would look the following:
+	 * </p>
+	 * <code>
+	 * String[] playerOne = basicInfo[0];<br>
+	 * String id = playerOne[0] //playerid<br>
+	 * String name = playerOne[1] //playername<br>
+	 * String score = playerOne[2] //score
+	 * </code>
+	 * 
+	 * @return a two dimensional array containg the detailed player information
+	 * @see #getBasicPlayerInfo()
 	 */
 	public Optional<String[][]> getDetailedPlayerInfo()
 	{
@@ -251,11 +261,11 @@ public class SampQuery implements AutoCloseable
 	}
 
 	/**
-	 * Returns a multidimensional String array of server rules.
+	 * Returns a Map containing all server rules. The Key is always the rules name.
 	 *
-	 * @return String[Rulename][Rulevalue]
+	 * @return a Map containing all server rules
 	 */
-	public Optional<String[][]> getServersRules()
+	public Optional<Map<String, String>> getServersRules()
 	{
 		if (send(PACKET_GET_RULES))
 		{
@@ -263,11 +273,11 @@ public class SampQuery implements AutoCloseable
 			if (Objects.nonNull(reply))
 			{
 				final ByteBuffer buffer = wrapReply(reply);
+				final Map<String, String> rules = new HashMap<>();
 
 				final short ruleCount = buffer.getShort();
-				final String[][] rules = new String[ruleCount][2];
 
-				for (int i = 0; i < rules.length; i++)
+				for (int i = 0; i < ruleCount; i++)
 				{
 					int len = buffer.get();
 					final byte[] ruleName = new byte[len];
@@ -285,21 +295,40 @@ public class SampQuery implements AutoCloseable
 						ruleValue[j] = buffer.get();
 					}
 
-					rules[i][0] = new String(ruleName);
-					rules[i][1] = new String(ruleValue);
+					rules.put(new String(ruleName), new String(ruleValue));
 				}
-
 				return Optional.of(rules);
 			}
 		}
 		return Optional.empty();
 	}
 
+	/**
+	 * <p>
+	 * Wraps the received bytes in a {@link ByteBuffer} for easier usage.
+	 * </p>
+	 * Contents of the byte array:
+	 * <ul>
+	 * <li>Byte 0 - 3: "SAMP"</li>
+	 * <li>Byte 4 - 7: IP</li>
+	 * <li>Byte 8 - 9: Port</li>
+	 * <li>Byte 10: Message Type</li>
+	 * <li>Byte 11+: Data</li>
+	 * </ul>
+	 * <p>
+	 * Because the Data contains multiple informations that we do not care for as of now, we are
+	 * setting the byte buffers initial position to eleven.
+	 * </p>
+	 * 
+	 * @param the
+	 *            byte array to be wrapped
+	 * @return the {@link ByteBuffer} that wraps the byte array
+	 */
 	private ByteBuffer wrapReply(final byte[] reply)
 	{
 		final ByteBuffer buffer = ByteBuffer.wrap(reply);
 		buffer.order(ByteOrder.LITTLE_ENDIAN);
-		buffer.position(11); // Ignoring trash
+		buffer.position(11);
 		return buffer;
 	}
 
@@ -392,7 +421,8 @@ public class SampQuery implements AutoCloseable
 	{
 		try
 		{
-			final byte[] receivedData = new byte[3072];
+			// This is enough for at least 100 players information.
+			final byte[] receivedData = new byte[14000];
 			final DatagramPacket receivedPacket = new DatagramPacket(receivedData, receivedData.length);
 			socket.receive(receivedPacket);
 			return receivedPacket.getData();

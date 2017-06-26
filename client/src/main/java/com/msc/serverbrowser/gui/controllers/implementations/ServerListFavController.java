@@ -25,4 +25,10 @@ public class ServerListFavController extends ServerListControllerMain
 		addToFavouritesMenuItem.setVisible(false);
 		removeFromFavouritesMenuItem.setVisible(true);
 	}
+
+	@Override
+	public void onClose()
+	{
+		super.onClose();
+	}
 }

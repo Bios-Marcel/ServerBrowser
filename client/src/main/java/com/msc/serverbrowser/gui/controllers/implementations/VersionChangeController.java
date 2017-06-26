@@ -231,4 +231,10 @@ public class VersionChangeController implements ViewController
 		buttonZeroC.setDisable(enabled);
 		buttonZeroA.setDisable(enabled);
 	}
+
+	@Override
+	public void onClose()
+	{
+		// Do nothing
+	}
 }

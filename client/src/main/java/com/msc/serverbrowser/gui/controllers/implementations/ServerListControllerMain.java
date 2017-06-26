@@ -3,10 +3,9 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -21,6 +20,7 @@ import com.msc.serverbrowser.util.GTA;
 import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -45,10 +45,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 public abstract class ServerListControllerMain implements ViewController
 {
@@ -115,8 +112,8 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		final FilteredList<SampServer> filteredServers = new FilteredList<>(servers);
 		filteredServers.predicateProperty().bind(filterProperty);
-
 		final SortedList<SampServer> sortedServers = new SortedList<>(filteredServers);
+
 		serverTable.comparatorProperty().addListener(changed ->
 		{
 			sortedServers.setComparator(serverTable.comparatorProperty().get());
@@ -125,13 +122,27 @@ public abstract class ServerListControllerMain implements ViewController
 
 		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
 
+		setPlayerComparator();
+		addServerUpdateListener();
+		setTableRowFactory();
+		serverTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+		serverTable.setItems(sortedServers);
+	}
+
+	private void setPlayerComparator()
+	{
 		columnPlayers.setComparator((o1, o2) ->
 		{
 			final int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));
 			final int p2 = Integer.parseInt(o2.replaceAll("[/](.*)", ""));
+
 			return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
 		});
+	}
 
+	private void setTableRowFactory()
+	{
 		serverTable.setRowFactory(facotry ->
 		{
 			final TableRow<SampServer> row = new TableRow<>();
@@ -169,10 +180,31 @@ public abstract class ServerListControllerMain implements ViewController
 
 			return row;
 		});
+	}
 
-		serverTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+	private void addServerUpdateListener()
+	{
+		serverTable.getSelectionModel().getSelectedCells().addListener((InvalidationListener) changed ->
+		{
+			if (serverTable.getSelectionModel().getSelectedIndices().size() == 1)
+			{
+				updateServerInfo(serverTable.getSelectionModel().getSelectedItem());
+			}
+			else
+			{
+				playerTable.getItems().clear();
+				playerTable.setPlaceholder(new Label(""));
+				serverAddress.setText("");
+				serverLagcomp.setText("");
+				serverPing.setText("");
+				serverPassword.setText("");
 
-		serverTable.setItems(sortedServers);
+				if (Objects.nonNull(serverInfoUpdateThread))
+				{
+					serverInfoUpdateThread.interrupt();
+				}
+			}
+		});
 	}
 
 	@FXML
@@ -181,7 +213,7 @@ public abstract class ServerListControllerMain implements ViewController
 		if (Objects.nonNull(addressTextField.getText()))
 		{
 			final String[] ipAndPort = addressTextField.getText().split("[:]");
-			if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
+			if (ipAndPort.length == 2 && validatePort(ipAndPort[1]))
 			{
 				final SampServer newServer = Favourites.addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 				if (!servers.contains(newServer))
@@ -205,7 +237,11 @@ public abstract class ServerListControllerMain implements ViewController
 	private void onClickConnect()
 	{
 		final String[] ipAndPort = addressTextField.getText().split("[:]");
-		if (ipAndPort.length == 2 && validateServerAddress(ipAndPort[0]) && validatePort(ipAndPort[1]))
+		if (ipAndPort.length == 1)
+		{
+			tryToConnect(ipAndPort[0], 7777);
+		}
+		else if (ipAndPort.length == 2 && validatePort(ipAndPort[1]))
 		{
 			tryToConnect(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 		}
@@ -217,19 +253,6 @@ public abstract class ServerListControllerMain implements ViewController
 			alert.setContentText("The address that you have entered, doesn't seem to be valid.");
 
 			alert.showAndWait();
-		}
-	}
-
-	private boolean validateServerAddress(final String address)
-	{
-		try
-		{
-			InetAddress.getByName(address);
-			return true;
-		}
-		catch (final UnknownHostException e)
-		{
-			return false;
 		}
 	}
 
@@ -247,37 +270,9 @@ public abstract class ServerListControllerMain implements ViewController
 			final int portNumber = Integer.parseInt(port);
 			return portNumber >= 0 && portNumber <= 65535;
 		}
-		catch (final NumberFormatException e)
+		catch (@SuppressWarnings("unused") final NumberFormatException exception)
 		{
 			return false;
-		}
-	}
-
-	@FXML
-	protected void onTableViewMouseReleased(final MouseEvent clicked)
-	{
-		menu.hide();
-
-		final List<SampServer> serverList = serverTable.getSelectionModel().getSelectedItems();
-
-		if (!serverList.isEmpty())
-		{
-			if (clicked.getButton().equals(MouseButton.PRIMARY))
-			{
-				updateServerInfo(serverList.get(0));
-			}
-		}
-	}
-
-	@FXML
-	protected void onTableViewKeyReleased(final KeyEvent released)
-	{
-		final SampServer server = serverTable.getSelectionModel().getSelectedItem();
-		final KeyCode usedKey = released.getCode();
-
-		if (usedKey.equals(KeyCode.DOWN) || usedKey.equals(KeyCode.KP_DOWN) || usedKey.equals(KeyCode.KP_UP) || usedKey.equals(KeyCode.UP))
-		{
-			updateServerInfo(server);
 		}
 	}
 
@@ -427,7 +422,7 @@ public abstract class ServerListControllerMain implements ViewController
 				GTA.connectToServer(address + ":" + port);
 			}
 		}
-		catch (final Exception e)
+		catch (@SuppressWarnings("unused") final Exception exception)
 		{
 			final Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Connect to Server");
@@ -462,44 +457,24 @@ public abstract class ServerListControllerMain implements ViewController
 
 				final Optional<String[]> infoOptional = query.getBasicServerInfo();
 
-				final Optional<String[][]> infoMoreOptional = query.getServersRules();
+				final Optional<Map<String, String>> serverRulesOptional = query.getServersRules();
 
-				if (infoOptional.isPresent() && infoMoreOptional.isPresent())
+				if (infoOptional.isPresent() && serverRulesOptional.isPresent())
 				{
 					final String[] info = infoOptional.get();
-					final String[][] infoMore = infoMoreOptional.get();
+					final Map<String, String> serverRules = serverRulesOptional.get();
 
 					final int players = Integer.parseInt(info[1]);
 					final int maxPlayers = Integer.parseInt(info[2]);
-
-					String weburl = null;
-					String lagcomp = null;
-					String version = null;
-
-					for (final String[] element : infoMore)
-					{
-						if (element[0].equals("lagcomp"))
-						{
-							lagcomp = element[1];
-						}
-						else if (element[0].equals("weburl"))
-						{
-							weburl = element[1];
-						}
-						else if (element[0].equals("version"))
-						{
-							version = element[1];
-						}
-					}
 
 					server.setPlayers(players);
 					server.setMaxPlayers(maxPlayers);
 					server.setHostname(info[3]);
 					server.setMode(info[4]);
 					server.setLanguage(info[5]);
-					server.setWebsite(weburl);
-					server.setVersion(version);
-					server.setLagcomp(lagcomp);
+					server.setWebsite(serverRules.get("weburl"));
+					server.setVersion(serverRules.get("version"));
+					server.setLagcomp(serverRules.get("lagcomp"));
 
 					final ObservableList<Player> playerList = FXCollections.observableArrayList();
 
@@ -541,7 +516,7 @@ public abstract class ServerListControllerMain implements ViewController
 					Favourites.updateServerData(server);
 				}
 			}
-			catch (final Exception e)
+			catch (@SuppressWarnings("unused") final Exception exception)
 			{
 				Platform.runLater(() ->
 				{
@@ -569,5 +544,11 @@ public abstract class ServerListControllerMain implements ViewController
 		serverCount.setText(serverTable.getItems().size() + "");
 		playerCount.setText(playersPlaying + "");
 		slotCount.setText(maxSlots - playersPlaying + "");
+	}
+
+	@Override
+	public void onClose()
+	{
+		serverInfoUpdateThread.interrupt();
 	}
 }

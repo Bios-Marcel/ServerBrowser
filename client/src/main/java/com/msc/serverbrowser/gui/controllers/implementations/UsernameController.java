@@ -98,4 +98,10 @@ public class UsernameController implements ViewController
 		GTA.applyUsername();
 		nameList.setItems(FXCollections.observableArrayList(PastUsernames.getPastUsernames()));
 	}
+
+	@Override
+	public void onClose()
+	{
+		//Do nothing
+	}
 }

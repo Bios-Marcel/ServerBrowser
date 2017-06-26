@@ -51,20 +51,11 @@ public class Favourites
 
 			query.getServersRules().ifPresent(rules ->
 			{
-				for (final String[] rule : rules)
-				{
-					if (rule[0].equals("weburl"))
-					{
-						server.setWebsite(rule[1]);
-					}
-					else if (rule[0].equals("version"))
-					{
-						server.setVersion(rule[1]);
-					}
-				}
+				server.setWebsite(rules.get("weburl"));
+				server.setVersion(rules.get("version"));
 			});
 		}
-		catch (final Exception e)
+		catch (@SuppressWarnings("unused") final Exception exception)
 		{
 			Logging.logger.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.");
 			server.setHostname("Unknown");
@@ -91,10 +82,8 @@ public class Favourites
 		if (!isFavourite(server))
 		{
 			String statement = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
-			statement = MessageFormat
-					.format(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server
-							.getPlayers().toString(), server.getMaxPlayers()
-									.toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
+			statement = escapeFormat(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
+					.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
 			SQLDatabase.getInstance().execute(statement);
 		}
 		else
@@ -124,11 +113,19 @@ public class Favourites
 	public static void updateServerData(final SampServer server)
 	{
 		String statement = "UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
-		statement = MessageFormat
-				.format(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
-						.getMaxPlayers().toString(), server
-								.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
+		statement = escapeFormat(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server.getMaxPlayers()
+				.toString(), server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
 		SQLDatabase.getInstance().execute(statement);
+	}
+
+	private static String escapeFormat(final String string, final String... replacements)
+	{
+		final String[] replacementsNew = new String[replacements.length];
+		for (int i = 0; i < replacements.length; i++)
+		{
+			replacementsNew[i] = replacements[i].replace("'", "''");
+		}
+		return MessageFormat.format(string, replacementsNew);
 	}
 
 	/**

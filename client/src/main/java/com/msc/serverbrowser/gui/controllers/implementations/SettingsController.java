@@ -49,4 +49,10 @@ public class SettingsController implements ViewController
 			ClientProperties.setProperty(property, newValue);
 		});
 	}
+
+	@Override
+	public void onClose()
+	{
+		//Do nothing
+	}
 }

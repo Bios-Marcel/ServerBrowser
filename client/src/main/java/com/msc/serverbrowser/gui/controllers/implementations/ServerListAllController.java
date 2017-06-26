@@ -20,6 +20,8 @@ import javafx.scene.control.Label;
 
 public class ServerListAllController extends ServerListControllerMain
 {
+	private Thread serverLookup;
+
 	private static Object deserialzieAndDecompress(final byte[] data)
 	{
 		try (final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
@@ -44,8 +46,9 @@ public class ServerListAllController extends ServerListControllerMain
 
 		serverTable.setPlaceholder(new Label("Loading server list, please wait a moment."));
 
-		final Thread thread = new Thread(() ->
+		serverLookup = new Thread(() ->
 		{
+
 			if (Objects.nonNull(Client.remoteDataService))
 			{
 				try
@@ -57,9 +60,9 @@ public class ServerListAllController extends ServerListControllerMain
 							.map(SampServer::new)
 							.collect(Collectors.toSet()));
 				}
-				catch (final RemoteException e)
+				catch (final RemoteException exception)
 				{
-					Logging.logger.log(Level.SEVERE, "Couldn't retrieve data from server.", e);
+					Logging.logger.log(Level.SEVERE, "Couldn't retrieve data from server.", exception);
 					Platform.runLater(() -> serverTable.setPlaceholder(new Label("Server connection couldn't be established.")));
 				}
 			}
@@ -70,7 +73,8 @@ public class ServerListAllController extends ServerListControllerMain
 
 			Platform.runLater(() -> updateGlobalInfo());
 		});
-		thread.start();
+
+		serverLookup.start();
 	}
 
 	@Override
@@ -80,5 +84,12 @@ public class ServerListAllController extends ServerListControllerMain
 
 		addToFavouritesMenuItem.setVisible(true);
 		removeFromFavouritesMenuItem.setVisible(false);
+	}
+
+	@Override
+	public void onClose()
+	{
+		super.onClose();
+		serverLookup.interrupt();
 	}
 }

@@ -4,19 +4,18 @@ import java.util.Objects;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class SampServer
 {
-	private final StringProperty	hostnameProperty		= new SimpleStringProperty();
-	private final StringProperty	addressProperty			= new SimpleStringProperty();
-	private final StringProperty	actualPlayersProperty	= new SimpleStringProperty();
-	private final StringProperty	modeProperty			= new SimpleStringProperty();
-	private final StringProperty	languageProperty		= new SimpleStringProperty();
-	private final StringProperty	lagcompProperty			= new SimpleStringProperty();
-	private final StringProperty	websiteProperty			= new SimpleStringProperty();
-	private final StringProperty	versionProperty			= new SimpleStringProperty();
+	private final StringProperty	hostnameProperty		= new OneLineStringProperty();
+	private final StringProperty	addressProperty			= new OneLineStringProperty();
+	private final StringProperty	actualPlayersProperty	= new OneLineStringProperty();
+	private final StringProperty	modeProperty			= new OneLineStringProperty();
+	private final StringProperty	languageProperty		= new OneLineStringProperty();
+	private final StringProperty	lagcompProperty			= new OneLineStringProperty();
+	private final StringProperty	websiteProperty			= new OneLineStringProperty();
+	private final StringProperty	versionProperty			= new OneLineStringProperty();
 
 	private final IntegerProperty	portProperty		= new SimpleIntegerProperty();
 	private final IntegerProperty	playersProperty		= new SimpleIntegerProperty();
