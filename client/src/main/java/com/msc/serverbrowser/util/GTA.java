@@ -65,7 +65,6 @@ public class GTA
 
 	// Can't be null, Eclipse just doesn't acknowledge the Objects.nonNull method as a valid
 	// nullcheck
-	@SuppressWarnings("null")
 	public static Optional<String> getGtaPath()
 	{
 		String property = ClientProperties.getPropertyAsString(Property.SAMP_PATH);

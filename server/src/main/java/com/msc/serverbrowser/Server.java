@@ -284,9 +284,10 @@ public class Server
 							logger.log(Level.INFO, "Added Server: " + inputLine);
 						}
 					}
-					catch (@SuppressWarnings("unused") final Exception exception)
+					catch (final Exception exception)
 					{
-						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine);
+						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine, exception
+								);
 					}
 				}
 			}
