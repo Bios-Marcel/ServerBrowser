@@ -1,7 +1,0 @@
-apply plugin: 'javafx-gradle-plugin'
-
-
-jfx {
-    mainClass = 'com.msc.serverbrowser.Client'
-    vendor = 'Bios-Marcel'
-}
