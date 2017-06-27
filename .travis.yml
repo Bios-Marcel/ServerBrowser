@@ -10,10 +10,3 @@ matrix:
       dist: trusty
       jdk: oraclejdk8
       env: FAILURES_ALLOWED=false
-    - os: linux
-      sudo: false
-      jdk: oraclejdk8
-      env: FAILURES_ALLOWED=true
-      # older than 1.8.0_40 will fail compiling since javafx-gradle-plugin 8.8.0
-  allow_failures:
-    - env: FAILURES_ALLOWED=true
