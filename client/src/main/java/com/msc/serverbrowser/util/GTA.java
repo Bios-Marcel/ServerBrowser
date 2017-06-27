@@ -35,7 +35,7 @@ public class GTA {
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try {
 			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName",
-					usernameProperty().get());
+					usernameProperty.get());
 		} catch (final RegistryException e) {
 			Logging.logger.log(Level.WARNING, "Couldn't set username.", e);
 		}

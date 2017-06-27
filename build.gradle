@@ -1,35 +1,58 @@
 /*
+* # TODO
+* 
+* - debug and release profile
+* - JFX build
+* - travis ci
+* - shadow to proguard to jfx
+*
+*/
+
+/*
 * Since both the client and the server needs this plugin, we set it up globally.
 * The 'javafx-gradle-plugin' can generate executable JARs, Exe, Deb, RPM and DMG files.
 */
 buildscript {
-    dependencies {
-        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
-    }
-    repositories {
+	dependencies {
+		classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.2'
+		classpath 'net.sf.proguard:proguard-gradle:5.3.3'
+		classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+	}
+	repositories {
 		jcenter()
-    }
+	}
 }
 
 allprojects{
 	apply plugin: 'eclipse'
 	apply plugin: 'java'
 	
-    group = 'me.marcelschr.samp'
-    version = '1.0'
+	group = 'me.marcelschr.samp'
+	version = '1.0'
 
 	repositories {
-	    jcenter()
+		jcenter()
 	}
 
 	task wrapper(type: Wrapper) {
-	  	gradleVersion = '4.0'
+		gradleVersion = '4.0'
 	}
 }
 
 
 subprojects {
-    dependencies {
-        testCompile "junit:junit:4.12"
-    }
+	apply plugin: 'com.github.johnrengelman.shadow'
+
+	dependencies {
+		testCompile "junit:junit:4.12"
+	}
+
+	shadowJar {
+		exclude 'org.sqlite.native'
+		include 'org.sqlite.native.Windows'
+	}
+
+	task optimize(type: proguard.gradle.ProGuardTask) {
+		//TODO take shadow jar and optimize
+	}
 }
