@@ -1,5 +1,6 @@
 before_install:
  - chmod +x gradlew
+ - apt-get install openjfx
 language: java
 jdk:
   - oraclejdk8
