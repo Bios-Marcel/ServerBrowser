@@ -31,7 +31,7 @@ public class UsernameController implements ViewController
 	@Override
 	public void initialize()
 	{
-		usernameTextField.textProperty().bindBidirectional(GTA.usernameProperty());
+		usernameTextField.textProperty().bindBidirectional(GTA.usernameProperty);
 
 		nameList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 

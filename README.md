@@ -28,16 +28,16 @@ ServerBrowser			The parent project
 
 To see which tasks are available, run:
 
-__ on Unix:__
+**on Unix:**
 
 ``` shell
-$ ./gradlew task
+$ ./gradlew tasks
 ```
 
-__ on Window:__
+**on Windows:**
 
 ``` shell
-$ ./gradlew.bat task
+$ ./gradlew.bat tasks
 ```
 
 The first time you execute __gradlew__ (gradle wrapper) it will download a local copy of gradle into the project folder __.gradle__. This will not be committed to version control.
@@ -50,13 +50,19 @@ To run tasks on the subprojects, you can either __cd__ into the subproject and r
 
 ``` shell
 $ cd client
-$ ./gradlew run
+$ ../gradlew run
 ```
 
 Or run it from the parent project by prefixing the task with the subprojects name and a ":" (colon).
 
 ``` shell
 $ ./gradlew client:run
+```
+
+Assemble and test the build outputs. You will find the results in the __build__ folders of __client__ and __server__.
+
+``` shell
+$ ./gradlew build
 ```
 
 ### Syncing gradle with Eclipse
@@ -73,11 +79,104 @@ $ ./gradlew eclipseClean eclipse
 
 Eclipse will instantly reload the fresh project settings files.
 
+### Pipeline
+
+__ServerBrowser__ utilizes advanced build techniques in order to assemble and optimize the output. The goal is to build the smallest possible 'self-contained' executable for Windows for the client. __shared__ is simply a library project and as such produces a JAR and the server get assembled to a distribution ZIP with executable scripts for all platforms. 
+
+__self-contained__ in this context means the JVM is bundled with the output.
+
+In order to achieve this the following 3 step process is used:
+
+1. Put all build outputs into a single JAR (fat JAR), including (transitive) dependencies.
+2. Optimize, shrink and obfuscate the fat JAR.
+3. Bundle the optimized JAR with a JVM and build a native container around them (exe/deb).
+
+These steps map to these tools:
+
+1. [Gradle Shadow Plugin](http://imperceptiblethoughts.com/shadow/#introduction)
+2. [Proguard](https://www.guardsquare.com/en/proguard/manual/gradle)
+3. [javapackager](https://github.com/FibreFoX/javafx-gradle-plugin) + [JavaFX-Gradle-Plugin](https://github.com/FibreFoX/javafx-gradle-plugin)
+
+Our build scripts are largely glue around those tools.
+
+### Reflection and Resources with Proguard
+
+We use [Proguard](https://www.guardsquare.com/en/proguard/manual/introduction) to optimized the output JAR. This means that reflection and resource loading need to be handled with care.
+
+#### Changing Proguard config and looking at optimized stacktraces
+
+You can change the file __proguard.pro__ in your favorite editor directly, or use the ProguardGUI from the Proguard project.
+
+```shell
+$ ./gradlew client:runProguardGui
+```
+
+If you need to de-obfuscate a stacktrace from the optimized version of the client, you can use the __ReTrace__ tab of the ProguardGui.
+
+TODO(bugabinga): Add task to start ReTrace directly.
+
+#### Reflection
+
+First of all; __don´t use reflection!__ It´s performance is horrible and the runtime behavior hard to predict.
+
+If you absolutely have to have reflection, you need to mark classes that get accessed at runtime via reflection in the __proguarg.pro__ config file.
+
+To learn how to do this read the intro about reflections.
+* [in the official documentation](https://www.guardsquare.com/en/proguard/manual/introduction) 
+* [the keep options documentation](https://www.guardsquare.com/en/proguard/manual/usage#keepoptions)
+
+Pay special attention to the "Keep option modifiers" in order to at least __allowshrinking__ and __allowoptimization__ if possible.
+
+#### Resources
+
+If resources like images need to be loaded in the code, make sure to never hard-code the paths which contain package names because those get rewritten during optimization.
+
+**Example bad:**
+
+```
+TODO
+```
+
+**Example good:**
+
+```
+TODO
+```
+
+#### Running optimized JAR
+
+In order to test the optimized client, simply run:
+
+``` shell
+$ ./gradlew client:runOptimized
+```
+
+This will optimize the output JAR and run it. This makes it easy to test new __proguard.pro__ configs.
+
 ## Troubleshooting
 
 If your Client isn't able to connect to the server anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).
 
 The second thing you might want to check, is your firewall. Make sure you haven't blocked port 1099 or the application itself.
+
+### Proguard Errors
+
+```
+Warning: there were 1 kept classes and class members that were remapped anyway.
+         You should adapt your configuration or edit the mapping file.
+         If you are sure this remapping won't hurt, you could try your luck
+         using the '-ignorewarnings' option.
+         (http://proguard.sourceforge.net/manual/troubleshooting.html#mappingconflict1)
+```
+
+This most likely means, that new classes were added to the __keep__ list of proguard, but they are still referenced as __obfuscated__ in __proguard.map__.
+
+Run __clean__ to reset the file and build again.
+
+``` shell
+$ ./gradlew clean
+```
+
 
 ## You need help?
 [Send me an E-Mail](mailto:marceloschr@gmail.com)
