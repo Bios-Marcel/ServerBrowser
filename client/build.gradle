@@ -1,3 +1,20 @@
+/*
+* The 'javafx-gradle-plugin' can generate executable JARs, exe, deb, RPM and DMG files.
+* Shadow generates a fat JAR.
+* Proguard is an optimizer.
+*/
+buildscript {
+	dependencies {
+		classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.2'
+		classpath 'net.sf.proguard:proguard-gradle:5.3.3'
+		classpath 'net.sf.proguard:proguard-gui:5.3.3'
+		classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+	}
+	repositories {
+		jcenter()
+	}
+}
+
 apply plugin: 'application'
 
 mainClassName = "com.msc.serverbrowser.Client"
@@ -10,8 +27,67 @@ dependencies {
 		compile project(':shared')
 }
 
-jar {
-	//Exlude good OSes.
-    exclude('org/sqlite/native/**')   
-    include('org/sqlite/native/Windows/**')  
+apply plugin: 'com.github.johnrengelman.shadow'
+shadowJar {
+	//Merges all service file under "META-INF/services" to one
+	mergeServiceFiles()
+	
+	//this restricts which JARs are bundled. needs to be seen if necessary
+	//configurations = [project.configurations.compile]
+	
+	/*
+	* WARNING! Changes to excludes/includes only seem to take effect after a "clean" with gradle.
+	* I am not sure where the bug lies, but this should not happen with gradle...
+	*/
+	//Excluding binary stuff for non-Windows platform
+	exclude 'org/sqlite/native/Linux/**'
+	exclude 'org/sqlite/native/FreeBSD/**'
+	exclude 'org/sqlite/native/Mac/**'
+	//Theoretically, in a distant future, one could kill 32bit support...
+	//exclude 'org/sqlite/native/Windows/x86/**'
+
+	//maven adds junk into the "META-INF/maven" folder which is useful for libraries, but not for apps,
+	//since these are typically not consumed by other projects.
+	exclude 'META-INF/maven/**'
+}
+
+task optimize(type: proguard.gradle.ProGuardTask, dependsOn: 'shadowJar') {
+	//The input jar that shall be optimized. We use the shadow jar, because it has all the code with 
+	//dependencies inside and so gives a lot of code to work with for proguard
+	injars "${libsDir}/${shadowJar.baseName}-${shadowJar.version}-${shadowJar.classifier}.jar"
+	outjars "${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar"
+
+	configuration 'proguard.pro'
+}
+
+task runOptimized(type: JavaExec, dependsOn: 'optimize') {
+	main = mainClassName
+	classpath = files("${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar")
+}
+
+task cleanProguardMap {
+	description 'Cleaning the Proguard obfuscation map!'
+	doLast {
+		//Clear the file. DO NOT DELETE IT! proguard assumes it exists
+		file('proguard.map').write ''
+	}
+}
+clean.dependsOn cleanProguardMap
+
+task runProguardGui(type: JavaExec) {
+	classpath buildscript.configurations.classpath
+	main 'proguard.gui.ProGuardGUI'
+	//speed up the shitty intro animation	
+	jvmArgs '-Dsun.java2d.opengl=true'
+	//preload our config file
+	args 'proguard.pro'
+}
+
+apply plugin: 'javafx-gradle-plugin'
+jfx {
+    mainClass = mainClassName
+    vendor = projectVendor
+    
+    //precompiles the CSS to binary. Useful performance gain, if the CSS files are not modified during runtime
+    css2bin = true
 }
