@@ -3,27 +3,7 @@
 * 
 * - debug and release profile
 * - JFX build
-* - travis-ci
-* - shadow to proguard to jfx
-* - extract commonalities of build script between client and server
 */
-
-/*
-* Since both the client and the server needs the javafx plugin, we set it up globally.
-* The 'javafx-gradle-plugin' can generate executable JARs, exe, deb, RPM and DMG files.
-* The same is true for proguard (optimizer) and shadow (fat JAR).
-*/
-buildscript {
-	dependencies {
-		classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.2'
-		classpath 'net.sf.proguard:proguard-gradle:5.3.3'
-		classpath 'net.sf.proguard:proguard-gui:5.3.3'
-		classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
-	}
-	repositories {
-		jcenter()
-	}
-}
 
 /*
 * The most basic setting which apply to ALL projects (including the root) go here:
@@ -47,21 +27,6 @@ subprojects {
 	dependencies {
 		testCompile "junit:junit:4.12"
 	}
-}
-
-task cleanProguardMap(type: Delete) {
-	def conf = new File(proguardMap)
-	//Clear the file. DO NOT DELETE IT! proguard assumes it exists
-	conf.write ''
-}
-
-task runProguardGui(type: JavaExec) {
-	classpath buildscript.configurations.classpath
-	main 'proguard.gui.ProGuardGUI'
-	//speed up the shitty intro animation	
-	jvmArgs '-Dsun.java2d.opengl=true'
-	//preload our config file
-	args proguardConf
 }
 
 task wrapper(type: Wrapper) {

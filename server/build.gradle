@@ -8,19 +8,3 @@ dependencies {
 		
 		compile project(':shared')
 }
-
-apply plugin: 'com.github.johnrengelman.shadow'
-shadowJar {
-	//this restricts which JARs are bundled. needs to be seen if necessary
-	//configurations = [project.configurations.compile]
-}
-
-task optimize(type: proguard.gradle.ProGuardTask) {
-	//TODO take shadow jar and optimize
-}
-
-apply plugin: 'javafx-gradle-plugin'
-jfx {
-    mainClass = mainClassName
-    vendor = projectVendor
-}

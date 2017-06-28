@@ -1,3 +1,20 @@
+/*
+* The 'javafx-gradle-plugin' can generate executable JARs, exe, deb, RPM and DMG files.
+* Shadow generates a fat JAR.
+* Proguard is an optimizer.
+*/
+buildscript {
+	dependencies {
+		classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.2'
+		classpath 'net.sf.proguard:proguard-gradle:5.3.3'
+		classpath 'net.sf.proguard:proguard-gui:5.3.3'
+		classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+	}
+	repositories {
+		jcenter()
+	}
+}
+
 apply plugin: 'application'
 
 mainClassName = "com.msc.serverbrowser.Client"
@@ -40,13 +57,30 @@ task optimize(type: proguard.gradle.ProGuardTask, dependsOn: 'shadowJar') {
 	injars "${libsDir}/${shadowJar.baseName}-${shadowJar.version}-${shadowJar.classifier}.jar"
 	outjars "${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar"
 
-	configuration "../${proguardConf}"
+	configuration 'proguard.pro'
 }
 
 task runOptimized(type: JavaExec, dependsOn: 'optimize') {
 	main = mainClassName
-	println("${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar")
 	classpath = files("${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar")
+}
+
+task cleanProguardMap {
+	description 'Cleaning the Proguard obfuscation map!'
+	doLast {
+		//Clear the file. DO NOT DELETE IT! proguard assumes it exists
+		file('proguard.map').write ''
+	}
+}
+clean.dependsOn cleanProguardMap
+
+task runProguardGui(type: JavaExec) {
+	classpath buildscript.configurations.classpath
+	main 'proguard.gui.ProGuardGUI'
+	//speed up the shitty intro animation	
+	jvmArgs '-Dsun.java2d.opengl=true'
+	//preload our config file
+	args 'proguard.pro'
 }
 
 apply plugin: 'javafx-gradle-plugin'

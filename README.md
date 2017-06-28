@@ -50,7 +50,7 @@ To run tasks on the subprojects, you can either __cd__ into the subproject and r
 
 ``` shell
 $ cd client
-$ ./gradlew run
+$ ../gradlew run
 ```
 
 Or run it from the parent project by prefixing the task with the subprojects name and a ":" (colon).
@@ -81,7 +81,7 @@ Eclipse will instantly reload the fresh project settings files.
 
 ### Pipeline
 
-__ServerBrowser__ utilizes advanced build techniques in order to assemble and optimize the output. The goal is to build the smallest possible 'self-contained' executable for Windows for the client and respectively a DEB file for the server.
+__ServerBrowser__ utilizes advanced build techniques in order to assemble and optimize the output. The goal is to build the smallest possible 'self-contained' executable for Windows for the client. __shared__ is simply a library project and as such produces a JAR and the server get assembled to a distribution ZIP with executable scripts for all platforms. 
 
 __self-contained__ in this context means the JVM is bundled with the output.
 
@@ -99,19 +99,21 @@ These steps map to these tools:
 
 Our build scripts are largely glue around those tools.
 
-### TODO Debug Build
-
-### TODO Release Build
-
-## Troubleshooting
-
-If your Client isn't able to connect to the server anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).
-
-The second thing you might want to check, is your firewall. Make sure you haven't blocked port 1099 or the application itself.
-
 ### Reflection and Resources with Proguard
 
 We use [Proguard](https://www.guardsquare.com/en/proguard/manual/introduction) to optimized the output JAR. This means that reflection and resource loading need to be handled with care.
+
+#### Changing Proguard config and looking at optimized stacktraces
+
+You can change the file __proguard.pro__ in your favorite editor directly, or use the ProguardGUI from the Proguard project.
+
+```shell
+$ ./gradlew client:runProguardGui
+```
+
+If you need to de-obfuscate a stacktrace from the optimized version of the client, you can use the __ReTrace__ tab of the ProguardGui.
+
+TODO(bugabinga): Add task to start ReTrace directly.
 
 #### Reflection
 
@@ -146,10 +148,16 @@ TODO
 In order to test the optimized client, simply run:
 
 ``` shell
-$ ./gradlew runOptimized
+$ ./gradlew client:runOptimized
 ```
 
 This will optimize the output JAR and run it. This makes it easy to test new __proguard.pro__ configs.
+
+## Troubleshooting
+
+If your Client isn't able to connect to the server anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).
+
+The second thing you might want to check, is your firewall. Make sure you haven't blocked port 1099 or the application itself.
 
 ### Proguard Errors
 
