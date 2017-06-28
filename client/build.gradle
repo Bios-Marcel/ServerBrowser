@@ -44,8 +44,9 @@ task optimize(type: proguard.gradle.ProGuardTask, dependsOn: 'shadowJar') {
 }
 
 task runOptimized(type: JavaExec, dependsOn: 'optimize') {
-	classpath = files('${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar')
 	main = mainClassName
+	println("${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar")
+	classpath = files("${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar")
 }
 
 apply plugin: 'javafx-gradle-plugin'

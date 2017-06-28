@@ -107,7 +107,47 @@ If your Client isn't able to connect to the server anymore, the first thing you 
 
 The second thing you might want to check, is your firewall. Make sure you haven't blocked port 1099 or the application itself.
 
-### TODO Reflection and Resources
+### Reflection and Resources with Proguard
+
+We use [Proguard](https://www.guardsquare.com/en/proguard/manual/introduction) to optimized the output JAR. This means that reflection and resource loading need to be handled with care.
+
+#### Reflection
+
+First of all; __don´t use reflection!__ It´s performance is horrible and the runtime behavior hard to predict.
+
+If you absolutely have to have reflection, you need to mark classes that get accessed at runtime via reflection in the __proguarg.pro__ config file.
+
+To learn how to do this read the intro about reflections.
+* [in the official documentation](https://www.guardsquare.com/en/proguard/manual/introduction) 
+* [the keep options documentation](https://www.guardsquare.com/en/proguard/manual/usage#keepoptions)
+
+Pay special attention to the "Keep option modifiers" in order to at least __allowshrinking__ and __allowoptimization__ if possible.
+
+#### Resources
+
+If resources like images need to be loaded in the code, make sure to never hard-code the paths which contain package names because those get rewritten during optimization.
+
+**Example bad:**
+
+```
+TODO
+```
+
+**Example good:**
+
+```
+TODO
+```
+
+#### Running optimized JAR
+
+In order to test the optimized client, simply run:
+
+``` shell
+$ ./gradlew runOptimized
+```
+
+This will optimize the output JAR and run it. This makes it easy to test new __proguard.pro__ configs.
 
 ### Proguard Errors
 
