@@ -25,12 +25,7 @@ import javafx.stage.Modality;
 
 public class GTA
 {
-	private static StringProperty username = new SimpleStringProperty(retrieveUsernameFromRegistry());
-
-	public static StringProperty usernameProperty()
-	{
-		return username;
-	}
+	public static StringProperty usernameProperty = new SimpleStringProperty(retrieveUsernameFromRegistry());
 
 	/**
 	 * Writes the actual username (from registry) into the past usernames list and sets the new name
@@ -41,7 +36,7 @@ public class GTA
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try
 		{
-			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty().get());
+			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get());
 		}
 		catch (final RegistryException e)
 		{
@@ -63,8 +58,7 @@ public class GTA
 		}
 	}
 
-	// Can't be null, Eclipse just doesn't acknowledge the Objects.nonNull method as a valid
-	// nullcheck
+	@SuppressWarnings("null") // Can't be null
 	public static Optional<String> getGtaPath()
 	{
 		String property = ClientProperties.getPropertyAsString(Property.SAMP_PATH);
