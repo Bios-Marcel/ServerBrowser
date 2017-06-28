@@ -125,7 +125,7 @@ public class Favourites
 		{
 			replacementsNew[i] = replacements[i].replace("'", "''");
 		}
-		return MessageFormat.format(string, replacementsNew);
+		return MessageFormat.format(string, (Object[]) replacementsNew);
 	}
 
 	/**

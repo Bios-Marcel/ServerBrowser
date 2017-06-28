@@ -46,99 +46,84 @@ public class Server
 
 	public static void main(final String[] args)
 	{
+		final boolean recreatedb = Boolean.parseBoolean(getParameter(args, "-updatedb", "-recreatedb").orElse("false"));
+		final Optional<String> username = getParameter(args, "-u", "-username");
+		Optional<String> password = getParameter(args, "-p", "-password");
+		final Optional<String> database = getParameter(args, "-d", "-database");
+		final Optional<String> server = getParameter(args, "-s", "-server");
 
-		if (args.length == 0)
-		{
-			System.out.println("Usage: java -jar jar -u/-username [NAME]");
-			System.out.println("To set a password using the arguments use -p/-password [password]");
-			System.out.println("Optionally, append a -recreatedb/-updatedb to force updating the server list.");
-		}
-		else if (args.length >= 1)
-		{
-			boolean recreatedb = false;
-			String username = null;
-			String password = null;
-			String database = "mp_server_browser";
-
-			for (int i = 0; i < args.length; i++)
-			{
-				if (args[i].equals("-recreatedb") || args[i].equals("-updatedb"))
-				{
-					recreatedb = true;
-				}
-				else if (args[i].equals("-p") || args[i].equals("-password"))
-				{
-					if (args.length >= i + 2)
-					{// Password was given
-						password = args[i + 1];
-					}
-					else
-					{// Empty password
-						password = "";
-					}
-				}
-				else if (args[i].equals("-u") || args[i].equals("-username"))
-				{
-					if (args.length >= i + 2)
-					{
-						username = args[i + 1];
-					}
-					else
-					{
-						System.out.println("You must enter a username to access the MySQL database.");
-						System.exit(0);
-					}
-				}
-				else if (args[i].equals("-d") || args[i].equals("-database"))
-				{
-					if (args.length >= i + 2)
-					{
-						database = args[i + 1];
-					}
-				}
-			}
-
-			if (Objects.isNull(username))
-			{// Username patameter wasn't used
-				System.out.println("Please enter a Username for your Database");
-				System.exit(0);
-			}
-
-			if (Objects.isNull(password))
-			{// Password parameter wasn't used
-				final Console console = System.console();
-				password = new String(console.readPassword("Enter your database password: "));
-			}
-
-			MySQLConnection.init(username, password, database);
-
-			try
-			{
-				registry = LocateRegistry.createRegistry(1099);
-				dataService = new DataServiceServerImplementation();
-				updateService = new UpdateServiceServerImplementation();
-				dataServiceStub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
-				updateServiceStub = (UpdateServiceInterface) UnicastRemoteObject.exportObject(updateService, 0);
-				registry.rebind(DataServiceInterface.INTERFACE_NAME, dataServiceStub);
-				registry.rebind(UpdateServiceInterface.INTERFACE_NAME, updateServiceStub);
-				logger.log(Level.INFO, "RMI has been initialized.");
-			}
-			catch (final Exception exception)
-			{
-				logger.log(Level.SEVERE, "Couldn't initialize RMI", exception);
-				System.exit(0);
-			}
-
-			if (recreatedb)
-			{
-				updateDBWithMasterlistContent();
-			}
-
-			setServerList();
-
-			createCronJob();
+		if (Objects.isNull(password))
+		{// Password parameter wasn't used
+			final Console console = System.console();
+			password = Optional.ofNullable(new String(console.readPassword("Enter your database password: ")));
 		}
 
+		if (Objects.isNull(username) || Objects.isNull(password) || Objects.isNull(database) || Objects.isNull(server))
+		{
+			System.out.println("You have to set the following in order to launch the server:");
+			System.out.println("Username: -u / -username [Username]");
+			System.out.println("Password: -p / -password [Password] or don't use -p at all and get prompted for the password.");
+			System.out.println("Database: -d / -database [Database]");
+			System.out.println("Server: -s / -server [Host]");
+			System.exit(0);
+		}
+
+		MySQLConnection.init(server.get(), username.get(), password.get(), database.get());
+
+		try
+		{
+			registry = LocateRegistry.createRegistry(1099);
+			dataService = new DataServiceServerImplementation();
+			updateService = new UpdateServiceServerImplementation();
+			dataServiceStub = (DataServiceInterface) UnicastRemoteObject.exportObject(dataService, 0);
+			updateServiceStub = (UpdateServiceInterface) UnicastRemoteObject.exportObject(updateService, 0);
+			registry.rebind(DataServiceInterface.INTERFACE_NAME, dataServiceStub);
+			registry.rebind(UpdateServiceInterface.INTERFACE_NAME, updateServiceStub);
+			logger.log(Level.INFO, "RMI has been initialized.");
+		}
+		catch (final Exception exception)
+		{
+			logger.log(Level.SEVERE, "Couldn't initialize RMI", exception);
+			System.exit(0);
+		}
+
+		if (recreatedb)
+		{
+			updateDBWithMasterlistContent();
+		}
+
+		setServerList();
+
+		createCronJob();
+	}
+
+	private static Optional<String> getParameter(final String[] args, final String... parameterNames)
+	{
+		for (int i = 0; i < args.length; i++)
+		{
+			final String param = args[i];
+			if (isOneOf(param, parameterNames))
+			{
+				if (args.length >= i + 2)
+				{
+					return Optional.of(args[i + 1]);
+				}
+				return Optional.of("");
+			}
+		}
+		return Optional.ofNullable(null);
+	}
+
+	private static <T> boolean isOneOf(final T object, final T[] compareTo)
+	{
+		for (final Object compareObject : compareTo)
+		{
+			if (compareObject.equals(object))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static void setServerList()
@@ -262,8 +247,7 @@ public class Server
 					}
 					catch (final Exception exception)
 					{
-						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine, exception
-								);
+						logger.log(Level.SEVERE, "Failed to connect to Server: " + inputLine, exception);
 					}
 				}
 			}

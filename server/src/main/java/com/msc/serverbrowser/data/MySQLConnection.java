@@ -14,13 +14,12 @@ public class MySQLConnection
 
 	public static Connection connect = null;
 
-	public static void init(final String username, final String password, final String database)
+	public static void init(final String server, final String username, final String password, final String database)
 	{
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			connect = DriverManager
-					.getConnection("jdbc:mysql://localhost?useSSL=false&useUnicode=true&characterEncoding=UTF-8", username, password);
+			connect = DriverManager.getConnection("jdbc:mysql://" + server + "?useSSL=false&useUnicode=true&characterEncoding=UTF-8", username, password);
 			connect.setCatalog(database);
 			logger.log(Level.INFO, "Databank connection has been established.");
 		}

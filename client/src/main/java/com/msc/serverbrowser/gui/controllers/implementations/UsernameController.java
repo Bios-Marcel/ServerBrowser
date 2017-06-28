@@ -102,6 +102,6 @@ public class UsernameController implements ViewController
 	@Override
 	public void onClose()
 	{
-		//Do nothing
+		// Do nothing
 	}
 }
