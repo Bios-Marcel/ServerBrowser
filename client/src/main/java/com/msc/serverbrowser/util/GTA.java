@@ -16,6 +16,7 @@ import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -23,8 +24,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Modality;
 
+/**
+ * Contains utility methods for interacting with native samp stuff.
+ *
+ * @author Marcel
+ */
 public class GTA
 {
+	/**
+	 * Holds the users username.
+	 */
 	public static StringProperty usernameProperty = new SimpleStringProperty(retrieveUsernameFromRegistry());
 
 	/**
@@ -32,6 +41,7 @@ public class GTA
 	 */
 	public static void applyUsername()
 	{
+
 		killSamp();
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try
@@ -45,6 +55,12 @@ public class GTA
 
 	}
 
+	// TODO Think of a better solution
+	/**
+	 * Returns the Username that samp has set in the registry.
+	 *
+	 * @return Username or "404 name not found"
+	 */
 	private static String retrieveUsernameFromRegistry()
 	{
 		try
@@ -58,6 +74,11 @@ public class GTA
 		}
 	}
 
+	/**
+	 * Returns the GTA path.
+	 *
+	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA couldn't be found
+	 */
 	@SuppressWarnings("null") // Can't be null
 	public static Optional<String> getGtaPath()
 	{
@@ -89,6 +110,11 @@ public class GTA
 		}
 	}
 
+	/**
+	 * Returns the version number of the installed samp version, if samp and gta have been found.
+	 *
+	 * @return {@link Optional} of installed versions version number or an empty {@link Optional}
+	 */
 	public static Optional<String> getInstalledVersion()
 	{
 		String versionString = null;
@@ -96,6 +122,11 @@ public class GTA
 		if (path.isPresent())
 		{
 			final File file = new File(path.get() + "samp.dll");
+
+			if (!file.exists())
+			{// samp.dll doesn't exist, even though GTA is installed at this point.
+				return Optional.empty();
+			}
 
 			/*
 			 * Bad Practice, could potentionally cause an error if Kalcor decides to do a huge
@@ -130,6 +161,16 @@ public class GTA
 		return Optional.ofNullable(versionString);
 	}
 
+	/**
+	 * Connects to the given server (IP and Port) using an empty (no) password. Other than
+	 * {@link GTA#connectToServer(String)} and {@link GTA#connectToServer(String, String)}, this
+	 * method uses the <code>samp://</code> protocol to connect to make the samp launcher connect to
+	 * the server.
+	 *
+	 * @param ipAndPort
+	 *            the server to connect to
+	 * @return true if it was most likely successful
+	 */
 	private static boolean connectToServerUsingProtocol(final String ipAndPort)
 	{
 		Logging.logger.log(Level.INFO, "Connecting using protocol.");
@@ -162,18 +203,36 @@ public class GTA
 		kill("gta_sa.exe");
 	}
 
-	private static void kill(final String application)
+	/**
+	 * Kills a process with a given name.
+	 *
+	 * @param processName
+	 *            the name that determines what processes will be killed
+	 */
+	private static void kill(final String processName)
 	{
-		try
+		if (OSUtil.isWindows())
 		{
-			Runtime.getRuntime().exec("taskkill /F /IM " + application);
-		}
-		catch (final IOException exception)
-		{
-			Logging.logger.log(Level.SEVERE, "Couldn't kill " + application, exception);
+			try
+			{
+				Runtime.getRuntime().exec("taskkill /F /IM " + processName);
+			}
+			catch (final IOException exception)
+			{
+				Logging.logger.log(Level.SEVERE, "Couldn't kill " + processName, exception);
+			}
 		}
 	}
 
+	/**
+	 * Connects to the given server (IP and Port) using the given password. Uses the commandline to
+	 * open samp and connect to the server.
+	 *
+	 * @param ipAndPort
+	 *            the server to connect to
+	 * @param password
+	 *            the password to use for connecting
+	 */
 	public static void connectToServer(final String ipAndPort, final String password)
 	{
 		killGTA();
@@ -212,6 +271,13 @@ public class GTA
 		}
 	}
 
+	/**
+	 * Connects to the given server (IP and Port) using an empty (no) password.
+	 *
+	 * @param ipAndPort
+	 *            the server to connect to
+	 * @see GTA#connectToServer(String, String)
+	 */
 	public static void connectToServer(final String ipAndPort)
 	{
 		connectToServer(ipAndPort, "");
