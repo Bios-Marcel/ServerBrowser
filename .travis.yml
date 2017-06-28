@@ -1,0 +1,12 @@
+before_install:
+ - chmod +x gradlew
+
+language: java
+
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      dist: trusty
+      jdk: oraclejdk8
+      env: FAILURES_ALLOWED=false
