@@ -31,34 +31,34 @@
 		</padding>
 	</HBox>
 	<TableView fx:id="serverTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-		minWidth="-Infinity" prefHeight="100.0" VBox.vgrow="ALWAYS">
+		minWidth="-Infinity" prefHeight="100.0" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
 		<columns>
-			<TableColumn fx:id="columnHostname" minWidth="20.0" prefWidth="20.0" sortable="true" text="Hostname">
+			<TableColumn fx:id="columnHostname" sortable="true" text="Hostname">
 				<cellValueFactory>
 					<PropertyValueFactory property="hostname" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="columnPlayers" maxWidth="66.0" minWidth="66.0" prefWidth="66.0" sortable="true" text="Players">
+			<TableColumn fx:id="columnPlayers" maxWidth="66.0" minWidth="66.0" sortable="true" text="Players">
 				<cellValueFactory>
 					<PropertyValueFactory property="playersAndMaxPlayers" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="columnMode" maxWidth="500.0" minWidth="80.0" sortable="true" text="Mode">
+			<TableColumn fx:id="columnMode" minWidth="80.0" sortable="true" text="Mode">
 				<cellValueFactory>
 					<PropertyValueFactory property="mode" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="columnLanguage" maxWidth="500.0" minWidth="80.0" sortable="true" text="Language">
+			<TableColumn fx:id="columnLanguage" minWidth="80.0" sortable="true" text="Language">
 				<cellValueFactory>
 					<PropertyValueFactory property="language" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn maxWidth="65.0" minWidth="65.0" prefWidth="65.0" sortable="true" text="Version">
+			<TableColumn maxWidth="65.0" minWidth="65.0" sortable="true" text="Version">
 				<cellValueFactory>
 					<PropertyValueFactory property="version" />
 				</cellValueFactory>
 			</TableColumn>
-			<TableColumn fx:id="columnWebsite" minWidth="20.0" prefWidth="200.0" sortable="true" text="Website">
+			<TableColumn fx:id="columnWebsite" sortable="true" text="Website">
 				<cellValueFactory>
 					<PropertyValueFactory property="website" />
 				</cellValueFactory>
@@ -74,7 +74,7 @@
 		</padding>
 		<children>
 			<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0"
-				prefWidth="300.0">
+				prefWidth="300.0" tableMenuButtonVisible="true">
 				<columns>
 					<TableColumn fx:id="playerName" prefWidth="227.0" text="Player">
 						<cellValueFactory>
