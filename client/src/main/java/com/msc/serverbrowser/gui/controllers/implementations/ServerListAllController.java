@@ -33,7 +33,7 @@ public class ServerListAllController extends ServerListControllerMain
 		}
 		catch (final IOException | ClassNotFoundException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Error deserializing and decompressing data", exception);
+			Logging.instance.log(Level.SEVERE, "Error deserializing and decompressing data", exception);
 			return null;
 		}
 	}
@@ -63,7 +63,7 @@ public class ServerListAllController extends ServerListControllerMain
 				}
 				catch (final RemoteException exception)
 				{
-					Logging.logger.log(Level.SEVERE, "Couldn't retrieve data from server.", exception);
+					Logging.instance.log(Level.SEVERE, "Couldn't retrieve data from server.", exception);
 					Platform.runLater(() -> serverTable.setPlaceholder(new Label("Server connection couldn't be established.")));
 				}
 			}

@@ -54,7 +54,7 @@ public class GTA
 		}
 		catch (final RegistryException e)
 		{
-			Logging.logger.log(Level.WARNING, "Couldn't set username.", e);
+			Logging.instance.log(Level.WARNING, "Couldn't set username.", e);
 		}
 
 	}
@@ -78,7 +78,7 @@ public class GTA
 		}
 		catch (final Exception exception)
 		{
-			Logging.logger.log(Level.WARNING, "Couldn't retrieve Username from registry.", exception);
+			Logging.instance.log(Level.WARNING, "Couldn't retrieve Username from registry.", exception);
 			return "404 Name not found";
 		}
 	}
@@ -124,7 +124,7 @@ public class GTA
 		}
 		catch (final RegistryException exception)
 		{
-			Logging.logger.log(Level.WARNING, "Couldn't retrieve GTA path.", exception);
+			Logging.instance.log(Level.WARNING, "Couldn't retrieve GTA path.", exception);
 			return null;
 		}
 	}
@@ -202,7 +202,7 @@ public class GTA
 			return false;
 		}
 
-		Logging.logger.log(Level.INFO, "Connecting using protocol.");
+		Logging.instance.log(Level.INFO, "Connecting using protocol.");
 		try
 		{
 			final Desktop d = Desktop.getDesktop();
@@ -251,7 +251,7 @@ public class GTA
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't kill " + processName, exception);
+			Logging.instance.log(Level.SEVERE, "Couldn't kill " + processName, exception);
 		}
 	}
 
@@ -272,7 +272,7 @@ public class GTA
 		{
 			try
 			{
-				Logging.logger.log(Level.INFO, "Connecting using executeable.");
+				Logging.instance.log(Level.INFO, "Connecting using executeable.");
 				final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
 				builder.directory(new File(gtaPath.get()));
 				builder.start();
@@ -285,7 +285,7 @@ public class GTA
 				}
 				else
 				{
-					Logging.logger.log(Level.WARNING, "Couldn't connect to server", exception);
+					Logging.instance.log(Level.WARNING, "Couldn't connect to server", exception);
 				}
 			}
 		}

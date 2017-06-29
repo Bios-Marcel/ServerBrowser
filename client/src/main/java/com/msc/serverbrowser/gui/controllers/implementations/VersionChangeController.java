@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.Client;
+import com.msc.serverbrowser.constants.Paths;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtility;
@@ -23,9 +24,8 @@ import net.lingala.zip4j.exception.ZipException;
 
 public class VersionChangeController implements ViewController
 {
-	private static final String NOT_INSTALLING = "NOT_INSTALLING";
-
-	private static final String OUTPUT_ZIP = System.getProperty("user.home") + File.separator + "sampex" + File.separator + "temp.zip";
+	private static final String	NOT_INSTALLING	= "NOT_INSTALLING";
+	private static final String	OUTPUT_ZIP		= Paths.SAMPEX_PATH + File.separator + "temp.zip";
 
 	private static String installing = NOT_INSTALLING;
 
@@ -176,7 +176,7 @@ public class VersionChangeController implements ViewController
 				}
 				catch (final ZipException | IOException | IllegalArgumentException exception)
 				{
-					Logging.logger.log(Level.SEVERE, "Error Updating client.", exception);
+					Logging.instance.log(Level.SEVERE, "Error Updating client.", exception);
 
 					updateInstallationState(oldVersionButton, newVersionButton);
 				}

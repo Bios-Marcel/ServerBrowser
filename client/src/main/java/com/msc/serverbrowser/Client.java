@@ -19,6 +19,7 @@ import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.interfaces.DataServiceInterface;
 import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
 import com.msc.sampbrowser.util.Hashing;
+import com.msc.serverbrowser.constants.Paths;
 import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientProperties;
@@ -72,8 +73,8 @@ public class Client extends Application
 	public void start(final Stage primaryStage)
 	{
 		instance = this;
-		establishConnection();
 		initClient();
+		establishConnection();
 		loadUI(primaryStage);
 
 		new Thread(() -> checkVersion()).start();
@@ -99,7 +100,7 @@ public class Client extends Application
 			}
 			catch (RemoteException | NotBoundException exception)
 			{
-				Logging.logger.log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
+				Logging.instance.log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
 				Platform.runLater(() -> displayNoConnectionDialog());
 			}
 		}
@@ -137,15 +138,17 @@ public class Client extends Application
 			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 			primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+
 			primaryStage.setOnCloseRequest(close ->
 			{
 				controller.onClose();
 				ClientProperties.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
 				ClientProperties.setProperty(Property.FULLSCREEN, primaryStage.isFullScreen());
 			});
-			primaryStage.show();
 
 			stage = primaryStage;
+
+			primaryStage.show();
 
 			if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
 			{
@@ -153,8 +156,8 @@ public class Client extends Application
 				setAlertIcon(alert);
 				alert.initOwner(stage);
 				alert.initModality(Modality.APPLICATION_MODAL);
-				alert.setTitle(APPLICATION_NAME);
-				alert.setHeaderText("Your client has been updated");
+				alert.setTitle(APPLICATION_NAME + "- Changelog");
+				alert.setHeaderText("Your client has been updated | Changelog");
 
 				final StringBuilder updateText = new StringBuilder();
 				updateText.append("- Settings Page has been added");
@@ -166,7 +169,7 @@ public class Client extends Application
 		}
 		catch (final Exception exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't load UI", exception);
+			Logging.instance.log(Level.SEVERE, "Couldn't load UI", exception);
 			System.exit(0);
 		}
 	}
@@ -194,47 +197,45 @@ public class Client extends Application
 	 */
 	private void initClient()
 	{
-		final String sampexFolder = System.getProperty("user.home") + File.separator + "sampex";
+		final File sampexFolder = new File(Paths.SAMPEX_PATH);
 
-		File file = new File(sampexFolder);
-
-		if (!file.exists())
+		if (!sampexFolder.exists())
 		{
-			file.mkdir();
+			sampexFolder.mkdir();
 		}
 
-		file = new File(sampexFolder + File.separator + "favourites.xml");
+		final File oldFavouritesFile = new File(Paths.SAMPEX_PATH + File.separator + "favourites.xml");
 
 		// Migration from XML to SQLLite
-		if (file.exists())
+		if (oldFavouritesFile.exists())
 		{
 			for (final SampServer server : Favourites.getFavouritesFromXML())
 			{
 				Favourites.addServerToFavourites(server);
 			}
-			file.delete();
+			oldFavouritesFile.delete();
 		}
 
-		file = new File(sampexFolder + File.separator + "pastusernames.xml");
+		final File oldPastUsernamesFile = new File(Paths.SAMPEX_PATH + File.separator + "pastusernames.xml");
 
-		if (file.exists())
+		if (oldPastUsernamesFile.exists())
 		{
 			for (final String username : PastUsernames.getPastUsernamesFromXML())
 			{
 				PastUsernames.addPastUsername(username);
 			}
-			file.delete();
+			oldPastUsernamesFile.delete();
 		}
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an update is available
+	 * Compares the local version number to the one lying on the server. If an update is availbable
 	 * the user will be asked if he wants to update.
 	 */
 	private void checkVersion()
 	{
 		if (Objects.nonNull(remoteDataService))
-		{// Connection with server was not successful
+		{// Connection with server was not sucessful
 			try
 			{
 				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
@@ -258,15 +259,15 @@ public class Client extends Application
 			}
 			catch (final FileNotFoundException notFound)
 			{
-				Logging.logger.log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.", notFound);
+				Logging.instance.log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.", notFound);
 			}
 			catch (final NoSuchAlgorithmException nonExistentAlgorithm)
 			{
-				Logging.logger.log(Level.INFO, "The used Hashing-Algorithm doesan't exist.", nonExistentAlgorithm);
+				Logging.instance.log(Level.INFO, "The used Hashing-Algorithm doesan't exist.", nonExistentAlgorithm);
 			}
 			catch (final IOException updateException)
 			{
-				Logging.logger.log(Level.SEVERE, "Couldn't retrieve Update Info.", updateException);
+				Logging.instance.log(Level.SEVERE, "Couldn't retrieve Update Info.", updateException);
 			}
 		}
 	}
@@ -285,7 +286,7 @@ public class Client extends Application
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't retrieve update.", exception);
+			Logging.instance.log(Level.SEVERE, "Couldn't retrieve update.", exception);
 		}
 	}
 
@@ -324,7 +325,7 @@ public class Client extends Application
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't selfrestart.", exception);
+			Logging.instance.log(Level.SEVERE, "Couldn't selfrestart.", exception);
 		}
 	}
 

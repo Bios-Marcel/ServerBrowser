@@ -135,7 +135,7 @@ public class MainController implements ViewController
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't load view.", exception);
+			Logging.instance.log(Level.SEVERE, "Couldn't load view.", exception);
 		}
 	}
 
