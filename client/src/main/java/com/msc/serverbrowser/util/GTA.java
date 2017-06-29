@@ -41,6 +41,10 @@ public class GTA
 	 */
 	public static void applyUsername()
 	{
+		if (!OSUtil.isWindows())
+		{
+			return;
+		}
 
 		killSamp();
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
@@ -63,6 +67,11 @@ public class GTA
 	 */
 	private static String retrieveUsernameFromRegistry()
 	{
+		if (!OSUtil.isWindows())
+		{
+			return "You are on Linux ;D";
+		}
+
 		try
 		{
 			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName");
@@ -82,6 +91,11 @@ public class GTA
 	@SuppressWarnings("null") // Can't be null
 	public static Optional<String> getGtaPath()
 	{
+		if (!OSUtil.isWindows())
+		{
+			return Optional.of("You are on Linux ;D");
+		}
+
 		String property = ClientProperties.getPropertyAsString(Property.SAMP_PATH);
 		property = Objects.isNull(property) || property.isEmpty() ? null : property;
 		if (Objects.nonNull(property) && !property.endsWith("\\"))
@@ -99,6 +113,11 @@ public class GTA
 	 */
 	public static String getGtaPathUnsafe()
 	{
+		if (!OSUtil.isWindows())
+		{
+			return "You are on Linux ;D";
+		}
+
 		try
 		{
 			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", "");
@@ -117,6 +136,11 @@ public class GTA
 	 */
 	public static Optional<String> getInstalledVersion()
 	{
+		if (!OSUtil.isWindows())
+		{
+			return Optional.empty();
+		}
+
 		String versionString = null;
 		final Optional<String> path = getGtaPath();
 		if (path.isPresent())
@@ -173,6 +197,11 @@ public class GTA
 	 */
 	private static boolean connectToServerUsingProtocol(final String ipAndPort)
 	{
+		if (!OSUtil.isWindows())
+		{
+			return false;
+		}
+
 		Logging.logger.log(Level.INFO, "Connecting using protocol.");
 		try
 		{
@@ -213,14 +242,16 @@ public class GTA
 	{
 		if (OSUtil.isWindows())
 		{
-			try
-			{
-				Runtime.getRuntime().exec("taskkill /F /IM " + processName);
-			}
-			catch (final IOException exception)
-			{
-				Logging.logger.log(Level.SEVERE, "Couldn't kill " + processName, exception);
-			}
+			return;
+		}
+
+		try
+		{
+			Runtime.getRuntime().exec("taskkill /F /IM " + processName);
+		}
+		catch (final IOException exception)
+		{
+			Logging.logger.log(Level.SEVERE, "Couldn't kill " + processName, exception);
 		}
 	}
 
