@@ -59,6 +59,7 @@ public class ServerListAllController extends ServerListControllerMain
 					servers.addAll(serializedServers.stream()
 							.map(SampServer::new)
 							.collect(Collectors.toSet()));
+					Platform.runLater(() -> serverTable.refresh());
 				}
 				catch (final RemoteException exception)
 				{

@@ -44,6 +44,14 @@ public class OSUtil
 		}
 	}
 
+	/**
+	 * Puts <code>http://</code> infront of the url if not it already has <code>http://</code> or
+	 * <code>https://</code> infront of it.
+	 *
+	 * @param url
+	 *            the url to fix
+	 * @return the fixed url or the original if there was no need to fix
+	 */
 	private static String fixUrlIfNecessary(final String url)
 	{
 		String website = url;
