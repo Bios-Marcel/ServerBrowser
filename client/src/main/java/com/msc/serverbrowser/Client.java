@@ -19,6 +19,7 @@ import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.interfaces.DataServiceInterface;
 import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
 import com.msc.sampbrowser.util.Hashing;
+import com.msc.serverbrowser.constants.Paths;
 import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientProperties;
@@ -72,8 +73,8 @@ public class Client extends Application
 	public void start(final Stage primaryStage)
 	{
 		instance = this;
-		establishConnection();
 		initClient();
+		establishConnection();
 		loadUI(primaryStage);
 
 		new Thread(() -> checkVersion()).start();
@@ -99,7 +100,7 @@ public class Client extends Application
 			}
 			catch (RemoteException | NotBoundException exception)
 			{
-				Logging.logger.log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
+				Logging.instance.log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
 				Platform.runLater(() -> displayNoConnectionDialog());
 			}
 		}
@@ -133,11 +134,11 @@ public class Client extends Application
 			primaryStage.setScene(scene);
 			primaryStage.getIcons().add(APPLICATION_ICON);
 			primaryStage.setTitle(APPLICATION_NAME);
-			primaryStage.show();
 			primaryStage.setMinWidth(primaryStage.getWidth());
 			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 			primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+
 			primaryStage.setOnCloseRequest(close ->
 			{
 				controller.onClose();
@@ -147,14 +148,16 @@ public class Client extends Application
 
 			stage = primaryStage;
 
+			primaryStage.show();
+
 			if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
 			{
 				final Alert alert = new Alert(AlertType.INFORMATION);
 				setAlertIcon(alert);
 				alert.initOwner(stage);
 				alert.initModality(Modality.APPLICATION_MODAL);
-				alert.setTitle(APPLICATION_NAME);
-				alert.setHeaderText("Your client has been updated");
+				alert.setTitle(APPLICATION_NAME + "- Changelog");
+				alert.setHeaderText("Your client has been updated | Changelog");
 
 				final StringBuilder updateText = new StringBuilder();
 				updateText.append("- Settings Page has been added");
@@ -164,9 +167,9 @@ public class Client extends Application
 				ClientProperties.setProperty(Property.SHOW_CHANGELOG, false);
 			}
 		}
-		catch (final Exception e)
+		catch (final Exception exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't load UI", e);
+			Logging.instance.log(Level.SEVERE, "Couldn't load UI", exception);
 			System.exit(0);
 		}
 	}
@@ -194,34 +197,34 @@ public class Client extends Application
 	 */
 	private void initClient()
 	{
-		File file = new File(System.getProperty("user.home") + File.separator + "sampex");
+		final File sampexFolder = new File(Paths.SAMPEX_PATH);
 
-		if (!file.exists())
+		if (!sampexFolder.exists())
 		{
-			file.mkdir();
+			sampexFolder.mkdir();
 		}
 
-		file = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
+		final File oldFavouritesFile = new File(Paths.SAMPEX_PATH + File.separator + "favourites.xml");
 
 		// Migration from XML to SQLLite
-		if (file.exists())
+		if (oldFavouritesFile.exists())
 		{
 			for (final SampServer server : Favourites.getFavouritesFromXML())
 			{
 				Favourites.addServerToFavourites(server);
 			}
-			file.delete();
+			oldFavouritesFile.delete();
 		}
 
-		file = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
+		final File oldPastUsernamesFile = new File(Paths.SAMPEX_PATH + File.separator + "pastusernames.xml");
 
-		if (file.exists())
+		if (oldPastUsernamesFile.exists())
 		{
 			for (final String username : PastUsernames.getPastUsernamesFromXML())
 			{
 				PastUsernames.addPastUsername(username);
 			}
-			file.delete();
+			oldPastUsernamesFile.delete();
 		}
 	}
 
@@ -248,27 +251,23 @@ public class Client extends Application
 						alert.setHeaderText("Update required");
 						alert.setContentText("The launcher needs an update. Not updating the client might lead to problems. Click 'OK' to update and 'Cancel' to not update.");
 
-						alert.showAndWait().ifPresent(result ->
-						{
-							if (result == ButtonType.OK)
-							{
-								updateLauncher();
-							}
-						});
+						alert.showAndWait()
+								.filter(ButtonType.OK::equals)
+								.ifPresent(__ -> updateLauncher());
 					});
 				}
 			}
 			catch (final FileNotFoundException notFound)
 			{
-				Logging.logger.log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.", notFound);
+				Logging.instance.log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.", notFound);
 			}
 			catch (final NoSuchAlgorithmException nonExistentAlgorithm)
 			{
-				Logging.logger.log(Level.INFO, "The used Hashing-Algorithm doesan't exist.", nonExistentAlgorithm);
+				Logging.instance.log(Level.INFO, "The used Hashing-Algorithm doesan't exist.", nonExistentAlgorithm);
 			}
 			catch (final IOException updateException)
 			{
-				Logging.logger.log(Level.SEVERE, "Couldn't retrieve Update Info.", updateException);
+				Logging.instance.log(Level.SEVERE, "Couldn't retrieve Update Info.", updateException);
 			}
 		}
 	}
@@ -287,7 +286,7 @@ public class Client extends Application
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't retrieve update.", exception);
+			Logging.instance.log(Level.SEVERE, "Couldn't retrieve update.", exception);
 		}
 	}
 
@@ -326,7 +325,7 @@ public class Client extends Application
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't selfrestart.", exception);
+			Logging.instance.log(Level.SEVERE, "Couldn't selfrestart.", exception);
 		}
 	}
 

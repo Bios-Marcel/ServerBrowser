@@ -2,30 +2,49 @@ package com.msc.serverbrowser.logging;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-public class Logging
-{
-	public static final Logger logger = Logger.getAnonymousLogger();
+import com.msc.serverbrowser.constants.Paths;
 
-	static
+public class Logging extends Logger
+{
+	public static Logging instance;
+
+	/**
+	 * @return {@link #instance}
+	 */
+	public Logging logger()
 	{
-		logger.setLevel(Level.INFO);
+		if (Objects.isNull(instance))
+		{
+			instance = new Logging();
+			instance.init();
+		}
+		return instance;
+	}
+
+	private Logging()
+	{
+		super("SAMP-Logger", null);
+	}
+
+	private void init()
+	{
+		instance.setLevel(Level.INFO);
 		try
 		{
-			final FileHandler filehandler = new FileHandler(System.getProperty("user.home") + File.separator + "sampex" + File.separator
-					+ "Log.log");
+			final FileHandler filehandler = new FileHandler(Paths.SAMPEX_PATH + File.separator + "Log.log");
 			final SimpleFormatter formatter = new SimpleFormatter();
 			filehandler.setFormatter(formatter);
-			logger.addHandler(filehandler);
+			instance.addHandler(filehandler);
 		}
 		catch (SecurityException | IOException e)
 		{
-			logger.log(Level.SEVERE, "Couldn't configure logger properly", e);
+			instance.log(Level.SEVERE, "Couldn't configure logger properly", e);
 		}
-
 	}
 }

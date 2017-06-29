@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.entities.SampServerBuilder;
 import com.msc.sampbrowser.query.SampQuery;
+import com.msc.serverbrowser.constants.Paths;
 import com.msc.serverbrowser.logging.Logging;
 
 public class Favourites
@@ -57,7 +58,7 @@ public class Favourites
 		}
 		catch (@SuppressWarnings("unused") final Exception exception)
 		{
-			Logging.logger.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.");
+			Logging.instance.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.");
 			server.setHostname("Unknown");
 			server.setLanguage("Unknown");
 			server.setMode("Unknown");
@@ -88,7 +89,7 @@ public class Favourites
 		}
 		else
 		{
-			Logging.logger.info("Server wasn't added, because it already is a favourite.");
+			Logging.instance.info("Server wasn't added, because it already is a favourite.");
 		}
 	}
 
@@ -186,7 +187,7 @@ public class Favourites
 	{
 		final List<SampServer> servers = new ArrayList<>();
 
-		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
+		final File xmlFile = new File(Paths.SAMPEX_PATH + File.separator + "favourites.xml");
 		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
 		try

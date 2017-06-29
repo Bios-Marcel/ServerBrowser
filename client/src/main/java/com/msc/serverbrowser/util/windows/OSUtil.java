@@ -40,7 +40,7 @@ public class OSUtil
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger.log(Level.WARNING, "Couldn't visit website '" + url + "' (" + fixedUrl + ").", exception);
+			Logging.instance.log(Level.WARNING, "Couldn't visit website '" + url + "' (" + fixedUrl + ").", exception);
 		}
 	}
 

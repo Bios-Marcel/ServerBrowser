@@ -19,6 +19,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.msc.serverbrowser.constants.Paths;
+
 public class PastUsernames
 {
 	public static void addPastUsername(final String username)
@@ -64,7 +66,7 @@ public class PastUsernames
 	{
 		final Set<String> usernames = new HashSet<>();
 
-		final File xmlFile = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
+		final File xmlFile = new File(Paths.SAMPEX_PATH + File.separator + "pastusernames.xml");
 		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
 		try

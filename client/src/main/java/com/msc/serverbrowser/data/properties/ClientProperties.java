@@ -59,7 +59,7 @@ public class ClientProperties
 		}
 		catch (final NumberFormatException e)
 		{
-			Logging.logger.log(Level.SEVERE, "Invalid property value, property: " + property, e);
+			Logging.instance.log(Level.SEVERE, "Invalid property value, property: " + property, e);
 		}
 
 		return value;
@@ -79,7 +79,7 @@ public class ClientProperties
 		}
 		catch (final NumberFormatException e)
 		{
-			Logging.logger.log(Level.SEVERE, "Invalid property value, property: " + property, e);
+			Logging.instance.log(Level.SEVERE, "Invalid property value, property: " + property, e);
 		}
 
 		return value;
