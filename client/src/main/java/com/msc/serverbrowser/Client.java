@@ -133,7 +133,6 @@ public class Client extends Application
 			primaryStage.setScene(scene);
 			primaryStage.getIcons().add(APPLICATION_ICON);
 			primaryStage.setTitle(APPLICATION_NAME);
-			primaryStage.show();
 			primaryStage.setMinWidth(primaryStage.getWidth());
 			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
@@ -144,6 +143,7 @@ public class Client extends Application
 				ClientProperties.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
 				ClientProperties.setProperty(Property.FULLSCREEN, primaryStage.isFullScreen());
 			});
+			primaryStage.show();
 
 			stage = primaryStage;
 
@@ -164,9 +164,9 @@ public class Client extends Application
 				ClientProperties.setProperty(Property.SHOW_CHANGELOG, false);
 			}
 		}
-		catch (final Exception e)
+		catch (final Exception exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Couldn't load UI", e);
+			Logging.logger.log(Level.SEVERE, "Couldn't load UI", exception);
 			System.exit(0);
 		}
 	}
@@ -194,14 +194,16 @@ public class Client extends Application
 	 */
 	private void initClient()
 	{
-		File file = new File(System.getProperty("user.home") + File.separator + "sampex");
+		final String sampexFolder = System.getProperty("user.home") + File.separator + "sampex";
+
+		File file = new File(sampexFolder);
 
 		if (!file.exists())
 		{
 			file.mkdir();
 		}
 
-		file = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "favourites.xml");
+		file = new File(sampexFolder + File.separator + "favourites.xml");
 
 		// Migration from XML to SQLLite
 		if (file.exists())
@@ -213,7 +215,7 @@ public class Client extends Application
 			file.delete();
 		}
 
-		file = new File(System.getProperty("user.home") + File.separator + "sampex" + File.separator + "pastusernames.xml");
+		file = new File(sampexFolder + File.separator + "pastusernames.xml");
 
 		if (file.exists())
 		{
@@ -226,13 +228,13 @@ public class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an update is availbable
+	 * Compares the local version number to the one lying on the server. If an update is available
 	 * the user will be asked if he wants to update.
 	 */
 	private void checkVersion()
 	{
 		if (Objects.nonNull(remoteDataService))
-		{// Connection with server was not sucessful
+		{// Connection with server was not successful
 			try
 			{
 				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
@@ -248,13 +250,9 @@ public class Client extends Application
 						alert.setHeaderText("Update required");
 						alert.setContentText("The launcher needs an update. Not updating the client might lead to problems. Click 'OK' to update and 'Cancel' to not update.");
 
-						alert.showAndWait().ifPresent(result ->
-						{
-							if (result == ButtonType.OK)
-							{
-								updateLauncher();
-							}
-						});
+						alert.showAndWait()
+								.filter(ButtonType.OK::equals)
+								.ifPresent(__ -> updateLauncher());
 					});
 				}
 			}

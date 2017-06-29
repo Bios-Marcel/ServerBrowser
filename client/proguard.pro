@@ -21,6 +21,10 @@
 -adaptresourcefilecontents **.properties,META-INF/MANIFEST.MF,META-INF/services/**,**fxml,**.css
 
 
+#
+#
+-keeppackagenames org.sqlite.native 
+
 # Preserve the special static methods that are required in all enumeration
 # classes.
 -keepclassmembers,allowoptimization enum  * {

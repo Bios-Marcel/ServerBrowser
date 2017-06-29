@@ -55,9 +55,9 @@ public class SQLDatabase
 				statement.execute(createTableServerHistory);
 			}
 		}
-		catch (final SQLException e)
+		catch (final SQLException exception)
 		{
-			Logging.logger.log(Level.SEVERE, "Error while initializing local Database connection.", e);
+			Logging.logger.log(Level.SEVERE, "Error while initializing local Database connection.", exception);
 		}
 	}
 
@@ -80,9 +80,9 @@ public class SQLDatabase
 		{
 			return Optional.of(sqlConnection.prepareStatement(statement).executeQuery());
 		}
-		catch (final SQLException e)
+		catch (final SQLException exception)
 		{
-			e.printStackTrace();
+			exception.printStackTrace();
 			return Optional.empty();
 		}
 	}

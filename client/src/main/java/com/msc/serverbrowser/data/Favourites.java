@@ -55,9 +55,9 @@ public class Favourites
 				server.setVersion(rules.get("version"));
 			});
 		}
-		catch (@SuppressWarnings("unused") final Exception exception)
+		catch (final Exception exception)
 		{
-			Logging.logger.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.");
+			Logging.logger.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.", exception);
 			server.setHostname("Unknown");
 			server.setLanguage("Unknown");
 			server.setMode("Unknown");
@@ -93,7 +93,7 @@ public class Favourites
 	}
 
 	/**
-	 * Checks wether a server is favourite.
+	 * Checks whether a server is favourite.
 	 *
 	 * @param server
 	 *            server to check if it is a favourite

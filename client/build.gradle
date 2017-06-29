@@ -21,7 +21,7 @@ mainClassName = "com.msc.serverbrowser.Client"
 
 dependencies {
 		compile 'com.github.sarxos:windows-registry-util:0.3'
-		compile 'org.xerial:sqlite-jdbc:3.18.0'
+		compile 'org.xerial:sqlite-jdbc:3.19.3'
 		compile 'net.lingala.zip4j:zip4j:1.3.2'
 		
 		compile project(':shared')
@@ -39,8 +39,13 @@ shadowJar {
 	* WARNING! Changes to excludes/includes only seem to take effect after a "clean" with gradle.
 	* I am not sure where the bug lies, but this should not happen with gradle...
 	*/
-	//Excluding binary stuff for non-Windows platform
-	exclude 'org/sqlite/native/Linux/**'
+	//Excluding binary stuff for unsupported platforms
+	
+	exclude 'org/sqlite/native/Linux/android-arm**'
+	exclude 'org/sqlite/native/Linux/arm**'
+	exclude 'org/sqlite/native/Linux/arm6**'
+	exclude 'org/sqlite/native/Linux/armv7**'
+	exclude 'org/sqlite/native/Linux/ppc64**'
 	exclude 'org/sqlite/native/FreeBSD/**'
 	exclude 'org/sqlite/native/Mac/**'
 	//Theoretically, in a distant future, one could kill 32bit support...
