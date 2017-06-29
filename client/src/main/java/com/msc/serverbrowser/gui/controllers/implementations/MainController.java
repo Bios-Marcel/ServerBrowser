@@ -135,10 +135,11 @@ public class MainController implements ViewController
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException exception)
 		{
-			Logging.instance.log(Level.SEVERE, "Couldn't load view.", exception);
+			Logging.logger().log(Level.SEVERE, "Couldn't load view.", exception);
 		}
 	}
 
+	@Override
 	public void onClose()
 	{
 		ClientProperties.setProperty(Property.LAST_VIEW, activeView.getId());

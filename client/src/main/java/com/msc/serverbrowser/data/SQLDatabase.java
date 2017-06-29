@@ -69,7 +69,7 @@ public class SQLDatabase
 		}
 		catch (final SQLException exception)
 		{
-			Logging.instance.log(Level.SEVERE, "Error while initializing local Database connection.", exception);
+			Logging.logger().log(Level.SEVERE, "Error while initializing local Database connection.", exception);
 		}
 	}
 
@@ -88,7 +88,7 @@ public class SQLDatabase
 		}
 		catch (final SQLException exception)
 		{
-			Logging.instance.log(Level.SEVERE, "Couldn't execute query.", exception);
+			Logging.logger().log(Level.SEVERE, "Couldn't execute query.", exception);
 			return false;
 		}
 	}

@@ -176,7 +176,7 @@ public class VersionChangeController implements ViewController
 				}
 				catch (final ZipException | IOException | IllegalArgumentException exception)
 				{
-					Logging.instance.log(Level.SEVERE, "Error Updating client.", exception);
+					Logging.logger().log(Level.SEVERE, "Error Updating client.", exception);
 
 					updateInstallationState(oldVersionButton, newVersionButton);
 				}
