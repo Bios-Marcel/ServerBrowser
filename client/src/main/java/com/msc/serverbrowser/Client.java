@@ -100,7 +100,7 @@ public class Client extends Application
 			}
 			catch (RemoteException | NotBoundException exception)
 			{
-				Logging.instance.log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
+				Logging.logger().log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
 				Platform.runLater(() -> displayNoConnectionDialog());
 			}
 		}
@@ -169,7 +169,7 @@ public class Client extends Application
 		}
 		catch (final Exception exception)
 		{
-			Logging.instance.log(Level.SEVERE, "Couldn't load UI", exception);
+			Logging.logger().log(Level.SEVERE, "Couldn't load UI", exception);
 			System.exit(0);
 		}
 	}
@@ -259,15 +259,15 @@ public class Client extends Application
 			}
 			catch (final FileNotFoundException notFound)
 			{
-				Logging.instance.log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.", notFound);
+				Logging.logger().log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.", notFound);
 			}
 			catch (final NoSuchAlgorithmException nonExistentAlgorithm)
 			{
-				Logging.instance.log(Level.INFO, "The used Hashing-Algorithm doesan't exist.", nonExistentAlgorithm);
+				Logging.logger().log(Level.INFO, "The used Hashing-Algorithm doesan't exist.", nonExistentAlgorithm);
 			}
 			catch (final IOException updateException)
 			{
-				Logging.instance.log(Level.SEVERE, "Couldn't retrieve Update Info.", updateException);
+				Logging.logger().log(Level.SEVERE, "Couldn't retrieve Update Info.", updateException);
 			}
 		}
 	}
@@ -286,7 +286,7 @@ public class Client extends Application
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.instance.log(Level.SEVERE, "Couldn't retrieve update.", exception);
+			Logging.logger().log(Level.SEVERE, "Couldn't retrieve update.", exception);
 		}
 	}
 
@@ -325,7 +325,7 @@ public class Client extends Application
 		}
 		catch (final IOException exception)
 		{
-			Logging.instance.log(Level.SEVERE, "Couldn't selfrestart.", exception);
+			Logging.logger().log(Level.SEVERE, "Couldn't selfrestart.", exception);
 		}
 	}
 

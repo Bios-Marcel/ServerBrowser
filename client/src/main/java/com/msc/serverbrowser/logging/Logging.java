@@ -12,12 +12,12 @@ import com.msc.serverbrowser.constants.Paths;
 
 public class Logging extends Logger
 {
-	public static Logging instance;
+	private static Logging instance;
 
 	/**
 	 * @return {@link #instance}
 	 */
-	public Logging logger()
+	public static Logging logger()
 	{
 		if (Objects.isNull(instance))
 		{

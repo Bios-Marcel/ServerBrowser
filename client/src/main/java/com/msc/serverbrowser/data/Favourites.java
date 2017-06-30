@@ -58,7 +58,7 @@ public class Favourites
 		}
 		catch (final Exception exception)
 		{
-			Logging.instance.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.", exception);
+			Logging.logger().log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.", exception);
 			server.setHostname("Unknown");
 			server.setLanguage("Unknown");
 			server.setMode("Unknown");
@@ -89,7 +89,7 @@ public class Favourites
 		}
 		else
 		{
-			Logging.instance.info("Server wasn't added, because it already is a favourite.");
+			Logging.logger().info("Server wasn't added, because it already is a favourite.");
 		}
 	}
 
