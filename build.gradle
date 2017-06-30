@@ -2,7 +2,9 @@
 * # TODO
 * 
 * - debug and release profile
-* - JFX build
+* - can proguard replace shadowjar ?
+* - pack200 task
+* - JFX build consuming shadowJar
 */
 
 /*
