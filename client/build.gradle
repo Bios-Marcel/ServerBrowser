@@ -41,11 +41,11 @@ shadowJar {
 	*/
 	//Excluding binary stuff for unsupported platforms
 	
-	exclude 'org/sqlite/native/Linux/android-arm**'
-	exclude 'org/sqlite/native/Linux/arm**'
-	exclude 'org/sqlite/native/Linux/arm6**'
-	exclude 'org/sqlite/native/Linux/armv7**'
-	exclude 'org/sqlite/native/Linux/ppc64**'
+	exclude 'org/sqlite/native/Linux/android-arm/**'
+	exclude 'org/sqlite/native/Linux/arm/**'
+	exclude 'org/sqlite/native/Linux/armv6/**'
+	exclude 'org/sqlite/native/Linux/armv7/**'
+	exclude 'org/sqlite/native/Linux/ppc64/**'
 	exclude 'org/sqlite/native/FreeBSD/**'
 	exclude 'org/sqlite/native/Mac/**'
 	//Theoretically, in a distant future, one could kill 32bit support...

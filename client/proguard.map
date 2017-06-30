@@ -113,40 +113,40 @@ com.msc.sampbrowser.entities.SampServerBuilder -> h:
     1204:1205:void com.msc.sampbrowser.entities.SampServer.setWebsite(java.lang.String):204:205 -> f
     1204:1205:com.msc.sampbrowser.entities.SampServerBuilder setWebsite(java.lang.String):58 -> f
     2023:2041:java.lang.String com.msc.sampbrowser.util.Hashing.verifyChecksum(java.lang.String):23:41 -> b
-    2082:2093:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):82:93 -> a
-    2104:2104:boolean com.msc.serverbrowser.data.Favourites.isFavourite(com.msc.sampbrowser.entities.SampServer):104:104 -> a
-    2104:2104:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):82 -> a
-    2151:2177:java.util.List com.msc.serverbrowser.data.Favourites.getFavourites():151:177 -> a
-    2151:2177:boolean com.msc.serverbrowser.data.Favourites.isFavourite(com.msc.sampbrowser.entities.SampServer):104 -> a
-    2151:2177:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):82 -> a
+    2083:2094:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):83:94 -> a
+    2105:2105:boolean com.msc.serverbrowser.data.Favourites.isFavourite(com.msc.sampbrowser.entities.SampServer):105:105 -> a
+    2105:2105:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):83 -> a
+    2152:2178:java.util.List com.msc.serverbrowser.data.Favourites.getFavourites():152:178 -> a
+    2152:2178:boolean com.msc.serverbrowser.data.Favourites.isFavourite(com.msc.sampbrowser.entities.SampServer):105 -> a
+    2152:2178:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):83 -> a
     3107:3107:java.lang.String com.msc.sampbrowser.entities.SampServer.getHostname():107:107 -> a
-    3107:3107:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):85 -> a
+    3107:3107:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):86 -> a
     3117:3117:java.lang.String com.msc.sampbrowser.entities.SampServer.getLagcomp():117:117 -> a
-    3117:3117:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):85 -> a
+    3117:3117:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):86 -> a
     3122:3122:java.lang.String com.msc.sampbrowser.entities.SampServer.getLanguage():122:122 -> a
-    3122:3122:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):85 -> a
+    3122:3122:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):86 -> a
     3142:3142:java.lang.Integer com.msc.sampbrowser.entities.SampServer.getPlayers():142:142 -> a
-    3142:3142:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):85 -> a
+    3142:3142:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):86 -> a
     4127:4127:java.lang.Integer com.msc.sampbrowser.entities.SampServer.getMaxPlayers():127:127 -> a
-    4127:4127:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):86 -> a
+    4127:4127:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):87 -> a
     4132:4132:java.lang.String com.msc.sampbrowser.entities.SampServer.getMode():132:132 -> a
-    4132:4132:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):86 -> a
+    4132:4132:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):87 -> a
     4147:4147:java.lang.String com.msc.sampbrowser.entities.SampServer.getVersion():147:147 -> a
-    4147:4147:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):86 -> a
+    4147:4147:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):87 -> a
     4152:4152:java.lang.String com.msc.sampbrowser.entities.SampServer.getWebsite():152:152 -> a
-    4152:4152:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):86 -> a
-    5123:5128:java.lang.String com.msc.serverbrowser.data.Favourites.escapeFormat(java.lang.String,java.lang.String[]):123:128 -> a
-    5187:5240:java.util.List com.msc.serverbrowser.data.Favourites.getFavouritesFromXML():187:240 -> a
+    4152:4152:void com.msc.serverbrowser.data.Favourites.addServerToFavourites(com.msc.sampbrowser.entities.SampServer):87 -> a
+    5124:5129:java.lang.String com.msc.serverbrowser.data.Favourites.escapeFormat(java.lang.String,java.lang.String[]):124:129 -> a
+    5188:5241:java.util.List com.msc.serverbrowser.data.Favourites.getFavouritesFromXML():188:241 -> a
     6064:6064:com.msc.sampbrowser.entities.SampServer build():64:64 -> a
-    6064:6064:java.util.List com.msc.serverbrowser.data.Favourites.getFavouritesFromXML():226 -> a
-    6157:6175:void com.msc.serverbrowser.data.Favourites.lambda$getFavourites$2(java.util.List,java.sql.ResultSet):157:175 -> a
+    6064:6064:java.util.List com.msc.serverbrowser.data.Favourites.getFavouritesFromXML():227 -> a
+    6158:6176:void com.msc.serverbrowser.data.Favourites.lambda$getFavourites$2(java.util.List,java.sql.ResultSet):158:176 -> a
     7064:7064:com.msc.sampbrowser.entities.SampServer build():64:64 -> a
-    7064:7064:void com.msc.serverbrowser.data.Favourites.lambda$getFavourites$2(java.util.List,java.sql.ResultSet):168 -> a
-    8026:8032:void com.msc.serverbrowser.data.PastUsernames.addPastUsername(java.lang.String):26:32 -> a
-    8043:8060:java.util.List com.msc.serverbrowser.data.PastUsernames.getPastUsernames():43:60 -> a
-    8043:8060:void com.msc.serverbrowser.data.PastUsernames.addPastUsername(java.lang.String):26 -> a
-    8065:8099:java.util.Set com.msc.serverbrowser.data.PastUsernames.getPastUsernamesFromXML():65:99 -> a
-    9049:9058:void com.msc.serverbrowser.data.PastUsernames.lambda$getPastUsernames$0(java.util.List,java.sql.ResultSet):49:58 -> b
+    7064:7064:void com.msc.serverbrowser.data.Favourites.lambda$getFavourites$2(java.util.List,java.sql.ResultSet):169 -> a
+    8028:8034:void com.msc.serverbrowser.data.PastUsernames.addPastUsername(java.lang.String):28:34 -> a
+    8045:8062:java.util.List com.msc.serverbrowser.data.PastUsernames.getPastUsernames():45:62 -> a
+    8045:8062:void com.msc.serverbrowser.data.PastUsernames.addPastUsername(java.lang.String):28 -> a
+    8067:8101:java.util.Set com.msc.serverbrowser.data.PastUsernames.getPastUsernamesFromXML():67:101 -> a
+    9051:9060:void com.msc.serverbrowser.data.PastUsernames.lambda$getPastUsernames$0(java.util.List,java.sql.ResultSet):51:60 -> b
     10024:10044:java.lang.String com.msc.serverbrowser.data.properties.ClientProperties.getPropertyAsString(com.msc.serverbrowser.data.properties.Property):24:44 -> a
     11041:11041:java.lang.String com.msc.serverbrowser.data.properties.Property.defaultValue():41:41 -> a
     11041:11041:java.lang.String com.msc.serverbrowser.data.properties.ClientProperties.getPropertyAsString(com.msc.serverbrowser.data.properties.Property):24 -> a
@@ -185,52 +185,56 @@ com.msc.serverbrowser.Client -> com.msc.serverbrowser.Client:
     com.msc.sampbrowser.interfaces.DataServiceInterface remoteDataService -> a
     com.msc.sampbrowser.interfaces.UpdateServiceInterface remoteUpdateService -> a
     javafx.stage.Stage stage -> stage
-    43:43:void <init>() -> <init>
-    74:80:void start(javafx.stage.Stage) -> start
-    1087:1106:void establishConnection():87:106 -> start
-    1087:1106:void start(javafx.stage.Stage):75 -> start
-    1197:1228:void initClient():197:228 -> start
-    1197:1228:void start(javafx.stage.Stage):76 -> start
-    2124:2172:void loadUI(javafx.stage.Stage):124:172 -> start
-    2124:2172:void start(javafx.stage.Stage):77 -> start
-    188:189:void setAlertIcon(javafx.scene.control.Alert) -> a
-    297:297:java.io.File getOwnJarFile() -> a
-    333:346:void main(java.lang.String[]) -> main
-    247:256:void lambda$checkVersion$4() -> b
-    255:255:void lambda$null$3(javafx.scene.control.ButtonType) -> a
-    2281:2290:void updateLauncher():281:290 -> a
-    2281:2290:void lambda$null$3(javafx.scene.control.ButtonType):255 -> a
-    2305:2329:void selfRestart():305:329 -> a
-    2305:2329:void updateLauncher():284 -> a
-    2305:2329:void lambda$null$3(javafx.scene.control.ButtonType):255 -> a
-    142:145:void lambda$loadUI$2(com.msc.serverbrowser.gui.controllers.implementations.MainController,javafx.stage.Stage,javafx.stage.WindowEvent) -> a
+    44:44:void <init>() -> <init>
+    75:81:void start(javafx.stage.Stage) -> start
+    1200:1229:void initClient():200:229 -> start
+    1200:1229:void start(javafx.stage.Stage):76 -> start
+    2088:2107:void establishConnection():88:107 -> start
+    2088:2107:void start(javafx.stage.Stage):77 -> start
+    2125:2175:void loadUI(javafx.stage.Stage):125:175 -> start
+    2125:2175:void start(javafx.stage.Stage):78 -> start
+    191:192:void setAlertIcon(javafx.scene.control.Alert) -> a
+    298:298:java.io.File getOwnJarFile() -> a
+    334:347:void main(java.lang.String[]) -> main
+    248:257:void lambda$checkVersion$4() -> b
+    256:256:void lambda$null$3(javafx.scene.control.ButtonType) -> a
+    2282:2291:void updateLauncher():282:291 -> a
+    2282:2291:void lambda$null$3(javafx.scene.control.ButtonType):256 -> a
+    2306:2330:void selfRestart():306:330 -> a
+    2306:2330:void updateLauncher():285 -> a
+    2306:2330:void lambda$null$3(javafx.scene.control.ButtonType):256 -> a
+    144:147:void lambda$loadUI$2(com.msc.serverbrowser.gui.controllers.implementations.MainController,javafx.stage.Stage,javafx.stage.WindowEvent) -> a
     3144:3145:void com.msc.serverbrowser.gui.controllers.implementations.MainController.onClose():144:145 -> a
-    3144:3145:void lambda$loadUI$2(com.msc.serverbrowser.gui.controllers.implementations.MainController,javafx.stage.Stage,javafx.stage.WindowEvent):142 -> a
+    3144:3145:void lambda$loadUI$2(com.msc.serverbrowser.gui.controllers.implementations.MainController,javafx.stage.Stage,javafx.stage.WindowEvent):144 -> a
     4053:4053:int com.msc.serverbrowser.gui.Views.getId():53:53 -> a
     4053:4053:void com.msc.serverbrowser.gui.controllers.implementations.MainController.onClose():144 -> a
-    4053:4053:void lambda$loadUI$2(com.msc.serverbrowser.gui.controllers.implementations.MainController,javafx.stage.Stage,javafx.stage.WindowEvent):142 -> a
+    4053:4053:void lambda$loadUI$2(com.msc.serverbrowser.gui.controllers.implementations.MainController,javafx.stage.Stage,javafx.stage.WindowEvent):144 -> a
     4131:4133:void com.msc.serverbrowser.data.properties.ClientProperties.setProperty(com.msc.serverbrowser.data.properties.Property,java.lang.Integer):131:133 -> a
     4131:4133:void com.msc.serverbrowser.gui.controllers.implementations.MainController.onClose():144 -> a
-    4131:4133:void lambda$loadUI$2(com.msc.serverbrowser.gui.controllers.implementations.MainController,javafx.stage.Stage,javafx.stage.WindowEvent):142 -> a
-    103:103:void lambda$establishConnection$1() -> c
-    4176:4184:void displayNoConnectionDialog():176:184 -> c
-    4176:4184:void lambda$establishConnection$1():103 -> c
-    79:79:void lambda$start$0() -> d
-    4236:4272:void checkVersion():236:272 -> d
-    4236:4272:void lambda$start$0():79 -> d
-    49:54:void <clinit>() -> <clinit>
-com.msc.serverbrowser.data.SQLDatabase -> i:
-    java.lang.String DB_LOCATION -> c
-    java.sql.Connection sqlConnection -> a
+    4131:4133:void lambda$loadUI$2(com.msc.serverbrowser.gui.controllers.implementations.MainController,javafx.stage.Stage,javafx.stage.WindowEvent):144 -> a
+    104:104:void lambda$establishConnection$1() -> c
+    4179:4187:void displayNoConnectionDialog():179:187 -> c
+    4179:4187:void lambda$establishConnection$1():104 -> c
+    80:80:void lambda$start$0() -> d
+    4237:4273:void checkVersion():237:273 -> d
+    4237:4273:void lambda$start$0():80 -> d
+    50:55:void <clinit>() -> <clinit>
+com.msc.serverbrowser.constants.Paths -> i:
+    java.lang.String USER_PATH -> c
+    java.lang.String SAMPEX_PATH -> d
+    7:8:void <clinit>() -> <clinit>
+com.msc.serverbrowser.data.SQLDatabase -> j:
+    java.lang.String DB_LOCATION -> e
     com.msc.serverbrowser.data.SQLDatabase instance -> a
-    15:15:void <init>() -> <init>
-    25:29:com.msc.serverbrowser.data.SQLDatabase getInstance() -> a
-    68:73:boolean execute(java.lang.String) -> execute
-    81:86:java.util.Optional executeGetResult(java.lang.String) -> a
-    17:35:void <clinit>() -> <clinit>
-    1041:1062:void init():41:62 -> <clinit>
-    1041:1062:void <clinit>():34 -> <clinit>
-com.msc.serverbrowser.data.properties.Property -> j:
+    java.sql.Connection sqlConnection -> a
+    28:33:com.msc.serverbrowser.data.SQLDatabase getInstance() -> a
+    1050:1074:void init():50:74 -> a
+    1050:1074:com.msc.serverbrowser.data.SQLDatabase getInstance():31 -> a
+    40:41:void <init>() -> <init>
+    87:92:boolean execute(java.lang.String) -> execute
+    107:112:java.util.Optional executeGetResult(java.lang.String) -> a
+    18:18:void <clinit>() -> <clinit>
+com.msc.serverbrowser.data.properties.Property -> k:
     com.msc.serverbrowser.data.properties.Property LAST_VIEW -> a
     com.msc.serverbrowser.data.properties.Property MAXIMIZED -> b
     com.msc.serverbrowser.data.properties.Property FULLSCREEN -> c
@@ -244,10 +248,10 @@ com.msc.serverbrowser.data.properties.Property -> j:
     java.lang.Class datatype -> datatype
     23:27:void <init>(java.lang.String,int,int,java.lang.Object,java.lang.Class) -> <init>
     5:14:void <clinit>() -> <clinit>
-com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory -> k:
+com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory -> l:
     8:8:void <init>() -> <init>
     13:17:java.net.Socket createSocket(java.lang.String,int) -> createSocket
-com.msc.serverbrowser.gui.Views -> l:
+com.msc.serverbrowser.gui.Views -> m:
     com.msc.serverbrowser.gui.Views SERVERS_FAV -> a
     com.msc.serverbrowser.gui.Views SERVERS_ALL -> b
     com.msc.serverbrowser.gui.Views USERNAME_CHANGER -> c
@@ -262,12 +266,11 @@ com.msc.serverbrowser.gui.Views -> l:
     1013:1013:void <clinit>():35 -> <clinit>
     1053:1053:int getId():53:53 -> <clinit>
     1053:1053:void <clinit>():37 -> <clinit>
-com.msc.serverbrowser.gui.controllers.implementations.MainController -> m:
+com.msc.serverbrowser.gui.controllers.implementations.MainController -> n:
     17:17:void <init>() -> <init>
-com.msc.serverbrowser.logging.Logging -> n:
-    java.util.logging.Logger logger -> logger
-    12:30:void <clinit>() -> <clinit>
-com.msc.serverbrowser.util.GTA -> o:
+com.msc.serverbrowser.logging.Logging -> o:
+    com.msc.serverbrowser.logging.Logging instance -> a
+com.msc.serverbrowser.util.GTA -> p:
     70:82:java.lang.String retrieveUsernameFromRegistry() -> a
     1046:1046:java.lang.String com.github.sarxos.winreg.WindowsRegistry.readString(com.github.sarxos.winreg.HKey,java.lang.String,java.lang.String):46:46 -> a
     1046:1046:java.lang.String retrieveUsernameFromRegistry():77 -> a
@@ -275,27 +278,27 @@ com.msc.serverbrowser.util.GTA -> o:
     2046:2046:java.lang.String com.github.sarxos.winreg.WindowsRegistry.readString(com.github.sarxos.winreg.HKey,java.lang.String,java.lang.String):46:46 -> b
     2046:2046:java.lang.String getGtaPathUnsafe():123 -> b
     37:37:void <clinit>() -> <clinit>
-com.msc.serverbrowser.util.windows.OSUtil -> p:
-    java.lang.String OS -> d
+com.msc.serverbrowser.util.windows.OSUtil -> q:
+    java.lang.String OS -> f
     22:22:boolean isWindows() -> isWindows
     15:15:void <clinit>() -> <clinit>
-org.sqlite.ExtendedCommand$BackupCommand -> q:
-    java.lang.String srcDB -> e
-    java.lang.String destFile -> f
+org.sqlite.ExtendedCommand$BackupCommand -> r:
+    java.lang.String srcDB -> g
+    java.lang.String destFile -> h
     java.util.regex.Pattern backupCmd -> a
     76:79:void <init>(java.lang.String,java.lang.String) -> <init>
     91:102:org.sqlite.ExtendedCommand$BackupCommand parse(java.lang.String) -> a
     106:107:void execute(org.sqlite.core.DB) -> a
     81:82:void <clinit>() -> <clinit>
-org.sqlite.ExtendedCommand$RestoreCommand -> r:
-    java.lang.String targetDB -> g
-    java.lang.String srcFile -> h
+org.sqlite.ExtendedCommand$RestoreCommand -> s:
+    java.lang.String targetDB -> i
+    java.lang.String srcFile -> j
     java.util.regex.Pattern restoreCmd -> b
     123:126:void <init>(java.lang.String,java.lang.String) -> <init>
     135:145:org.sqlite.ExtendedCommand$RestoreCommand parse(java.lang.String) -> a
     152:153:void execute(org.sqlite.core.DB) -> a
     115:116:void <clinit>() -> <clinit>
-org.sqlite.ExtendedCommand$SQLExtension -> s:
+org.sqlite.ExtendedCommand$SQLExtension -> t:
     void execute(org.sqlite.core.DB) -> a
     java.lang.String getValue() -> getValue
     int estimateLength() -> a
@@ -317,7 +320,7 @@ org.sqlite.JDBC -> org.sqlite.JDBC:
     2098:2098:java.sql.Connection createConnection(java.lang.String,java.util.Properties):114 -> connect
     2098:2098:java.sql.Connection connect(java.lang.String,java.util.Properties):88 -> connect
     29:34:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig -> t:
+org.sqlite.SQLiteConfig -> u:
     java.util.Properties pragmaTable -> a
     int openModeFlag -> b
     org.sqlite.SQLiteConfig$TransactionMode transactionMode -> a
@@ -325,7 +328,7 @@ org.sqlite.SQLiteConfig -> t:
     org.sqlite.SQLiteConfig$DateClass dateClass -> a
     org.sqlite.SQLiteConfig$DatePrecision datePrecision -> a
     long dateMultiplier -> a
-    java.lang.String dateStringFormat -> i
+    java.lang.String dateStringFormat -> k
     java.lang.String[] OnOff -> a
     61:62:void <init>() -> <init>
     46:93:void <init>(java.util.Properties) -> <init>
@@ -338,7 +341,7 @@ org.sqlite.SQLiteConfig -> t:
     1425:1429:java.lang.String[] toStringArray$734a3d99(org.sqlite.ExtendedCommand$SQLExtension[]):425:429 -> a
     1425:1429:java.lang.String[] access$100$734a3d99(org.sqlite.ExtendedCommand$SQLExtension[]):43 -> a
     238:238:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$DateClass -> u:
+org.sqlite.SQLiteConfig$DateClass -> v:
     org.sqlite.SQLiteConfig$DateClass INTEGER -> b
     org.sqlite.SQLiteConfig$DateClass TEXT -> c
     org.sqlite.SQLiteConfig$DateClass REAL -> d
@@ -350,7 +353,7 @@ org.sqlite.SQLiteConfig$DateClass -> u:
     1769:1769:org.sqlite.SQLiteConfig$DateClass valueOf(java.lang.String):769:769 -> a
     1769:1769:org.sqlite.SQLiteConfig$DateClass getDateClass(java.lang.String):777 -> a
     769:770:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$DatePrecision -> v:
+org.sqlite.SQLiteConfig$DatePrecision -> w:
     org.sqlite.SQLiteConfig$DatePrecision SECONDS -> b
     org.sqlite.SQLiteConfig$DatePrecision MILLISECONDS -> c
     org.sqlite.SQLiteConfig$DatePrecision[] $VALUES -> a
@@ -361,7 +364,7 @@ org.sqlite.SQLiteConfig$DatePrecision -> v:
     1749:1749:org.sqlite.SQLiteConfig$DatePrecision valueOf(java.lang.String):749:749 -> a
     1749:1749:org.sqlite.SQLiteConfig$DatePrecision getPrecision(java.lang.String):757 -> a
     749:750:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$Encoding -> w:
+org.sqlite.SQLiteConfig$Encoding -> x:
     org.sqlite.SQLiteConfig$Encoding UTF8 -> a
     org.sqlite.SQLiteConfig$Encoding UTF16 -> b
     org.sqlite.SQLiteConfig$Encoding UTF16_LITTLE_ENDIAN -> c
@@ -379,7 +382,7 @@ org.sqlite.SQLiteConfig$Encoding -> w:
     1453:1453:void <init>(java.lang.String,int,org.sqlite.SQLiteConfig$Encoding):449 -> <init>
     453:453:java.lang.String getValue() -> getValue
     432:440:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$JournalMode -> x:
+org.sqlite.SQLiteConfig$JournalMode -> y:
     org.sqlite.SQLiteConfig$JournalMode DELETE -> a
     org.sqlite.SQLiteConfig$JournalMode TRUNCATE -> b
     org.sqlite.SQLiteConfig$JournalMode PERSIST -> c
@@ -391,7 +394,7 @@ org.sqlite.SQLiteConfig$JournalMode -> x:
     461:461:void <init>(java.lang.String,int) -> <init>
     465:465:java.lang.String getValue() -> getValue
     461:462:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$LockingMode -> y:
+org.sqlite.SQLiteConfig$LockingMode -> z:
     org.sqlite.SQLiteConfig$LockingMode NORMAL -> a
     org.sqlite.SQLiteConfig$LockingMode EXCLUSIVE -> b
     org.sqlite.SQLiteConfig$LockingMode[] $VALUES -> a
@@ -399,7 +402,7 @@ org.sqlite.SQLiteConfig$LockingMode -> y:
     562:562:void <init>(java.lang.String,int) -> <init>
     565:565:java.lang.String getValue() -> getValue
     562:563:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$Pragma -> z:
+org.sqlite.SQLiteConfig$Pragma -> A:
     org.sqlite.SQLiteConfig$Pragma OPEN_MODE -> a
     org.sqlite.SQLiteConfig$Pragma SHARED_CACHE -> b
     org.sqlite.SQLiteConfig$Pragma LOAD_EXTENSION -> c
@@ -432,7 +435,7 @@ org.sqlite.SQLiteConfig$Pragma -> z:
     org.sqlite.SQLiteConfig$Pragma DATE_CLASS -> D
     org.sqlite.SQLiteConfig$Pragma DATE_STRING_FORMAT -> E
     org.sqlite.SQLiteConfig$Pragma BUSY_TIMEOUT -> F
-    java.lang.String pragmaName -> j
+    java.lang.String pragmaName -> l
     java.lang.String[] choices -> choices
     java.lang.String description -> description
     org.sqlite.SQLiteConfig$Pragma[] $VALUES -> a
@@ -441,7 +444,7 @@ org.sqlite.SQLiteConfig$Pragma -> z:
     289:290:void <init>(java.lang.String,int,java.lang.String,java.lang.String[]) -> <init>
     292:296:void <init>(java.lang.String,int,java.lang.String,java.lang.String,java.lang.String[]) -> <init>
     240:278:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$SynchronousMode -> A:
+org.sqlite.SQLiteConfig$SynchronousMode -> B:
     org.sqlite.SQLiteConfig$SynchronousMode OFF -> a
     org.sqlite.SQLiteConfig$SynchronousMode NORMAL -> b
     org.sqlite.SQLiteConfig$SynchronousMode FULL -> c
@@ -450,7 +453,7 @@ org.sqlite.SQLiteConfig$SynchronousMode -> A:
     642:642:void <init>(java.lang.String,int) -> <init>
     646:646:java.lang.String getValue() -> getValue
     642:643:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$TempStore -> B:
+org.sqlite.SQLiteConfig$TempStore -> C:
     org.sqlite.SQLiteConfig$TempStore DEFAULT -> a
     org.sqlite.SQLiteConfig$TempStore FILE -> b
     org.sqlite.SQLiteConfig$TempStore MEMORY -> c
@@ -459,7 +462,7 @@ org.sqlite.SQLiteConfig$TempStore -> B:
     667:667:void <init>(java.lang.String,int) -> <init>
     671:671:java.lang.String getValue() -> getValue
     667:668:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConfig$TransactionMode -> C:
+org.sqlite.SQLiteConfig$TransactionMode -> D:
     org.sqlite.SQLiteConfig$TransactionMode DEFFERED -> b
     org.sqlite.SQLiteConfig$TransactionMode IMMEDIATE -> c
     org.sqlite.SQLiteConfig$TransactionMode EXCLUSIVE -> d
@@ -471,14 +474,14 @@ org.sqlite.SQLiteConfig$TransactionMode -> C:
     1712:1712:org.sqlite.SQLiteConfig$TransactionMode valueOf(java.lang.String):712:712 -> a
     1712:1712:org.sqlite.SQLiteConfig$TransactionMode getMode(java.lang.String):720 -> a
     712:713:void <clinit>() -> <clinit>
-org.sqlite.SQLiteConnection -> D:
+org.sqlite.SQLiteConnection -> E:
     45:46:void <init>(java.lang.String,java.lang.String,java.util.Properties) -> <init>
     49:49:void setSchema(java.lang.String) -> setSchema
     52:52:java.lang.String getSchema() -> getSchema
     56:56:void abort(java.util.concurrent.Executor) -> abort
     59:59:void setNetworkTimeout(java.util.concurrent.Executor,int) -> setNetworkTimeout
     62:62:int getNetworkTimeout() -> getNetworkTimeout
-org.sqlite.SQLiteErrorCode -> E:
+org.sqlite.SQLiteErrorCode -> F:
     org.sqlite.SQLiteErrorCode UNKNOWN_ERROR -> a
     org.sqlite.SQLiteErrorCode SQLITE_OK -> b
     org.sqlite.SQLiteErrorCode SQLITE_ERROR -> c
@@ -563,9 +566,9 @@ org.sqlite.SQLiteErrorCode -> E:
     1036:1036:org.sqlite.SQLiteErrorCode getErrorCode(int):136 -> a
     150:150:java.lang.String toString() -> toString
     36:114:void <clinit>() -> <clinit>
-org.sqlite.SQLiteException -> F:
+org.sqlite.SQLiteException -> G:
     34:36:void <init>(java.lang.String,org.sqlite.SQLiteErrorCode) -> <init>
-org.sqlite.SQLiteJDBCLoader -> G:
+org.sqlite.SQLiteJDBCLoader -> H:
     boolean extracted -> a
     49:49:void <init>() -> <init>
     61:65:boolean initialize() -> initialize
@@ -582,11 +585,11 @@ org.sqlite.SQLiteJDBCLoader -> G:
     371:372:int getMinorVersion() -> getMinorVersion
     380:397:java.lang.String getVersion() -> getVersion
     51:51:void <clinit>() -> <clinit>
-org.sqlite.SQLiteJDBCLoader$1 -> H:
-    java.lang.String searchPattern -> k
+org.sqlite.SQLiteJDBCLoader$1 -> I:
+    java.lang.String searchPattern -> m
     80:81:void <init>() -> <init>
     83:83:boolean accept(java.io.File,java.lang.String) -> accept
-org.sqlite.SQLiteOpenMode -> I:
+org.sqlite.SQLiteOpenMode -> J:
     org.sqlite.SQLiteOpenMode READONLY -> a
     org.sqlite.SQLiteOpenMode READWRITE -> b
     org.sqlite.SQLiteOpenMode CREATE -> c
@@ -608,7 +611,7 @@ org.sqlite.SQLiteOpenMode -> I:
     int flag -> flag
     58:60:void <init>(java.lang.String,int,int) -> <init>
     35:53:void <clinit>() -> <clinit>
-org.sqlite.core.CoreConnection -> J:
+org.sqlite.core.CoreConnection -> K:
     java.lang.String url -> url
     java.lang.String fileName -> fileName
     org.sqlite.core.DB db -> a
@@ -623,7 +626,7 @@ org.sqlite.core.CoreConnection -> J:
     org.sqlite.SQLiteConfig$DateClass dateClass -> a
     long dateMultiplier -> a
     org.sqlite.date.FastDateFormat dateFormat -> a
-    java.lang.String dateStringFormat -> i
+    java.lang.String dateStringFormat -> k
     33:87:void <init>(java.lang.String,java.lang.String,java.util.Properties) -> <init>
     1746:1746:org.sqlite.SQLiteConfig$TransactionMode org.sqlite.SQLiteConfig.getTransactionMode():746:746 -> <init>
     1746:1746:void <init>(java.lang.String,java.lang.String,java.util.Properties):73 -> <init>
@@ -645,7 +648,7 @@ org.sqlite.core.CoreConnection -> J:
     382:383:void finalize() -> finalize
     389:396:void close() -> close
     41:53:void <clinit>() -> <clinit>
-org.sqlite.core.CoreDatabaseMetaData -> K:
+org.sqlite.core.CoreDatabaseMetaData -> L:
     org.sqlite.SQLiteConnection conn -> a
     java.sql.PreparedStatement getTableTypes -> a
     java.sql.PreparedStatement getTypeInfo -> b
@@ -671,7 +674,7 @@ org.sqlite.core.CoreDatabaseMetaData -> K:
     182:190:java.lang.String escape(java.lang.String) -> escape
     300:301:void finalize() -> finalize
     198:206:void <clinit>() -> <clinit>
-org.sqlite.core.CorePreparedStatement -> L:
+org.sqlite.core.CorePreparedStatement -> M:
     int columnCount -> f
     int paramCount -> g
     int batchQueryCount -> h
@@ -694,10 +697,10 @@ org.sqlite.core.CorePreparedStatement -> L:
     2425:2425:java.lang.String org.sqlite.date.FastDatePrinter.format(java.util.Date):443 -> a
     2425:2425:java.lang.String org.sqlite.date.FastDateFormat.format(java.util.Date):432 -> a
     2425:2425:void setDateByMilliseconds(int,java.lang.Long):131 -> a
-org.sqlite.core.CorePreparedStatement$1 -> M:
+org.sqlite.core.CorePreparedStatement$1 -> N:
     int[] $SwitchMap$org$sqlite$SQLiteConfig$DateClass -> a
     129:129:void <clinit>() -> <clinit>
-org.sqlite.core.CoreResultSet -> N:
+org.sqlite.core.CoreResultSet -> O:
     org.sqlite.core.CoreStatement stmt -> a
     org.sqlite.core.DB db -> a
     boolean open -> open
@@ -716,13 +719,13 @@ org.sqlite.core.CoreResultSet -> N:
     96:99:int markCol(int) -> b
     106:110:void checkMeta() -> g
     113:136:void close() -> close
-org.sqlite.core.CoreStatement -> O:
+org.sqlite.core.CoreStatement -> P:
     org.sqlite.SQLiteConnection conn -> a
     org.sqlite.core.DB db -> a
     org.sqlite.core.CoreResultSet rs -> a
     org.sqlite.core.CoreDatabaseMetaData metadata -> b
     long pointer -> b
-    java.lang.String sql -> l
+    java.lang.String sql -> n
     int batchPos -> l
     java.lang.Object[] batch -> a
     boolean resultsWaiting -> d
@@ -735,7 +738,7 @@ org.sqlite.core.CoreStatement -> O:
     1886:1886:void org.sqlite.core.DB.throwex(int):886:886 -> h
     1886:1886:void internalClose():126 -> h
     java.sql.ResultSet executeQuery$ffd99d9(java.lang.String) -> a
-org.sqlite.core.DB -> P:
+org.sqlite.core.DB -> Q:
     org.sqlite.SQLiteConnection conn -> a
     long begin -> c
     long commit -> d
@@ -801,7 +804,7 @@ org.sqlite.core.DB -> P:
     957:984:void ensureAutoCommit() -> k
     5886:5886:void throwex(int):886:886 -> k
     5886:5886:void ensureAutoCommit():976 -> k
-org.sqlite.core.NativeDB -> Q:
+org.sqlite.core.NativeDB -> R:
     boolean isLoaded -> e
     boolean loadSucceeded -> f
     28:62:void <init>() -> <init>
@@ -858,7 +861,7 @@ org.sqlite.core.NativeDB -> Q:
     475:482:byte[] stringToUtf8ByteArray(java.lang.String) -> b
     487:494:java.lang.String utf8ByteArrayToString(byte[]) -> b
     37:46:void <clinit>() -> <clinit>
-org.sqlite.date.FastDateFormat -> R:
+org.sqlite.date.FastDateFormat -> S:
     long serialVersionUID -> serialVersionUID
     org.sqlite.date.FormatCache cache -> a
     org.sqlite.date.FastDatePrinter printer -> a
@@ -892,12 +895,12 @@ org.sqlite.date.FastDateFormat -> R:
     4504:4504:java.util.TimeZone org.sqlite.date.FastDatePrinter.getTimeZone():504:504 -> toString
     4504:4504:java.lang.String toString():586 -> toString
     98:98:void <clinit>() -> <clinit>
-org.sqlite.date.FastDateFormat$1 -> S:
+org.sqlite.date.FastDateFormat$1 -> T:
     98:98:void <init>() -> <init>
     98:98:java.text.Format createInstance(java.lang.String,java.util.TimeZone,java.util.Locale) -> a
     1101:1101:org.sqlite.date.FastDateFormat createInstance(java.lang.String,java.util.TimeZone,java.util.Locale):101:101 -> a
     1101:1101:java.text.Format createInstance(java.lang.String,java.util.TimeZone,java.util.Locale):98 -> a
-org.sqlite.date.FastDateParser -> T:
+org.sqlite.date.FastDateParser -> U:
     long serialVersionUID -> serialVersionUID
     java.util.Locale JAPANESE_IMPERIAL -> a
     java.lang.String pattern -> pattern
@@ -907,7 +910,7 @@ org.sqlite.date.FastDateParser -> T:
     int startYear -> n
     java.util.regex.Pattern parsePattern -> c
     org.sqlite.date.FastDateParser$Strategy[] strategies -> a
-    java.lang.String currentFormatField -> m
+    java.lang.String currentFormatField -> o
     org.sqlite.date.FastDateParser$Strategy nextStrategy -> a
     java.util.regex.Pattern formatPattern -> d
     java.util.concurrent.ConcurrentMap[] caches -> a
@@ -947,31 +950,31 @@ org.sqlite.date.FastDateParser -> T:
     1409:1410:int adjustYear(int):409:410 -> a
     1409:1410:int access$300(org.sqlite.date.FastDateParser,int):72 -> a
     80:921:void <clinit>() -> <clinit>
-org.sqlite.date.FastDateParser$1 -> U:
+org.sqlite.date.FastDateParser$1 -> V:
     723:723:void <init>() -> <init>
     729:734:void setCalendar(org.sqlite.date.FastDateParser,java.util.Calendar,java.lang.String) -> a
-org.sqlite.date.FastDateParser$2 -> V:
+org.sqlite.date.FastDateParser$2 -> W:
     892:892:void <init>() -> <init>
     895:895:int modify(int) -> c
-org.sqlite.date.FastDateParser$3 -> W:
+org.sqlite.date.FastDateParser$3 -> X:
     905:905:void <init>() -> <init>
     908:908:int modify(int) -> c
-org.sqlite.date.FastDateParser$4 -> X:
+org.sqlite.date.FastDateParser$4 -> Y:
     911:911:void <init>() -> <init>
     914:914:int modify(int) -> c
-org.sqlite.date.FastDateParser$CaseInsensitiveTextStrategy -> Y:
+org.sqlite.date.FastDateParser$CaseInsensitiveTextStrategy -> Z:
     int field -> field
     java.util.Locale locale -> locale
     java.util.Map lKeyValues -> e
     624:633:void <init>(int,java.util.Calendar,java.util.Locale) -> <init>
     640:645:boolean addRegex(org.sqlite.date.FastDateParser,java.lang.StringBuilder) -> a
     653:664:void setCalendar(org.sqlite.date.FastDateParser,java.util.Calendar,java.lang.String) -> a
-org.sqlite.date.FastDateParser$CopyQuotedStrategy -> Z:
-    java.lang.String formatField -> n
+org.sqlite.date.FastDateParser$CopyQuotedStrategy -> aa:
+    java.lang.String formatField -> p
     584:586:void <init>(java.lang.String) -> <init>
     593:597:boolean isNumber() -> isNumber
     605:606:boolean addRegex(org.sqlite.date.FastDateParser,java.lang.StringBuilder) -> a
-org.sqlite.date.FastDateParser$ISO8601TimeZoneStrategy -> aa:
+org.sqlite.date.FastDateParser$ISO8601TimeZoneStrategy -> ab:
     java.lang.String pattern -> pattern
     org.sqlite.date.FastDateParser$Strategy ISO_8601_1_STRATEGY -> r
     org.sqlite.date.FastDateParser$Strategy ISO_8601_2_STRATEGY -> s
@@ -981,7 +984,7 @@ org.sqlite.date.FastDateParser$ISO8601TimeZoneStrategy -> aa:
     860:865:void setCalendar(org.sqlite.date.FastDateParser,java.util.Calendar,java.lang.String) -> a
     879:887:org.sqlite.date.FastDateParser$Strategy getStrategy(int) -> a
     867:869:void <clinit>() -> <clinit>
-org.sqlite.date.FastDateParser$NumberStrategy -> ab:
+org.sqlite.date.FastDateParser$NumberStrategy -> ac:
     int field -> field
     678:680:void <init>(int) -> <init>
     687:687:boolean isNumber() -> isNumber
@@ -992,21 +995,21 @@ org.sqlite.date.FastDateParser$NumberStrategy -> ab:
     1426:1426:boolean addRegex(org.sqlite.date.FastDateParser,java.lang.StringBuilder):697 -> a
     710:711:void setCalendar(org.sqlite.date.FastDateParser,java.util.Calendar,java.lang.String) -> a
     719:719:int modify(int) -> c
-org.sqlite.date.FastDateParser$Strategy -> ac:
+org.sqlite.date.FastDateParser$Strategy -> ad:
     432:432:void <init>() -> <init>
     441:441:boolean isNumber() -> isNumber
     455:455:void setCalendar(org.sqlite.date.FastDateParser,java.util.Calendar,java.lang.String) -> a
     boolean addRegex(org.sqlite.date.FastDateParser,java.lang.StringBuilder) -> a
     432:432:void <init>(byte) -> <init>
-org.sqlite.date.FastDateParser$TimeZoneStrategy -> ad:
-    java.lang.String validTimeZoneChars -> o
+org.sqlite.date.FastDateParser$TimeZoneStrategy -> ae:
+    java.lang.String validTimeZoneChars -> q
     java.util.SortedMap tzNames -> a
     743:801:void <init>(java.util.Locale) -> <init>
     808:809:boolean addRegex(org.sqlite.date.FastDateParser,java.lang.StringBuilder) -> a
     818:831:void setCalendar(org.sqlite.date.FastDateParser,java.util.Calendar,java.lang.String) -> a
-org.sqlite.date.FastDatePrinter -> ae:
+org.sqlite.date.FastDatePrinter -> af:
     long serialVersionUID -> serialVersionUID
-    java.lang.String mPattern -> p
+    java.lang.String mPattern -> r
     java.util.TimeZone mTimeZone -> b
     java.util.Locale mLocale -> b
     org.sqlite.ExtendedCommand$SQLExtension[] mRules$6d503b6f -> a
@@ -1030,12 +1033,12 @@ org.sqlite.date.FastDatePrinter -> ae:
     1588:1590:void appendDigits(java.lang.StringBuffer,int):588:590 -> b
     1588:1590:void access$000(java.lang.StringBuffer,int):80 -> b
     1062:1062:void <clinit>() -> <clinit>
-org.sqlite.date.FastDatePrinter$CharacterLiteral -> af:
+org.sqlite.date.FastDatePrinter$CharacterLiteral -> ag:
     char mValue -> a
     639:641:void <init>(char) -> <init>
     647:647:int estimateLength() -> a
     654:655:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
-org.sqlite.date.FastDatePrinter$Iso8601_Rule -> ag:
+org.sqlite.date.FastDatePrinter$Iso8601_Rule -> ah:
     org.sqlite.date.FastDatePrinter$Iso8601_Rule ISO8601_HOURS -> a
     org.sqlite.date.FastDatePrinter$Iso8601_Rule ISO8601_HOURS_MINUTES -> b
     org.sqlite.date.FastDatePrinter$Iso8601_Rule ISO8601_HOURS_COLON_MINUTES -> c
@@ -1045,40 +1048,40 @@ org.sqlite.date.FastDatePrinter$Iso8601_Rule -> ag:
     1242:1242:int estimateLength() -> a
     1249:1277:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
     1201:1205:void <clinit>() -> <clinit>
-org.sqlite.date.FastDatePrinter$PaddedNumberField -> ah:
+org.sqlite.date.FastDatePrinter$PaddedNumberField -> ai:
     int mField -> p
     int mSize -> q
     826:833:void <init>(int,int) -> <init>
     839:839:int estimateLength() -> a
     846:847:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
     854:862:void appendTo(java.lang.StringBuffer,int) -> a
-org.sqlite.date.FastDatePrinter$StringLiteral -> ai:
-    java.lang.String mValue -> q
+org.sqlite.date.FastDatePrinter$StringLiteral -> aj:
+    java.lang.String mValue -> s
     670:672:void <init>(java.lang.String) -> <init>
     678:678:int estimateLength() -> a
     685:686:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
-org.sqlite.date.FastDatePrinter$TextField -> aj:
+org.sqlite.date.FastDatePrinter$TextField -> ak:
     int mField -> p
     java.lang.String[] mValues -> d
     703:706:void <init>(int,java.lang.String[]) -> <init>
     712:719:int estimateLength() -> a
     726:727:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
-org.sqlite.date.FastDatePrinter$TimeZoneDisplayKey -> ak:
+org.sqlite.date.FastDatePrinter$TimeZoneDisplayKey -> al:
     java.util.TimeZone mTimeZone -> b
     int mStyle -> r
     java.util.Locale mLocale -> b
     1298:1306:void <init>(java.util.TimeZone,boolean,int,java.util.Locale) -> <init>
     1313:1313:int hashCode() -> hashCode
     1321:1331:boolean equals(java.lang.Object) -> equals
-org.sqlite.date.FastDatePrinter$TimeZoneNameRule -> al:
+org.sqlite.date.FastDatePrinter$TimeZoneNameRule -> am:
     java.util.Locale mLocale -> b
     int mStyle -> r
-    java.lang.String mStandard -> r
-    java.lang.String mDaylight -> s
+    java.lang.String mStandard -> t
+    java.lang.String mDaylight -> u
     1103:1109:void <init>(java.util.TimeZone,java.util.Locale,int) -> <init>
     1118:1118:int estimateLength() -> a
     1125:1131:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
-org.sqlite.date.FastDatePrinter$TimeZoneNumberRule -> am:
+org.sqlite.date.FastDatePrinter$TimeZoneNumberRule -> an:
     org.sqlite.date.FastDatePrinter$TimeZoneNumberRule INSTANCE_COLON -> a
     org.sqlite.date.FastDatePrinter$TimeZoneNumberRule INSTANCE_NO_COLON -> b
     org.sqlite.date.FastDatePrinter$TimeZoneNumberRule INSTANCE_ISO_8601 -> c
@@ -1088,19 +1091,19 @@ org.sqlite.date.FastDatePrinter$TimeZoneNumberRule -> am:
     1161:1161:int estimateLength() -> a
     1168:1191:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
     1139:1141:void <clinit>() -> <clinit>
-org.sqlite.date.FastDatePrinter$TwelveHourField -> an:
+org.sqlite.date.FastDatePrinter$TwelveHourField -> ao:
     org.sqlite.ExtendedCommand$SQLExtension mRule$5625d56d$1f57e076 -> a
     988:990:void <init>(org.sqlite.ExtendedCommand$SQLExtension) -> <init>
     996:996:int estimateLength() -> a
     1003:1008:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
     1014:1015:void appendTo(java.lang.StringBuffer,int) -> a
-org.sqlite.date.FastDatePrinter$TwentyFourHourField -> ao:
+org.sqlite.date.FastDatePrinter$TwentyFourHourField -> ap:
     org.sqlite.ExtendedCommand$SQLExtension mRule$5625d56d$1f57e076 -> a
     1030:1032:void <init>(org.sqlite.ExtendedCommand$SQLExtension) -> <init>
     1038:1038:int estimateLength() -> a
     1045:1050:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
     1056:1057:void appendTo(java.lang.StringBuffer,int) -> a
-org.sqlite.date.FastDatePrinter$TwoDigitMonthField -> ap:
+org.sqlite.date.FastDatePrinter$TwoDigitMonthField -> aq:
     org.sqlite.date.FastDatePrinter$TwoDigitMonthField INSTANCE -> a
     951:952:void <init>() -> <init>
     958:958:int estimateLength() -> a
@@ -1109,13 +1112,13 @@ org.sqlite.date.FastDatePrinter$TwoDigitMonthField -> ap:
     1972:1973:void appendTo(java.lang.StringBuffer,java.util.Calendar):965 -> a
     972:973:void appendTo(java.lang.StringBuffer,int) -> a
     945:945:void <clinit>() -> <clinit>
-org.sqlite.date.FastDatePrinter$TwoDigitNumberField -> aq:
+org.sqlite.date.FastDatePrinter$TwoDigitNumberField -> ar:
     int mField -> p
     876:878:void <init>(int) -> <init>
     884:884:int estimateLength() -> a
     891:892:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
     898:903:void appendTo(java.lang.StringBuffer,int) -> a
-org.sqlite.date.FastDatePrinter$TwoDigitYearField -> ar:
+org.sqlite.date.FastDatePrinter$TwoDigitYearField -> as:
     org.sqlite.date.FastDatePrinter$TwoDigitYearField INSTANCE -> a
     916:917:void <init>() -> <init>
     923:923:int estimateLength() -> a
@@ -1124,32 +1127,32 @@ org.sqlite.date.FastDatePrinter$TwoDigitYearField -> ar:
     1937:1938:void appendTo(java.lang.StringBuffer,java.util.Calendar):930 -> a
     937:938:void appendTo(java.lang.StringBuffer,int) -> a
     910:910:void <clinit>() -> <clinit>
-org.sqlite.date.FastDatePrinter$UnpaddedMonthField -> as:
+org.sqlite.date.FastDatePrinter$UnpaddedMonthField -> at:
     org.sqlite.date.FastDatePrinter$UnpaddedMonthField INSTANCE -> a
     784:785:void <init>() -> <init>
     791:791:int estimateLength() -> a
     798:799:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
     805:810:void appendTo(java.lang.StringBuffer,int) -> a
     777:777:void <clinit>() -> <clinit>
-org.sqlite.date.FastDatePrinter$UnpaddedNumberField -> at:
+org.sqlite.date.FastDatePrinter$UnpaddedNumberField -> au:
     int mField -> p
     741:743:void <init>(int) -> <init>
     749:749:int estimateLength() -> a
     756:757:void appendTo(java.lang.StringBuffer,java.util.Calendar) -> a
     763:770:void appendTo(java.lang.StringBuffer,int) -> a
-org.sqlite.date.FormatCache -> au:
+org.sqlite.date.FormatCache -> av:
     java.util.concurrent.ConcurrentMap cInstanceCache -> b
     35:41:void <init>() -> <init>
     70:90:java.text.Format getInstance$b9d09af(java.lang.String,java.util.TimeZone) -> a
     java.text.Format createInstance(java.lang.String,java.util.TimeZone,java.util.Locale) -> a
     44:44:void <clinit>() -> <clinit>
-org.sqlite.date.FormatCache$MultipartKey -> av:
+org.sqlite.date.FormatCache$MultipartKey -> aw:
     java.lang.Object[] keys -> keys
     int hashCode -> hashCode
     233:235:void <init>(java.lang.Object[]) -> <init>
     245:245:boolean equals(java.lang.Object) -> equals
     253:262:int hashCode() -> hashCode
-org.sqlite.jdbc3.JDBC3Connection -> aw:
+org.sqlite.jdbc3.JDBC3Connection -> ax:
     java.util.concurrent.atomic.AtomicInteger savePoint -> a
     java.util.Map typeMap -> f
     22:27:void <init>(java.lang.String,java.lang.String,java.util.Properties) -> <init>
@@ -1187,7 +1190,7 @@ org.sqlite.jdbc3.JDBC3Connection -> aw:
     307:311:void releaseSavepoint(java.sql.Savepoint) -> releaseSavepoint
     317:321:void rollback(java.sql.Savepoint) -> rollback
     326:326:java.sql.Struct createStruct(java.lang.String,java.lang.Object[]) -> createStruct
-org.sqlite.jdbc3.JDBC3DatabaseMetaData -> ax:
+org.sqlite.jdbc3.JDBC3DatabaseMetaData -> ay:
     java.util.regex.Pattern TYPE_INTEGER -> e
     java.util.regex.Pattern TYPE_VARCHAR -> f
     java.util.regex.Pattern TYPE_FLOAT -> g
@@ -1385,12 +1388,12 @@ org.sqlite.jdbc3.JDBC3DatabaseMetaData -> ax:
     22:22:java.lang.String access$200$31cadd25(java.lang.String) -> e
     22:22:java.lang.String access$300$31cadd25(java.lang.String) -> f
     1083:1848:void <clinit>() -> <clinit>
-org.sqlite.jdbc3.JDBC3DatabaseMetaData$PrimaryKeyFinder -> ay:
-    java.lang.String table -> t
-    java.lang.String pkName -> u
+org.sqlite.jdbc3.JDBC3DatabaseMetaData$PrimaryKeyFinder -> az:
+    java.lang.String table -> v
+    java.lang.String pkName -> w
     java.lang.String[] pkColumns -> e
     1859:1921:void <init>(org.sqlite.jdbc3.JDBC3DatabaseMetaData,java.lang.String) -> <init>
-org.sqlite.jdbc3.JDBC3PreparedStatement -> az:
+org.sqlite.jdbc3.JDBC3PreparedStatement -> aA:
     30:31:void <init>(org.sqlite.SQLiteConnection,java.lang.String) -> <init>
     37:40:void clearParameters() -> clearParameters
     46:57:boolean execute() -> execute
@@ -1444,7 +1447,7 @@ org.sqlite.jdbc3.JDBC3PreparedStatement -> az:
     531:531:int executeUpdate(java.lang.String) -> executeUpdate
     539:539:java.sql.ResultSet executeQuery(java.lang.String) -> executeQuery
     547:547:void addBatch(java.lang.String) -> addBatch
-org.sqlite.jdbc3.JDBC3ResultSet -> aA:
+org.sqlite.jdbc3.JDBC3ResultSet -> aB:
     java.util.regex.Pattern COLUMN_TYPENAME -> l
     java.util.regex.Pattern COLUMN_TYPECAST -> m
     java.util.regex.Pattern COLUMN_PRECISION -> n
@@ -1547,14 +1550,14 @@ org.sqlite.jdbc3.JDBC3ResultSet -> aA:
     1032:1089:java.util.Calendar julianDateToCalendar(java.lang.Double,java.util.Calendar) -> a
     1093:1099:void checkCalendar(java.util.Calendar) -> b
     658:668:void <clinit>() -> <clinit>
-org.sqlite.jdbc3.JDBC3Savepoint -> aB:
+org.sqlite.jdbc3.JDBC3Savepoint -> aC:
     int id -> id
     java.lang.String name -> name
     12:15:void <init>(int) -> <init>
     17:20:void <init>(int,java.lang.String) -> <init>
     23:23:int getSavepointId() -> getSavepointId
     27:27:java.lang.String getSavepointName() -> getSavepointName
-org.sqlite.jdbc3.JDBC3Statement -> aC:
+org.sqlite.jdbc3.JDBC3Statement -> aD:
     21:22:void <init>(org.sqlite.SQLiteConnection) -> <init>
     28:36:void close() -> close
     42:43:void finalize() -> finalize
@@ -1602,7 +1605,7 @@ org.sqlite.jdbc3.JDBC3Statement -> aC:
     410:410:int executeUpdate(java.lang.String,int[]) -> executeUpdate
     412:412:int executeUpdate(java.lang.String,java.lang.String[]) -> executeUpdate
     414:414:boolean execute(java.lang.String,int) -> execute
-org.sqlite.jdbc4.JDBC4Connection -> aD:
+org.sqlite.jdbc4.JDBC4Connection -> aE:
     24:25:void <init>(java.lang.String,java.lang.String,java.util.Properties) -> <init>
     28:34:java.sql.DatabaseMetaData getMetaData() -> getMetaData
     38:41:java.sql.Statement createStatement(int,int,int) -> createStatement
@@ -1620,7 +1623,7 @@ org.sqlite.jdbc4.JDBC4Connection -> aD:
     114:114:java.lang.String getClientInfo(java.lang.String) -> getClientInfo
     119:119:java.util.Properties getClientInfo() -> getClientInfo
     125:125:java.sql.Array createArrayOf(java.lang.String,java.lang.Object[]) -> createArrayOf
-org.sqlite.jdbc4.JDBC4DatabaseMetaData -> aE:
+org.sqlite.jdbc4.JDBC4DatabaseMetaData -> aF:
     14:15:void <init>(org.sqlite.SQLiteConnection) -> <init>
     19:19:java.lang.Object unwrap(java.lang.Class) -> unwrap
     23:23:boolean isWrapperFor(java.lang.Class) -> isWrapperFor
@@ -1632,7 +1635,7 @@ org.sqlite.jdbc4.JDBC4DatabaseMetaData -> aE:
     55:55:java.sql.ResultSet getFunctions(java.lang.String,java.lang.String,java.lang.String) -> getFunctions
     59:59:java.sql.ResultSet getPseudoColumns(java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> getPseudoColumns
     63:63:boolean generatedKeyAlwaysReturned() -> generatedKeyAlwaysReturned
-org.sqlite.jdbc4.JDBC4PreparedStatement -> aF:
+org.sqlite.jdbc4.JDBC4PreparedStatement -> aG:
     19:20:void <init>(org.sqlite.SQLiteConnection,java.lang.String) -> <init>
     25:25:void setRowId(int,java.sql.RowId) -> setRowId
     31:31:void setNString(int,java.lang.String) -> setNString
@@ -1652,7 +1655,7 @@ org.sqlite.jdbc4.JDBC4PreparedStatement -> aF:
     113:113:void setClob(int,java.io.Reader) -> setClob
     119:119:void setBlob(int,java.io.InputStream) -> setBlob
     124:124:void setNClob(int,java.io.Reader) -> setNClob
-org.sqlite.jdbc4.JDBC4ResultSet -> aG:
+org.sqlite.jdbc4.JDBC4ResultSet -> aH:
     28:29:void <init>(org.sqlite.core.CoreStatement) -> <init>
     33:43:void close() -> close
     1061:1061:boolean org.sqlite.core.CoreResultSet.isOpen():61:61 -> close
@@ -1790,7 +1793,7 @@ org.sqlite.jdbc4.JDBC4ResultSet -> aG:
     500:500:void updateTimestamp(int,java.sql.Timestamp) -> updateTimestamp
     502:502:void updateTimestamp(java.lang.String,java.sql.Timestamp) -> updateTimestamp
     505:505:void refreshRow() -> refreshRow
-org.sqlite.jdbc4.JDBC4Statement -> aH:
+org.sqlite.jdbc4.JDBC4Statement -> aI:
     boolean closed -> closed
     boolean closeOnCompletion -> i
     11:23:void <init>(org.sqlite.SQLiteConnection) -> <init>

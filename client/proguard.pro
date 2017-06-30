@@ -20,9 +20,8 @@
 -adaptresourcefilenames **.properties,**fxml,**.css
 -adaptresourcefilecontents **.properties,META-INF/MANIFEST.MF,META-INF/services/**,**fxml,**.css
 
-
 #
-#
+# Native libraries need to be loaded during runtime
 -keeppackagenames org.sqlite.native 
 
 # Preserve the special static methods that are required in all enumeration
