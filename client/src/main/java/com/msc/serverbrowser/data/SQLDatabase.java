@@ -30,11 +30,11 @@ public class SQLDatabase
 			instance = new SQLDatabase();
 			instance.init();
 		}
-		return instance;
+		return instance;t
 	}
 
 	/**
-	 * Private Constructor to keep outsiders from instanciating this class.
+	 * Private Constructor to keep outsiders from instantiating this class.
 	 */
 	private SQLDatabase()
 	{
@@ -78,7 +78,7 @@ public class SQLDatabase
 	 *
 	 * @param statement
 	 *            the statement to execute
-	 * @return <code>true</code> if sucessful and <code>false<code> otherwise
+	 * @return <code>true</code> if successful and <code>false<code> otherwise
 	 */
 	public boolean execute(final String statement)
 	{
@@ -104,6 +104,7 @@ public class SQLDatabase
 	{
 		try
 		{
+			System.out.println("sqlConnection =" + sqlConnection);
 			return Optional.of(sqlConnection.prepareStatement(statement).executeQuery());
 		}
 		catch (final SQLException e)

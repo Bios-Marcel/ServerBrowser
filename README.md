@@ -159,24 +159,5 @@ If your Client isn't able to connect to the server anymore, the first thing you 
 
 The second thing you might want to check, is your firewall. Make sure you haven't blocked port 1099 or the application itself.
 
-### Proguard Errors
-
-```
-Warning: there were 1 kept classes and class members that were remapped anyway.
-         You should adapt your configuration or edit the mapping file.
-         If you are sure this remapping won't hurt, you could try your luck
-         using the '-ignorewarnings' option.
-         (http://proguard.sourceforge.net/manual/troubleshooting.html#mappingconflict1)
-```
-
-This most likely means, that new classes were added to the __keep__ list of proguard, but they are still referenced as __obfuscated__ in __proguard.map__.
-
-Run __clean__ to reset the file and build again.
-
-``` shell
-$ ./gradlew clean
-```
-
-
 ## You need help?
 [Send me an E-Mail](mailto:marceloschr@gmail.com)

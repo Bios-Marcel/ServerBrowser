@@ -10,7 +10,6 @@
 -allowaccessmodification
 -mergeinterfacesaggressively
 -printmapping proguard.map
--applymapping proguard.map
 -overloadaggressively
 -useuniqueclassmembernames
 -flattenpackagehierarchy ''
