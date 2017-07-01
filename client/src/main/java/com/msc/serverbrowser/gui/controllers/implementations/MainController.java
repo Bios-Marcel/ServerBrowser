@@ -12,6 +12,7 @@ import com.msc.serverbrowser.logging.Logging;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 
 public class MainController implements ViewController
@@ -31,7 +32,7 @@ public class MainController implements ViewController
 	private StackPane	menuItemSettings;
 
 	@FXML
-	private StackPane	activeViewContainer;
+	private ScrollPane	activeViewContainer;
 	private Views		activeView;
 
 	@Override
@@ -127,8 +128,7 @@ public class MainController implements ViewController
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
 			loader.setController(view.getControllerType().newInstance());
-			activeViewContainer.getChildren().clear();
-			activeViewContainer.getChildren().add(loader.load());
+			activeViewContainer.setContent(loader.load());
 			activeViewContainer.getStylesheets().setAll(view.getStylesheetPath());
 			headerTitle.setText(view.getTitle());
 		}

@@ -196,7 +196,7 @@ public class Client extends Application
 	public static void setupDialog(final Alert alert)
 	{
 		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(APPLICATION_ICON);
-		ObservableList<String> clientStylesheets = getInstance().getStage().getScene().getStylesheets();
+		final ObservableList<String> clientStylesheets = getInstance().getStage().getScene().getStylesheets();
 		alert.getDialogPane().getStylesheets().addAll(clientStylesheets);
 		alert.initOwner(getInstance().getStage());
 		alert.initModality(Modality.APPLICATION_MODAL);

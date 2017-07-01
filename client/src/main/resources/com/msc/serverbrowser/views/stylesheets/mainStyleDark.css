@@ -26,6 +26,19 @@
     -fx-background-color: -component-background-color-selected !important;
 }
 
+/**
+ * Container that contains the elements of the specific view
+ */
+
+.viewContent
+{
+	-fx-padding: 5.0;	
+}
+
+/**
+ * General Component settings
+ */
+
 .text-field, .combo-box, .titled-pane
 {
 	-fx-border-width: 1.0;
@@ -162,6 +175,26 @@
 }
 
 /**
+ * CheckBoxes
+ */
+ 
+.check-box .box
+{
+	-fx-border-color: -border-color;
+}
+
+.check-box:selected
+{
+	-fx-background-insets: 5.0;
+}
+
+.check-box:selected > .box > .mark
+{
+	-fx-background-color: -border-color;
+}
+
+
+/**
  * Tab Pane (Menu)
  */
 
@@ -188,25 +221,6 @@
 {
 	-fx-background-color: -component-background-color;
 	-fx-border-width: 3.0 0.0 1.0 0.0;
-}
-
-/**
- * CheckBoxes
- */
- 
-.check-box .box
-{
-	-fx-border-color: -border-color;
-}
-
-.check-box:selected
-{
-	-fx-background-insets: 5.0;
-}
-
-.check-box:selected > .box > .mark
-{
-	-fx-background-color: -border-color;
 }
 
 /**
