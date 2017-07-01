@@ -10,6 +10,11 @@ import java.nio.channels.ReadableByteChannel;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
+/**
+ * Contains all kinds of utility methods that are somehow connected to file actions.
+ *
+ * @author Marcel
+ */
 public class FileUtility
 {
 	/**

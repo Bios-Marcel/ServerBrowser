@@ -13,6 +13,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 
+/**
+ * Defines the behaviour of the settings view and manages setting bindings.
+ *
+ * @author Marcel
+ */
 public class SettingsController implements ViewController
 {
 	@FXML
@@ -56,6 +61,16 @@ public class SettingsController implements ViewController
 		});
 	}
 
+	/**
+	 * Does a one way bidning of a {@link CheckBox} to a {@link Property}. Initially sets the value
+	 * of the {@link CheckBox} acording to the {@link Property Properties} value. As soon as the
+	 * {@link CheckBox} value changes, the {@link Property} value will also change.
+	 *
+	 * @param box
+	 *            th {@link CheckBox}
+	 * @param property
+	 *            the {@link Property} that will be bound to the {@link CheckBox}
+	 */
 	private static void setupCheckBox(final CheckBox box, final Property property)
 	{
 		box.selectedProperty().set(ClientProperties.getPropertyAsBoolean(property));
