@@ -6,8 +6,6 @@
 buildscript {
 	dependencies {
 		classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.2'
-		classpath 'net.sf.proguard:proguard-gradle:5.3.3'
-		classpath 'net.sf.proguard:proguard-gui:5.3.3'
 		classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
 	}
 	repositories {
@@ -22,7 +20,6 @@ mainClassName = "com.msc.serverbrowser.Client"
 dependencies {
 		compile 'com.github.sarxos:windows-registry-util:0.3'
 		compile 'org.xerial:sqlite-jdbc:3.19.3'
-		compile 'net.lingala.zip4j:zip4j:1.3.2'
 		
 		compile project(':shared')
 }
@@ -32,8 +29,8 @@ shadowJar {
 	//Merges all service file under "META-INF/services" to one
 	mergeServiceFiles()
 	
-	//this restricts which JARs are bundled. needs to be seen if necessary
-	//configurations = [project.configurations.compile]
+	//this restricts which JARs are bundled. only include the necessary bits
+	configurations = [project.configurations.compile]
 	
 	/*
 	* WARNING! Changes to excludes/includes only seem to take effect after a "clean" with gradle.
@@ -54,38 +51,6 @@ shadowJar {
 	//maven adds junk into the "META-INF/maven" folder which is useful for libraries, but not for apps,
 	//since these are typically not consumed by other projects.
 	exclude 'META-INF/maven/**'
-}
-
-task optimize(type: proguard.gradle.ProGuardTask, dependsOn: 'shadowJar') {
-	//The input jar that shall be optimized. We use the shadow jar, because it has all the code with 
-	//dependencies inside and so gives a lot of code to work with for proguard
-	injars "${libsDir}/${shadowJar.baseName}-${shadowJar.version}-${shadowJar.classifier}.jar"
-	outjars "${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar"
-
-	configuration 'proguard.pro'
-}
-
-task runOptimized(type: JavaExec, dependsOn: 'optimize') {
-	main = mainClassName
-	classpath = files("${libsDir}/${shadowJar.baseName}-${shadowJar.version}-proguard.jar")
-}
-
-task cleanProguardMap {
-	description 'Cleaning the Proguard obfuscation map!'
-	doLast {
-		//Clear the file. DO NOT DELETE IT! proguard assumes it exists
-		file('proguard.map').write ''
-	}
-}
-clean.dependsOn cleanProguardMap
-
-task runProguardGui(type: JavaExec) {
-	classpath buildscript.configurations.classpath
-	main 'proguard.gui.ProGuardGUI'
-	//speed up the shitty intro animation	
-	jvmArgs '-Dsun.java2d.opengl=true'
-	//preload our config file
-	args 'proguard.pro'
 }
 
 apply plugin: 'javafx-gradle-plugin'

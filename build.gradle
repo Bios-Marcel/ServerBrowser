@@ -2,7 +2,7 @@
 * # TODO
 * 
 * - debug and release profile
-* - can proguard replace shadowjar ?
+* - zip
 * - pack200 task
 * - JFX build consuming shadowJar
 */
@@ -27,7 +27,8 @@ allprojects{
 */
 subprojects {
 	dependencies {
-		testCompile "junit:junit:4.12"
+		//"runtime" means the JAR will not be shipped with output
+		runtime 'org.eclipse.jdt:org.eclipse.jdt.annotation:2.1.0'
 	}
 }
 

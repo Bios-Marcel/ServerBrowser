@@ -16,7 +16,7 @@ public class Encoding
 		{
 			return new String(toEncode, charset);
 		}
-		catch (final UnsupportedEncodingException exception)
+		catch (@SuppressWarnings("unused") final UnsupportedEncodingException exception)
 		{
 			return new String(toEncode, StandardCharsets.UTF_8);
 		}

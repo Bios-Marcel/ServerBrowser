@@ -1,24 +1,37 @@
 package com.msc.serverbrowser.util;
 
+import static java.io.File.separator;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
+import com.msc.serverbrowser.logging.Logging;
 
+/**
+ * Util methods for dealing with downloading and unzipping files.
+ * 
+ * @author oliver
+ * @since 01.07.2017
+ */
 public class FileUtility
 {
 	/**
-	 * Downlaods a file and saves it to the given location.
+	 * Downloads a file and saves it to the given location.
 	 *
 	 * @param url
 	 *            the url to download from
 	 * @param outputPath
 	 *            the path where to save the downloaded file
+	 * @return the downloaded file
 	 * @throws IOException
 	 *             if an errors occurs while writing the file or opening the stream
 	 */
@@ -35,14 +48,62 @@ public class FileUtility
 	/**
 	 * Unzips a file.
 	 *
-	 * @param zipFile
+	 * @param zipFilePath
 	 *            input zip file
-	 * @param output
+	 * @param outputLocation
 	 *            zip file output folder
 	 */
-	public static void unzip(final String file, final String outputLocation) throws ZipException
+	public static void unzip(final String zipFilePath, final String outputLocation)
 	{
-		final ZipFile zipFile = new ZipFile(file);
-		zipFile.extractAll(outputLocation);
+		// Open the zip file
+		try (final ZipFile zipFile = new ZipFile(zipFilePath);)
+		{
+			final Enumeration<?> enu = zipFile.entries();
+			while (enu.hasMoreElements())
+			{
+				final ZipEntry zipEntry = (ZipEntry) enu.nextElement();
+
+				final String name = zipEntry.getName();
+				final long size = zipEntry.getSize();
+				final long compressedSize = zipEntry.getCompressedSize();
+
+				System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize);
+
+				// Do we need to create a directory ?
+				final File file = new File(outputLocation + separator + name);
+				if (name.endsWith("/"))
+				{
+					file.mkdirs();
+					continue;
+				}
+
+				final File parent = file.getParentFile();
+				if (parent != null)
+				{
+					parent.mkdirs();
+				}
+
+				// Extract the file
+				try (final InputStream inputStream = zipFile.getInputStream(zipEntry);
+						final FileOutputStream outputStream = new FileOutputStream(file);)
+				{
+					/*
+					 * The buffer is the max amount of bytes kept in RAM during any given time while
+					 * unzipping. Since most windows disks are aligned to 4096 or 8192, we use a
+					 * multiple of those values for best performance.
+					 */
+					final byte[] bytes = new byte[8192];
+					int length;
+					while ((length = inputStream.read(bytes)) >= 0)
+					{
+						outputStream.write(bytes, 0, length);
+					}
+				}
+			}
+		}
+		catch (final IOException exception)
+		{
+			Logging.logger().log(Level.SEVERE, "Unable to unzip the file.", exception);
+		}
 	}
 }

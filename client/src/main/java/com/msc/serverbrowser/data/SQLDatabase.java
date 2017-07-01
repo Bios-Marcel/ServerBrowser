@@ -28,9 +28,10 @@ public class SQLDatabase
 		if (Objects.isNull(instance))
 		{
 			instance = new SQLDatabase();
-			instance.init();
 		}
-		return instance;t
+
+		System.out.println("instance = " + instance);
+		return instance;
 	}
 
 	/**
@@ -38,6 +39,7 @@ public class SQLDatabase
 	 */
 	private SQLDatabase()
 	{
+		init();
 	}
 
 	/**
@@ -45,9 +47,12 @@ public class SQLDatabase
 	 */
 	private void init()
 	{
+		System.out.println("init DB_LOCATION = " + DB_LOCATION);
 		try
 		{
 			sqlConnection = DriverManager.getConnection("jdbc:sqlite:" + DB_LOCATION);
+
+			System.out.println("init sqlConnection = " + sqlConnection);
 
 			try (final Statement statement = sqlConnection.createStatement())
 			{
@@ -104,12 +109,12 @@ public class SQLDatabase
 	{
 		try
 		{
-			System.out.println("sqlConnection =" + sqlConnection);
+			System.out.println("executeGetResult sqlConnection =" + sqlConnection);
 			return Optional.of(sqlConnection.prepareStatement(statement).executeQuery());
 		}
-		catch (final SQLException e)
+		catch (final SQLException exception)
 		{
-			e.printStackTrace();
+			Logging.logger().log(Level.SEVERE, "Failed to execute SQL query!", exception);
 			return Optional.empty();
 		}
 	}

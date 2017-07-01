@@ -20,7 +20,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.stage.Modality;
-import net.lingala.zip4j.exception.ZipException;
 
 public class VersionChangeController implements ViewController
 {
@@ -174,7 +173,7 @@ public class VersionChangeController implements ViewController
 
 					updateInstallationState(newVersionButton, oldVersionButton);
 				}
-				catch (final ZipException | IOException | IllegalArgumentException exception)
+				catch (final IOException | IllegalArgumentException exception)
 				{
 					Logging.logger().log(Level.SEVERE, "Error Updating client.", exception);
 
