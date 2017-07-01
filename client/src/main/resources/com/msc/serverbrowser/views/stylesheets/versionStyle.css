@@ -1,9 +1,11 @@
 .installEntry
 {
-	-fx-border-width: 0 0 1 0;
-	-fx-border-insets: 10;
-	-fx-border-color: #E2E2E1;
 	-fx-padding: 10;
+}
+
+.separator
+{
+	-fx-padding: 10 10 10 15;
 }
 
 .installLabel
@@ -11,12 +13,11 @@
 	-fx-padding: 10;
 	-fx-font-size: 24;
 	-fx-pref-height: 23;
-	-fx-pref-width: 235;
 }
 
 .installButton
 {
-	-fx-background-color: #639BE0;
+	-fx-background-color: -special-button-color;
 	-fx-background-radius: 0;
 	-fx-border-radius: 0;
 	-fx-padding: 10;

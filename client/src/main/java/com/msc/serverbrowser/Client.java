@@ -31,6 +31,7 @@ import com.msc.serverbrowser.util.FileUtility;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -130,7 +131,16 @@ public class Client extends Application
 		{
 			final Parent root = loader.load();
 			final Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("/com/msc/serverbrowser/views/stylesheets/mainStyle.css").toExternalForm());
+
+			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+			{
+				scene.getStylesheets().add(getClass().getResource("/com/msc/serverbrowser/views/stylesheets/mainStyleDark.css").toExternalForm());
+			}
+			else
+			{
+				scene.getStylesheets().add(getClass().getResource("/com/msc/serverbrowser/views/stylesheets/mainStyle.css").toExternalForm());
+			}
+
 			primaryStage.setScene(scene);
 			primaryStage.getIcons().add(APPLICATION_ICON);
 			primaryStage.setTitle(APPLICATION_NAME);
@@ -153,9 +163,7 @@ public class Client extends Application
 			if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
 			{
 				final Alert alert = new Alert(AlertType.INFORMATION);
-				setAlertIcon(alert);
-				alert.initOwner(stage);
-				alert.initModality(Modality.APPLICATION_MODAL);
+				setupDialog(alert);
 				alert.setTitle(APPLICATION_NAME + "- Changelog");
 				alert.setHeaderText("Your client has been updated | Changelog");
 
@@ -177,18 +185,21 @@ public class Client extends Application
 	public void displayNoConnectionDialog()
 	{
 		final Alert alert = new Alert(AlertType.ERROR);
-		setAlertIcon(alert);
-		alert.initOwner(stage);
-		alert.initModality(Modality.APPLICATION_MODAL);
+		setupDialog(alert);
 		alert.setTitle("Connecting to server");
 		alert.setHeaderText("Server connection could not be established");
 		alert.setContentText("The server connection doesn't seeem to be established, try again later, for more information check the log files.");
 		alert.showAndWait();
 	}
 
-	public static void setAlertIcon(final Alert alert)
+	// TODO(MSC) Mit DialogBuilder oder so ersetzen
+	public static void setupDialog(final Alert alert)
 	{
 		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(APPLICATION_ICON);
+		ObservableList<String> clientStylesheets = getInstance().getStage().getScene().getStylesheets();
+		alert.getDialogPane().getStylesheets().addAll(clientStylesheets);
+		alert.initOwner(getInstance().getStage());
+		alert.initModality(Modality.APPLICATION_MODAL);
 	}
 
 	/**
@@ -246,7 +257,7 @@ public class Client extends Application
 					Platform.runLater(() ->
 					{
 						final Alert alert = new Alert(AlertType.CONFIRMATION);
-						setAlertIcon(alert);
+						setupDialog(alert);
 						alert.setTitle("Launching Application");
 						alert.setHeaderText("Update required");
 						alert.setContentText("The launcher needs an update. Not updating the client might lead to problems. Click 'OK' to update and 'Cancel' to not update.");

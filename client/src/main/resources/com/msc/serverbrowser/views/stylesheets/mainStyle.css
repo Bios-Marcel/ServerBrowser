@@ -1,3 +1,8 @@
+*
+{
+	-special-button-color: #639BE0;
+}
+
 .scroll-pane
 {
 	-fx-background-insets: 0
@@ -40,16 +45,24 @@
 
 .MenuItem
 {
-	-fx-background-color: transparent;
 	-fx-min-height: 100px;
 	-fx-min-width: 100px;
 	-fx-border-width: 0 0 1 0;
 	-fx-border-color: #639BE0;
 }
 
-.MenuItem:hover
+/**
+ * Special
+ */
+
+.beta-sign
 {
-	-fx-background-color: #1F5FAE;
+	-fx-background-color: -special-button-color;
+	-fx-padding: 0 10 0 10;
+	-fx-background-insets: 0 5 0 5;
+	-fx-font-weight: bold;
+	-fx-background-radius: 3;
+	-fx-text-fill: white;
 }
 
 .clickedItem

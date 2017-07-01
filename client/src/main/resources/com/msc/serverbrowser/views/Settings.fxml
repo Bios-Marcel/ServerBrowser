@@ -8,8 +8,10 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+
 <ScrollPane fitToWidth="true" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<content>
 		<VBox spacing="10.0">
@@ -41,11 +43,31 @@
 					<content>
 						<VBox>
 							<children>
-								<CheckBox fx:id="askForUsernameOnConnectCheckBox" mnemonicParsing="false" text="Always ask for Username when connecting to a server" />
+								<HBox maxWidth="1.7976931348623157E308">
+									<children>
+										<CheckBox fx:id="askForUsernameOnConnectCheckBox" mnemonicParsing="false" />
+										<Label text="Always ask for Username when connecting to a server" />
+									</children>
+								</HBox>
 							</children>
 						</VBox>
 					</content>
 				</TitledPane>
+            <TitledPane fx:id="connectionPane1" text="Appearance">
+               <content>
+                  <VBox>
+                     <children>
+                        <HBox maxWidth="1.7976931348623157E308">
+                           <children>
+                              <CheckBox fx:id="darkThemeCheckBox" mnemonicParsing="false" />
+                              <Label text="Use dark theme" />
+                              <Label styleClass="beta-sign" text="BETA"/>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
+            </TitledPane>
 			</children>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

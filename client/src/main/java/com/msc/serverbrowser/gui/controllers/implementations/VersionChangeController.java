@@ -19,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.stage.Modality;
 import net.lingala.zip4j.exception.ZipException;
 
 public class VersionChangeController implements ViewController
@@ -192,9 +191,7 @@ public class VersionChangeController implements ViewController
 		else
 		{
 			final Alert alert = new Alert(AlertType.ERROR);
-			Client.setAlertIcon(alert);
-			alert.initOwner(Client.getInstance().getStage());
-			alert.initModality(Modality.APPLICATION_MODAL);
+			Client.setupDialog(alert);
 			alert.setTitle("Installing SA-MP Version " + versionToBeInstalled);
 			alert.setHeaderText("GTA couldn't be located");
 			alert.setContentText("It seems like you don't have GTA installed.");
