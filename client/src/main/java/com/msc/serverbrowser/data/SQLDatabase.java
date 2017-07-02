@@ -28,16 +28,17 @@ public class SQLDatabase
 		if (Objects.isNull(instance))
 		{
 			instance = new SQLDatabase();
-			instance.init();
 		}
+
 		return instance;
 	}
 
 	/**
-	 * Private Constructor to keep outsiders from instanciating this class.
+	 * Private Constructor to keep outsiders from instantiating this class.
 	 */
 	private SQLDatabase()
 	{
+		init();
 	}
 
 	/**
@@ -78,7 +79,7 @@ public class SQLDatabase
 	 *
 	 * @param statement
 	 *            the statement to execute
-	 * @return <code>true</code> if sucessful and <code>false<code> otherwise
+	 * @return <code>true</code> if successful and <code>false<code> otherwise
 	 */
 	public boolean execute(final String statement)
 	{
@@ -106,9 +107,9 @@ public class SQLDatabase
 		{
 			return Optional.of(sqlConnection.prepareStatement(statement).executeQuery());
 		}
-		catch (final SQLException e)
+		catch (final SQLException exception)
 		{
-			e.printStackTrace();
+			Logging.logger().log(Level.SEVERE, "Failed to execute SQL query!", exception);
 			return Optional.empty();
 		}
 	}

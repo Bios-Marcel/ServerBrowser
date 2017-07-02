@@ -37,7 +37,7 @@ public class ClientProperties
 			}
 			catch (final SQLException exception)
 			{
-				exception.printStackTrace();
+				Logging.logger().log(Level.SEVERE, "Could not set the property as a String.", exception);
 			}
 		}
 

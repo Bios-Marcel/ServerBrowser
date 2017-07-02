@@ -58,4 +58,4 @@
 !gradle-wrapper.jar
 
 # Cache of project
-**/.gradletasknamecache
+**/.gradletasknamecacheclient/proguard.map
