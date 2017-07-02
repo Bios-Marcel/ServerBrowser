@@ -10,30 +10,25 @@ import java.util.logging.SimpleFormatter;
 
 import com.msc.serverbrowser.constants.Paths;
 
-public class Logging extends Logger
+public class Logging
 {
-	private static Logging instance;
+	private static Logger instance;
 
 	/**
-	 * @return the logger instance for this app.
+	 * @return {@link #instance}
 	 */
-	public static Logging logger()
+	public static Logger logger()
 	{
 		if (Objects.isNull(instance))
 		{
-			instance = new Logging();
-			Logging.init();
+			init();
 		}
 		return instance;
 	}
 
-	private Logging()
-	{
-		super("SAMP-Logger", null);
-	}
-
 	private static void init()
 	{
+		instance = Logger.getAnonymousLogger();
 		instance.setLevel(Level.INFO);
 		try
 		{
@@ -42,9 +37,9 @@ public class Logging extends Logger
 			filehandler.setFormatter(formatter);
 			instance.addHandler(filehandler);
 		}
-		catch (SecurityException | IOException e)
+		catch (SecurityException | IOException exception)
 		{
-			instance.log(Level.SEVERE, "Couldn't configure logger properly", e);
+			instance.log(Level.SEVERE, "Couldn't configure logger properly", exception);
 		}
 	}
 }

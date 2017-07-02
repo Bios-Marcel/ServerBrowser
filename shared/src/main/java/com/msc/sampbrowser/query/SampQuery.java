@@ -135,7 +135,7 @@ public class SampQuery implements AutoCloseable
 					hostname[i] = buffer.get();
 				}
 
-				serverInfo[3] = Encoding.encodeUsingCharsetIfPossible(hostname, encoding);
+				serverInfo[3] = Encoding.decodeUsingCharsetIfPossible(hostname, encoding);
 
 				// Gamemode
 				len = buffer.getInt();
@@ -145,7 +145,7 @@ public class SampQuery implements AutoCloseable
 				{
 					gamemode[i] = buffer.get();
 				}
-				serverInfo[4] = Encoding.encodeUsingCharsetIfPossible(gamemode, encoding);
+				serverInfo[4] = Encoding.decodeUsingCharsetIfPossible(gamemode, encoding);
 
 				// Language
 				len = buffer.getInt();
@@ -155,7 +155,7 @@ public class SampQuery implements AutoCloseable
 				{
 					language[i] = buffer.get();
 				}
-				serverInfo[5] = Encoding.encodeUsingCharsetIfPossible(language, encoding);
+				serverInfo[5] = Encoding.decodeUsingCharsetIfPossible(language, encoding);
 
 				return Optional.of(serverInfo);
 			}
