@@ -19,8 +19,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import net.lingala.zip4j.exception.ZipException;
 
+/**
+ * @since 02.07.2017
+ */
 public class VersionChangeController implements ViewController
 {
 	private static final String	NOT_INSTALLING	= "NOT_INSTALLING";
@@ -173,7 +175,7 @@ public class VersionChangeController implements ViewController
 
 					updateInstallationState(newVersionButton, oldVersionButton);
 				}
-				catch (final ZipException | IOException | IllegalArgumentException exception)
+				catch (final IOException | IllegalArgumentException exception)
 				{
 					Logging.logger().log(Level.SEVERE, "Error Updating client.", exception);
 
