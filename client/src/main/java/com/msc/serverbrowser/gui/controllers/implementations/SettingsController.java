@@ -3,12 +3,11 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
+import com.msc.serverbrowser.gui.Views;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -56,12 +55,13 @@ public class SettingsController implements ViewController
 		setupCheckBox(darkThemeCheckBox, Property.USE_DARK_THEME);
 		darkThemeCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) ->
 		{
-			final Alert alert = new Alert(AlertType.INFORMATION);
-			Client.setupDialog(alert);
-			alert.setTitle("Settings");
-			alert.setHeaderText("Restart necessary");
-			alert.setContentText("In order to be able to see the changes, you will have to restart the application.");
-			alert.show();
+			final Boolean rememberLastViewOld = ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW);
+			ClientProperties.setProperty(Property.REMEMBER_LAST_VIEW, true);
+			ClientProperties.setProperty(Property.LAST_VIEW, Views.SETTINGS.getId());
+
+			Client.getInstance().loadUI();
+
+			ClientProperties.setProperty(Property.REMEMBER_LAST_VIEW, rememberLastViewOld);
 		});
 		setupCheckBox(allowCloseSampCheckBox, Property.ALLOW_CLOSE_SAMP);
 		setupCheckBox(allowCloseGtaCheckBox, Property.ALLOW_CLOSE_GTA);
