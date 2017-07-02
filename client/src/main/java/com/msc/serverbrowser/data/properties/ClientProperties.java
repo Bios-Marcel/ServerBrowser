@@ -150,4 +150,9 @@ public class ClientProperties
 			throw new IllegalArgumentException("Value can't be null.");
 		}
 	}
+
+	public static void restorePropertyToDefault(final Property property)
+	{
+		setProperty(property, property.defaultValue());
+	}
 }

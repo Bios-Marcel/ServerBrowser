@@ -76,7 +76,7 @@
                   </HBox>
                   <HBox maxWidth="1.7976931348623157E308">
                      <children>
-                        <CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" />
+                        <CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" text="testsetset"/>
                         <Label text="Allow this application to shut down Grand Theft Auto: San Andreas" />
                      </children>
                   </HBox>

@@ -1,6 +1,8 @@
 *
 {
 	-special-button-color: #639BE0;
+	-mark-color: #538ED7;
+	-menu-color: #538ED7;
 }
 
 /**
@@ -19,19 +21,28 @@
 
 .scroll-bar .thumb
 {
-	-fx-background-color: #538ED7;
+	-fx-background-color: -mark-color;
+	-fx-background-insets: 0.0;
 	-fx-background-radius: 0.0;
+}
+
+.scroll-bar .increment-button
+{
+	-fx-padding: 5.0 2.5 5.0 2.5;
+}
+
+.scroll-bar .decrement-button
+{
+	-fx-padding: 5.0 2.5 5.0 2.5;
 }
 
 .scroll-bar .decrement-button .decrement-arrow
 {
-	-fx-background-color: #538ED7;
-	-fx-background-radius: 0.0;
+	-fx-background-color: -mark-color;
 }
 .scroll-bar .increment-button .increment-arrow
 {
-	-fx-background-color: #538ED7;
-	-fx-background-radius: 0.0;
+	-fx-background-color: -mark-color;
 }
 
 .titled-pane .title
@@ -40,25 +51,47 @@
 	-fx-border-radius: 0.0 !important;
 }
 
-#tabpane
-{
-	-fx-background-color: #538ED7;
-}
+/**
+ * Tab Pane (Menu)
+ */
 
-#title
+.viewTitle
 {
 	-fx-background-color: white;
 	-fx-border-color: #639BE0 #FFFFFF #E2E2E1 #FFFFFF;
-	-fx-border-width: 3.0 0.0 1.0 0.0;
+	-fx-border-width: 3.0 0.0 0.0 0.0;
+	-fx-padding: 20.0 0.0 20.0 15.0;
+	-fx-font-size: 20.0;
 }
+
+.tabPane
+{
+	-fx-background-color: -menu-color;
+}
+
+.tabScrollPane
+{
+	-fx-border-width: 0.0px;
+	-fx-padding: 0.0 -1.0 0.0 0.0;
+	-fx-min-width: 100.0px;
+}
+
 
 .MenuItem
 {
+	-fx-background-color: -menu-color;
 	-fx-min-height: 100.0px;
-	-fx-min-width: 100.0px;
+	-fx-min-width: 80.0px;
+	-fx-max-height: 0.0px; /* HACK(MSC) keeps StackPane from overgrowing */
 	-fx-border-width: 0.0 0.0 1.0 0.0;
 	-fx-border-color: #639BE0;
 }
+
+.menuItemIcon
+{
+	-fx-fill: white;
+}
+
 
 /**
  * Special

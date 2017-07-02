@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -64,6 +65,7 @@ public class Favourites
 			server.setMode("Unknown");
 			server.setWebsite("Unknown");
 			server.setVersion("Unknown");
+			server.setLagcomp("Unknown");
 			server.setPlayers(0);
 			server.setMaxPlayers(0);
 		}
@@ -124,7 +126,11 @@ public class Favourites
 		final String[] replacementsNew = new String[replacements.length];
 		for (int i = 0; i < replacements.length; i++)
 		{
-			replacementsNew[i] = replacements[i].replace("'", "''");
+			final String replacementValue = replacements[i];
+			if (Objects.nonNull(replacementValue))
+			{
+				replacementsNew[i] = replacementValue.replace("'", "''");
+			}
 		}
 		return MessageFormat.format(string, (Object[]) replacementsNew);
 	}

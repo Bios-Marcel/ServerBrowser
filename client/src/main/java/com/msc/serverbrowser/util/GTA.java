@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.github.sarxos.winreg.HKey;
@@ -98,14 +97,13 @@ public class GTA
 			return Optional.of("You are on Linux ;D");
 		}
 
-		String property = ClientProperties.getPropertyAsString(Property.SAMP_PATH);
-		property = Objects.isNull(property) || property.isEmpty() ? null : property;
-		if (Objects.nonNull(property) && !property.endsWith("\\"))
-		{
-			property = property + "\\";
-		}
+		final String property = ClientProperties.getPropertyAsString(Property.SAMP_PATH);
 
-		return Optional.ofNullable(property);
+		if (Objects.isNull(property) || property.isEmpty())
+		{
+			return Optional.empty();
+		}
+		return property.endsWith("\\") ? Optional.of(property) : Optional.of(property + "\\");
 	}
 
 	/**
@@ -136,61 +134,49 @@ public class GTA
 	 *
 	 * @return {@link Optional} of installed versions version number or an empty {@link Optional}
 	 */
-	public static Optional<@NonNull String> getInstalledVersion()
+	@SuppressWarnings("null")
+	public static Optional<String> getInstalledVersion()
 	{
 		if (!OSUtil.isWindows())
-		{
+		{// OS not supported
 			return Optional.empty();
 		}
 
-		@Nullable
-		String versionString = null;
 		final Optional<String> path = getGtaPath();
-		if (path.isPresent())
-		{
-			final File file = new File(path.get() + "samp.dll");
+		if (!path.isPresent())
+		{// GTA couldn't be found
+			return Optional.empty();
+		}
 
-			if (!file.exists())
-			{// samp.dll doesn't exist, even though GTA is installed at this point.
-				return Optional.empty();
-			}
-
-			/*
-			 * Bad Practice, will cause an error if Kalcor decides to do a huge update someday :P
-			 */
-			switch ((int) file.length())
-			{
-				case 2199552:
-					versionString = "0.3.7";
-					break;
-				case 1093632:
-					versionString = "0.3z";
-					break;
-				case 2084864:
-					versionString = "0.3x";
-					break;
-				case 1998848:
-					versionString = "0.3e";
-					break;
-				case 2015232:
-					versionString = "0.3d";
-					break;
-				case 1511424:
-					versionString = "0.3c";
-					break;
-				case 610304:
-					versionString = "0.3a";
-					break;
-			}
+		final File file = new File(path.get() + "samp.dll");
+		if (!file.exists())
+		{// samp.dll doesn't exist, even though GTA is installed at this point.
+			return Optional.empty();
 		}
 
 		/*
-		 * Since the type "String" in the "Optional" is annotated with "@NonNull", "ofNullable" is
-		 * expected to take a string that cannot be null. This is clearly nonsensical in this case.
+		 * Bad Practice, will cause an error if Kalcor decides to do a huge update someday :P
 		 */
-		@SuppressWarnings("null")
-		final Optional<@NonNull String> maybeAVersion = Optional.ofNullable(versionString);
-		return maybeAVersion;
+		switch ((int) file.length())
+		{
+			case 2199552:
+				return Optional.of("0.3.7");
+			case 1093632:
+				return Optional.of("0.3z");
+			case 2084864:
+				return Optional.of("0.3x");
+			case 1998848:
+				return Optional.of("0.3e");
+			case 2015232:
+				return Optional.of("0.3d");
+			case 1511424:
+				return Optional.of("0.3c");
+			case 610304:
+				return Optional.of("0.3a");
+			default:
+				return Optional.empty();
+		}
+
 	}
 
 	/**

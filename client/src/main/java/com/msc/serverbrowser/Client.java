@@ -144,8 +144,6 @@ public class Client extends Application
 			primaryStage.setScene(scene);
 			primaryStage.getIcons().add(APPLICATION_ICON);
 			primaryStage.setTitle(APPLICATION_NAME);
-			primaryStage.setMinWidth(primaryStage.getWidth());
-			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 			primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
 
@@ -160,6 +158,10 @@ public class Client extends Application
 
 			primaryStage.show();
 
+			// Must be called after show, otherwise, it will be set to 0
+			primaryStage.setMinWidth(500);
+			primaryStage.setMinHeight(400);
+
 			if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
 			{
 				final Alert alert = new Alert(AlertType.INFORMATION);
@@ -168,7 +170,11 @@ public class Client extends Application
 				alert.setHeaderText("Your client has been updated | Changelog");
 
 				final StringBuilder updateText = new StringBuilder();
-				updateText.append("- Settings Page has been added");
+				updateText.append("- New Dark Theme (Can be activated on settings page)");
+				updateText.append(System.lineSeparator());
+				updateText.append("- Bug Fix where adding servers that can't be reached leaded to nothing happening");
+				updateText.append(System.lineSeparator());
+				updateText.append("- Refactoring of Layout");
 
 				alert.setContentText(updateText.toString());
 				alert.show();

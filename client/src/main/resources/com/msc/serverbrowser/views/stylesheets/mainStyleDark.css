@@ -165,13 +165,26 @@
 .scroll-bar .thumb
 {
 	-fx-background-color: -mark-color;
-	-fx-background-insets: -1.0;
+	-fx-background-insets: 0.0 -1.0 0.0 0.0;
 }
 
 .scroll-bar
 {
-	-fx-border-width: 1.0 1.0 1.0 1.0;
+	-fx-border-width: 1.0;
 	-fx-border-color: -border-color;
+}
+
+/**
+ * Increase height of the regions that contain the increment and decrement arrows
+ */
+.scroll-bar .increment-button
+{
+	-fx-padding: 5.0 2.5 5.0 2.5;
+}
+
+.scroll-bar .decrement-button
+{
+	-fx-padding: 5.0 2.5 5.0 2.5;
 }
 
 /**
@@ -198,29 +211,43 @@
  * Tab Pane (Menu)
  */
 
-#tabpane
+.viewTitle
+{
+	-fx-background-color: -component-background-color;
+	-fx-padding: 20.0 0.0 20.0 15.0;
+	-fx-font-size: 20.0;
+}
+
+.tabPane
 {
 	-fx-background-color: -menu-color;
+}
+
+.tabScrollPane
+{
+	-fx-border-width: 0.0px;
+	-fx-padding: 0.0 -1.0 0.0 0.0;
+	-fx-min-width: 100.0px;
 }
 
 .MenuItem
 {
 	-fx-background-color: -menu-color;
 	-fx-min-height: 100.0px;
-	-fx-min-width: 100.0px;
+	-fx-min-width: 80.0px;
+	-fx-max-height: 0.0px; /* HACK(MSC) keeps StackPane from overgrowing */
 	-fx-border-width: 0.0 0.0 1.0 0.0;
 	-fx-border-color: -border-color;
+}
+
+.menuItemIcon
+{
+	-fx-fill: white; /* Sets the SVGs colours */
 }
 
 .clickedItem
 {
 	-fx-background-color: -special-button-color;
-}
-
-#title
-{
-	-fx-background-color: -component-background-color;
-	-fx-border-width: 3.0 0.0 1.0 0.0;
 }
 
 /**
@@ -230,10 +257,10 @@
 .beta-sign
 {
 	-fx-background-color: -special-button-color;
-	-fx-padding: 0 10 0 10;
-	-fx-background-insets: 0 5 0 5;
+	-fx-padding: 0.0 10.0 0.0 10.0;
+	-fx-background-insets: 0.0 5.0 0.0 5.0;
 	-fx-font-weight: bold;
-	-fx-background-radius: 3;
+	-fx-background-radius: 3.0;
 }
 
 .copyableLabel
