@@ -1,0 +1,249 @@
+/*
+ * This section contains general style.
+ */
+
+*
+{
+	-component-background-color: #121212;
+	-component-background-color-selected: #404040;
+	-menu-color: derive( -component-background-color, -10.0%);
+	-mark-color: -component-background-color-selected;
+	-border-color: -component-background-color-selected;
+	
+	-special-button-color: #9239ad;
+	
+    -fx-text-fill: #CCCCCC;
+    -fx-background-color: #212121;
+	-fx-focus-color: transparent !important;
+	
+	-fx-background-insets: 0.0;
+	-fx-border-radius: 0.0;
+    -fx-background-radius: 0.0;
+}
+
+*:selected
+{
+    -fx-background-color: -component-background-color-selected !important;
+}
+
+/**
+ * Container that contains the elements of the specific view
+ */
+
+.viewContent
+{
+	-fx-padding: 5.0;	
+}
+
+/**
+ * General Component settings
+ */
+
+.text-field, .combo-box, .titled-pane
+{
+	-fx-border-width: 1.0;
+	-fx-border-color: -border-color;
+}
+
+/**
+ * ComboBox
+ */
+
+.combo-box .cell:selected {
+    -fx-background-color: inherit !important;
+}
+
+/**
+ * Separator
+ */
+ 
+.separator .line
+{
+	-fx-border-color: -border-color;
+}
+
+/**
+ * Titled Pane
+ */
+
+.titled-pane .content
+{
+	-fx-border-width: 0.0 !important;
+}
+
+.titled-pane .arrow
+{
+	-fx-background-color: -mark-color;
+}
+
+.titled-pane .title
+{
+	-fx-border-color: -border-color;
+	-fx-border-width: 0.0 0.0 1.0 0.0;
+}
+
+/**
+ * Buttons
+ */
+
+.button
+{
+    -fx-padding: 5.0;
+    -fx-background-color: -component-background-color;
+}
+
+.button:armed
+{
+    -fx-background-color: -component-background-color-selected;	
+}
+
+.toggle-button
+{
+    -fx-padding: 5.0;
+    -fx-background-color: -component-background-color;
+}
+
+
+/*
+ * Tables
+ */
+
+.table-view .column-header-background .nested-column-header
+{
+	-fx-border-color: -border-color;
+	-fx-border-width: 0.0 0.0 1.0 0.0;
+}
+
+.table-view .arrow
+{
+	-fx-background-color: -mark-color;
+}
+
+.column-header
+{
+	-fx-border-width: 0.0 1.0 0.0 1.0;
+	-fx-border-insets: 0.0 -1.0 0.0 -1.0;
+	-fx-border-color: -border-color;
+}
+
+.table-view
+{
+	-fx-border-color: -border-color; 	
+	-fx-border-width: 1.0;
+    -fx-background-radius: 0.0;
+}
+
+.table-view .placeholder
+{
+	-fx-padding: 15.0;
+}
+
+.table-row-cell
+{
+	-fx-table-cell-border-color: -border-color;
+}
+
+.table-row-cell:selected .table-cell
+{
+   -fx-background-color: -component-background-color-selected;
+}
+
+.table-view .show-hide-columns-button
+{
+	-fx-border-width: 0.0 0.0 1.0 1.0;
+	-fx-border-color: -border-color;
+}
+.table-view .show-hide-columns-button .show-hide-column-image
+{
+	-fx-background-color: -mark-color;
+}
+
+/**
+ * ScrollBar
+ */
+
+.scroll-bar .thumb
+{
+	-fx-background-color: -mark-color;
+	-fx-background-insets: -1.0;
+}
+
+.scroll-bar
+{
+	-fx-border-width: 1.0 1.0 1.0 1.0;
+	-fx-border-color: -border-color;
+}
+
+/**
+ * CheckBoxes
+ */
+ 
+.check-box .box
+{
+	-fx-border-color: -border-color;
+}
+
+.check-box:selected
+{
+	-fx-background-insets: 5.0;
+}
+
+.check-box:selected > .box > .mark
+{
+	-fx-background-color: -border-color;
+}
+
+
+/**
+ * Tab Pane (Menu)
+ */
+
+#tabpane
+{
+	-fx-background-color: -menu-color;
+}
+
+.MenuItem
+{
+	-fx-background-color: -menu-color;
+	-fx-min-height: 100.0px;
+	-fx-min-width: 100.0px;
+	-fx-border-width: 0.0 0.0 1.0 0.0;
+	-fx-border-color: -border-color;
+}
+
+.clickedItem
+{
+	-fx-background-color: -special-button-color;
+}
+
+#title
+{
+	-fx-background-color: -component-background-color;
+	-fx-border-width: 3.0 0.0 1.0 0.0;
+}
+
+/**
+ * Special
+ */
+
+.beta-sign
+{
+	-fx-background-color: -special-button-color;
+	-fx-padding: 0 10 0 10;
+	-fx-background-insets: 0 5 0 5;
+	-fx-font-weight: bold;
+	-fx-background-radius: 3;
+}
+
+.copyableLabel
+{
+	-fx-border-width: 0.0;
+}
+
+.copyableLabel, .copyableLabel:focused 
+{
+	-fx-padding: 0.0;
+    -fx-background-color: transparent ;
+    -fx-background-insets: 0.0px ;
+}

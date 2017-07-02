@@ -14,6 +14,8 @@ import java.util.regex.PatternSyntaxException;
 import com.msc.sampbrowser.entities.Player;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.query.SampQuery;
+import com.msc.sampbrowser.util.ObjectUtil;
+import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.GTA;
@@ -188,7 +190,11 @@ public abstract class ServerListControllerMain implements ViewController
 		{
 			if (serverTable.getSelectionModel().getSelectedIndices().size() == 1)
 			{
-				updateServerInfo(serverTable.getSelectionModel().getSelectedItem());
+				final SampServer selectedServer = serverTable.getSelectionModel().getSelectedItem();
+				if (Objects.nonNull(selectedServer))
+				{
+					updateServerInfo(selectedServer);
+				}
 			}
 			else
 			{
@@ -224,6 +230,7 @@ public abstract class ServerListControllerMain implements ViewController
 			else
 			{
 				final Alert alert = new Alert(AlertType.ERROR);
+				Client.setupDialog(alert);
 				alert.setTitle("Add to Favourites");
 				alert.setHeaderText("Couldn't add server to favourites.");
 				alert.setContentText("The address that you have entered, doesn't seem to be valid.");
@@ -236,7 +243,7 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private void onClickConnect()
 	{
-		final String[] ipAndPort = addressTextField.getText().split("[:]");
+		final String[] ipAndPort = ObjectUtil.orElse(addressTextField.getText(), "").split("[:]");
 		if (ipAndPort.length == 1)
 		{
 			tryToConnect(ipAndPort[0], 7777);
@@ -247,13 +254,18 @@ public abstract class ServerListControllerMain implements ViewController
 		}
 		else
 		{
-			final Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Connect to Server");
-			alert.setHeaderText("Can't connect to Server");
-			alert.setContentText("The address that you have entered, doesn't seem to be valid.");
-
-			alert.showAndWait();
+			showCantConnectToServerError();
 		}
+	}
+
+	private void showCantConnectToServerError()
+	{
+		final Alert alert = new Alert(AlertType.ERROR);
+		Client.setupDialog(alert);
+		alert.setTitle("Connect to Server");
+		alert.setHeaderText("Can't connect to Server");
+		alert.setContentText("The address that you have entered, doesn't seem to be valid.");
+		alert.showAndWait();
 	}
 
 	/**
@@ -424,12 +436,7 @@ public abstract class ServerListControllerMain implements ViewController
 		}
 		catch (@SuppressWarnings("unused") final Exception exception)
 		{
-			final Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Connect to Server");
-			alert.setHeaderText("Can't connect to Server");
-			alert.setContentText("Server seems to be offline, try again.");
-
-			alert.showAndWait();
+			showCantConnectToServerError();
 		}
 	}
 

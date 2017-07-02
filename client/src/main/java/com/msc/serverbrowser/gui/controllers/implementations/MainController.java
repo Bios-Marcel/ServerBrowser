@@ -12,13 +12,11 @@ import com.msc.serverbrowser.logging.Logging;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 
 public class MainController implements ViewController
 {
-	private static final String	MENUITEM_SELECTED_COLOR		= "-fx-background-color: #1F5FAE;";
-	private static final String	MENUITEM_UNSELECTED_COLOR	= "-fx-background-color: #538ED7;";
-
 	@FXML
 	private Label headerTitle;
 
@@ -34,7 +32,7 @@ public class MainController implements ViewController
 	private StackPane	menuItemSettings;
 
 	@FXML
-	private StackPane	activeViewContainer;
+	private ScrollPane	activeViewContainer;
 	private Views		activeView;
 
 	@Override
@@ -82,37 +80,39 @@ public class MainController implements ViewController
 
 	private void loadView(final Views view)
 	{
-		menuItemFav.setStyle(MENUITEM_UNSELECTED_COLOR);
-		menuItemSettings.setStyle(MENUITEM_UNSELECTED_COLOR);
-		menuItemUser.setStyle(MENUITEM_UNSELECTED_COLOR);
-		menuItemAll.setStyle(MENUITEM_UNSELECTED_COLOR);
-		menuItemVersion.setStyle(MENUITEM_UNSELECTED_COLOR);
+		final String CLICKED_STYLE_CLASS = "clickedItem";
+
+		menuItemFav.getStyleClass().remove(CLICKED_STYLE_CLASS);
+		menuItemSettings.getStyleClass().remove(CLICKED_STYLE_CLASS);
+		menuItemUser.getStyleClass().remove(CLICKED_STYLE_CLASS);
+		menuItemAll.getStyleClass().remove(CLICKED_STYLE_CLASS);
+		menuItemVersion.getStyleClass().remove(CLICKED_STYLE_CLASS);
 
 		switch (view)
 		{
 			case VERSION_CHANGER:
 			{
-				menuItemVersion.setStyle(MENUITEM_SELECTED_COLOR);
+				menuItemVersion.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
 			}
 			case USERNAME_CHANGER:
 			{
-				menuItemUser.setStyle(MENUITEM_SELECTED_COLOR);
+				menuItemUser.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
 			}
 			case SETTINGS:
 			{
-				menuItemSettings.setStyle(MENUITEM_SELECTED_COLOR);
+				menuItemSettings.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
 			}
 			case SERVERS_FAV:
 			{
-				menuItemFav.setStyle(MENUITEM_SELECTED_COLOR);
+				menuItemFav.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
 			}
 			case SERVERS_ALL:
 			{
-				menuItemAll.setStyle(MENUITEM_SELECTED_COLOR);
+				menuItemAll.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
 			}
 		}
@@ -128,8 +128,7 @@ public class MainController implements ViewController
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
 			loader.setController(view.getControllerType().newInstance());
-			activeViewContainer.getChildren().clear();
-			activeViewContainer.getChildren().add(loader.load());
+			activeViewContainer.setContent(loader.load());
 			activeViewContainer.getStylesheets().setAll(view.getStylesheetPath());
 			headerTitle.setText(view.getTitle());
 		}

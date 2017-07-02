@@ -301,9 +301,7 @@ public class GTA
 		else
 		{
 			final Alert alert = new Alert(AlertType.ERROR);
-			Client.setAlertIcon(alert);
-			alert.initOwner(Client.getInstance().getStage());
-			alert.initModality(Modality.APPLICATION_MODAL);
+			Client.setupDialog(alert);
 			alert.setTitle("Connecting to server");
 			alert.setHeaderText("GTA couldn't be located");
 			alert.setContentText("It seems like you don't have GTA installed.");

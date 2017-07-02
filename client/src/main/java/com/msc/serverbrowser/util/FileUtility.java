@@ -20,6 +20,7 @@ import com.msc.serverbrowser.logging.Logging;
  * Util methods for dealing with downloading and unzipping files.
  *
  * @author oliver
+ * @author Marcel
  * @since 01.07.2017
  */
 public class FileUtility

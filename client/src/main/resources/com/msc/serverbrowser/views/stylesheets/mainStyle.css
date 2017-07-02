@@ -1,29 +1,43 @@
+*
+{
+	-special-button-color: #639BE0;
+}
+
+/**
+ * Container that contains the elements of the specific view
+ */
+
+.viewContent
+{
+	-fx-padding: 5.0;	
+}
+
 .scroll-pane
 {
-	-fx-background-insets: 0
+	-fx-background-insets: 0.0
 }
 
 .scroll-bar .thumb
 {
 	-fx-background-color: #538ED7;
-	-fx-background-radius: 0;
+	-fx-background-radius: 0.0;
 }
 
 .scroll-bar .decrement-button .decrement-arrow
 {
 	-fx-background-color: #538ED7;
-	-fx-background-radius: 0;
+	-fx-background-radius: 0.0;
 }
 .scroll-bar .increment-button .increment-arrow
 {
 	-fx-background-color: #538ED7;
-	-fx-background-radius: 0;
+	-fx-background-radius: 0.0;
 }
 
 .titled-pane .title
 {
-	-fx-background-radius: 0 !important;
-	-fx-border-radius: 0 !important;
+	-fx-background-radius: 0.0 !important;
+	-fx-border-radius: 0.0 !important;
 }
 
 #tabpane
@@ -35,21 +49,29 @@
 {
 	-fx-background-color: white;
 	-fx-border-color: #639BE0 #FFFFFF #E2E2E1 #FFFFFF;
-	-fx-border-width: 3 0 1 0;
+	-fx-border-width: 3.0 0.0 1.0 0.0;
 }
 
 .MenuItem
 {
-	-fx-background-color: transparent;
-	-fx-min-height: 100px;
-	-fx-min-width: 100px;
-	-fx-border-width: 0 0 1 0;
+	-fx-min-height: 100.0px;
+	-fx-min-width: 100.0px;
+	-fx-border-width: 0.0 0.0 1.0 0.0;
 	-fx-border-color: #639BE0;
 }
 
-.MenuItem:hover
+/**
+ * Special
+ */
+
+.beta-sign
 {
-	-fx-background-color: #1F5FAE;
+	-fx-background-color: -special-button-color;
+	-fx-padding: 0.0 10.0 0.0 10.0;
+	-fx-background-insets: 0.0 5.0 0.0 5.0;
+	-fx-font-weight: bold;
+	-fx-background-radius: 3.0;
+	-fx-text-fill: white;
 }
 
 .clickedItem
@@ -59,7 +81,7 @@
 
 .copyableLabel, .copyableLabel:focused 
 {
-	-fx-padding: 0;
+	-fx-padding: 0.0;
     -fx-background-color: transparent ;
-    -fx-background-insets: 0px ;
+    -fx-background-insets: 0.0px ;
 }
