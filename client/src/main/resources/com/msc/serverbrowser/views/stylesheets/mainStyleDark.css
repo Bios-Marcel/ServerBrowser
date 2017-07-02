@@ -82,6 +82,11 @@
 	-fx-border-width: 0.0 0.0 1.0 0.0;
 }
 
+.titled-pane:collapsed .title
+{
+	-fx-border-width: 0;
+}
+
 /**
  * Buttons
  */
