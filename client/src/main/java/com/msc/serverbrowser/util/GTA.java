@@ -8,6 +8,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
 import com.github.sarxos.winreg.WindowsRegistry;
@@ -111,7 +114,7 @@ public class GTA
 	 *
 	 * @return String of the GTA Path or null.
 	 */
-	public static String getGtaPathUnsafe()
+	public static @Nullable String getGtaPathUnsafe()
 	{
 		if (!OSUtil.isWindows())
 		{
@@ -134,13 +137,14 @@ public class GTA
 	 *
 	 * @return {@link Optional} of installed versions version number or an empty {@link Optional}
 	 */
-	public static Optional<String> getInstalledVersion()
+	public static Optional<@NonNull String> getInstalledVersion()
 	{
 		if (!OSUtil.isWindows())
 		{
 			return Optional.empty();
 		}
 
+		@Nullable
 		String versionString = null;
 		final Optional<String> path = getGtaPath();
 		if (path.isPresent())
@@ -153,8 +157,7 @@ public class GTA
 			}
 
 			/*
-			 * Bad Practice, could potentionally cause an error if Kalcor decides to do a huge
-			 * update someday :P
+			 * Bad Practice, will cause an error if Kalcor decides to do a huge update someday :P
 			 */
 			switch ((int) file.length())
 			{
@@ -182,7 +185,13 @@ public class GTA
 			}
 		}
 
-		return Optional.ofNullable(versionString);
+		/*
+		 * Since the type "String" in the "Optional" is annotated with "@NonNull", "ofNullable" is
+		 * expected to take a string that cannot be null. This is clearly nonsensical in this case.
+		 */
+		@SuppressWarnings("null")
+		final Optional<@NonNull String> maybeAVersion = Optional.ofNullable(versionString);
+		return maybeAVersion;
 	}
 
 	/**

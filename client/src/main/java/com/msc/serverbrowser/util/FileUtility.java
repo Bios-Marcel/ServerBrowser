@@ -1,6 +1,7 @@
 package com.msc.serverbrowser.util;
 
 import static java.io.File.separator;
+import static java.lang.String.format;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,7 +11,6 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.Enumeration;
-import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -18,7 +18,7 @@ import com.msc.serverbrowser.logging.Logging;
 
 /**
  * Util methods for dealing with downloading and unzipping files.
- * 
+ *
  * @author oliver
  * @since 01.07.2017
  */
@@ -52,22 +52,23 @@ public class FileUtility
 	 *            input zip file
 	 * @param outputLocation
 	 *            zip file output folder
+	 * @throws IOException
 	 */
-	public static void unzip(final String zipFilePath, final String outputLocation)
+	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException
 	{
 		// Open the zip file
 		try (final ZipFile zipFile = new ZipFile(zipFilePath);)
 		{
-			final Enumeration<?> enu = zipFile.entries();
+			final Enumeration<? extends ZipEntry> enu = zipFile.entries();
 			while (enu.hasMoreElements())
 			{
-				final ZipEntry zipEntry = (ZipEntry) enu.nextElement();
+				final ZipEntry zipEntry = enu.nextElement();
 
 				final String name = zipEntry.getName();
 				final long size = zipEntry.getSize();
 				final long compressedSize = zipEntry.getCompressedSize();
 
-				System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize);
+				Logging.logger().fine(() -> format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
 
 				// Do we need to create a directory ?
 				final File file = new File(outputLocation + separator + name);
@@ -100,10 +101,6 @@ public class FileUtility
 					}
 				}
 			}
-		}
-		catch (final IOException exception)
-		{
-			Logging.logger().log(Level.SEVERE, "Unable to unzip the file.", exception);
 		}
 	}
 }

@@ -21,6 +21,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.stage.Modality;
 
+/**
+ * @since 02.07.2017
+ */
 public class VersionChangeController implements ViewController
 {
 	private static final String	NOT_INSTALLING	= "NOT_INSTALLING";

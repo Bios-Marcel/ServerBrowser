@@ -30,7 +30,6 @@ public class SQLDatabase
 			instance = new SQLDatabase();
 		}
 
-		System.out.println("instance = " + instance);
 		return instance;
 	}
 
@@ -47,12 +46,9 @@ public class SQLDatabase
 	 */
 	private void init()
 	{
-		System.out.println("init DB_LOCATION = " + DB_LOCATION);
 		try
 		{
 			sqlConnection = DriverManager.getConnection("jdbc:sqlite:" + DB_LOCATION);
-
-			System.out.println("init sqlConnection = " + sqlConnection);
 
 			try (final Statement statement = sqlConnection.createStatement())
 			{
@@ -109,7 +105,6 @@ public class SQLDatabase
 	{
 		try
 		{
-			System.out.println("executeGetResult sqlConnection =" + sqlConnection);
 			return Optional.of(sqlConnection.prepareStatement(statement).executeQuery());
 		}
 		catch (final SQLException exception)
