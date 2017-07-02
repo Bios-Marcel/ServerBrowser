@@ -15,14 +15,14 @@ public class Logging extends Logger
 	private static Logging instance;
 
 	/**
-	 * @return {@link #instance}
+	 * @return the logger instance for this app.
 	 */
 	public static Logging logger()
 	{
 		if (Objects.isNull(instance))
 		{
 			instance = new Logging();
-			instance.init();
+			Logging.init();
 		}
 		return instance;
 	}
@@ -32,7 +32,7 @@ public class Logging extends Logger
 		super("SAMP-Logger", null);
 	}
 
-	private void init()
+	private static void init()
 	{
 		instance.setLevel(Level.INFO);
 		try
