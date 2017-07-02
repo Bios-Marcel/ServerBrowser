@@ -30,6 +30,10 @@ public class SettingsController implements ViewController
 	private CheckBox	rememberLastViewCheckBox;
 	@FXML
 	private CheckBox	darkThemeCheckBox;
+	@FXML
+	private CheckBox	allowCloseSampCheckBox;
+	@FXML
+	private CheckBox	allowCloseGtaCheckBox;
 
 	@FXML
 	private TitledPane	connectionPane;
@@ -59,6 +63,8 @@ public class SettingsController implements ViewController
 			alert.setContentText("In order to be able to see the changes, you will have to restart the application.");
 			alert.show();
 		});
+		setupCheckBox(allowCloseSampCheckBox, Property.ALLOW_CLOSE_SAMP);
+		setupCheckBox(allowCloseGtaCheckBox, Property.ALLOW_CLOSE_GTA);
 	}
 
 	/**

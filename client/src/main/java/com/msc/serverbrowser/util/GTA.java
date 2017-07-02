@@ -22,7 +22,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Modality;
 
 /**
  * Contains utility methods for interacting with native samp stuff.
@@ -240,7 +239,7 @@ public class GTA
 	 */
 	private static void kill(final String processName)
 	{
-		if (OSUtil.isWindows())
+		if (!OSUtil.isWindows())
 		{
 			return;
 		}
@@ -266,7 +265,11 @@ public class GTA
 	 */
 	public static void connectToServer(final String ipAndPort, final String password)
 	{
-		killGTA();
+		if (ClientProperties.getPropertyAsBoolean(Property.ALLOW_CLOSE_GTA))
+		{
+			killGTA();
+		}
+
 		final Optional<String> gtaPath = getGtaPath();
 		if (gtaPath.isPresent())
 		{

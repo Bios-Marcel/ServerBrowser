@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -65,5 +64,25 @@
 				</VBox>
 			</content>
 		</TitledPane>
+      <TitledPane fx:id="connectionPane11" text="Permissions">
+         <content>
+            <VBox spacing="5.0">
+               <children>
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false" />
+                        <Label text="Allow this application to shut down San Andreas Multiplayer Client" />
+                     </children>
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" />
+                        <Label text="Allow this application to shut down Grand Theft Auto: San Andreas" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+      </TitledPane>
 	</children>
 </VBox>

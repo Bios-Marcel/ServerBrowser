@@ -342,7 +342,7 @@ public abstract class ServerListControllerMain implements ViewController
 					return false;
 				}
 			}
-			catch (final PatternSyntaxException e)
+			catch (@SuppressWarnings("unused") final PatternSyntaxException exception)
 			{
 				return false;
 			}
