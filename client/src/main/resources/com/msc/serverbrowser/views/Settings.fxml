@@ -4,47 +4,32 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="5" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<TitledPane fx:id="generalPane" text="General">
 			<content>
-				<GridPane hgap="10.0" vgap="5.0">
-					<columnConstraints>
-						<ColumnConstraints hgrow="NEVER" />
-						<ColumnConstraints hgrow="SOMETIMES" />
-					</columnConstraints>
-					<rowConstraints>
-						<RowConstraints vgrow="SOMETIMES" />
-						<RowConstraints vgrow="SOMETIMES" />
-						<RowConstraints vgrow="SOMETIMES" />
-					</rowConstraints>
+				<VBox spacing="5.0">
 					<children>
-						<Label text="SA-MP Path" />
-						<TextField fx:id="sampPathTextField" promptText="WIll automatically be detected if left empty" GridPane.columnIndex="1" />
-						<Label text="Notify Server on startup" GridPane.rowIndex="1" />
-						<CheckBox fx:id="notifyServerOnStartupCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-						<Label text="Remember last view" GridPane.rowIndex="2" />
-						<CheckBox fx:id="rememberLastViewCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+						<HBox spacing="5.0">
+							<children>
+								<Label maxHeight="1.7976931348623157E308" text="SA-MP Path" />
+								<TextField fx:id="sampPathTextField" promptText="Will be automatically detected if left empty" />
+							</children>
+						</HBox>
+						<CheckBox fx:id="notifyServerOnStartupCheckBox" mnemonicParsing="false" text="Notify Server on startup" />
+						<CheckBox fx:id="rememberLastViewCheckBox" mnemonicParsing="false" text="Remember last view" />
 					</children>
-				</GridPane>
+				</VBox>
 			</content>
 		</TitledPane>
 		<TitledPane fx:id="connectionPane" text="Connection">
 			<content>
 				<VBox>
 					<children>
-						<HBox maxWidth="1.7976931348623157E308">
-							<children>
-								<CheckBox fx:id="askForUsernameOnConnectCheckBox" mnemonicParsing="false" />
-								<Label text="Always ask for Username when connecting to a server" />
-							</children>
-						</HBox>
+						<CheckBox fx:id="askForUsernameOnConnectCheckBox" mnemonicParsing="false" text="Always ask for Username when connecting to a server" />
 					</children>
 				</VBox>
 			</content>
@@ -55,8 +40,7 @@
 					<children>
 						<HBox maxWidth="1.7976931348623157E308">
 							<children>
-								<CheckBox fx:id="darkThemeCheckBox" mnemonicParsing="false" />
-								<Label text="Use dark theme" />
+								<CheckBox fx:id="darkThemeCheckBox" mnemonicParsing="false" text="Use dark theme" />
 								<Label styleClass="beta-sign" text="BETA" />
 							</children>
 						</HBox>
@@ -64,25 +48,15 @@
 				</VBox>
 			</content>
 		</TitledPane>
-      <TitledPane fx:id="connectionPane11" text="Permissions">
-         <content>
-            <VBox spacing="5.0">
-               <children>
-                  <HBox maxWidth="1.7976931348623157E308">
-                     <children>
-                        <CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false" />
-                        <Label text="Allow this application to shut down San Andreas Multiplayer Client" />
-                     </children>
-                  </HBox>
-                  <HBox maxWidth="1.7976931348623157E308">
-                     <children>
-                        <CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" />
-                        <Label text="Allow this application to shut down Grand Theft Auto: San Andreas" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </content>
-      </TitledPane>
+		<TitledPane fx:id="connectionPane11" text="Permissions">
+			<content>
+				<VBox spacing="5.0">
+					<children>
+						<CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false" text="Allow this application to shut down San Andreas Multiplayer Client" />
+						<CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" text="Allow this application to shut down Grand Theft Auto: San Andreas" />
+					</children>
+				</VBox>
+			</content>
+		</TitledPane>
 	</children>
 </VBox>

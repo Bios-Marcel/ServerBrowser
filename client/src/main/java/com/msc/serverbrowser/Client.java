@@ -28,6 +28,7 @@ import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
+import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtility;
 
@@ -132,13 +133,12 @@ public class Client extends Application
 		return stage;
 	}
 
-	/**
-	 * Loads the main UI.
-	 *
-	 * @param primaryStage
-	 *            the stage to use for displaying the UI
-	 */
-	private void loadUI(final Stage primaryStage)
+	public void loadUI()
+	{
+		loadUIAndGetController();
+	}
+
+	private ViewController loadUIAndGetController()
 	{
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/com/msc/serverbrowser/views/Main.fxml"));
@@ -158,44 +158,65 @@ public class Client extends Application
 				scene.getStylesheets().add(getClass().getResource("/com/msc/serverbrowser/views/stylesheets/mainStyle.css").toExternalForm());
 			}
 
-			primaryStage.setScene(scene);
-			primaryStage.getIcons().add(APPLICATION_ICON);
-			primaryStage.setTitle(APPLICATION_NAME);
-			primaryStage.setMinWidth(primaryStage.getWidth());
-			primaryStage.setMinHeight(primaryStage.getHeight());
-			primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
-			primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+			stage.setScene(scene);
 
-			primaryStage.setOnCloseRequest(close ->
-			{
-				controller.onClose();
-				ClientProperties.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
-				ClientProperties.setProperty(Property.FULLSCREEN, primaryStage.isFullScreen());
-			});
-
-			stage = primaryStage;
-
-			primaryStage.show();
-
-			if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
-			{
-				final Alert alert = new Alert(AlertType.INFORMATION);
-				setupDialog(alert);
-				alert.setTitle(APPLICATION_NAME + "- Changelog");
-				alert.setHeaderText("Your client has been updated | Changelog");
-
-				final StringBuilder updateText = new StringBuilder();
-				updateText.append("- Settings Page has been added");
-
-				alert.setContentText(updateText.toString());
-				alert.show();
-				ClientProperties.setProperty(Property.SHOW_CHANGELOG, false);
-			}
 		}
 		catch (final Exception exception)
 		{
 			Logging.logger().log(Level.SEVERE, "Couldn't load UI", exception);
 			System.exit(0);
+		}
+
+		return controller;
+	}
+
+	/**
+	 * Loads the main UI.
+	 *
+	 * @param primaryStage
+	 *            the stage to use for displaying the UI
+	 */
+	private void loadUI(final Stage primaryStage)
+	{
+		stage = primaryStage;
+
+		final ViewController controller = loadUIAndGetController();
+
+		primaryStage.getIcons().add(APPLICATION_ICON);
+		primaryStage.setTitle(APPLICATION_NAME);
+		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
+		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+
+		primaryStage.setOnCloseRequest(close ->
+		{
+			controller.onClose();
+			ClientProperties.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
+			ClientProperties.setProperty(Property.FULLSCREEN, primaryStage.isFullScreen());
+		});
+
+		primaryStage.show();
+
+		// Must be called after show, otherwise, it will be set to 0
+		primaryStage.setMinWidth(700);
+		primaryStage.setMinHeight(400);
+
+		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
+		{
+			final Alert alert = new Alert(AlertType.INFORMATION);
+			setupDialog(alert);
+			alert.setTitle(APPLICATION_NAME + "- Changelog");
+			alert.setHeaderText("Your client has been updated | Changelog");
+
+			final StringBuilder updateText = new StringBuilder();
+			updateText.append("- New Dark Theme (Can be activated on settings page)");
+			updateText.append(System.lineSeparator());
+			updateText.append("- Bug Fix where adding servers that can't be reached leaded to nothing happening");
+			updateText.append(System.lineSeparator());
+			updateText.append("- Refactoring of Layout");
+
+			alert.setContentText(updateText.toString());
+			alert.show();
+			ClientProperties.setProperty(Property.SHOW_CHANGELOG, false);
 		}
 	}
 
