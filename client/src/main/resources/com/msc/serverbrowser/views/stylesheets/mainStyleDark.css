@@ -84,7 +84,7 @@
 
 .titled-pane:collapsed .title
 {
-	-fx-border-width: 0;
+	-fx-border-width: 0.0;
 }
 
 /**
@@ -203,7 +203,7 @@
 
 .check-box:selected
 {
-	-fx-background-insets: 5.0;
+	-fx-background-insets: 10000.0; /* HACK(MSC) Fix visible background bug when selected */
 }
 
 .check-box:selected > .box > .mark

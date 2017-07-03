@@ -169,6 +169,8 @@ public class Client extends Application
 		primaryStage.setTitle(APPLICATION_NAME);
 		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+		// Usually true by default, but on unix systems that use openjfx, it is false by default
+		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
 		{
@@ -179,8 +181,7 @@ public class Client extends Application
 
 		primaryStage.show();
 
-		// Must be called after show, otherwise, it will be set to 0
-		primaryStage.setMinWidth(700);
+		primaryStage.setMinWidth(800);
 		primaryStage.setMinHeight(400);
 
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
