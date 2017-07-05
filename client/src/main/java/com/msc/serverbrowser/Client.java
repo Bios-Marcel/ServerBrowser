@@ -30,7 +30,7 @@ import com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.FileUtility;
+import com.msc.serverbrowser.util.FileUtil;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -186,6 +186,8 @@ public class Client extends Application
 		primaryStage.setTitle(APPLICATION_NAME);
 		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+		// Usually true by default, but on unix systems that use openjfx, it is false by default
+		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
 		{
@@ -196,8 +198,7 @@ public class Client extends Application
 
 		primaryStage.show();
 
-		// Must be called after show, otherwise, it will be set to 0
-		primaryStage.setMinWidth(700);
+		primaryStage.setMinWidth(800);
 		primaryStage.setMinHeight(400);
 
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
@@ -329,7 +330,7 @@ public class Client extends Application
 		try
 		{
 			final URI url = new URI(remoteUpdateService.getLatestVersionURL());
-			FileUtility.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
+			FileUtil.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
 			ClientProperties.setProperty(Property.SHOW_CHANGELOG, true);
 			selfRestart();
 		}

@@ -12,7 +12,7 @@ import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.Paths;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.FileUtility;
+import com.msc.serverbrowser.util.FileUtil;
 import com.msc.serverbrowser.util.GTA;
 
 import javafx.application.Platform;
@@ -173,8 +173,8 @@ public class VersionChangeController implements ViewController
 				try
 				{
 					final Optional<String> gtaPath = GTA.getGtaPath();
-					downloadedFile = Optional.of(FileUtility.downloadFile("http://164.132.193.101/sampversion/" + versionToBeInstalled + ".zip", OUTPUT_ZIP));
-					FileUtility.unzip(OUTPUT_ZIP, gtaPath.get());
+					downloadedFile = Optional.of(FileUtil.downloadFile("http://164.132.193.101/sampversion/" + versionToBeInstalled + ".zip", OUTPUT_ZIP));
+					FileUtil.unzip(OUTPUT_ZIP, gtaPath.get());
 
 					updateInstallationState(newVersionButton, oldVersionButton);
 				}

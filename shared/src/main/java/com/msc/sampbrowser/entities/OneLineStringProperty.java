@@ -37,9 +37,9 @@ public class OneLineStringProperty extends SimpleStringProperty
 		super.set(toSet);
 	}
 
-	private static String replaceLineBreaks(final String v)
+	private static String replaceLineBreaks(final String value)
 	{
-		final String toSet = Objects.isNull(v) ? null : v.replaceAll(System.lineSeparator(), " ").trim();
+		final String toSet = Objects.isNull(value) ? null : value.replace("\n", " ").replace("\r", " ").trim();
 		return toSet;
 	}
 }
