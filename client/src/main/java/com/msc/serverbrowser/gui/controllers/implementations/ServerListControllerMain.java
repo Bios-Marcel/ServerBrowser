@@ -11,8 +11,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.msc.sampbrowser.entities.Player;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.query.SampQuery;
@@ -212,7 +210,7 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				menu.hide();
 				final List<SampServer> serverList = serverTable.getSelectionModel().getSelectedItems();
-				final @Nullable SampServer rowItem = row.getItem();
+				final SampServer rowItem = row.getItem();
 
 				if (!serverTable.getSelectionModel().getSelectedIndices().contains(row.getIndex()))
 				{

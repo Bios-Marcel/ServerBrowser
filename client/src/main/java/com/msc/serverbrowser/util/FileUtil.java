@@ -14,8 +14,6 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.msc.serverbrowser.logging.Logging;
 
 /**
@@ -68,7 +66,7 @@ public class FileUtil
 			{
 				// Can't be null since we did Enumeration.hasMoreElements()
 				@SuppressWarnings("null")
-				final @NonNull ZipEntry zipEntry = enu.nextElement();
+				final ZipEntry zipEntry = enu.nextElement();
 
 				final String name = zipEntry.getName();
 				final long size = zipEntry.getSize();
