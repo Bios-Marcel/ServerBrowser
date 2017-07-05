@@ -23,7 +23,7 @@ import com.msc.serverbrowser.logging.Logging;
  * @author Marcel
  * @since 01.07.2017
  */
-public class FileUtility
+public class FileUtil
 {
 	/**
 	 * Downloads a file and saves it to the given location.

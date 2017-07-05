@@ -28,7 +28,7 @@ import com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.FileUtility;
+import com.msc.serverbrowser.util.FileUtil;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -313,7 +313,7 @@ public class Client extends Application
 		try
 		{
 			final URI url = new URI(remoteUpdateService.getLatestVersionURL());
-			FileUtility.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
+			FileUtil.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
 			ClientProperties.setProperty(Property.SHOW_CHANGELOG, true);
 			selfRestart();
 		}

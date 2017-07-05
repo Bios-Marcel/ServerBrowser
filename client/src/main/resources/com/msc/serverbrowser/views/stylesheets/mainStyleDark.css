@@ -163,6 +163,17 @@
 	-fx-background-color: -mark-color;
 }
 
+.table-row-cell:selected .table-cell .hyperlink
+{
+	-fx-background-color: -mark-color !important;	
+}
+
+.table-cell .hyperlink
+{
+	-fx-border-width: 0.0;
+	-fx-padding: -2.0 0.0 -2.0 0.0;
+}
+
 /**
  * ScrollBar
  */

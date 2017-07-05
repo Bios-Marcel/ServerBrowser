@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.StringUtil;
 
 public class OSUtil
 {
@@ -32,7 +33,7 @@ public class OSUtil
 	public static void browse(final String url)
 	{
 		final Desktop desktop = Desktop.getDesktop();
-		final String fixedUrl = fixUrlIfNecessary(url);
+		final String fixedUrl = StringUtil.fixUrlIfNecessary(url);
 
 		try
 		{
@@ -42,23 +43,5 @@ public class OSUtil
 		{
 			Logging.logger().log(Level.WARNING, "Couldn't visit website '" + url + "' (" + fixedUrl + ").", exception);
 		}
-	}
-
-	/**
-	 * Puts <code>http://</code> infront of the url if not it already has <code>http://</code> or
-	 * <code>https://</code> infront of it.
-	 *
-	 * @param url
-	 *            the url to fix
-	 * @return the fixed url or the original if there was no need to fix
-	 */
-	private static String fixUrlIfNecessary(final String url)
-	{
-		String website = url;
-		if (!website.startsWith("http://") || !website.startsWith("https://"))
-		{
-			website = "http://" + website;
-		}
-		return website;
 	}
 }

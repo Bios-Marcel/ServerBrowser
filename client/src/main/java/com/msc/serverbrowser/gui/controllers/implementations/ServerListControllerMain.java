@@ -19,6 +19,7 @@ import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.GTA;
+import com.msc.serverbrowser.util.StringUtil;
 import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.application.Platform;
@@ -38,10 +39,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -59,21 +62,24 @@ public abstract class ServerListControllerMain implements ViewController
 	private final static StringProperty serverAddressProperty = new SimpleStringProperty();
 
 	@FXML
-	protected TableView<SampServer>	serverTable;
+	protected TableView<SampServer>			serverTable;
 	@FXML
-	protected Label					playerCount;
+	private TableColumn<SampServer, String>	columnWebsite;
+
 	@FXML
-	protected Label					slotCount;
+	protected Label		playerCount;
 	@FXML
-	protected Label					serverCount;
+	protected Label		slotCount;
 	@FXML
-	private TextField				serverAddress;
+	protected Label		serverCount;
 	@FXML
-	private Label					serverLagcomp;
+	private TextField	serverAddress;
 	@FXML
-	private Label					serverPing;
+	private Label		serverLagcomp;
 	@FXML
-	private Label					serverPassword;
+	private Label		serverPing;
+	@FXML
+	private Label		serverPassword;
 
 	@FXML
 	private TableView<Player>				playerTable;
@@ -123,6 +129,37 @@ public abstract class ServerListControllerMain implements ViewController
 		});
 
 		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
+
+		columnWebsite.setCellFactory(param ->
+		{
+			final TableCell<SampServer, String> cell = new TableCell<SampServer, String>() {
+
+				@Override
+				protected void updateItem(final String website, final boolean empty)
+				{
+					if (!empty)
+					{
+						final String websiteFixed = StringUtil.fixUrlIfNecessary(website.toLowerCase());
+						if (StringUtil.isValidURL(websiteFixed))
+						{
+							final Hyperlink hyperlink = new Hyperlink(website);
+							hyperlink.setUnderline(true);
+							hyperlink.setOnAction(hyperlinkTemp -> OSUtil.browse(websiteFixed));
+							setText("");
+							setGraphic(hyperlink);
+						}
+						else
+						{
+							setText(website);
+							setGraphic(null);
+						}
+
+					}
+				}
+			};
+
+			return cell;
+		});
 
 		setPlayerComparator();
 		addServerUpdateListener();
@@ -395,7 +432,9 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 			else if (clickedItem == copyIpAddressAndPortMenuItem)
 			{
+
 				final SampServer server = serverList.get(0);
+				System.out.println(StringUtil.printHexChars(server.getMode()));
 				final StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
 				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, null);
