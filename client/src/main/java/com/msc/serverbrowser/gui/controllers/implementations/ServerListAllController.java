@@ -18,6 +18,7 @@ import com.msc.serverbrowser.logging.Logging;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
+@SuppressWarnings("null")
 public class ServerListAllController extends ServerListControllerMain
 {
 	private Thread serverLookup;

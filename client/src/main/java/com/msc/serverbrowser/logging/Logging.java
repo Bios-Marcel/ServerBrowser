@@ -10,12 +10,21 @@ import java.util.logging.SimpleFormatter;
 
 import com.msc.serverbrowser.constants.Paths;
 
+/**
+ * Initializes and holds the applications {@link Logger} instance
+ *
+ * @author Marcel
+ * @since 06.07.2017
+ */
 public class Logging
 {
+	/**
+	 * The Loggers Singleton instance.
+	 */
 	private static Logger instance;
 
 	/**
-	 * @return {@link #instance}
+	 * @return the Loggers singleton instance
 	 */
 	public static Logger logger()
 	{
@@ -26,6 +35,7 @@ public class Logging
 		return instance;
 	}
 
+	@SuppressWarnings("null") // Anonysmus logger shouldn't be null
 	private static void init()
 	{
 		instance = Logger.getAnonymousLogger();

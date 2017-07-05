@@ -39,7 +39,11 @@ public class OneLineStringProperty extends SimpleStringProperty
 
 	private static String replaceLineBreaks(final String value)
 	{
-		final String toSet = Objects.isNull(value) ? null : value.replace("\n", " ").replace("\r", " ").trim();
+		/*
+		 * Replacing \r\n first and afterwards leftover \n by doing it like that, i never replace a
+		 * single line break by two spaces
+		 */
+		final String toSet = Objects.isNull(value) ? null : value.replace("\r\n", " ").replace("\n", " ").trim();
 		return toSet;
 	}
 }

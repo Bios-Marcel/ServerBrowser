@@ -141,7 +141,7 @@ public class Client extends Application
 	private ViewController loadUIAndGetController()
 	{
 		final FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("/com/msc/serverbrowser/views/Main.fxml"));
+		loader.setLocation(getClass().getResource(Paths.VIEW_PATH + "Main.fxml"));
 		final MainController controller = new MainController();
 		loader.setController(controller);
 		try
@@ -151,11 +151,11 @@ public class Client extends Application
 
 			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
 			{
-				scene.getStylesheets().add(getClass().getResource("/com/msc/serverbrowser/views/stylesheets/mainStyleDark.css").toExternalForm());
+				scene.getStylesheets().add(Paths.STYLESHEET_PATH + "mainStyleDark.css");
 			}
 			else
 			{
-				scene.getStylesheets().add(getClass().getResource("/com/msc/serverbrowser/views/stylesheets/mainStyle.css").toExternalForm());
+				scene.getStylesheets().add(Paths.STYLESHEET_PATH + "mainStyle.css");
 			}
 
 			stage.setScene(scene);

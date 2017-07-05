@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings("all") // Class will be deleted soon
 public class MySQLConnection
 {
 	private static final Logger logger = Logger.getLogger("Server");

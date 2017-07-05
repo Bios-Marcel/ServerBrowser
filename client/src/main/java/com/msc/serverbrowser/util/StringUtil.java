@@ -22,7 +22,7 @@ public class StringUtil
 		return website;
 	}
 
-	public static String printHexChars(final String string)
+	public static String getHexChars(final String string)
 	{
 		final char[] chars = string.toCharArray();
 

@@ -15,19 +15,28 @@ import org.kohsuke.github.RateLimitHandler;
 import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
 import com.msc.sampbrowser.util.Hashing;
 
-public class UpdateServiceServerImplementation implements UpdateServiceInterface {
+/**
+ * Contains methods for providing clients with updates.
+ *
+ * @author Marcel
+ */
+public class UpdateServiceServerImplementation implements UpdateServiceInterface
+{
 	@Override
 	public String getLatestVersionChecksum()
-			throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException {
+			throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException
+	{
 		return Hashing.verifyChecksum("/var/www/html/sampversion/launcher/launcher.jar");
 	}
 
 	@Override
-	public String getLatestVersionURL() throws IOException, RemoteException {
+	public String getLatestVersionURL() throws IOException, RemoteException
+	{
 		final GitHub gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build();
 		final GHRepository repository = gitHub.getRepository("Bios-Marcel/ServerBrowser");
 		final List<GHRelease> releases = repository.listReleases().asList();
-		if (releases.size() >= 1) {
+		if (releases.size() >= 1)
+		{
 			final GHRelease release = releases.get(0);
 			return release.getAssets().get(0).getBrowserDownloadUrl();
 		}

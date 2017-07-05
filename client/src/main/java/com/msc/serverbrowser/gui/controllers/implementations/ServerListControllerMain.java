@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.PatternSyntaxException;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.msc.sampbrowser.entities.Player;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.query.SampQuery;
@@ -183,6 +185,7 @@ public abstract class ServerListControllerMain implements ViewController
 		});
 	}
 
+	@SuppressWarnings("null")
 	private void setTableRowFactory()
 	{
 		serverTable.setRowFactory(facotry ->
@@ -193,11 +196,11 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				menu.hide();
 				final List<SampServer> serverList = serverTable.getSelectionModel().getSelectedItems();
-				final SampServer rowItem = row.getItem();
+				final @Nullable SampServer rowItem = row.getItem();
 
 				if (!serverTable.getSelectionModel().getSelectedIndices().contains(row.getIndex()))
 				{
-					if (rowItem != null)
+					if (Objects.nonNull(rowItem))
 					{
 						serverTable.getSelectionModel().select(rowItem);
 						if (clicked.getButton().equals(MouseButton.SECONDARY))
@@ -437,7 +440,7 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 
 				final SampServer server = serverList.get(0);
-				System.out.println(StringUtil.printHexChars(server.getMode()));
+				System.out.println(StringUtil.getHexChars(server.getMode()));
 				final StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
 				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, null);

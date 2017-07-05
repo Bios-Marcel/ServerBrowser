@@ -3,6 +3,7 @@ package com.msc.serverbrowser.gui;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.msc.serverbrowser.constants.Paths;
 import com.msc.serverbrowser.gui.controllers.implementations.ServerListAllController;
 import com.msc.serverbrowser.gui.controllers.implementations.ServerListFavController;
 import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
@@ -12,11 +13,11 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 
 public enum Views
 {
-	SERVERS_FAV(1, "Servers | Favourites", ServerListFavController.class, "/com/msc/serverbrowser/views/ServerList.fxml", "/com/msc/serverbrowser/views/stylesheets/serverListStyle.css"),
-	SERVERS_ALL(2, "Servers | All", ServerListAllController.class, "/com/msc/serverbrowser/views/ServerList.fxml", "/com/msc/serverbrowser/views/stylesheets/serverListStyle.css"),
-	USERNAME_CHANGER(3, "Username Changer", UsernameController.class, "/com/msc/serverbrowser/views/Username.fxml", "/com/msc/serverbrowser/views/stylesheets/usernameStyle.css"),
-	VERSION_CHANGER(4, "Version Changer", VersionChangeController.class, "/com/msc/serverbrowser/views/Version.fxml", "/com/msc/serverbrowser/views/stylesheets/versionStyle.css"),
-	SETTINGS(5, "Settings", SettingsController.class, "/com/msc/serverbrowser/views/Settings.fxml", "/com/msc/serverbrowser/views/stylesheets/settingsStyle.css");
+	SERVERS_FAV(1, "Servers | Favourites", ServerListFavController.class, Paths.VIEW_PATH + "ServerList.fxml", Paths.STYLESHEET_PATH + "serverListStyle.css"),
+	SERVERS_ALL(2, "Servers | All", ServerListAllController.class, Paths.VIEW_PATH + "ServerList.fxml", Paths.STYLESHEET_PATH + "serverListStyle.css"),
+	USERNAME_CHANGER(3, "Username Changer", UsernameController.class, Paths.VIEW_PATH + "Username.fxml", Paths.STYLESHEET_PATH + "usernameStyle.css"),
+	VERSION_CHANGER(4, "Version Changer", VersionChangeController.class, Paths.VIEW_PATH + "Version.fxml", Paths.STYLESHEET_PATH + "versionStyle.css"),
+	SETTINGS(5, "Settings", SettingsController.class, Paths.VIEW_PATH + "Settings.fxml", Paths.STYLESHEET_PATH + "settingsStyle.css");
 
 	private final int id;
 
@@ -24,8 +25,9 @@ public enum Views
 
 	private Class<? extends ViewController> necessaryController;
 
-	private String	stylesheetPath;
-	private String	fxmlPath;
+	private String stylesheetPath;
+
+	private String fxmlPath;
 
 	private final static Map<Integer, Views> idMapping = new HashMap<>();
 
@@ -39,12 +41,12 @@ public enum Views
 	}
 
 	private Views(final int id, final String title, final Class<? extends ViewController> necessaryController, final String fxmlPath,
-			final String stylesheetPath)
+			final String stylesheetPathCss)
 	{
 		this.id = id;
 		this.title = title;
 		this.necessaryController = necessaryController;
-		this.stylesheetPath = stylesheetPath;
+		this.stylesheetPath = stylesheetPathCss;
 		this.fxmlPath = fxmlPath;
 	}
 
