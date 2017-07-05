@@ -8,6 +8,10 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author oliver
+ * @since 06.07.2017
+ */
 public class MySQLConnection
 {
 	private static final Logger logger = Logger.getLogger("Server");

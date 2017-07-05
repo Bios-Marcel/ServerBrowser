@@ -13,6 +13,10 @@ import com.msc.sampbrowser.entities.SampServerSerializeable;
 import com.msc.sampbrowser.interfaces.DataServiceInterface;
 import com.msc.serverbrowser.data.MySQLConnection;
 
+/**
+ * @author oliver
+ * @since 06.07.2017
+ */
 public class DataServiceServerImplementation implements DataServiceInterface
 {
 	private static List<SampServerSerializeable> servers = new ArrayList<>();

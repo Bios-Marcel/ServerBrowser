@@ -29,9 +29,6 @@ dependencies {
 
 apply plugin: 'com.github.johnrengelman.shadow'
 shadowJar {
-	//Merges all service file under "META-INF/services" to one
-	mergeServiceFiles()
-	
 	/*
 	* WARNING! Changes to excludes/includes only seem to take effect after a "clean" with gradle.
 	* I am not sure where the bug lies, but this should not happen with gradle...
@@ -47,6 +44,9 @@ shadowJar {
 	exclude 'org/sqlite/native/Mac/**'
 	//Theoretically, in a distant future, one could kill 32bit support...
 	//exclude 'org/sqlite/native/Windows/x86/**'
+
+	//Merges all service file under "META-INF/services" to one
+	mergeServiceFiles()
 }
 
 apply plugin: 'javafx-gradle-plugin'
@@ -88,6 +88,9 @@ jfx {
     ] 
     // per default the outcome of the gradle "jarTask" will be used, set this to specify otherwise (like proguard-output)
     alternativePathToJarFile = "$libsDir/$shadowJar.baseName-$shadowJar.version-$shadowJar.classifier"+".jar"
+    copyAdditionalAppResourcesToJar = true
+    skipCopyingDependencies = true
+    useLibFolderContentForManifestClasspath = true
     
     // this is used for files below "src/main/deploy", e.g. "src/main/deploy/windows/$rootProject.name.ico"
     appName = "$rootProject.name"

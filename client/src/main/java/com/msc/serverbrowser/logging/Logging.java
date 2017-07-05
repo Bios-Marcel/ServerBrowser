@@ -14,9 +14,6 @@ public class Logging
 {
 	private static Logger instance;
 
-	/**
-	 * @return {@link #instance}
-	 */
 	public static Logger logger()
 	{
 		if (Objects.isNull(instance))

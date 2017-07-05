@@ -6,8 +6,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.Paths;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
@@ -29,7 +27,7 @@ public class VersionChangeController implements ViewController
 {
 	private static final String NOT_INSTALLING = "NOT_INSTALLING";
 
-	private static final @NonNull String OUTPUT_ZIP = Paths.SAMPEX_PATH + File.separator + "temp.zip";
+	private static final String OUTPUT_ZIP = Paths.SAMPEX_PATH + File.separator + "temp.zip";
 
 	private static String installing = NOT_INSTALLING;
 

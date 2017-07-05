@@ -1,9 +1,4 @@
 /*
-* # TODO
-* - pack200 task
-*/
-
-/*
 * When using plugins in gradle, we need to tell it where it can download them:
 */
 buildscript {
@@ -37,9 +32,6 @@ subprojects {
 	apply plugin: 'org.junit.platform.gradle.plugin'
 
 	dependencies {
-		//"runtime" means the JAR will not be shipped with output
-		runtime 'org.eclipse.jdt:org.eclipse.jdt.annotation:2.1.0'
-		
 		testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0-M4")
    		testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M4")
 	}
@@ -55,7 +47,11 @@ task wrapper(type: Wrapper) {
 /*
 * Load private and secret properties!
 */
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-ext.localSecretKeystorePassword = properties.getProperty('localSecretKeystorePassword')
-ext.localSecretKeyPassword = properties.getProperty('localSecretKeyPassword')
+def localProps = project.rootProject.file('local.properties')
+if (localProps.exists())
+{
+	Properties properties = new Properties()
+	properties.load(localProps.newDataInputStream())
+	ext.localSecretKeystorePassword = properties.getProperty('localSecretKeystorePassword')
+	ext.localSecretKeyPassword = properties.getProperty('localSecretKeyPassword')
+}

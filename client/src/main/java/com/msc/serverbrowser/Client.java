@@ -15,8 +15,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.interfaces.DataServiceInterface;
 import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
@@ -68,20 +66,20 @@ public class Client extends Application
 	/**
 	 * Windows Registry.
 	 */
-	public static @Nullable Registry registry;
+	public static Registry registry;
 
 	/**
 	 * Interface to the app server.
 	 */
-	public static @Nullable DataServiceInterface	remoteDataService;
+	public static DataServiceInterface		remoteDataService;
 	/**
 	 * Interface to the update server.
 	 */
-	public static @Nullable UpdateServiceInterface	remoteUpdateService;
+	public static UpdateServiceInterface	remoteUpdateService;
 
-	private @Nullable Stage stage;
+	private Stage stage;
 
-	private static @Nullable Client instance;
+	private static Client instance;
 
 	public static Client getInstance()
 	{
@@ -89,13 +87,12 @@ public class Client extends Application
 	}
 
 	@Override
-	public void start(final @Nullable Stage primaryStage)
+	public void start(final Stage primaryStage)
 	{
 		instance = this;
 		initClient();
 		establishConnection();
 		loadUI(primaryStage);
-
 		new Thread(() -> checkVersion()).start();
 	}
 
@@ -279,7 +276,7 @@ public class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an update is availbable
+	 * Compares the local version number to the one lying on the server. If an update is available
 	 * the user will be asked if he wants to update.
 	 */
 	private static void checkVersion()
