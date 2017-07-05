@@ -66,15 +66,27 @@ public abstract class ServerListControllerMain implements ViewController
 
 	private final static StringProperty serverAddressProperty = new SimpleStringProperty();
 
+	/**
+	 * This Table contains all available servers / favourite servers, depending on the active view.
+	 */
 	@FXML
 	protected TableView<SampServer>			serverTable;
 	@FXML
 	private TableColumn<SampServer, String>	columnWebsite;
 
+	/**
+	 * Displays the number of active players on all Servers in {@link #serverTable}.
+	 */
 	@FXML
 	protected Label		playerCount;
+	/**
+	 * Displays the amount of all slots on all Servers in {@link #serverTable}.
+	 */
 	@FXML
 	protected Label		slotCount;
+	/**
+	 * Number of servers in {@link #serverTable}.
+	 */
 	@FXML
 	protected Label		serverCount;
 	@FXML
@@ -92,15 +104,17 @@ public abstract class ServerListControllerMain implements ViewController
 	private TableColumn<SampServer, String>	columnPlayers;
 
 	/**
-	 * The menu that will be dsiplayed, when a user selects 1 .. n servers and right clicks the
-	 * table
+	 * When clicked, all selected servers will be added to favourites.
 	 */
-	protected MenuItem		addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
-	protected MenuItem		removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
-	private final MenuItem	visitWebsiteMenuItem			= new MenuItem("Visit Website");
-	private final MenuItem	connectMenuItem					= new MenuItem("Connect to Server");
-	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
-	protected ContextMenu	menu							= new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
+	protected MenuItem			addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
+	/**
+	 * When clicked, all selected servers will be removed from favourites.
+	 */
+	protected MenuItem			removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
+	private final MenuItem		visitWebsiteMenuItem			= new MenuItem("Visit Website");
+	private final MenuItem		connectMenuItem					= new MenuItem("Connect to Server");
+	private final MenuItem		copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
+	private final ContextMenu	menu							= new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	@FXML
 	private CheckBox			regexCheckBox;
@@ -113,9 +127,12 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private ComboBox<String>	versionFilter;
 
-	protected int	playersPlaying	= 0;
-	protected int	maxSlots		= 0;
+	private int	playersPlaying	= 0;
+	private int	maxSlots		= 0;
 
+	/**
+	 * Holds all servers that might be displayed in {@link #serverTable}.
+	 */
 	protected ObservableList<SampServer> servers = FXCollections.observableArrayList();
 
 	private static Thread serverInfoUpdateThread;
@@ -185,7 +202,6 @@ public abstract class ServerListControllerMain implements ViewController
 		});
 	}
 
-	@SuppressWarnings("null")
 	private void setTableRowFactory()
 	{
 		serverTable.setRowFactory(facotry ->
@@ -485,6 +501,12 @@ public abstract class ServerListControllerMain implements ViewController
 		}
 	}
 
+	/**
+	 * Updates the data that the {@link SampServer} holds and displays the correct values on the UI.
+	 *
+	 * @param server
+	 *            the {@link SampServer} object to update locally
+	 */
 	protected void updateServerInfo(final SampServer server)
 	{
 		playerTable.getItems().clear();

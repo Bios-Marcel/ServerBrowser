@@ -18,7 +18,11 @@ import com.msc.serverbrowser.logging.Logging;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
-@SuppressWarnings("null")
+/**
+ * Controller, that controlls the "All Servers" view.
+ *
+ * @author Marcel
+ */
 public class ServerListAllController extends ServerListControllerMain
 {
 	private Thread serverLookup;

@@ -35,7 +35,6 @@ public class Logging
 		return instance;
 	}
 
-	@SuppressWarnings("null") // Anonysmus logger shouldn't be null
 	private static void init()
 	{
 		instance = Logger.getAnonymousLogger();

@@ -81,6 +81,9 @@ public class Client extends Application
 
 	private static Client instance;
 
+	/**
+	 * @return the clients singleton instance
+	 */
 	public static Client getInstance()
 	{
 		return instance;
@@ -96,8 +99,8 @@ public class Client extends Application
 		new Thread(() -> checkVersion()).start();
 	}
 
-	/*
-	 * + Establishes the connection with the rmi server.
+	/**
+	 * Establishes the connection with the rmi server.
 	 */
 	public static void establishConnection()
 	{
@@ -130,6 +133,9 @@ public class Client extends Application
 		return stage;
 	}
 
+	/**
+	 * Loads the UI as if the Client has just been started.
+	 */
 	public void loadUI()
 	{
 		loadUIAndGetController();
@@ -218,6 +224,9 @@ public class Client extends Application
 		}
 	}
 
+	/**
+	 * Displays a dialog that tells the user that the server connection couldn't be established.
+	 */
 	public static void displayNoConnectionDialog()
 	{
 		final Alert alert = new Alert(AlertType.ERROR);
@@ -229,6 +238,20 @@ public class Client extends Application
 	}
 
 	// TODO(MSC) Mit DialogBuilder oder so ersetzen
+	/**
+	 * <p>
+	 * Sets up a dialog; performs the following actions:
+	 * </p>
+	 * <ul>
+	 * <li>sets stylesheets</li>
+	 * <li>sets the owner stage</li>
+	 * <li>sets the modality</li>
+	 * <li>sets the icon</li>
+	 * </ul>
+	 *
+	 * @param alert
+	 *            the {@link Alert} that will be set up
+	 */
 	public static void setupDialog(final Alert alert)
 	{
 		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(APPLICATION_ICON);
@@ -376,6 +399,12 @@ public class Client extends Application
 		}
 	}
 
+	/**
+	 * Programs entry point, it also intitializes specific when passed as args.
+	 *
+	 * @param args
+	 *            used to determine what backend to connect to
+	 */
 	public static void main(final String[] args)
 	{
 		if (args.length >= 2)
