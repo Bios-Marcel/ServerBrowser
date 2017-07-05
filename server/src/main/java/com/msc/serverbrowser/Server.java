@@ -32,6 +32,10 @@ import com.msc.serverbrowser.data.MySQLConnection;
 import com.msc.serverbrowser.serviceImplementations.DataServiceServerImplementation;
 import com.msc.serverbrowser.serviceImplementations.UpdateServiceServerImplementation;
 
+/**
+ * @author oliver
+ * @since 06.07.2017
+ */
 public class Server
 {
 	private static final Logger logger = Logger.getLogger("Server");

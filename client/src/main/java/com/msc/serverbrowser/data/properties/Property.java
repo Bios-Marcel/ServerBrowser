@@ -1,7 +1,5 @@
 package com.msc.serverbrowser.data.properties;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.msc.serverbrowser.util.GTA;
 
 public enum Property
@@ -24,7 +22,7 @@ public enum Property
 
 	private Class<?> datatype;
 
-	private <T extends Object> Property(final int value, final @Nullable T defaultValue, final Class<T> datatype)
+	private <T extends Object> Property(final int value, final T defaultValue, final Class<T> datatype)
 	{
 		id = value;
 		this.defaultValue = defaultValue == null ? null : defaultValue.toString();

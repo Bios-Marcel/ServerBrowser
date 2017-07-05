@@ -93,7 +93,6 @@ public class Client extends Application
 		initClient();
 		establishConnection();
 		loadUI(primaryStage);
-
 		new Thread(() -> checkVersion()).start();
 	}
 

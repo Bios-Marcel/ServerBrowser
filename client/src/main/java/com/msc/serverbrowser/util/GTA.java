@@ -8,8 +8,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
 import com.github.sarxos.winreg.WindowsRegistry;
@@ -111,7 +109,7 @@ public class GTA
 	 *
 	 * @return String of the GTA Path or null.
 	 */
-	public static @Nullable String getGtaPathUnsafe()
+	public static String getGtaPathUnsafe()
 	{
 		if (!OSUtil.isWindows())
 		{
