@@ -26,7 +26,7 @@ public enum Property
 
 	private <T extends Object> Property(final int value, final @Nullable T defaultValue, final Class<T> datatype)
 	{
-		this.id = value;
+		id = value;
 		this.defaultValue = defaultValue == null ? null : defaultValue.toString();
 		this.datatype = datatype;
 	}

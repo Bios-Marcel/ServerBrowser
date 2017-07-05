@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.interfaces.DataServiceInterface;
 import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
@@ -43,6 +45,9 @@ import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * @since 02.07.2017
+ */
 public class Client extends Application
 {
 	/**
@@ -55,16 +60,28 @@ public class Client extends Application
 	 * Application icon that can be used everywhere where necessary.
 	 */
 	public static final Image	APPLICATION_ICON	= new Image(Client.class.getResourceAsStream("/com/msc/serverbrowser/icons/icon.png"));
+	/**
+	 * Name of the application, as displayed to people.
+	 */
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	public static Registry registry;
+	/**
+	 * Windows Registry.
+	 */
+	public static @Nullable Registry registry;
 
-	public static DataServiceInterface		remoteDataService;
-	public static UpdateServiceInterface	remoteUpdateService;
+	/**
+	 * Interface to the app server.
+	 */
+	public static @Nullable DataServiceInterface	remoteDataService;
+	/**
+	 * Interface to the update server.
+	 */
+	public static @Nullable UpdateServiceInterface	remoteUpdateService;
 
-	private Stage stage;
+	private @Nullable Stage stage;
 
-	private static Client instance;
+	private static @Nullable Client instance;
 
 	public static Client getInstance()
 	{
@@ -72,7 +89,7 @@ public class Client extends Application
 	}
 
 	@Override
-	public void start(final Stage primaryStage)
+	public void start(final @Nullable Stage primaryStage)
 	{
 		instance = this;
 		initClient();
@@ -85,7 +102,7 @@ public class Client extends Application
 	/*
 	 * + Establishes the connection with the rmi server.
 	 */
-	public void establishConnection()
+	public static void establishConnection()
 	{
 		if (Objects.isNull(remoteDataService) || Objects.isNull(remoteUpdateService))
 		{
@@ -109,7 +126,7 @@ public class Client extends Application
 	}
 
 	/**
-	 * @return {@link #stage}
+	 * @return the main window.
 	 */
 	public Stage getStage()
 	{
@@ -204,7 +221,7 @@ public class Client extends Application
 		}
 	}
 
-	public void displayNoConnectionDialog()
+	public static void displayNoConnectionDialog()
 	{
 		final Alert alert = new Alert(AlertType.ERROR);
 		setupDialog(alert);
@@ -228,7 +245,7 @@ public class Client extends Application
 	 * Creates files and folders that are necessary for the application to run properly and migrates
 	 * old xml data.
 	 */
-	private void initClient()
+	private static void initClient()
 	{
 		final File sampexFolder = new File(Paths.SAMPEX_PATH);
 
@@ -265,10 +282,10 @@ public class Client extends Application
 	 * Compares the local version number to the one lying on the server. If an update is availbable
 	 * the user will be asked if he wants to update.
 	 */
-	private void checkVersion()
+	private static void checkVersion()
 	{
 		if (Objects.nonNull(remoteDataService))
-		{// Connection with server was not sucessful
+		{// Connection with server was not successful
 			try
 			{
 				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
@@ -308,7 +325,7 @@ public class Client extends Application
 	/**
 	 * Downloads the latest version and restarts the client.
 	 */
-	private void updateLauncher()
+	private static void updateLauncher()
 	{
 		try
 		{
@@ -326,7 +343,7 @@ public class Client extends Application
 	/**
 	 * @return a File pointing to the applications own jar file
 	 */
-	private File getOwnJarFile()
+	private static File getOwnJarFile()
 	{
 		return new File(System.getProperty("java.class.path")).getAbsoluteFile();
 	}
@@ -334,7 +351,7 @@ public class Client extends Application
 	/**
 	 * Restarts the application.
 	 */
-	private void selfRestart()
+	private static void selfRestart()
 	{
 		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 		final File currentJar = getOwnJarFile();

@@ -44,6 +44,9 @@
 *.tar.gz
 *.rar
 
+# Allow all kinds of stuff in test resources for ... testing.
+!**/src/test/resources/**
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 **/hs_err_pid*
 

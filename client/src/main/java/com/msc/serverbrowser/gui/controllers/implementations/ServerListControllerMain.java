@@ -52,6 +52,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
 
+/**
+ * @since 02.07.2017
+ */
 public abstract class ServerListControllerMain implements ViewController
 {
 	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
@@ -295,7 +298,7 @@ public abstract class ServerListControllerMain implements ViewController
 		}
 	}
 
-	private void showCantConnectToServerError()
+	private static void showCantConnectToServerError()
 	{
 		final Alert alert = new Alert(AlertType.ERROR);
 		Client.setupDialog(alert);
@@ -309,10 +312,10 @@ public abstract class ServerListControllerMain implements ViewController
 	 * Validates the given port.
 	 *
 	 * @param port
-	 *            the ort to be validated
-	 * @return true if it is an int and between 0 and 65535
+	 *            the port to be validated
+	 * @return true if it is an integer and between 0 and 65535
 	 */
-	private boolean validatePort(final String port)
+	private static boolean validatePort(final String port)
 	{
 		try
 		{
@@ -368,7 +371,7 @@ public abstract class ServerListControllerMain implements ViewController
 		updateGlobalInfo();
 	}
 
-	private boolean regexFilter(final String toFilter, final String filterSetting)
+	private static boolean regexFilter(final String toFilter, final String filterSetting)
 	{
 		if (!filterSetting.isEmpty())
 		{
@@ -453,7 +456,7 @@ public abstract class ServerListControllerMain implements ViewController
 	 * @param port
 	 *            server port
 	 */
-	private void tryToConnect(final String address, final Integer port)
+	private static void tryToConnect(final String address, final Integer port)
 	{
 		try (final SampQuery query = new SampQuery(address, port))
 		{
