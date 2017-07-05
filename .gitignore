@@ -44,6 +44,10 @@
 *.tar.gz
 *.rar
 
+# Java Keystore #
+
+*.jks
+
 # Allow all kinds of stuff in test resources for ... testing.
 !**/src/test/resources/**
 

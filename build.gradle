@@ -1,10 +1,6 @@
 /*
 * # TODO
-* 
-* - debug and release profile
-* - zip
 * - pack200 task
-* - JFX build consuming shadowJar
 */
 
 /*
@@ -55,3 +51,11 @@ subprojects {
 task wrapper(type: Wrapper) {
 	gradleVersion = gradleWrapperVersion
 }
+
+/*
+* Load private and secret properties!
+*/
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+ext.localSecretKeystorePassword = properties.getProperty('localSecretKeystorePassword')
+ext.localSecretKeyPassword = properties.getProperty('localSecretKeyPassword')

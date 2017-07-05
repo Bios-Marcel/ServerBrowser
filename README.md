@@ -97,6 +97,58 @@ These steps map to these tools:
 
 Our build scripts are largely glue around those tools.
 
+### Building the native output
+
+``` shell
+$ ./gradlew jfxNative
+```
+
+This will generate an installable artifact in `client/build/jfx/native`. Depending on which platform you are building from, an EXE is generated on Windows, DEB/RPM on Linux and PKG/DMG on OSX.
+
+We support Windows and Linux and in order to be able to generate an installer, some dependencies need to be installed.
+
+#### Windows
+
+- Inno Setup 5 or later
+
+#### Linux (rpm)
+
+- RPMBuild
+
+#### Linux (deb)
+
+- Debian packaging tools
+
+### Javapackager
+
+The underlying technology for building native installer bundles is `javapackager`.
+Learn more about it here:
+
+- https://docs.oracle.com/javase/8/docs/technotes/guides/deploy/self-contained-packaging.html
+- https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javapackager.html
+- https://docs.oracle.com/javase/8/docs/technotes/tools/unix/javapackager.html
+
+### Realising a signed build
+
+Our builds are cryptographically signed. In order to build with signing enabled you need to setup 2 things.
+
+* A `local.properties` file:
+
+```
+localSecretKeystorePassword = "choose super secret pw"
+localSecretKeyPassword = "choose super secret pw yet again!"
+```
+
+* A keystore and private key
+
+Once you have your passwords setup, these can automatically generated for you with:
+
+``` shell
+$ ./gradlew jfxGenerateKeyStore
+```
+
+None of these files should __ever__ be commited to version control !
+
 ## Troubleshooting
 
 If your Client isn't able to connect to the server anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).

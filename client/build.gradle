@@ -21,6 +21,9 @@ dependencies {
 		compile 'com.github.sarxos:windows-registry-util:0.3'
 		compile 'org.xerial:sqlite-jdbc:3.19.3'
 		
+		//javapacker for native build. This will only be necessary if the userJvmOptions are used
+		//compile files("${System.properties['java.home']}/../lib/packager.jar")
+		
 		compile project(':shared')
 }
 
@@ -28,9 +31,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 shadowJar {
 	//Merges all service file under "META-INF/services" to one
 	mergeServiceFiles()
-	
-	//this restricts which JARs are bundled. only include the necessary bits
-	configurations = [project.configurations.compile]
 	
 	/*
 	* WARNING! Changes to excludes/includes only seem to take effect after a "clean" with gradle.
@@ -47,17 +47,70 @@ shadowJar {
 	exclude 'org/sqlite/native/Mac/**'
 	//Theoretically, in a distant future, one could kill 32bit support...
 	//exclude 'org/sqlite/native/Windows/x86/**'
-
-	//maven adds junk into the "META-INF/maven" folder which is useful for libraries, but not for apps,
-	//since these are typically not consumed by other projects.
-	exclude 'META-INF/maven/**'
 }
 
 apply plugin: 'javafx-gradle-plugin'
 jfx {
+    verbose = true
+    
     mainClass = mainClassName
+    println("$mainClass")
     vendor = projectVendor
+    
+    // String - setting this for windows-bundlers makes it possible to generate upgradeable installers (using same GUID)
+    identifier = "$projectGroup"+"."+"$rootProject.name"+"."+"$projectVendor"+"."+"$projectVersion"
+    
+    nativeReleaseVersion = "$projectVersion"
+    
+    //bundler = "RPM"
+    
+    //useful during debugging. but when all bundles are tried, some WILL ALWAYS fail, because EXE can only be built on windows, DEB/RPM on linux and PKG/DMG on OSX.
+    //failOnError = true
+    
+    //TODO
+    //icon under linux does not work
+    //remove libs from native bundle
+    //jvmArgs = ['-Xmx=128m','-Xms=64m'] //this syntax is wrong
+    //remove eclipse annotations
+    //signing
+    
+    needShortcut = true
+    needMenu = true
+    
+    bundleArguments = [
+        copyright: "TODO",
+        email: "TODO",
+        category: "Game",
+        "win.menuGroup": "Game",
+        licenseType: 'MPLv2.0',
+        //because windows is "special", it requires "special" file formats for the license...
+        licenseFile: org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'license.rtf' : 'LICENSE'
+    ] 
+    // per default the outcome of the gradle "jarTask" will be used, set this to specify otherwise (like proguard-output)
+    alternativePathToJarFile = "$libsDir/$shadowJar.baseName-$shadowJar.version-$shadowJar.classifier"+".jar"
+    
+    // this is used for files below "src/main/deploy", e.g. "src/main/deploy/windows/$rootProject.name.ico"
+    appName = "$rootProject.name"
+    additionalAppResources = 'src/main/additionalFiles'
+    jfxMainAppJarName = "$appName"+"-"+"$projectVersion"+".jar"
     
     //precompiles the CSS to binary. Useful performance gain, if the CSS files are not modified during runtime
     css2bin = true
+
+    // gradle jfxGenerateKeyStore
+    keyStore = "src/main/deploy/keystore.jks"
+    keyStoreAlias = "$projectVendor"+"-"+"$appName"
+    // assumes you have a file "local.properties" which does NOT get version controlled!
+    keyStorePassword = "$localSecretKeystorePassword"
+    keyPassword = "$localSecretKeyPassword"
+    keyStoreType = "jks"
+    overwriteKeyStore = false
+    
+    certDomain = "$projectGroup" // required
+    certOrgUnit = "$projectVendor" // defaults to "none"
+    certOrg = "$projectVendor" // required
+    certState = "Lower Saxony" // required
+    certCountry = "Germany" // required
 }
+
+jfxJar.dependsOn shadowJar
