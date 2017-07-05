@@ -64,6 +64,11 @@ public class FileUtil
 			final Enumeration<? extends ZipEntry> enu = zipFile.entries();
 			while (enu.hasMoreElements())
 			{
+<<<<<<< HEAD
+=======
+				// Can't be null since we did Enumeration.hasMoreElements()
+				@SuppressWarnings("null")
+>>>>>>> branch 'master' of https://github.com/Bios-Marcel/ServerBrowser/
 				final ZipEntry zipEntry = enu.nextElement();
 
 				final String name = zipEntry.getName();
