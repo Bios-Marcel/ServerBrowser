@@ -111,6 +111,7 @@ public class VersionChangeController implements ViewController
 				}
 			}
 		});
+
 	}
 
 	@FXML

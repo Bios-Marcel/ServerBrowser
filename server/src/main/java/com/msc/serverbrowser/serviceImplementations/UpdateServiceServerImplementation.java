@@ -23,8 +23,7 @@ import com.msc.sampbrowser.util.Hashing;
 public class UpdateServiceServerImplementation implements UpdateServiceInterface
 {
 	@Override
-	public String getLatestVersionChecksum()
-			throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException
+	public String getLatestVersionChecksum() throws FileNotFoundException, NoSuchAlgorithmException, IOException, RemoteException
 	{
 		return Hashing.verifyChecksum("/var/www/html/sampversion/launcher/launcher.jar");
 	}

@@ -1,7 +1,5 @@
 package com.msc.serverbrowser.util;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 public class StringUtil
 {
 	/**
@@ -46,7 +44,7 @@ public class StringUtil
 	 *            the {@link String} to check.
 	 * @return true if it was valid and false otherwise
 	 */
-	public static boolean isValidURL(final @Nullable String possibleUrl)
+	public static boolean isValidURL(final String possibleUrl)
 	{
 		if (possibleUrl == null)
 		{
