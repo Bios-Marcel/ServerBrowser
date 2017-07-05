@@ -55,3 +55,9 @@ if (localProps.exists())
 	ext.localSecretKeystorePassword = properties.getProperty('localSecretKeystorePassword')
 	ext.localSecretKeyPassword = properties.getProperty('localSecretKeyPassword')
 }
+else
+{
+	//for the travis build we set the secrets via enviraonment variables, because these can be encrypted with travis api
+	ext.localSecretKeystorePassword = System.getenv("KEYSTORE_PW")
+	ext.localSecretKeyPassword = System.getenv("KEY_PW")
+}
