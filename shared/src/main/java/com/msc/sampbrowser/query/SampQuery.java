@@ -41,6 +41,8 @@ public class SampQuery implements AutoCloseable
 	 *            hostname / ip
 	 * @param serverPort
 	 *            port
+	 * @param timeout
+	 *            the maximum time, that the socket tries connecting
 	 * @throws Exception
 	 *             Thrown if the connection is closed unexpectedly / has never beenopened properly
 	 */
@@ -62,6 +64,7 @@ public class SampQuery implements AutoCloseable
 	 * @param serverPort
 	 *            port
 	 * @throws Exception
+	 *             if the connection couldn't be established
 	 */
 	public SampQuery(final String serverAddress, final int serverPort) throws Exception
 	{
@@ -70,8 +73,6 @@ public class SampQuery implements AutoCloseable
 
 	/**
 	 * Returns whether a successful connection was made.
-	 *
-	 * @return boolean
 	 */
 	private void checkConnection() throws Exception
 	{
@@ -176,7 +177,7 @@ public class SampQuery implements AutoCloseable
 	 * String name = playerOne[0] //playername<br>
 	 * String score = playerOne[1] //score
 	 * </code>
-	 * 
+	 *
 	 * @return a two dimensional array containg the basic player information
 	 * @see #getDetailedPlayerInfo()
 	 */
@@ -225,7 +226,7 @@ public class SampQuery implements AutoCloseable
 	 * String name = playerOne[1] //playername<br>
 	 * String score = playerOne[2] //score
 	 * </code>
-	 * 
+	 *
 	 * @return a two dimensional array containg the detailed player information
 	 * @see #getBasicPlayerInfo()
 	 */
@@ -319,7 +320,7 @@ public class SampQuery implements AutoCloseable
 	 * Because the Data contains multiple informations that we do not care for as of now, we are
 	 * setting the byte buffers initial position to eleven.
 	 * </p>
-	 * 
+	 *
 	 * @param the
 	 *            byte array to be wrapped
 	 * @return the {@link ByteBuffer} that wraps the byte array

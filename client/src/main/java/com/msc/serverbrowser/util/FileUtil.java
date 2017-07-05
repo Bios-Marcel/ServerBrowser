@@ -64,8 +64,6 @@ public class FileUtil
 			final Enumeration<? extends ZipEntry> enu = zipFile.entries();
 			while (enu.hasMoreElements())
 			{
-				// Can't be null since we did Enumeration.hasMoreElements()
-				@SuppressWarnings("null")
 				final ZipEntry zipEntry = enu.nextElement();
 
 				final String name = zipEntry.getName();
