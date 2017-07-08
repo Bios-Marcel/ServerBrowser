@@ -1,31 +1,37 @@
 .installEntry
 {
-	-fx-padding: 10;
+	-fx-padding: 10.0;
 }
 
 .separator
 {
-	-fx-padding: 10 10 10 15;
+	-fx-padding: 10.0 10.0 10.0 15.0;
 }
 
 .installLabel
 {
-	-fx-padding: 10;
-	-fx-font-size: 24;
-	-fx-pref-height: 23;
+	-fx-padding: 10.0;
+	-fx-font-size: 24.0;
+	-fx-pref-height: 23.0;
 }
 
 .installButton
 {
 	-fx-background-color: -special-button-color;
-	-fx-background-radius: 0;
-	-fx-border-radius: 0;
-	-fx-padding: 10;
-	-fx-font-size: 14;
+	-fx-background-radius: 0.0;
+	-fx-border-radius: 0.0;
+	-fx-padding: 10.0;
+	-fx-font-size: 14.0;
 	-fx-font-weight: bold;
-	-fx-min-width: 100;
-	-fx-pref-width: 100;
+	-fx-min-width: 100.0;
+	-fx-pref-width: 100.0;
 	-fx-content-display: center;
 	-fx-alignment: center;
 	-fx-text-fill: white;
+}
+
+.installButton:focused
+{
+	-fx-padding: 9.0;
+	-fx-border-color: white;
 }

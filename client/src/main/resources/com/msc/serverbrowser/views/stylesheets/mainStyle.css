@@ -102,6 +102,11 @@
  * Special
  */
 
+.info-label-bottom
+{
+	-fx-padding: 0.0 0.0 0.0 20.0;
+}
+
 .beta-sign
 {
 	-fx-background-color: -special-button-color;

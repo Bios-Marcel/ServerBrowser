@@ -14,7 +14,7 @@
 	
     -fx-text-fill: #CCCCCC;
     -fx-background-color: #212121;
-	-fx-focus-color: transparent !important;
+	-fx-focus-color: white;
 	
 	-fx-background-insets: 0.0;
 	-fx-border-radius: 0.0;
@@ -26,6 +26,20 @@
     -fx-background-color: -component-background-color-selected !important;
 }
 
+/**
+ * Focus styles
+ */
+
+.combo-box:focused, .text-field:focused, .check-box:focused > .box, .table-view:focused
+{
+	-fx-border-color: -fx-focus-color !important;
+}
+
+.button:focused
+{
+	-fx-padding: 4.0;
+	-fx-border-color: -fx-focus-color;
+}
 /**
  * Container that contains the elements of the specific view
  */
@@ -49,8 +63,17 @@
  * ComboBox
  */
 
-.combo-box .cell:selected {
+.combo-box > .cell:selected {
     -fx-background-color: inherit !important;
+}
+
+/**
+ * List
+ */
+
+.list-cell:hover
+{
+	-fx-background-color: -component-background-color-selected !important;
 }
 
 /**
@@ -275,6 +298,11 @@
 /**
  * Special
  */
+
+.info-label-bottom
+{
+	-fx-padding: 0.0 0.0 0.0 20.0;
+}
 
 .beta-sign
 {

@@ -518,6 +518,7 @@ public abstract class ServerListControllerMain implements ViewController
 
 		serverPing.setText("Retrieving ...");
 		serverPassword.setText("Retrieving ...");
+		mapLabel.setText("Retrieving ...");
 
 		if (Objects.nonNull(serverInfoUpdateThread))
 		{
@@ -599,6 +600,8 @@ public abstract class ServerListControllerMain implements ViewController
 				{
 					serverPing.setText("Server Offline");
 					serverPassword.setText("");
+					mapLabel.setText("");
+					serverLagcomp.setText("");
 					playerTable.setPlaceholder(new Label("Couldn't retrieve players, server is offline."));
 				});
 			}
