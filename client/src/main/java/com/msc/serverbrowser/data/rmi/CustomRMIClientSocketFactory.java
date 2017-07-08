@@ -5,6 +5,12 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.rmi.server.RMIClientSocketFactory;
 
+/**
+ * Implementation of {@link RMIClientSocketFactory} that creates a {@link Socket} with a custom
+ * tiemout.
+ *
+ * @author Marcel
+ */
 public class CustomRMIClientSocketFactory implements RMIClientSocketFactory
 {
 	@Override

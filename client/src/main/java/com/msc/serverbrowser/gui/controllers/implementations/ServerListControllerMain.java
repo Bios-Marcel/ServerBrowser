@@ -95,6 +95,8 @@ public abstract class ServerListControllerMain implements ViewController
 	private Label		serverPing;
 	@FXML
 	private Label		serverPassword;
+	@FXML
+	private Label		mapLabel;
 
 	@FXML
 	private TableView<Player>				playerTable;
@@ -547,6 +549,7 @@ public abstract class ServerListControllerMain implements ViewController
 					server.setWebsite(serverRules.get("weburl"));
 					server.setVersion(serverRules.get("version"));
 					server.setLagcomp(serverRules.get("lagcomp"));
+					server.setMap(serverRules.get("mapname"));
 
 					final ObservableList<Player> playerList = FXCollections.observableArrayList();
 
@@ -564,6 +567,7 @@ public abstract class ServerListControllerMain implements ViewController
 					{
 						serverPassword.setText(info[0].equals("0") ? "No" : "Yes");
 						serverPing.setText("" + ping);
+						mapLabel.setText(server.getMap());
 
 						if (playerList.isEmpty())
 						{
@@ -583,6 +587,7 @@ public abstract class ServerListControllerMain implements ViewController
 						}
 
 						serverLagcomp.setText(server.getLagcomp());
+						updateGlobalInfo();
 					});
 
 					Favourites.updateServerData(server);

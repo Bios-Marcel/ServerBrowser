@@ -2,6 +2,12 @@ package com.msc.serverbrowser.constants;
 
 import java.io.File;
 
+/**
+ * Contains most Paths used by this application.
+ *
+ * @author Marcel
+ */
+@SuppressWarnings("javadoc")
 public class Paths
 {
 	public static final String	USER_PATH		= System.getProperty("user.home") + File.separator;

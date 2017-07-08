@@ -15,6 +15,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * ViewController for the Username View.
+ *
+ * @author Marcel
+ */
 public class UsernameController implements ViewController
 {
 	@FXML
@@ -39,7 +44,7 @@ public class UsernameController implements ViewController
 	}
 
 	@FXML
-	public void onUsernameClicked(final MouseEvent e)
+	private void onUsernameClicked(final MouseEvent e)
 	{
 		final ObservableList<String> usernames = nameList.getSelectionModel().getSelectedItems();
 

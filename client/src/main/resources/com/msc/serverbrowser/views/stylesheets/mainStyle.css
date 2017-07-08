@@ -87,6 +87,11 @@
 	-fx-border-color: #639BE0;
 }
 
+.MenuItem:hover
+{	
+	-fx-background-color: -fx-focus-color;
+}
+
 .menuItemIcon
 {
 	-fx-fill: white;
@@ -109,7 +114,7 @@
 
 .clickedItem
 {
-	-fx-background-color: #1F5FAE; 
+	-fx-background-color: #1F5FAE !important; 
 }
 
 .copyableLabel, .copyableLabel:focused 

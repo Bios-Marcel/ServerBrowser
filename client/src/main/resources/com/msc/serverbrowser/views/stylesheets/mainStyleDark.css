@@ -256,6 +256,11 @@
 	-fx-border-color: -border-color;
 }
 
+.MenuItem:hover
+{
+	-fx-background-color: -component-background-color-selected;
+}
+
 .menuItemIcon
 {
 	-fx-fill: white; /* Sets the SVGs colours */
@@ -263,7 +268,8 @@
 
 .clickedItem
 {
-	-fx-background-color: -special-button-color;
+	/* The important keeps the color from being override by the MenuItem:hover color */
+	-fx-background-color: -special-button-color !important;
 }
 
 /**

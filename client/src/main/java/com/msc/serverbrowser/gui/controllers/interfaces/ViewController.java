@@ -1,5 +1,10 @@
 package com.msc.serverbrowser.gui.controllers.interfaces;
 
+/**
+ * Interface that provides the minimal necessary methods for ViewController implementations.
+ *
+ * @author Marcel
+ */
 public interface ViewController
 {
 	/**

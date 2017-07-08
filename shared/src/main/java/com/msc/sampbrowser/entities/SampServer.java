@@ -16,6 +16,7 @@ public class SampServer
 	private final StringProperty	lagcompProperty			= new OneLineStringProperty();
 	private final StringProperty	websiteProperty			= new OneLineStringProperty();
 	private final StringProperty	versionProperty			= new OneLineStringProperty();
+	private final StringProperty	mapProperty				= new OneLineStringProperty();
 
 	private final IntegerProperty	portProperty		= new SimpleIntegerProperty();
 	private final IntegerProperty	playersProperty		= new SimpleIntegerProperty();
@@ -102,6 +103,11 @@ public class SampServer
 		return websiteProperty;
 	}
 
+	public StringProperty mapProperty()
+	{
+		return mapProperty;
+	}
+
 	public String getHostname()
 	{
 		return hostnameProperty.get();
@@ -150,6 +156,11 @@ public class SampServer
 	public String getWebsite()
 	{
 		return websiteProperty.get();
+	}
+
+	public String getMap()
+	{
+		return mapProperty.get();
 	}
 
 	public void setAddress(final String address)
@@ -202,6 +213,11 @@ public class SampServer
 	public void setWebsite(final String website)
 	{
 		websiteProperty.set(website);
+	}
+
+	public void setMap(final String map)
+	{
+		mapProperty.set(map);
 	}
 
 	@Override

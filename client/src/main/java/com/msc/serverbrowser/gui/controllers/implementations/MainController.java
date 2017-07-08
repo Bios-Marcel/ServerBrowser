@@ -15,6 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 
+/**
+ * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
+ * view (Settings, Servers ...).
+ *
+ * @author Marcel
+ */
 public class MainController implements ViewController
 {
 	@FXML

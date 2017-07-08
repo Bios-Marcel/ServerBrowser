@@ -5,6 +5,11 @@ import java.util.List;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.serverbrowser.data.Favourites;
 
+/**
+ * ViewController for the favourite servers list view.
+ *
+ * @author Marcel
+ */
 public class ServerListFavController extends ServerListControllerMain
 {
 	@Override
