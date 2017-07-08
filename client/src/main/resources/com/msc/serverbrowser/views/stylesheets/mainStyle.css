@@ -22,10 +22,8 @@
 .scroll-bar .thumb
 {
 	-fx-background-color: -mark-color;
-	-fx-background-insets: 0.0;
 	-fx-background-radius: 0.0;
 }
-
 
 .scroll-bar .increment-button, .scroll-bar .decrement-button
 {
@@ -38,6 +36,10 @@
 {
 	-fx-background-color: transparent;
 }
+
+/**
+ * TitledPane
+ */
 
 .titled-pane .title
 {

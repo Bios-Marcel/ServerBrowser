@@ -49,6 +49,11 @@
 	-fx-padding: 5.0;	
 }
 
+.viewContent > .scroll-bar
+{
+	-fx-border-width: 0.0px;
+}
+
 /**
  * General Component settings
  */
@@ -191,12 +196,7 @@
 	-fx-background-color: -mark-color;
 }
 
-.table-row-cell:selected .table-cell .hyperlink
-{
-	-fx-background-color: -mark-color !important;	
-}
-
-.table-cell .hyperlink
+.hyperlink
 {
 	-fx-border-width: 0.0;
 	-fx-padding: -2.0 0.0 -2.0 0.0;
@@ -209,7 +209,6 @@
 .scroll-bar .thumb
 {
 	-fx-background-color: -mark-color;
-	-fx-background-insets: 0.0 -1.0 0.0 0.0;
 }
 
 .scroll-bar
@@ -271,6 +270,11 @@
 	-fx-border-width: 0.0px;
 	-fx-padding: 0.0 -1.0 0.0 0.0;
 	-fx-min-width: 80.0px;
+}
+
+.tabScrollPane .scroll-bar
+{
+	-fx-border-width: 0.0px;
 }
 
 .MenuItem

@@ -44,7 +44,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -68,9 +67,7 @@ public abstract class ServerListControllerMain implements ViewController
 	 * This Table contains all available servers / favourite servers, depending on the active view.
 	 */
 	@FXML
-	protected TableView<SampServer>			serverTable;
-	@FXML
-	private TableColumn<SampServer, String>	columnWebsite;
+	protected TableView<SampServer> serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
@@ -97,6 +94,8 @@ public abstract class ServerListControllerMain implements ViewController
 	private Label		serverPassword;
 	@FXML
 	private Label		mapLabel;
+	@FXML
+	private Hyperlink	websiteLink;
 
 	@FXML
 	private TableView<Player>				playerTable;
@@ -151,37 +150,6 @@ public abstract class ServerListControllerMain implements ViewController
 		});
 
 		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
-
-		columnWebsite.setCellFactory(param ->
-		{
-			final TableCell<SampServer, String> cell = new TableCell<SampServer, String>() {
-
-				@Override
-				protected void updateItem(final String website, final boolean empty)
-				{
-					if (!empty)
-					{
-						final String websiteFixed = StringUtil.fixUrlIfNecessary(website.toLowerCase());
-						if (StringUtil.isValidURL(websiteFixed))
-						{
-							final Hyperlink hyperlink = new Hyperlink(website);
-							hyperlink.setUnderline(true);
-							hyperlink.setOnAction(hyperlinkTemp -> OSUtil.browse(websiteFixed));
-							setText("");
-							setGraphic(hyperlink);
-						}
-						else
-						{
-							setText(website);
-							setGraphic(null);
-						}
-
-					}
-				}
-			};
-
-			return cell;
-		});
 
 		setPlayerComparator();
 		addServerUpdateListener();
@@ -510,15 +478,17 @@ public abstract class ServerListControllerMain implements ViewController
 	protected void updateServerInfo(final SampServer server)
 	{
 		playerTable.getItems().clear();
-
 		playerTable.setPlaceholder(new Label("Retrieving..."));
 
 		serverAddress.setText(server.getAddress() + ":" + server.getPort());
-		serverLagcomp.setText(server.getLagcomp());
 
+		serverLagcomp.setText("Retrieving ...");
 		serverPing.setText("Retrieving ...");
 		serverPassword.setText("Retrieving ...");
 		mapLabel.setText("Retrieving ...");
+		websiteLink.setText("Retrieving ...");
+		websiteLink.setUnderline(false);
+		websiteLink.setOnAction(null);
 
 		if (Objects.nonNull(serverInfoUpdateThread))
 		{
@@ -564,46 +534,60 @@ public abstract class ServerListControllerMain implements ViewController
 
 					final long ping = query.getPing();
 
-					Platform.runLater(() ->
+					if (!serverInfoUpdateThread.isInterrupted())
 					{
-						serverPassword.setText(info[0].equals("0") ? "No" : "Yes");
-						serverPing.setText("" + ping);
-						mapLabel.setText(server.getMap());
+						Platform.runLater(() ->
+						{
+							serverPassword.setText(info[0].equals("0") ? "No" : "Yes");
+							serverPing.setText("" + ping);
+							mapLabel.setText(server.getMap());
+							websiteLink.setText(server.getWebsite());
 
-						if (playerList.isEmpty())
-						{
-							playerTable.setPlaceholder(new Label("Server is empty"));
-						}
-						else
-						{
+							final String websiteFixed = StringUtil.fixUrlIfNecessary(server.getWebsite().toLowerCase());
+							if (StringUtil.isValidURL(websiteFixed))
+							{
+								websiteLink.setUnderline(true);
+								websiteLink.setOnAction(hyperlinkTemp -> OSUtil.browse(websiteFixed));
+							}
+
+							if (playerList.isEmpty())
+							{
+								playerTable.setPlaceholder(new Label("Server is empty"));
+							}
 							playerTable.setItems(playerList);
-						}
 
-						if (playerTable.getItems().isEmpty() && server.getPlayers() >= 100)
-						{
-							final Label label = new Label("Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
-							label.setWrapText(true);
-							label.setAlignment(Pos.CENTER);
-							playerTable.setPlaceholder(label);
-						}
+							if (playerTable.getItems().isEmpty() && server.getPlayers() >= 100)
+							{
+								final Label label = new Label("Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
+								label.setWrapText(true);
+								label.setAlignment(Pos.CENTER);
+								playerTable.setPlaceholder(label);
+							}
 
-						serverLagcomp.setText(server.getLagcomp());
-						updateGlobalInfo();
-					});
+							serverLagcomp.setText(server.getLagcomp());
+							updateGlobalInfo();
+						});
+					}
 
 					Favourites.updateServerData(server);
 				}
 			}
 			catch (@SuppressWarnings("unused") final Exception exception)
 			{
-				Platform.runLater(() ->
+				if (!serverInfoUpdateThread.isInterrupted())
 				{
-					serverPing.setText("Server Offline");
-					serverPassword.setText("");
-					mapLabel.setText("");
-					serverLagcomp.setText("");
-					playerTable.setPlaceholder(new Label("Couldn't retrieve players, server is offline."));
-				});
+					Platform.runLater(() ->
+					{
+						serverPing.setText("Server Offline");
+						serverPassword.setText("");
+						mapLabel.setText("");
+						serverLagcomp.setText("");
+						websiteLink.setText("");
+						// Not using setVisible because i dont want the items to resize or anything
+						websiteLink.setOnAction(null);
+						playerTable.setPlaceholder(new Label("Couldn't retrieve players, server is offline."));
+					});
+				}
 			}
 		});
 
