@@ -186,7 +186,6 @@ public class Client extends Application
 		final ViewController controller = loadUIAndGetController();
 
 		primaryStage.getIcons().add(APPLICATION_ICON);
-		primaryStage.setTitle(APPLICATION_NAME);
 		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
 		// Usually true by default, but on unix systems that use openjfx, it is false by default

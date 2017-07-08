@@ -572,7 +572,7 @@ public abstract class ServerListControllerMain implements ViewController
 
 						if (playerList.isEmpty())
 						{
-							playerTable.setPlaceholder(new Label("Currently, noone is playing on this server."));
+							playerTable.setPlaceholder(new Label("Server is empty"));
 						}
 						else
 						{

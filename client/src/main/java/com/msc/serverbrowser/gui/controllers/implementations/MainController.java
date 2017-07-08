@@ -3,6 +3,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.Views;
@@ -136,7 +137,7 @@ public class MainController implements ViewController
 			loader.setController(view.getControllerType().newInstance());
 			activeViewContainer.setContent(loader.load());
 			activeViewContainer.getStylesheets().setAll(view.getStylesheetPath());
-			headerTitle.setText(view.getTitle());
+			Client.getInstance().getStage().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException exception)
 		{

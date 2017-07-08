@@ -15,13 +15,13 @@
 		<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" styleClass="tabScrollPane"
 			HBox.hgrow="SOMETIMES">
 			<content>
-				<VBox styleClass="tabPane" maxHeight="1.7976931348623157E308" prefWidth="100.0">
+				<VBox styleClass="tabPane" maxHeight="1.7976931348623157E308" prefWidth="80.0">
 					<children>
 						<StackPane fx:id="menuItemFav" onMouseReleased="#onServersFavMenuItemClicked" styleClass="MenuItem">
 							<children>
 								<SVGPath
 									content="M33,10.822l5.797,11.746l1.163,2.357l2.602,0.378l12.963,1.884l-9.38,9.143l-1.882,1.835l0.444,2.591  l2.214,12.91L35.327,47.57L33,46.348l-2.327,1.223l-11.594,6.096l2.214-12.91l0.444-2.591l-1.882-1.835l-9.38-9.143l12.962-1.884  l2.602-0.378l1.163-2.357L33,10.822 M33-0.475L22.719,20.355L-0.27,23.696L16.365,39.91l-3.927,22.896L33,51.996l20.562,10.811  L49.635,39.91L66.27,23.696L43.28,20.355L33-0.475L33-0.475z"
-									styleClass="menuItemIcon" />
+									styleClass="menuItemIcon" scaleX="0.95" scaleY="0.95" />
 							</children>
 						</StackPane>
 						<StackPane fx:id="menuItemAll" onMouseReleased="#onServersAllMenuItemClicked" styleClass="MenuItem">
@@ -56,19 +56,7 @@
 				</VBox>
 			</content>
 		</ScrollPane>
-		<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
-			<children>
-				<Label fx:id="headerTitle" styleClass="viewTitle" maxWidth="1.7976931348623157E308" text="Placeholder" VBox.vgrow="ALWAYS">
-					<font>
-						<Font name="Open Sans" size="20.0" />
-					</font>
-					<padding>
-						<Insets bottom="24.0" left="35.0" top="23.0" />
-					</padding>
-				</Label>
-				<ScrollPane fx:id="activeViewContainer" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-					styleClass="viewContent" VBox.vgrow="ALWAYS" />
-			</children>
-		</VBox>
+		<ScrollPane fx:id="activeViewContainer" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+			styleClass="viewContent" HBox.hgrow="ALWAYS" />
 	</children>
 </HBox>

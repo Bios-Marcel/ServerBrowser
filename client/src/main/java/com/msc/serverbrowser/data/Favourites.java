@@ -2,6 +2,10 @@ package com.msc.serverbrowser.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -245,5 +249,46 @@ public class Favourites
 		}
 
 		return servers;
+	}
+
+	public static List<SampServer> retrieveLegacyFavourites()
+	{
+		final List<SampServer> legacyFavourites = new ArrayList<>();
+
+		try
+		{
+			final byte[] data = Files.readAllBytes(java.nio.file.Paths.get(Paths.SAMP_USERDATA));
+			final ByteBuffer buffer = ByteBuffer.wrap(data);
+			buffer.order(ByteOrder.LITTLE_ENDIAN);
+
+			// Skiping trash at the beginning
+			buffer.position(buffer.position() + 8);
+
+			final int sc = buffer.getInt();
+			for (int i = 0; i < sc; i++)
+			{
+				final byte[] ipBytes = new byte[buffer.getInt()];
+				buffer.get(ipBytes);
+				final String ip = new String(ipBytes, StandardCharsets.US_ASCII);
+
+				final int port = buffer.getInt();
+
+				/* Skip unimportant stuff */
+				int skip = buffer.getInt(); // Hostname
+				buffer.position(buffer.position() + skip);
+				skip = buffer.getInt(); // Rcon pw
+				buffer.position(buffer.position() + skip);
+				skip = buffer.getInt(); // Server pw
+				buffer.position(buffer.position() + skip);
+
+				legacyFavourites.add(new SampServer(ip, port));
+			}
+
+			return legacyFavourites;
+		}
+		catch (@SuppressWarnings("unused") final IOException exception)
+		{
+			return legacyFavourites;
+		}
 	}
 }

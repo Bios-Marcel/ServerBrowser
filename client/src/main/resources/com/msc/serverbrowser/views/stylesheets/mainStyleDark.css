@@ -71,9 +71,14 @@
  * List
  */
 
-.list-cell:hover
+.list-view .list-cell:hover
 {
 	-fx-background-color: -component-background-color-selected !important;
+}
+
+.list-view .list-cell:empty
+{
+	-fx-background-color: inherit !important;
 }
 
 /**
@@ -213,17 +218,16 @@
 	-fx-border-color: -border-color;
 }
 
-/**
- * Increase height of the regions that contain the increment and decrement arrows
- */
-.scroll-bar .increment-button
+.scroll-bar .increment-button, .scroll-bar .decrement-button
 {
-	-fx-padding: 5.0 2.5 5.0 2.5;
+	-fx-max-height: 0;
+	-fx-min-height: 0;
+	-fx-pref-height: 0;
 }
 
-.scroll-bar .decrement-button
+.scroll-bar .decrement-button .decrement-arrow, .scroll-bar .increment-button .increment-arrow
 {
-	-fx-padding: 5.0 2.5 5.0 2.5;
+	-fx-background-color: transparent;
 }
 
 /**
@@ -266,17 +270,16 @@
 {
 	-fx-border-width: 0.0px;
 	-fx-padding: 0.0 -1.0 0.0 0.0;
-	-fx-min-width: 100.0px;
+	-fx-min-width: 80.0px;
 }
 
 .MenuItem
 {
 	-fx-background-color: -menu-color;
-	-fx-min-height: 100.0px;
-	-fx-min-width: 80.0px;
+	-fx-min-height: 80.0px;
+	-fx-min-width: 60.0px;
 	-fx-max-height: 0.0px; /* HACK(MSC) keeps StackPane from overgrowing */
-	-fx-border-width: 0.0 0.0 1.0 0.0;
-	-fx-border-color: -border-color;
+	-fx-border-width: 0;
 }
 
 .MenuItem:hover
