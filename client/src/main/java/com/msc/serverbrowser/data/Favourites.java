@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -257,7 +258,7 @@ public class Favourites
 
 		try
 		{
-			final byte[] data = Files.readAllBytes(java.nio.file.Paths.get(PathConstants.SAMP_USERDATA));
+			final byte[] data = Files.readAllBytes(Paths.get(PathConstants.SAMP_USERDATA));
 			final ByteBuffer buffer = ByteBuffer.wrap(data);
 			buffer.order(ByteOrder.LITTLE_ENDIAN);
 
