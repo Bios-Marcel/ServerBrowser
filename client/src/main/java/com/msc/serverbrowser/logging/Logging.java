@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import com.msc.serverbrowser.constants.Paths;
+import com.msc.serverbrowser.constants.PathConstants;
 
 /**
  * Initializes and holds the applications {@link Logger} instance
@@ -41,7 +41,7 @@ public class Logging
 		instance.setLevel(Level.INFO);
 		try
 		{
-			final FileHandler filehandler = new FileHandler(Paths.SAMPEX_PATH + File.separator + "Log.log");
+			final FileHandler filehandler = new FileHandler(PathConstants.SAMPEX_PATH + File.separator + "Log.log");
 			final SimpleFormatter formatter = new SimpleFormatter();
 			filehandler.setFormatter(formatter);
 			instance.addHandler(filehandler);

@@ -11,12 +11,17 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.PatternSyntaxException;
 
+import com.github.plushaze.traynotification.animations.Animations;
+import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.sampbrowser.entities.Player;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.query.SampQuery;
 import com.msc.sampbrowser.util.ObjectUtil;
-import com.msc.serverbrowser.Client;
+import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.Favourites;
+import com.msc.serverbrowser.data.properties.ClientProperties;
+import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.GTA;
 import com.msc.serverbrowser.util.StringUtil;
@@ -34,8 +39,6 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -50,6 +53,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
 
 /**
  * @since 02.07.2017
@@ -256,13 +260,18 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 			else
 			{
-				final Alert alert = new Alert(AlertType.ERROR);
-				Client.setupDialog(alert);
-				alert.setTitle("Add to Favourites");
-				alert.setHeaderText("Couldn't add server to favourites.");
-				alert.setContentText("The address that you have entered, doesn't seem to be valid.");
+				TrayNotificationBuilder builder = new TrayNotificationBuilder()
+						.type(Notifications.ERROR)
+						.title("Add to favourites")
+						.message("Server couldn't be added to favourites, because the address doesn't seem to be valid.")
+						.animation(Animations.POPUP);
 
-				alert.showAndWait();
+				if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+				{
+					builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
+				}
+
+				builder.build().showAndDismiss(Duration.seconds(10));
 			}
 		}
 	}
@@ -287,12 +296,18 @@ public abstract class ServerListControllerMain implements ViewController
 
 	private static void showCantConnectToServerError()
 	{
-		final Alert alert = new Alert(AlertType.ERROR);
-		Client.setupDialog(alert);
-		alert.setTitle("Connect to Server");
-		alert.setHeaderText("Can't connect to Server");
-		alert.setContentText("The address that you have entered, doesn't seem to be valid.");
-		alert.showAndWait();
+		TrayNotificationBuilder builder = new TrayNotificationBuilder()
+				.type(Notifications.ERROR)
+				.title("Can't connect to Server")
+				.message("The address that you have entered, doesn't seem to be valid.")
+				.animation(Animations.POPUP);
+
+		if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+		{
+			builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
+		}
+
+		builder.build().showAndDismiss(Duration.seconds(10));
 	}
 
 	/**

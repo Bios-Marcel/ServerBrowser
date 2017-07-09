@@ -10,6 +10,7 @@ buildscript {
 	}
 	repositories {
 		jcenter()
+		maven { url 'https://jitpack.io' }
 	}
 }
 
@@ -17,10 +18,17 @@ apply plugin: 'application'
 
 mainClassName = "com.msc.serverbrowser.Client"
 
+repositories
+{
+	maven { url 'https://jitpack.io' }
+}
+
 dependencies {
 		compile 'com.github.sarxos:windows-registry-util:0.3'
 		compile 'org.xerial:sqlite-jdbc:3.19.3'
-		
+		compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
+		compile 'com.github.Bios-Marcel:TrayNotification:master-SNAPSHOT'
+				
 		//javapacker for native build. This will only be necessary if the userJvmOptions are used
 		//compile files("${System.properties['java.home']}/../lib/packager.jar")
 		

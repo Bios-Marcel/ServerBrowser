@@ -12,9 +12,9 @@ import com.msc.serverbrowser.logging.Logging;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
  * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
@@ -25,9 +25,6 @@ import javafx.scene.layout.StackPane;
 public class MainController implements ViewController
 {
 	@FXML
-	private Label headerTitle;
-
-	@FXML
 	private StackPane	menuItemFav;
 	@FXML
 	private StackPane	menuItemAll;
@@ -35,6 +32,8 @@ public class MainController implements ViewController
 	private StackPane	menuItemUser;
 	@FXML
 	private StackPane	menuItemVersion;
+	@FXML
+	private StackPane	menuItemFiles;
 	@FXML
 	private StackPane	menuItemSettings;
 
@@ -45,6 +44,14 @@ public class MainController implements ViewController
 	@Override
 	public void initialize()
 	{
+		/**
+		 * Disable Under Development Features
+		 */
+		if (!ClientProperties.getPropertyAsBoolean(Property.DEVELOPMENT))
+		{
+			((VBox) menuItemFiles.getParent()).getChildren().remove(menuItemFiles);
+		}
+
 		if (ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
 		{
 			loadView(Views.valueOf(ClientProperties.getPropertyAsInt(Property.LAST_VIEW)));
@@ -80,6 +87,12 @@ public class MainController implements ViewController
 	}
 
 	@FXML
+	private void onFileMenuItemClicked()
+	{
+		loadView(Views.FILES);
+	}
+
+	@FXML
 	private void onSettingsMenuItemClicked()
 	{
 		loadView(Views.SETTINGS);
@@ -94,6 +107,7 @@ public class MainController implements ViewController
 		menuItemUser.getStyleClass().remove(CLICKED_STYLE_CLASS);
 		menuItemAll.getStyleClass().remove(CLICKED_STYLE_CLASS);
 		menuItemVersion.getStyleClass().remove(CLICKED_STYLE_CLASS);
+		menuItemFiles.getStyleClass().remove(CLICKED_STYLE_CLASS);
 
 		switch (view)
 		{
@@ -122,6 +136,9 @@ public class MainController implements ViewController
 				menuItemAll.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
 			}
+			case FILES:
+				menuItemFiles.getStyleClass().add(CLICKED_STYLE_CLASS);
+				break;
 		}
 
 		loadFXML(view);
@@ -149,5 +166,6 @@ public class MainController implements ViewController
 	public void onClose()
 	{
 		ClientProperties.setProperty(Property.LAST_VIEW, activeView.getId());
+		System.exit(0); // Make sure that the application doesnt stay open for some reason
 	}
 }

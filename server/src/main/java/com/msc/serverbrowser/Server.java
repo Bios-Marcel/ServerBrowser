@@ -48,6 +48,10 @@ public class Server
 	private static DataServiceInterface	dataService;
 	private static DataServiceInterface	dataServiceStub;
 
+	/**
+	 * @param args
+	 *            parameters that are passed in the command line
+	 */
 	public static void main(final String[] args)
 	{
 		final boolean recreatedb = Boolean.parseBoolean(getParameter(args, "-updatedb", "-recreatedb").orElse("false"));

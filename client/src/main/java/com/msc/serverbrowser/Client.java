@@ -15,11 +15,15 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 
+import com.github.plushaze.traynotification.animations.Animations;
+import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.TrayNotification;
+import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.interfaces.DataServiceInterface;
 import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
 import com.msc.sampbrowser.util.Hashing;
-import com.msc.serverbrowser.constants.Paths;
+import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientProperties;
@@ -38,10 +42,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * @since 02.07.2017
@@ -144,7 +148,7 @@ public class Client extends Application
 	private ViewController loadUIAndGetController()
 	{
 		final FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource(Paths.VIEW_PATH + "Main.fxml"));
+		loader.setLocation(getClass().getResource(PathConstants.VIEW_PATH + "Main.fxml"));
 		final MainController controller = new MainController();
 		loader.setController(controller);
 		try
@@ -154,11 +158,11 @@ public class Client extends Application
 
 			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
 			{
-				scene.getStylesheets().add(Paths.STYLESHEET_PATH + "mainStyleDark.css");
+				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyleDark.css");
 			}
 			else
 			{
-				scene.getStylesheets().add(Paths.STYLESHEET_PATH + "mainStyle.css");
+				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyle.css");
 			}
 
 			stage.setScene(scene);
@@ -203,24 +207,42 @@ public class Client extends Application
 		primaryStage.setMinWidth(800);
 		primaryStage.setMinHeight(400);
 
-		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG))
+		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
-			final Alert alert = new Alert(AlertType.INFORMATION);
-			setupDialog(alert);
-			alert.setTitle(APPLICATION_NAME + "- Changelog");
-			alert.setHeaderText("Your client has been updated | Changelog");
+			TrayNotificationBuilder builder = new TrayNotificationBuilder()
+					.type(Notifications.INFORMATION)
+					.title("Your client has been updated")
+					.message("Click here to see the latest changelog.")
+					.animation(Animations.SLIDE);
 
-			final StringBuilder updateText = new StringBuilder();
-			updateText.append("- New Dark Theme (Can be activated on settings page)");
-			updateText.append(System.lineSeparator());
-			updateText.append("- Bug Fix where adding servers that can't be reached leaded to nothing happening");
-			updateText.append(System.lineSeparator());
-			updateText.append("- Refactoring of Layout");
+			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+			{
+				builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
+			}
 
-			alert.setContentText(updateText.toString());
-			alert.show();
-			ClientProperties.setProperty(Property.SHOW_CHANGELOG, false);
+			final TrayNotification notification = builder.build();
+			notification.setOnMouseClicked(__ -> showChangelog());
+			notification.showAndWait();
 		}
+	}
+
+	private void showChangelog()
+	{
+		final Alert alert = new Alert(AlertType.INFORMATION);
+		setupDialog(alert);
+		alert.setTitle(APPLICATION_NAME + "- Changelog");
+		alert.setHeaderText("Your client has been updated | Changelog");
+
+		final StringBuilder updateText = new StringBuilder();
+		updateText.append("- New Dark Theme (Can be activated on settings page)");
+		updateText.append(System.lineSeparator());
+		updateText.append("- Bug Fix where adding servers that can't be reached leaded to nothing happening");
+		updateText.append(System.lineSeparator());
+		updateText.append("- Refactoring of Layout");
+
+		alert.setContentText(updateText.toString());
+		alert.show();
+		ClientProperties.setProperty(Property.SHOW_CHANGELOG, false);
 	}
 
 	/**
@@ -228,12 +250,18 @@ public class Client extends Application
 	 */
 	public static void displayNoConnectionDialog()
 	{
-		final Alert alert = new Alert(AlertType.ERROR);
-		setupDialog(alert);
-		alert.setTitle("Connecting to server");
-		alert.setHeaderText("Server connection could not be established");
-		alert.setContentText("The server connection doesn't seeem to be established, try again later, for more information check the log files.");
-		alert.showAndWait();
+		TrayNotificationBuilder builder = new TrayNotificationBuilder()
+				.type(Notifications.ERROR)
+				.title("Server connection could not be established")
+				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
+				.animation(Animations.POPUP);
+
+		if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+		{
+			builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
+		}
+
+		builder.build().showAndDismiss(Duration.seconds(10));
 	}
 
 	// TODO(MSC) Mit DialogBuilder oder so ersetzen
@@ -266,14 +294,14 @@ public class Client extends Application
 	 */
 	private static void initClient()
 	{
-		final File sampexFolder = new File(Paths.SAMPEX_PATH);
+		final File sampexFolder = new File(PathConstants.SAMPEX_PATH);
 
 		if (!sampexFolder.exists())
 		{
 			sampexFolder.mkdir();
 		}
 
-		final File oldFavouritesFile = new File(Paths.SAMPEX_PATH + File.separator + "favourites.xml");
+		final File oldFavouritesFile = new File(PathConstants.SAMPEX_PATH + File.separator + "favourites.xml");
 
 		// Migration from XML to SQLLite
 		if (oldFavouritesFile.exists())
@@ -285,7 +313,7 @@ public class Client extends Application
 			oldFavouritesFile.delete();
 		}
 
-		final File oldPastUsernamesFile = new File(Paths.SAMPEX_PATH + File.separator + "pastusernames.xml");
+		final File oldPastUsernamesFile = new File(PathConstants.SAMPEX_PATH + File.separator + "pastusernames.xml");
 
 		if (oldPastUsernamesFile.exists())
 		{
@@ -314,15 +342,20 @@ public class Client extends Application
 				{
 					Platform.runLater(() ->
 					{
-						final Alert alert = new Alert(AlertType.CONFIRMATION);
-						setupDialog(alert);
-						alert.setTitle("Launching Application");
-						alert.setHeaderText("Update required");
-						alert.setContentText("The launcher needs an update. Not updating the client might lead to problems. Click 'OK' to update and 'Cancel' to not update.");
+						TrayNotificationBuilder builder = new TrayNotificationBuilder();
 
-						alert.showAndWait()
-								.filter(ButtonType.OK::equals)
-								.ifPresent(__ -> updateLauncher());
+						if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+						{
+							builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
+						}
+
+						final TrayNotification notification = builder.title("Update Available")
+								.message("Click here to update to the latest version. Not updating might lead to problems.")
+								.animation(Animations.SLIDE)
+								.build();
+
+						notification.setOnMouseClicked(__ -> updateLauncher());
+						notification.showAndWait();
 					});
 				}
 			}

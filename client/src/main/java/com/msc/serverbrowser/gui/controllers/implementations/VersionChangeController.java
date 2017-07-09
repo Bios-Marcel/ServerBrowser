@@ -6,8 +6,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import com.msc.serverbrowser.Client;
-import com.msc.serverbrowser.constants.Paths;
+import com.github.plushaze.traynotification.animations.Animations;
+import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
+import com.msc.serverbrowser.constants.PathConstants;
+import com.msc.serverbrowser.data.properties.ClientProperties;
+import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtil;
@@ -16,9 +20,8 @@ import com.msc.serverbrowser.util.GTA;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.util.Duration;
 
 /**
  * @since 02.07.2017
@@ -27,7 +30,7 @@ public class VersionChangeController implements ViewController
 {
 	private static final String NOT_INSTALLING = "NOT_INSTALLING";
 
-	private static final String OUTPUT_ZIP = Paths.SAMPEX_PATH + File.separator + "temp.zip";
+	private static final String OUTPUT_ZIP = PathConstants.SAMPEX_PATH + File.separator + "temp.zip";
 
 	private static String installing = NOT_INSTALLING;
 
@@ -193,12 +196,18 @@ public class VersionChangeController implements ViewController
 		}
 		else
 		{
-			final Alert alert = new Alert(AlertType.ERROR);
-			Client.setupDialog(alert);
-			alert.setTitle("Installing SA-MP Version " + versionToBeInstalled);
-			alert.setHeaderText("GTA couldn't be located");
-			alert.setContentText("It seems like you don't have GTA installed.");
-			alert.showAndWait();
+			TrayNotificationBuilder builder = new TrayNotificationBuilder()
+					.type(Notifications.ERROR)
+					.title("GTA couldn't be located")
+					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
+					.animation(Animations.POPUP);
+
+			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+			{
+				builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
+			}
+
+			builder.build().showAndDismiss(Duration.seconds(10));
 		}
 	}
 

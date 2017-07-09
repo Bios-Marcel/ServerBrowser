@@ -10,12 +10,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import com.msc.serverbrowser.constants.Paths;
+import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.logging.Logging;
 
 public class SQLDatabase
 {
-	private static final String DB_LOCATION = Paths.SAMPEX_PATH + File.separator + "samp.db";
+	private static final String DB_LOCATION = PathConstants.SAMPEX_PATH + File.separator + "samp.db";
 
 	private static SQLDatabase	instance;
 	private Connection			sqlConnection;

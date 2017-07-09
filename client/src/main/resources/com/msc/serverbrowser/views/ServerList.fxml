@@ -19,16 +19,19 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
+	xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<HBox spacing="5.0">
 			<children>
-				<TextField fx:id="addressTextField" onAction="#onClickConnect" promptText="Please enter a valid server address (Example: 195.43.123.234:63284)" HBox.hgrow="ALWAYS" />
+				<TextField fx:id="addressTextField" onAction="#onClickConnect" promptText="Please enter a valid server address (Example: 195.43.123.234:63284)"
+					HBox.hgrow="ALWAYS" />
 				<Button mnemonicParsing="false" onAction="#onClickConnect" text="Connect" />
 				<Button mnemonicParsing="false" onAction="#onClickAddToFavourites" text="Add to Favourites" />
 			</children>
 		</HBox>
-		<TableView fx:id="serverTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+		<TableView fx:id="serverTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+			minWidth="-Infinity" prefHeight="100.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
 			<columns>
 				<TableColumn fx:id="columnHostname" sortable="true" text="Hostname">
 					<cellValueFactory>
@@ -62,7 +65,8 @@
 		</TableView>
 		<HBox spacing="5.0">
 			<children>
-				<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" tableMenuButtonVisible="true">
+				<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0"
+					tableMenuButtonVisible="true">
 					<columns>
 						<TableColumn fx:id="playerName" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="-1.0" text="Player">
 							<cellValueFactory>
@@ -79,7 +83,8 @@
 						<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 					</columnResizePolicy>
 				</TableView>
-				<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Filter Settings" HBox.hgrow="ALWAYS">
+				<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Filter Settings"
+					HBox.hgrow="ALWAYS">
 					<content>
 						<GridPane hgap="10.0" maxHeight="1.7976931348623157E308" vgap="5.0">
 							<columnConstraints>
@@ -96,12 +101,17 @@
 							</rowConstraints>
 							<children>
 								<Label text="Use Regex" />
-								<CheckBox fx:id="regexCheckBox" mnemonicParsing="false" onAction="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
+								<CheckBox fx:id="regexCheckBox" mnemonicParsing="false" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
+									GridPane.halignment="LEFT" />
 								<Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-								<TextField fx:id="nameFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-								<TextField fx:id="modeFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-								<TextField fx:id="languageFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-								<ComboBox fx:id="versionFilter" maxWidth="1.7976931348623157E308" onAction="#onFilterSettingsChange" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
+								<TextField fx:id="nameFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+								<TextField fx:id="modeFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+								<TextField fx:id="languageFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+								<ComboBox fx:id="versionFilter" maxWidth="1.7976931348623157E308" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
+									GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
 									<items>
 										<FXCollections fx:factory="observableArrayList">
 											<String fx:value="" />
@@ -150,7 +160,8 @@
 								<Label text="Map:" GridPane.rowIndex="4" />
 								<Label fx:id="mapLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 								<Label text="Website" GridPane.rowIndex="5" />
-								<Hyperlink fx:id="websiteLink" maxWidth="130.0" underline="true" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="5" />
+								<Hyperlink fx:id="websiteLink" maxWidth="130.0" underline="true" GridPane.columnIndex="1" GridPane.hgrow="NEVER"
+									GridPane.rowIndex="5" />
 							</children>
 						</GridPane>
 					</content>

@@ -2,21 +2,26 @@
 
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox spacing="5" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<TitledPane fx:id="generalPane" text="General">
+		<TitledPane text="General">
 			<content>
 				<VBox spacing="5.0">
 					<children>
 						<HBox spacing="5.0">
 							<children>
 								<Label maxHeight="1.7976931348623157E308" text="SA-MP Path" />
-								<TextField fx:id="sampPathTextField" promptText="Will be automatically detected if left empty" />
+								<TextField fx:id="sampPathTextField" maxWidth="1.7976931348623157E308" promptText="Will be automatically detected if left empty" HBox.hgrow="ALWAYS" />
 							</children>
 						</HBox>
 						<CheckBox fx:id="notifyServerOnStartupCheckBox" mnemonicParsing="false" text="Notify Server on startup" />
@@ -25,7 +30,8 @@
 				</VBox>
 			</content>
 		</TitledPane>
-		<TitledPane fx:id="connectionPane" text="Connection">
+		<!-- TODO(MSC) Invisible since this isn't implemented yet>
+		<TitledPane text="Connection">
 			<content>
 				<VBox>
 					<children>
@@ -33,8 +39,44 @@
 					</children>
 				</VBox>
 			</content>
+		</TitledPane-->
+		<TitledPane text="SA-MP (Requires SA-MP restart to take effect)">
+			<content>
+				<VBox spacing="5.0">
+					<children>
+						<GridPane hgap="5.0" vgap="5.0">
+							<columnConstraints>
+								<ColumnConstraints hgrow="NEVER" />
+								<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
+							</columnConstraints>
+							<rowConstraints>
+								<RowConstraints vgrow="SOMETIMES" />
+								<RowConstraints vgrow="SOMETIMES" />
+							</rowConstraints>
+							<children>
+								<Label maxHeight="1.7976931348623157E308" text="FPS Limit" />
+								<Label maxHeight="1.7976931348623157E308" text="PageSize" GridPane.rowIndex="1" />
+								<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1">
+									<valueFactory>
+										<SpinnerValueFactory.IntegerSpinnerValueFactory max="90" min="20" />
+									</valueFactory>
+								</Spinner>
+								<Spinner fx:id="pageSizeSpinner" maxWidth="70.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+									<valueFactory>
+										<SpinnerValueFactory.IntegerSpinnerValueFactory max="20" min="10" />
+									</valueFactory>
+								</Spinner>
+							</children>
+						</GridPane>
+						<CheckBox fx:id="audioproxyCheckBox" mnemonicParsing="false" text="Don't use System Proxy for Audiostreams" />
+						<CheckBox fx:id="timestampsCheckBox" mnemonicParsing="false" text="Chat Timestamps" />
+						<CheckBox fx:id="multicoreCheckbox" mnemonicParsing="false" text="Multicore usage" />
+						<CheckBox fx:id="audioMsgOffCheckBox" mnemonicParsing="false" text="Turn Audiostream messages off" />
+					</children>
+				</VBox>
+			</content>
 		</TitledPane>
-		<TitledPane fx:id="connectionPane1" text="Appearance">
+		<TitledPane text="Appearance">
 			<content>
 				<VBox>
 					<children>
@@ -48,12 +90,21 @@
 				</VBox>
 			</content>
 		</TitledPane>
-		<TitledPane fx:id="connectionPane11" text="Permissions">
+		<TitledPane text="Permissions">
 			<content>
 				<VBox spacing="5.0">
 					<children>
 						<CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false" text="Allow this application to shut down San Andreas Multiplayer Client" />
 						<CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" text="Allow this application to shut down Grand Theft Auto: San Andreas" />
+					</children>
+				</VBox>
+			</content>
+		</TitledPane>
+		<TitledPane text="Updates">
+			<content>
+				<VBox spacing="5.0">
+					<children>
+						<CheckBox fx:id="showChangelogCheckBox" mnemonicParsing="false" text="Show Changelog after the application has been updated" />
 					</children>
 				</VBox>
 			</content>

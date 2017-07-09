@@ -14,6 +14,7 @@
 	
     -fx-text-fill: #CCCCCC;
     -fx-background-color: #212121;
+    -component-inner-color: #212121;
 	-fx-focus-color: white;
 	
 	-fx-background-insets: 0.0;
@@ -30,7 +31,7 @@
  * Focus styles
  */
 
-.combo-box:focused, .text-field:focused, .check-box:focused > .box, .table-view:focused
+.combo-box:focused, .text-field:focused, .check-box:focused > .box, .table-view:focused, .spinner:focused
 {
 	-fx-border-color: -fx-focus-color !important;
 }
@@ -219,14 +220,57 @@
 
 .scroll-bar .increment-button, .scroll-bar .decrement-button
 {
-	-fx-max-height: 0;
-	-fx-min-height: 0;
-	-fx-pref-height: 0;
+	-fx-max-height: 0.0;
+	-fx-min-height: 0.0;
+	-fx-pref-height: 0.0;
 }
 
 .scroll-bar .decrement-button .decrement-arrow, .scroll-bar .increment-button .increment-arrow
 {
 	-fx-background-color: transparent;
+}
+
+/**
+ * Tabs
+ */
+
+.tab
+{
+	-fx-background-color: -component-inner-color !important;
+}
+
+.tab:selected > .tab-container > .focus-indicator
+{
+	-fx-background-color: transparent !important;	
+	-fx-border-color: transparent !important;
+}
+
+.tab
+{
+	-fx-border-width: 1.0;
+	-fx-border-color: -border-color;
+}
+
+.tab:selected > .tab-container
+{
+	-fx-border-color: transparent ;
+	-fx-background-color: transparent;
+}
+
+.tab:selected
+{
+	-fx-border-color: white !important;
+}
+
+.tab .tab-container .focus-indicator
+{
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+}
+
+.tab .tab-label
+{
+	-fx-text-fill: white;	
 }
 
 /**
@@ -283,7 +327,7 @@
 	-fx-min-height: 80.0px;
 	-fx-min-width: 60.0px;
 	-fx-max-height: 0.0px; /* HACK(MSC) keeps StackPane from overgrowing */
-	-fx-border-width: 0;
+	-fx-border-width: 0.0;
 }
 
 .MenuItem:hover
@@ -300,6 +344,26 @@
 {
 	/* The important keeps the color from being override by the MenuItem:hover color */
 	-fx-background-color: -special-button-color !important;
+}
+
+/**
+ * Spinner
+ */
+ 
+.spinner
+{
+    -fx-border-color: -border-color;
+
+}
+.spinner .increment-arrow-button, .spinner .decrement-arrow-button
+{
+    -fx-background-color: -mark-color;
+    -fx-padding: 3.0 5.0 3.0 5.0;
+}
+
+.spinner .text-input
+{
+    -fx-border-width: 0.0;
 }
 
 /**

@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.entities.SampServerBuilder;
 import com.msc.sampbrowser.query.SampQuery;
-import com.msc.serverbrowser.constants.Paths;
+import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.logging.Logging;
 
 public class Favourites
@@ -197,7 +197,7 @@ public class Favourites
 	{
 		final List<SampServer> servers = new ArrayList<>();
 
-		final File xmlFile = new File(Paths.SAMPEX_PATH + File.separator + "favourites.xml");
+		final File xmlFile = new File(PathConstants.SAMPEX_PATH + File.separator + "favourites.xml");
 		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
 		try
@@ -257,7 +257,7 @@ public class Favourites
 
 		try
 		{
-			final byte[] data = Files.readAllBytes(java.nio.file.Paths.get(Paths.SAMP_USERDATA));
+			final byte[] data = Files.readAllBytes(java.nio.file.Paths.get(PathConstants.SAMP_USERDATA));
 			final ByteBuffer buffer = ByteBuffer.wrap(data);
 			buffer.order(ByteOrder.LITTLE_ENDIAN);
 

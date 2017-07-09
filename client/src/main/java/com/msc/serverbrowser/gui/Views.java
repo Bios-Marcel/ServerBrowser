@@ -3,7 +3,8 @@ package com.msc.serverbrowser.gui;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.msc.serverbrowser.constants.Paths;
+import com.msc.serverbrowser.constants.PathConstants;
+import com.msc.serverbrowser.gui.controllers.implementations.FilesController;
 import com.msc.serverbrowser.gui.controllers.implementations.ServerListAllController;
 import com.msc.serverbrowser.gui.controllers.implementations.ServerListFavController;
 import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
@@ -19,15 +20,17 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 public enum Views
 {
 	@SuppressWarnings("javadoc")
-	SERVERS_FAV(1, "Servers | Favourites", ServerListFavController.class, Paths.VIEW_PATH + "ServerList.fxml", Paths.STYLESHEET_PATH + "serverListStyle.css"),
+	SERVERS_FAV(1, "Servers | Favourites", ServerListFavController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH + "serverListStyle.css"),
 	@SuppressWarnings("javadoc")
-	SERVERS_ALL(2, "Servers | All", ServerListAllController.class, Paths.VIEW_PATH + "ServerList.fxml", Paths.STYLESHEET_PATH + "serverListStyle.css"),
+	SERVERS_ALL(2, "Servers | All", ServerListAllController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH + "serverListStyle.css"),
 	@SuppressWarnings("javadoc")
-	USERNAME_CHANGER(3, "Username Changer", UsernameController.class, Paths.VIEW_PATH + "Username.fxml", Paths.STYLESHEET_PATH + "usernameStyle.css"),
+	USERNAME_CHANGER(3, "Username Changer", UsernameController.class, PathConstants.VIEW_PATH + "Username.fxml", PathConstants.STYLESHEET_PATH + "usernameStyle.css"),
 	@SuppressWarnings("javadoc")
-	VERSION_CHANGER(4, "Version Changer", VersionChangeController.class, Paths.VIEW_PATH + "Version.fxml", Paths.STYLESHEET_PATH + "versionStyle.css"),
+	VERSION_CHANGER(4, "Version Changer", VersionChangeController.class, PathConstants.VIEW_PATH + "Version.fxml", PathConstants.STYLESHEET_PATH + "versionStyle.css"),
 	@SuppressWarnings("javadoc")
-	SETTINGS(5, "Settings", SettingsController.class, Paths.VIEW_PATH + "Settings.fxml", Paths.STYLESHEET_PATH + "settingsStyle.css");
+	SETTINGS(5, "Settings", SettingsController.class, PathConstants.VIEW_PATH + "Settings.fxml", PathConstants.STYLESHEET_PATH + "settingsStyle.css"),
+	@SuppressWarnings("javadoc")
+	FILES(6, "Files", FilesController.class, PathConstants.VIEW_PATH + "Files.fxml", PathConstants.STYLESHEET_PATH + "filesStyle.css");
 
 	private final int id;
 

@@ -3,4 +3,3 @@ apply plugin: 'java-library'
 dependencies {
 		implementation 'com.github.albfernandez:juniversalchardet:2.0.0'
 }
-

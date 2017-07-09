@@ -45,6 +45,13 @@
 									scaleX="1.9" scaleY="1.9" styleClass="menuItemIcon" />
 							</children>
 						</StackPane>
+						<StackPane fx:id="menuItemFiles" onMouseReleased="#onFileMenuItemClicked" styleClass="MenuItem">
+							<children>
+								<SVGPath
+									content="m 86,611.375 a 20.002,20.002 0 0 0 -17.15625,9.6875 l -30,50 A 20.002,20.002 0 0 0 36,681.375 l 0,280 a 20.002,20.002 0 0 0 20,20 l 400,0 a 20.002,20.002 0 0 0 20,-20 l 0,-280 a 20.002,20.002 0 0 0 -20,-20 l -188.65625,0 -24.1875,-40.3125 A 20.002,20.002 0 0 0 226,611.375 l -140,0 z m 11.3125,40 117.375,0 24.15625,40.28125 A 20.002,20.002 0 0 0 256,701.375 l 180,0 0,240 -360,0 0,-254.46875 21.3125,-35.53125 z"
+									scaleX="0.14" scaleY="0.14" styleClass="menuItemIcon" />
+							</children>
+						</StackPane>
 						<StackPane fx:id="menuItemSettings" onMouseReleased="#onSettingsMenuItemClicked" styleClass="MenuItem">
 							<children>
 								<SVGPath

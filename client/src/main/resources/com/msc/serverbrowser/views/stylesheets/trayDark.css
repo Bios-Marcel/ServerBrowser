@@ -1,0 +1,15 @@
+*
+{
+	-fx-text-fill: #CCCCCC !important;
+    -fx-background-color: #212121;
+}
+ 
+ #trayNotificationRootNode
+ {
+ 	-fx-border-width: 0 !important;
+ }
+ 
+ #trayNotificationCloseButton #icon
+ {
+ 	-fx-background-color: white !important;
+ }

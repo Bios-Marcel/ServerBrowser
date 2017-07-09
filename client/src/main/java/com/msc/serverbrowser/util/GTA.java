@@ -8,10 +8,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
+import com.github.plushaze.traynotification.animations.Animations;
+import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
 import com.github.sarxos.winreg.WindowsRegistry;
-import com.msc.serverbrowser.Client;
+import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
@@ -20,8 +23,7 @@ import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.util.Duration;
 
 /**
  * Contains utility methods for interacting with native samp stuff.
@@ -87,7 +89,6 @@ public class GTA
 	 *
 	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA couldn't be found
 	 */
-	@SuppressWarnings("null") // Can't be null
 	public static Optional<String> getGtaPath()
 	{
 		if (!OSUtil.isWindows())
@@ -132,7 +133,6 @@ public class GTA
 	 *
 	 * @return {@link Optional} of installed versions version number or an empty {@link Optional}
 	 */
-	@SuppressWarnings("null")
 	public static Optional<String> getInstalledVersion()
 	{
 		if (!OSUtil.isWindows())
@@ -287,12 +287,18 @@ public class GTA
 		}
 		else
 		{
-			final Alert alert = new Alert(AlertType.ERROR);
-			Client.setupDialog(alert);
-			alert.setTitle("Connecting to server");
-			alert.setHeaderText("GTA couldn't be located");
-			alert.setContentText("It seems like you don't have GTA installed.");
-			alert.showAndWait();
+			TrayNotificationBuilder builder = new TrayNotificationBuilder()
+					.type(Notifications.ERROR)
+					.title("GTA couldn't be located")
+					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
+					.animation(Animations.POPUP);
+
+			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+			{
+				builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
+			}
+
+			builder.build().showAndDismiss(Duration.seconds(10));
 		}
 	}
 

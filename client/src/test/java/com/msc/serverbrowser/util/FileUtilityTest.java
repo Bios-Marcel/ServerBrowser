@@ -31,7 +31,6 @@ import org.junit.jupiter.api.Test;
  */
 class FileUtilityTest
 {
-	@SuppressWarnings("null") // cannot be null because JUnit will initialize this via "@BeforeAll"
 	private static MessageDigest shaDigester;
 
 	@BeforeAll

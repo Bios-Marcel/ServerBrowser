@@ -2,6 +2,12 @@ package com.msc.serverbrowser.data.properties;
 
 import com.msc.serverbrowser.util.GTA;
 
+/**
+ * Enum that holds all existant properties.
+ *
+ * @author Marcel
+ */
+@SuppressWarnings("javadoc")
 public enum Property
 {
 	LAST_VIEW(0, 1, Integer.class),
@@ -14,7 +20,9 @@ public enum Property
 	SAMP_PATH(8, GTA.getGtaPathUnsafe(), String.class),
 	USE_DARK_THEME(9, false, Boolean.class),
 	ALLOW_CLOSE_GTA(10, false, Boolean.class),
-	ALLOW_CLOSE_SAMP(11, false, Boolean.class);
+	ALLOW_CLOSE_SAMP(11, false, Boolean.class),
+	SHOW_CHANGELOG_AFTER_UPDATE(12, true, Boolean.class),
+	DEVELOPMENT(13, false, Boolean.class);
 
 	private int id;
 
@@ -29,16 +37,25 @@ public enum Property
 		this.datatype = datatype;
 	}
 
+	/**
+	 * @return the datatype of this property
+	 */
 	public Class<?> datatype()
 	{
 		return datatype;
 	}
 
+	/**
+	 * @return an integer that is used to identify the property
+	 */
 	public int id()
 	{
 		return id;
 	}
 
+	/**
+	 * @return the default value for this property
+	 */
 	public String defaultValue()
 	{
 		return defaultValue;
