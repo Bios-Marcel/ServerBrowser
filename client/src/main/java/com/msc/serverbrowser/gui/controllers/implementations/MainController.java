@@ -14,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
  * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
@@ -47,10 +46,10 @@ public class MainController implements ViewController
 		/**
 		 * Disable Under Development Features
 		 */
-		if (!ClientProperties.getPropertyAsBoolean(Property.DEVELOPMENT))
-		{
-			((VBox) menuItemFiles.getParent()).getChildren().remove(menuItemFiles);
-		}
+		// if (!ClientProperties.getPropertyAsBoolean(Property.DEVELOPMENT))
+		// {
+		// ((VBox) menuItemFiles.getParent()).getChildren().remove(menuItemFiles);
+		// }
 
 		if (ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
 		{

@@ -37,6 +37,18 @@ public class StringUtil
 		return charsAsHex.toString();
 	}
 
+	public static String humanReadableByteCount(final long bytes)
+	{
+		final int unit = 1024;
+		if (bytes < unit)
+		{// Keine Umformatierung nötig, da es so klein ist ;D
+			return bytes + " B";
+		}
+		final int exp = (int) (Math.log(bytes) / Math.log(unit));
+		final String pre = "KMGTPE".charAt(exp - 1) + "i";
+		return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+	}
+
 	/**
 	 * Checks if a {@link String} conforms to the uri format.
 	 *

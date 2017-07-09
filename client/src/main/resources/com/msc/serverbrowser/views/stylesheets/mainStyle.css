@@ -47,8 +47,18 @@
 	-fx-border-radius: 0.0 !important;
 }
 
+
 /**
- * Tab Pane (Menu)
+ * TabePane
+ */
+ 
+ .tab-header-background
+ {
+ 	-fx-background-color: transparent;
+ }
+
+/**
+ * MenuBar
  */
 
 .tabPane

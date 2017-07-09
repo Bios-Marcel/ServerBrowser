@@ -6,6 +6,11 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +24,16 @@ import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.StringUtil;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
-import javafx.scene.web.WebView;
 import javafx.util.Duration;
 
 /**
@@ -42,15 +50,18 @@ public class FilesController implements ViewController
 	private StackPane		imageContainer;
 	@FXML
 	private ComboBox<File>	screenshotComboBox;
+	@FXML
+	private Label			takenValue;
+	@FXML
+	private Label			sizeValue;
 
 	private File						presentImage;
 	private final ObservableList<File>	screenshots	= FXCollections.observableArrayList();
-
 	// Saved Positions
 
 	// Chatlogs
 	@FXML
-	private WebView chatLogWebView;
+	private TextArea contentTextArea;
 
 	@Override
 	public void initialize()
@@ -67,23 +78,15 @@ public class FilesController implements ViewController
 		{
 			final List<String> lines = Files.readAllLines(Paths.get(PathConstants.SAMP_CHATLOG));
 
-			final StringBuilder htmlContent = new StringBuilder();
-
-			htmlContent.append("<html><body>");
+			contentTextArea.clear();
 
 			lines.forEach(line ->
 			{
-				htmlContent.append(line);
-				htmlContent.append("<br>");
+				final String newLine = (line + System.lineSeparator()).replaceAll("([{].{6}[}])", "");
+				contentTextArea.insertText(contentTextArea.getText().length(), newLine);
 			});
 
-			htmlContent.append("</body></html>");
-			String content = htmlContent.toString();
-
 			// Replace Color Codes TODO(MSC) Implement Color feature
-			content = content.replaceAll("[{].{6}[}]", "");
-
-			chatLogWebView.getEngine().loadContent(content);
 		}
 		catch (@SuppressWarnings("unused") final IOException exception)
 		{
@@ -96,8 +99,8 @@ public class FilesController implements ViewController
 	{
 		try
 		{
-			Files.delete(Paths.get(PathConstants.SAMP_CHATLOG));
-			loadChatLog();
+			Files.deleteIfExists(Paths.get(PathConstants.SAMP_CHATLOG));
+			contentTextArea.clear();
 		}
 		catch (final IOException exception)
 		{
@@ -123,8 +126,15 @@ public class FilesController implements ViewController
 		final File sampFolder = new File(PathConstants.SAMP_PATH + "\\screens");
 		if (sampFolder.exists())
 		{
-			screenshots.setAll(sampFolder.listFiles());
+			final File[] listFiles = sampFolder.listFiles();
+			sortFileArray(listFiles);
+			screenshots.setAll(listFiles);
 		}
+	}
+
+	private void sortFileArray(final File[] listFiles)
+	{
+		Arrays.sort(listFiles, (fileOne, fileTwo) -> new Long(fileOne.lastModified()).compareTo(new Long(fileTwo.lastModified())));
 	}
 
 	@FXML
@@ -160,8 +170,17 @@ public class FilesController implements ViewController
 	private void loadPresentImage()
 	{
 		imageContainer.setStyle("-fx-background-image: url(\"" + pathToImage(presentImage.getAbsoluteFile()) + "\");");
-		screenshotComboBox.setValue(presentImage);
-		updateComboBoxContent();
+		sizeValue.setText(StringUtil.humanReadableByteCount(presentImage.length()));
+		final Instant timeAsInstant = Instant.ofEpochMilli(presentImage.lastModified());
+		final LocalDateTime localDateTime = LocalDateTime.ofInstant(timeAsInstant, ZoneId.systemDefault());
+		final String localDateTimeFormatted = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(localDateTime);
+		takenValue.setText(localDateTimeFormatted);
+
+		Platform.runLater(() ->
+		{// Getting IndexOutOfBound Exceptions otherwise
+			updateComboBoxContent();
+			screenshotComboBox.setValue(presentImage);
+		});
 	}
 
 	private Optional<File> getNextScreenshot()
@@ -170,8 +189,9 @@ public class FilesController implements ViewController
 
 		if (sampFolder.exists())
 		{
-			final List<File> filesInFolder = Arrays.asList(sampFolder.listFiles());
-
+			final File[] listFiles = sampFolder.listFiles();
+			sortFileArray(listFiles);
+			final List<File> filesInFolder = Arrays.asList(listFiles);
 			final int index = filesInFolder.indexOf(presentImage);
 
 			File nextImage;
@@ -197,7 +217,9 @@ public class FilesController implements ViewController
 
 		if (sampFolder.exists())
 		{
-			final List<File> filesInFolder = Arrays.asList(sampFolder.listFiles());
+			final File[] listFiles = sampFolder.listFiles();
+			sortFileArray(listFiles);
+			final List<File> filesInFolder = Arrays.asList(listFiles);
 			final int index = filesInFolder.indexOf(presentImage);
 
 			File nextImage;
