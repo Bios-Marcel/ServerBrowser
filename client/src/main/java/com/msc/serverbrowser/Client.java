@@ -130,14 +130,6 @@ public class Client extends Application
 	}
 
 	/**
-	 * @return the main window.
-	 */
-	public Stage getStage()
-	{
-		return stage;
-	}
-
-	/**
 	 * Loads the UI as if the Client has just been started.
 	 */
 	public void loadUI()
@@ -159,10 +151,12 @@ public class Client extends Application
 			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
 			{
 				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyleDark.css");
+				TrayNotificationBuilder.setDefaultStylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
 			}
 			else
 			{
 				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyle.css");
+				TrayNotificationBuilder.setDefaultStylesheet(null);
 			}
 
 			stage.setScene(scene);
@@ -192,6 +186,8 @@ public class Client extends Application
 		primaryStage.getIcons().add(APPLICATION_ICON);
 		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+
+		// TODO(MSC) Check why this is necessary, in a minimal example this isn't necessary
 		// Usually true by default, but on unix systems that use openjfx, it is false by default
 		primaryStage.setResizable(true);
 
@@ -209,16 +205,11 @@ public class Client extends Application
 
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
-			TrayNotificationBuilder builder = new TrayNotificationBuilder()
+			final TrayNotificationBuilder builder = new TrayNotificationBuilder()
 					.type(Notifications.INFORMATION)
 					.title("Your client has been updated")
 					.message("Click here to see the latest changelog.")
 					.animation(Animations.SLIDE);
-
-			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-			{
-				builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-			}
 
 			final TrayNotification notification = builder.build();
 			notification.setOnMouseClicked(__ -> showChangelog());
@@ -226,6 +217,19 @@ public class Client extends Application
 		}
 	}
 
+	/**
+	 * @deprecated TODO(MSC) Replace current changelog
+	 *             <p>
+	 *             Options:
+	 *             <ul>
+	 *             <li>Completly new dialog</li>
+	 *             <li>Open textfile</li>
+	 *             <li>Open Webpage (Github Release)</li>
+	 *             <li>Show mardown formatted file</li>
+	 *             </ul>
+	 *             </p>
+	 */
+	@Deprecated
 	private void showChangelog()
 	{
 		final Alert alert = new Alert(AlertType.INFORMATION);
@@ -252,21 +256,15 @@ public class Client extends Application
 	 */
 	public static void displayNoConnectionDialog()
 	{
-		TrayNotificationBuilder builder = new TrayNotificationBuilder()
+		new TrayNotificationBuilder()
 				.type(Notifications.ERROR)
 				.title("Server connection could not be established")
 				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
-				.animation(Animations.POPUP);
-
-		if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-		{
-			builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-		}
-
-		builder.build().showAndDismiss(Duration.seconds(10));
+				.animation(Animations.POPUP)
+				.build().showAndDismiss(Duration.seconds(10));
 	}
 
-	// TODO(MSC) Mit DialogBuilder oder so ersetzen
+	// TODO(MSC) Delete as soon as the Changelog dialog is removed
 	/**
 	 * <p>
 	 * Sets up a dialog; performs the following actions:
@@ -281,12 +279,12 @@ public class Client extends Application
 	 * @param alert
 	 *            the {@link Alert} that will be set up
 	 */
-	public static void setupDialog(final Alert alert)
+	private void setupDialog(final Alert alert)
 	{
 		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(APPLICATION_ICON);
-		final ObservableList<String> clientStylesheets = getInstance().getStage().getScene().getStylesheets();
+		final ObservableList<String> clientStylesheets = stage.getScene().getStylesheets();
 		alert.getDialogPane().getStylesheets().addAll(clientStylesheets);
-		alert.initOwner(getInstance().getStage());
+		alert.initOwner(stage);
 		alert.initModality(Modality.APPLICATION_MODAL);
 	}
 
@@ -344,14 +342,8 @@ public class Client extends Application
 				{
 					Platform.runLater(() ->
 					{
-						TrayNotificationBuilder builder = new TrayNotificationBuilder();
-
-						if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-						{
-							builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-						}
-
-						final TrayNotification notification = builder.title("Update Available")
+						final TrayNotification notification = new TrayNotificationBuilder()
+								.title("Update Available")
 								.message("Click here to update to the latest version. Not updating might lead to problems.")
 								.animation(Animations.SLIDE)
 								.build();
@@ -454,5 +446,16 @@ public class Client extends Application
 		}
 
 		Application.launch(args);
+	}
+
+	/**
+	 * Sets the Applications title.
+	 *
+	 * @param title
+	 *            the title to set
+	 */
+	public void setTitle(final String title)
+	{
+		stage.setTitle(title);
 	}
 }
