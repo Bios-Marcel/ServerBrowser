@@ -11,7 +11,7 @@ import java.util.List;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.msc.sampbrowser.entities.SampServer;
+import com.msc.serverbrowser.entities.SampServer;
 
 public class ServerUtil
 {

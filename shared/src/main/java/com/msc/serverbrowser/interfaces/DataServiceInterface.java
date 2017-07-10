@@ -1,4 +1,4 @@
-package com.msc.sampbrowser.interfaces;
+package com.msc.serverbrowser.interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

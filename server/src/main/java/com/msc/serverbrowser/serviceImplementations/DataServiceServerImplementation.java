@@ -9,9 +9,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
-import com.msc.sampbrowser.entities.SampServerSerializeable;
-import com.msc.sampbrowser.interfaces.DataServiceInterface;
 import com.msc.serverbrowser.data.MySQLConnection;
+import com.msc.serverbrowser.entities.SampServerSerializeable;
+import com.msc.serverbrowser.interfaces.DataServiceInterface;
 
 @SuppressWarnings("all") // Class will be deleted soon
 public class DataServiceServerImplementation implements DataServiceInterface

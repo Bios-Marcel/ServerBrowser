@@ -14,13 +14,13 @@ import java.util.regex.PatternSyntaxException;
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
-import com.msc.sampbrowser.entities.Player;
-import com.msc.sampbrowser.entities.SampServer;
-import com.msc.sampbrowser.query.SampQuery;
-import com.msc.sampbrowser.util.ObjectUtil;
 import com.msc.serverbrowser.data.Favourites;
+import com.msc.serverbrowser.entities.Player;
+import com.msc.serverbrowser.entities.SampServer;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
+import com.msc.serverbrowser.query.SampQuery;
 import com.msc.serverbrowser.util.GTA;
+import com.msc.serverbrowser.util.ObjectUtil;
 import com.msc.serverbrowser.util.StringUtil;
 import com.msc.serverbrowser.util.windows.OSUtil;
 

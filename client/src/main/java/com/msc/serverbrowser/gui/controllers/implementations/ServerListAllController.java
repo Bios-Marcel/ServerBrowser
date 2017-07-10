@@ -10,9 +10,9 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
-import com.msc.sampbrowser.entities.SampServer;
-import com.msc.sampbrowser.entities.SampServerSerializeable;
 import com.msc.serverbrowser.Client;
+import com.msc.serverbrowser.entities.SampServer;
+import com.msc.serverbrowser.entities.SampServerSerializeable;
 import com.msc.serverbrowser.logging.Logging;
 
 import javafx.application.Platform;

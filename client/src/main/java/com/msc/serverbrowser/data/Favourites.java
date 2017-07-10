@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import com.msc.sampbrowser.entities.SampServer;
-import com.msc.sampbrowser.entities.SampServerBuilder;
-import com.msc.sampbrowser.query.SampQuery;
 import com.msc.serverbrowser.constants.PathConstants;
+import com.msc.serverbrowser.entities.SampServer;
+import com.msc.serverbrowser.entities.SampServerBuilder;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.query.SampQuery;
 
 /**
  * Contains static methods for setting and retrieving favourite servers

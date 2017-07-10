@@ -1,4 +1,4 @@
-package com.msc.sampbrowser.interfaces;
+package com.msc.serverbrowser.interfaces;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

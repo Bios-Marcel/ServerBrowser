@@ -12,8 +12,8 @@ import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.kohsuke.github.RateLimitHandler;
 
-import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
-import com.msc.sampbrowser.util.Hashing;
+import com.msc.serverbrowser.interfaces.UpdateServiceInterface;
+import com.msc.serverbrowser.util.Hashing;
 
 /**
  * Contains methods for providing clients with updates.

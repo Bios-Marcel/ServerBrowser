@@ -23,12 +23,12 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.msc.sampbrowser.entities.SampServerSerializeable;
-import com.msc.sampbrowser.entities.SampServerSerializeableBuilder;
-import com.msc.sampbrowser.interfaces.DataServiceInterface;
-import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
-import com.msc.sampbrowser.query.SampQuery;
 import com.msc.serverbrowser.data.MySQLConnection;
+import com.msc.serverbrowser.entities.SampServerSerializeable;
+import com.msc.serverbrowser.entities.SampServerSerializeableBuilder;
+import com.msc.serverbrowser.interfaces.DataServiceInterface;
+import com.msc.serverbrowser.interfaces.UpdateServiceInterface;
+import com.msc.serverbrowser.query.SampQuery;
 import com.msc.serverbrowser.serviceImplementations.DataServiceServerImplementation;
 import com.msc.serverbrowser.serviceImplementations.UpdateServiceServerImplementation;
 

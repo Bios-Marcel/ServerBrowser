@@ -1,4 +1,4 @@
-package com.msc.sampbrowser.entities;
+package com.msc.serverbrowser.entities;
 
 import java.io.Serializable;
 import java.util.Objects;
