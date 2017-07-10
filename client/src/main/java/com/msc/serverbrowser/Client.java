@@ -48,6 +48,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
+ * TODO(MSC):
+ * <ul>
+ * <li>Improve applying of DarkTheme to TrayNotifications (Default style setting?)</li>
+ * </ul>
+ *
  * @since 02.07.2017
  */
 public class Client extends Application
@@ -238,6 +243,7 @@ public class Client extends Application
 		alert.setHeaderText("Your client has been updated | Changelog");
 
 		final StringBuilder updateText = new StringBuilder();
+<<<<<<< HEAD
 		updateText.append("- New Menu that lets u see screenshots and chat logs");
 		updateText.append(System.lineSeparator());
 		updateText.append("- Minor UI Changes");
@@ -245,6 +251,10 @@ public class Client extends Application
 		updateText.append("- SA-MP Legacy settings can now be changed on the settings page");
 		updateText.append(System.lineSeparator());
 		updateText.append("- Almost all dialogs have been replaced with tray notifications");
+=======
+		updateText.append("- More configurable SA-MP legacy settings");
+		updateText.append(System.lineSeparator() + System.lineSeparator());
+>>>>>>> branch 'master' of https://github.com/Bios-Marcel/ServerBrowser/
 
 		alert.setContentText(updateText.toString());
 		alert.show();

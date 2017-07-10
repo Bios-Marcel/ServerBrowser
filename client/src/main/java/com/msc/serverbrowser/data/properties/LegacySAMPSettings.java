@@ -12,7 +12,10 @@ import com.msc.serverbrowser.logging.Logging;
 
 /**
  * Contains convenient methods for interacting with the SA-MP legacy settings.
- *
+ * <p>
+ * <a href="http://wiki.sa-mp.com/wiki/Sa-mp.cfg.html">SA-MP.cfg Wiki</a>
+ * </p>
+ * 
  * @author Marcel
  */
 @SuppressWarnings("javadoc")
@@ -24,6 +27,10 @@ public class LegacySAMPSettings
 	public static final String	TIMESTAMP			= "timestamp";
 	public static final String	AUDIO_PROXY_OFF		= "audioproxyoff";
 	public static final String	AUDIO_MESSAGE_OFF	= "audiomsgoff";
+	public static final String	DISABLE_HEAD_MOVE	= "disableheadmove";
+	public static final String	IME					= "ime";
+	public static final String	DIRECT_MODE			= "directmode";
+	public static final String	NO_NAME_TAG_STATUS	= "nonametagstatus";
 
 	/**
 	 * @return {@link Properties} object containing the present legacy SA-MP Settings or an empty

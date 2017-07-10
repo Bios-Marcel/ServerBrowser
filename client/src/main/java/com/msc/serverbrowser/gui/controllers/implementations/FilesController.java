@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -20,8 +21,6 @@ import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.constants.PathConstants;
-import com.msc.serverbrowser.data.properties.ClientProperties;
-import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.StringUtil;
@@ -57,6 +56,12 @@ public class FilesController implements ViewController
 
 	private File						presentImage;
 	private final ObservableList<File>	screenshots	= FXCollections.observableArrayList();
+
+	/**
+	 * Compares {@link File files} depending against their last modified date.
+	 */
+	private static final Comparator<File> fileComparator = (fileOne, fileTwo) -> new Long(fileOne.lastModified()).compareTo(new Long(fileTwo.lastModified()));
+
 	// Saved Positions
 
 	// Chatlogs
@@ -104,18 +109,12 @@ public class FilesController implements ViewController
 		}
 		catch (final IOException exception)
 		{
-			TrayNotificationBuilder builder = new TrayNotificationBuilder()
+			new TrayNotificationBuilder()
 					.type(Notifications.ERROR)
 					.animation(Animations.POPUP)
 					.title("Chatlog couldn't be cleared")
-					.message("For more information, please check the logfiles.");
-
-			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-			{
-				builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-			}
-
-			builder.build().showAndDismiss(Duration.seconds(10));
+					.message("For more information, please check the logfiles.")
+					.build().showAndDismiss(Duration.seconds(10));
 
 			Logging.logger().log(Level.WARNING, "Couldn't clear chatlog", exception);
 		}
@@ -126,15 +125,9 @@ public class FilesController implements ViewController
 		final File sampFolder = new File(PathConstants.SAMP_PATH + "\\screens");
 		if (sampFolder.exists())
 		{
-			final File[] listFiles = sampFolder.listFiles();
-			sortFileArray(listFiles);
-			screenshots.setAll(listFiles);
+			screenshots.setAll(sampFolder.listFiles());
+			screenshots.sort(fileComparator);
 		}
-	}
-
-	private void sortFileArray(final File[] listFiles)
-	{
-		Arrays.sort(listFiles, (fileOne, fileTwo) -> new Long(fileOne.lastModified()).compareTo(new Long(fileTwo.lastModified())));
 	}
 
 	@FXML
@@ -189,9 +182,8 @@ public class FilesController implements ViewController
 
 		if (sampFolder.exists())
 		{
-			final File[] listFiles = sampFolder.listFiles();
-			sortFileArray(listFiles);
-			final List<File> filesInFolder = Arrays.asList(listFiles);
+			final List<File> filesInFolder = Arrays.asList(sampFolder.listFiles());
+			filesInFolder.sort(fileComparator);
 			final int index = filesInFolder.indexOf(presentImage);
 
 			File nextImage;
@@ -217,9 +209,8 @@ public class FilesController implements ViewController
 
 		if (sampFolder.exists())
 		{
-			final File[] listFiles = sampFolder.listFiles();
-			sortFileArray(listFiles);
-			final List<File> filesInFolder = Arrays.asList(listFiles);
+			final List<File> filesInFolder = Arrays.asList(sampFolder.listFiles());
+			filesInFolder.sort(fileComparator);
 			final int index = filesInFolder.indexOf(presentImage);
 
 			File nextImage;
@@ -238,6 +229,13 @@ public class FilesController implements ViewController
 		return Optional.empty();
 	}
 
+	/**
+	 * Creates a {@link URI} pointing to the passed {@link File}.
+	 *
+	 * @param nextImage
+	 *            the {@link File} to create a {@link URI} for
+	 * @return {@link URI} pointing to the passed {@link File}
+	 */
 	private URI pathToImage(final File nextImage)
 	{
 		try
@@ -245,9 +243,10 @@ public class FilesController implements ViewController
 			final URL url = new URL("file:/" + nextImage.getAbsolutePath());
 			return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
 		}
-		catch (final Exception e)
+		catch (final Exception exception)
 		{
-			throw new RuntimeException(e);
+			// TODO(MSC) Investigate, if this is a good idea.
+			throw new RuntimeException(exception);
 		}
 	}
 
@@ -256,5 +255,4 @@ public class FilesController implements ViewController
 	{
 		// TODO Auto-generated method stub
 	}
-
 }

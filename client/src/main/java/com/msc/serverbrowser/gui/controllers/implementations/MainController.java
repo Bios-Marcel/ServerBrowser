@@ -153,7 +153,7 @@ public class MainController implements ViewController
 			loader.setController(view.getControllerType().newInstance());
 			activeViewContainer.setContent(loader.load());
 			activeViewContainer.getStylesheets().setAll(view.getStylesheetPath());
-			Client.getInstance().getStage().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
+			Client.getInstance().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException exception)
 		{

@@ -57,6 +57,14 @@ public class SettingsController implements ViewController
 	private CheckBox			multicoreCheckbox;
 	@FXML
 	private CheckBox			audioMsgOffCheckBox;
+	@FXML
+	private CheckBox			disableHeadMoveCheckBox;
+	@FXML
+	private CheckBox			imeCheckBox;
+	@FXML
+	private CheckBox			directModeCheckBox;
+	@FXML
+	private CheckBox			noNameTagStatusCheckBox;
 
 	// Connection Settings
 	@FXML
@@ -109,6 +117,10 @@ public class SettingsController implements ViewController
 		audioMsgOffCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.AUDIO_MESSAGE_OFF, audioMsgOffCheckBox));
 		audioproxyCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.AUDIO_PROXY_OFF, audioproxyCheckBox));
 		timestampsCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.TIMESTAMP, timestampsCheckBox));
+		disableHeadMoveCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.DISABLE_HEAD_MOVE, disableHeadMoveCheckBox));
+		imeCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.IME, imeCheckBox));
+		directModeCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.DIRECT_MODE, directModeCheckBox));
+		noNameTagStatusCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.NO_NAME_TAG_STATUS, noNameTagStatusCheckBox));
 
 	}
 
@@ -135,6 +147,11 @@ public class SettingsController implements ViewController
 		final boolean audioProxyOff = legacyProperties.getProperty(LegacySAMPSettings.AUDIO_PROXY_OFF, "0").equals("1") ? true : false;
 		final boolean timestamp = legacyProperties.getProperty(LegacySAMPSettings.TIMESTAMP, "0").equals("1") ? true : false;
 
+		final boolean disableHeadMove = legacyProperties.getProperty(LegacySAMPSettings.DISABLE_HEAD_MOVE, "0").equals("1") ? true : false;
+		final boolean ime = legacyProperties.getProperty(LegacySAMPSettings.IME, "1").equals("1") ? true : false;
+		final boolean noNameTagStatus = legacyProperties.getProperty(LegacySAMPSettings.NO_NAME_TAG_STATUS, "0").equals("1") ? true : false;
+		final boolean directMode = legacyProperties.getProperty(LegacySAMPSettings.DIRECT_MODE, "0").equals("1") ? true : false;
+
 		final int fpsLimit = Integer.parseInt(legacyProperties.getProperty(LegacySAMPSettings.FPS_LIMIT, "50"));
 		fpsLimitSpinner.getValueFactory().setValue(fpsLimit);
 		final int pageSize = Integer.parseInt(legacyProperties.getProperty(LegacySAMPSettings.PAGE_SIZE, "50"));
@@ -144,6 +161,11 @@ public class SettingsController implements ViewController
 		audioMsgOffCheckBox.setSelected(audioMsgOff);
 		audioproxyCheckBox.setSelected(audioProxyOff);
 		timestampsCheckBox.setSelected(timestamp);
+
+		directModeCheckBox.setSelected(disableHeadMove);
+		imeCheckBox.setSelected(ime);
+		noNameTagStatusCheckBox.setSelected(noNameTagStatus);
+		directModeCheckBox.setSelected(directMode);
 	}
 
 	/**

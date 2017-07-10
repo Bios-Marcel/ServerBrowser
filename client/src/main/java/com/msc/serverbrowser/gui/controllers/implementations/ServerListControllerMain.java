@@ -18,10 +18,7 @@ import com.msc.sampbrowser.entities.Player;
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.query.SampQuery;
 import com.msc.sampbrowser.util.ObjectUtil;
-import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.Favourites;
-import com.msc.serverbrowser.data.properties.ClientProperties;
-import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.GTA;
 import com.msc.serverbrowser.util.StringUtil;
@@ -260,18 +257,12 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 			else
 			{
-				TrayNotificationBuilder builder = new TrayNotificationBuilder()
+				new TrayNotificationBuilder()
 						.type(Notifications.ERROR)
 						.title("Add to favourites")
 						.message("Server couldn't be added to favourites, because the address doesn't seem to be valid.")
-						.animation(Animations.POPUP);
-
-				if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-				{
-					builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-				}
-
-				builder.build().showAndDismiss(Duration.seconds(10));
+						.animation(Animations.POPUP)
+						.build().showAndDismiss(Duration.seconds(10));
 			}
 		}
 	}
@@ -296,18 +287,12 @@ public abstract class ServerListControllerMain implements ViewController
 
 	private static void showCantConnectToServerError()
 	{
-		TrayNotificationBuilder builder = new TrayNotificationBuilder()
+		new TrayNotificationBuilder()
 				.type(Notifications.ERROR)
 				.title("Can't connect to Server")
 				.message("The address that you have entered, doesn't seem to be valid.")
-				.animation(Animations.POPUP);
-
-		if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-		{
-			builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-		}
-
-		builder.build().showAndDismiss(Duration.seconds(10));
+				.animation(Animations.POPUP)
+				.build().showAndDismiss(Duration.seconds(10));
 	}
 
 	/**
