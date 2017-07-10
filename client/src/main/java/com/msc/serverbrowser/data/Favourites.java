@@ -1,6 +1,5 @@
 package com.msc.serverbrowser.data;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,22 +13,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.entities.SampServerBuilder;
 import com.msc.sampbrowser.query.SampQuery;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.logging.Logging;
 
+/**
+ * Contains static methods for setting and retrieving favourite servers
+ *
+ * @author Marcel
+ */
 public class Favourites
 {
 	/**
@@ -190,68 +184,8 @@ public class Favourites
 	}
 
 	/**
-	 * Returns a {@link List} of favourites from the old xml files.
-	 *
-	 * @return {@link List} of favourite servers
+	 * @return the List of all SampServers that the legacy favourite file contains.
 	 */
-	public static List<SampServer> getFavouritesFromXML()
-	{
-		final List<SampServer> servers = new ArrayList<>();
-
-		final File xmlFile = new File(PathConstants.SAMPEX_PATH + File.separator + "favourites.xml");
-		final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-
-		try
-		{
-			final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			final Document doc = dBuilder.parse(xmlFile);
-			doc.getDocumentElement().normalize();
-
-			final NodeList list = doc.getElementsByTagName("server");
-
-			for (int i = 0; i < list.getLength(); i++)
-			{
-				try
-				{
-					final Node node = list.item(i);
-					final NamedNodeMap attr = node.getAttributes();
-					final Node ipNode = attr.getNamedItem("ip");
-					final Node hostnameNode = attr.getNamedItem("hostname");
-					final Node modeNode = attr.getNamedItem("mode");
-					final Node languageNode = attr.getNamedItem("language");
-					final Node portNode = attr.getNamedItem("port");
-					final Node versionNode = attr.getNamedItem("version");
-					final Node lagcompNode = attr.getNamedItem("lagcomp");
-					final Node websiteNode = attr.getNamedItem("website");
-					final Node playersNode = attr.getNamedItem("players");
-					final Node maxplayersNode = attr.getNamedItem("maxplayers");
-
-					servers.add(new SampServerBuilder(ipNode.getTextContent(), Integer.parseInt(portNode.getTextContent()))
-							.setHostname(hostnameNode.getTextContent())
-							.setPlayers(Integer.parseInt(playersNode.getTextContent()))
-							.setMaxPlayers(Integer.parseInt(maxplayersNode.getTextContent()))
-							.setMode(modeNode.getTextContent())
-							.setLanguage(languageNode.getTextContent())
-							.setWebsite(websiteNode.getTextContent())
-							.setLagcomp(lagcompNode.getTextContent())
-							.setVersion(versionNode.getTextContent())
-							.build());
-				}
-				catch (final NullPointerException e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-		}
-		catch (ParserConfigurationException | SAXException | IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		return servers;
-	}
-
 	public static List<SampServer> retrieveLegacyFavourites()
 	{
 		final List<SampServer> legacyFavourites = new ArrayList<>();

@@ -19,13 +19,10 @@ import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotification;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
-import com.msc.sampbrowser.entities.SampServer;
 import com.msc.sampbrowser.interfaces.DataServiceInterface;
 import com.msc.sampbrowser.interfaces.UpdateServiceInterface;
 import com.msc.sampbrowser.util.Hashing;
 import com.msc.serverbrowser.constants.PathConstants;
-import com.msc.serverbrowser.data.Favourites;
-import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory;
@@ -300,29 +297,6 @@ public class Client extends Application
 		if (!sampexFolder.exists())
 		{
 			sampexFolder.mkdir();
-		}
-
-		final File oldFavouritesFile = new File(PathConstants.SAMPEX_PATH + File.separator + "favourites.xml");
-
-		// Migration from XML to SQLLite
-		if (oldFavouritesFile.exists())
-		{
-			for (final SampServer server : Favourites.getFavouritesFromXML())
-			{
-				Favourites.addServerToFavourites(server);
-			}
-			oldFavouritesFile.delete();
-		}
-
-		final File oldPastUsernamesFile = new File(PathConstants.SAMPEX_PATH + File.separator + "pastusernames.xml");
-
-		if (oldPastUsernamesFile.exists())
-		{
-			for (final String username : PastUsernames.getPastUsernamesFromXML())
-			{
-				PastUsernames.addPastUsername(username);
-			}
-			oldPastUsernamesFile.delete();
 		}
 	}
 

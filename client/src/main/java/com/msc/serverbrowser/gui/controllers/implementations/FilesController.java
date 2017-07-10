@@ -74,6 +74,7 @@ public class FilesController implements ViewController
 		screenshotComboBox.setItems(screenshots);
 		updateComboBoxContent();
 		loadChatLog();
+		nextImage();
 	}
 
 	@FXML
