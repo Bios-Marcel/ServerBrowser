@@ -12,7 +12,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="5" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
+	xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<TitledPane text="General">
 			<content>
@@ -21,25 +22,23 @@
 						<HBox spacing="5.0">
 							<children>
 								<Label maxHeight="1.7976931348623157E308" text="SA-MP Path" />
-								<TextField fx:id="sampPathTextField" maxWidth="1.7976931348623157E308" promptText="Will be automatically detected if left empty" HBox.hgrow="ALWAYS" />
+								<TextField fx:id="sampPathTextField" maxWidth="1.7976931348623157E308"
+									promptText="Will be automatically detected if left empty"
+									HBox.hgrow="ALWAYS" />
 							</children>
 						</HBox>
-						<CheckBox fx:id="notifyServerOnStartupCheckBox" mnemonicParsing="false" text="Notify Server on startup" />
-						<CheckBox fx:id="rememberLastViewCheckBox" mnemonicParsing="false" text="Remember last view" />
+						<CheckBox fx:id="notifyServerOnStartupCheckBox"
+							mnemonicParsing="false" text="Notify Server on startup" />
+						<CheckBox fx:id="rememberLastViewCheckBox"
+							mnemonicParsing="false" text="Remember last view" />
 					</children>
 				</VBox>
 			</content>
 		</TitledPane>
-		<!-- TODO(MSC) Invisible since this isn't implemented yet>
-		<TitledPane text="Connection">
-			<content>
-				<VBox>
-					<children>
-						<CheckBox fx:id="askForUsernameOnConnectCheckBox" mnemonicParsing="false" text="Always ask for Username when connecting to a server" />
-					</children>
-				</VBox>
-			</content>
-		</TitledPane-->
+		<!-- TODO(MSC) Invisible since this isn't implemented yet> <TitledPane 
+			text="Connection"> <content> <VBox> <children> <CheckBox fx:id="askForUsernameOnConnectCheckBox" 
+			mnemonicParsing="false" text="Always ask for Username when connecting to 
+			a server" /> </children> </VBox> </content> </TitledPane -->
 		<TitledPane text="SA-MP (Requires SA-MP restart to take effect)">
 			<content>
 				<VBox spacing="5.0">
@@ -47,7 +46,8 @@
 						<GridPane hgap="5.0" vgap="5.0">
 							<columnConstraints>
 								<ColumnConstraints hgrow="NEVER" />
-								<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
+								<ColumnConstraints hgrow="ALWAYS"
+									maxWidth="1.7976931348623157E308" />
 							</columnConstraints>
 							<rowConstraints>
 								<RowConstraints vgrow="SOMETIMES" />
@@ -55,23 +55,40 @@
 							</rowConstraints>
 							<children>
 								<Label maxHeight="1.7976931348623157E308" text="FPS Limit" />
-								<Label maxHeight="1.7976931348623157E308" text="PageSize" GridPane.rowIndex="1" />
-								<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1">
+								<Label maxHeight="1.7976931348623157E308" text="PageSize"
+									GridPane.rowIndex="1" />
+								<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0"
+									GridPane.columnIndex="1">
 									<valueFactory>
-										<SpinnerValueFactory.IntegerSpinnerValueFactory max="90" min="20" />
+										<SpinnerValueFactory.IntegerSpinnerValueFactory
+											max="90" min="20" />
 									</valueFactory>
 								</Spinner>
-								<Spinner fx:id="pageSizeSpinner" maxWidth="70.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+								<Spinner fx:id="pageSizeSpinner" maxWidth="70.0"
+									GridPane.columnIndex="1" GridPane.rowIndex="1">
 									<valueFactory>
-										<SpinnerValueFactory.IntegerSpinnerValueFactory max="20" min="10" />
+										<SpinnerValueFactory.IntegerSpinnerValueFactory
+											max="20" min="10" />
 									</valueFactory>
 								</Spinner>
 							</children>
 						</GridPane>
-						<CheckBox fx:id="audioproxyCheckBox" mnemonicParsing="false" text="Don't use System Proxy for Audiostreams" />
-						<CheckBox fx:id="timestampsCheckBox" mnemonicParsing="false" text="Chat Timestamps" />
-						<CheckBox fx:id="multicoreCheckbox" mnemonicParsing="false" text="Multicore usage" />
-						<CheckBox fx:id="audioMsgOffCheckBox" mnemonicParsing="false" text="Turn Audiostream messages off" />
+						<CheckBox fx:id="audioproxyCheckBox" mnemonicParsing="false"
+							text="Don't use System Proxy for Audiostreams" />
+						<CheckBox fx:id="timestampsCheckBox" mnemonicParsing="false"
+							text="Chat Timestamps" />
+						<CheckBox fx:id="multicoreCheckbox" mnemonicParsing="false"
+							text="Multicore usage" />
+						<CheckBox fx:id="audioMsgOffCheckBox" mnemonicParsing="false"
+							text="Turn Audiostream messages off" />
+						<CheckBox fx:id="disableHeadMoveCheckBox"
+							mnemonicParsing="false" text="Turn off head movement" />
+						<CheckBox fx:id="imeCheckBox" mnemonicParsing="false"
+							text="Input method text editing and language switching" />
+						<CheckBox fx:id="directModeCheckBox" mnemonicParsing="false"
+							text="Directmode (Fix chat text drawing problems)" />
+						<CheckBox fx:id="noNameTagStatusCheckBox"
+							mnemonicParsing="false" text="Disable AFK Status Symbol" />
 					</children>
 				</VBox>
 			</content>
@@ -82,7 +99,8 @@
 					<children>
 						<HBox maxWidth="1.7976931348623157E308">
 							<children>
-								<CheckBox fx:id="darkThemeCheckBox" mnemonicParsing="false" text="Use dark theme" />
+								<CheckBox fx:id="darkThemeCheckBox" mnemonicParsing="false"
+									text="Use dark theme" />
 								<Label styleClass="beta-sign" text="BETA" />
 							</children>
 						</HBox>
@@ -94,8 +112,10 @@
 			<content>
 				<VBox spacing="5.0">
 					<children>
-						<CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false" text="Allow this application to shut down San Andreas Multiplayer Client" />
-						<CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" text="Allow this application to shut down Grand Theft Auto: San Andreas" />
+						<CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false"
+							text="Allow this application to shut down San Andreas Multiplayer Client" />
+						<CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false"
+							text="Allow this application to shut down Grand Theft Auto: San Andreas" />
 					</children>
 				</VBox>
 			</content>
@@ -104,7 +124,8 @@
 			<content>
 				<VBox spacing="5.0">
 					<children>
-						<CheckBox fx:id="showChangelogCheckBox" mnemonicParsing="false" text="Show Changelog after the application has been updated" />
+						<CheckBox fx:id="showChangelogCheckBox" mnemonicParsing="false"
+							text="Show Changelog after the application has been updated" />
 					</children>
 				</VBox>
 			</content>

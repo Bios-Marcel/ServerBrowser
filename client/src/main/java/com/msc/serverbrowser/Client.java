@@ -48,6 +48,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
+ * TODO(MSC):
+ * <ul>
+ * <li>Improve applying of DarkTheme to TrayNotifications (Default style setting?)</li>
+ * </ul>
+ *
  * @since 02.07.2017
  */
 public class Client extends Application
@@ -130,14 +135,6 @@ public class Client extends Application
 	}
 
 	/**
-	 * @return the main window.
-	 */
-	public Stage getStage()
-	{
-		return stage;
-	}
-
-	/**
 	 * Loads the UI as if the Client has just been started.
 	 */
 	public void loadUI()
@@ -192,6 +189,8 @@ public class Client extends Application
 		primaryStage.getIcons().add(APPLICATION_ICON);
 		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+
+		// TODO(MSC) Check why this is necessary, in a minimal example this isn't necessary
 		// Usually true by default, but on unix systems that use openjfx, it is false by default
 		primaryStage.setResizable(true);
 
@@ -226,6 +225,19 @@ public class Client extends Application
 		}
 	}
 
+	/**
+	 * @deprecated TODO(MSC) Replace current changelog
+	 *             <p>
+	 *             Options:
+	 *             <ul>
+	 *             <li>Completly new dialog</li>
+	 *             <li>Open textfile</li>
+	 *             <li>Open Webpage (Github Release)</li>
+	 *             <li>Show mardown formatted file</li>
+	 *             </ul>
+	 *             </p>
+	 */
+	@Deprecated
 	private void showChangelog()
 	{
 		final Alert alert = new Alert(AlertType.INFORMATION);
@@ -234,11 +246,8 @@ public class Client extends Application
 		alert.setHeaderText("Your client has been updated | Changelog");
 
 		final StringBuilder updateText = new StringBuilder();
-		updateText.append("- New Dark Theme (Can be activated on settings page)");
-		updateText.append(System.lineSeparator());
-		updateText.append("- Bug Fix where adding servers that can't be reached leaded to nothing happening");
-		updateText.append(System.lineSeparator());
-		updateText.append("- Refactoring of Layout");
+		updateText.append("- More configurable SA-MP legacy settings");
+		updateText.append(System.lineSeparator() + System.lineSeparator());
 
 		alert.setContentText(updateText.toString());
 		alert.show();
@@ -264,7 +273,7 @@ public class Client extends Application
 		builder.build().showAndDismiss(Duration.seconds(10));
 	}
 
-	// TODO(MSC) Mit DialogBuilder oder so ersetzen
+	// TODO(MSC) Delete as soon as the Changelog dialog is removed
 	/**
 	 * <p>
 	 * Sets up a dialog; performs the following actions:
@@ -279,12 +288,12 @@ public class Client extends Application
 	 * @param alert
 	 *            the {@link Alert} that will be set up
 	 */
-	public static void setupDialog(final Alert alert)
+	private void setupDialog(final Alert alert)
 	{
 		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(APPLICATION_ICON);
-		final ObservableList<String> clientStylesheets = getInstance().getStage().getScene().getStylesheets();
+		final ObservableList<String> clientStylesheets = stage.getScene().getStylesheets();
 		alert.getDialogPane().getStylesheets().addAll(clientStylesheets);
-		alert.initOwner(getInstance().getStage());
+		alert.initOwner(stage);
 		alert.initModality(Modality.APPLICATION_MODAL);
 	}
 
@@ -452,5 +461,16 @@ public class Client extends Application
 		}
 
 		Application.launch(args);
+	}
+
+	/**
+	 * Sets the Applications title.
+	 *
+	 * @param title
+	 *            the title to set
+	 */
+	public void setTitle(final String title)
+	{
+		stage.setTitle(title);
 	}
 }
