@@ -10,8 +10,6 @@ import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.constants.PathConstants;
-import com.msc.serverbrowser.data.properties.ClientProperties;
-import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtil;
@@ -196,18 +194,12 @@ public class VersionChangeController implements ViewController
 		}
 		else
 		{
-			TrayNotificationBuilder builder = new TrayNotificationBuilder()
+			new TrayNotificationBuilder()
 					.type(Notifications.ERROR)
 					.title("GTA couldn't be located")
 					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
-					.animation(Animations.POPUP);
-
-			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-			{
-				builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-			}
-
-			builder.build().showAndDismiss(Duration.seconds(10));
+					.animation(Animations.POPUP)
+					.build().showAndDismiss(Duration.seconds(10));
 		}
 	}
 

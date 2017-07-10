@@ -156,10 +156,12 @@ public class Client extends Application
 			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
 			{
 				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyleDark.css");
+				TrayNotificationBuilder.setDefaultStylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
 			}
 			else
 			{
 				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyle.css");
+				TrayNotificationBuilder.setDefaultStylesheet(null);
 			}
 
 			stage.setScene(scene);
@@ -208,16 +210,11 @@ public class Client extends Application
 
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
-			TrayNotificationBuilder builder = new TrayNotificationBuilder()
+			final TrayNotificationBuilder builder = new TrayNotificationBuilder()
 					.type(Notifications.INFORMATION)
 					.title("Your client has been updated")
 					.message("Click here to see the latest changelog.")
 					.animation(Animations.SLIDE);
-
-			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-			{
-				builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-			}
 
 			final TrayNotification notification = builder.build();
 			notification.setOnMouseClicked(__ -> showChangelog());
@@ -259,18 +256,12 @@ public class Client extends Application
 	 */
 	public static void displayNoConnectionDialog()
 	{
-		TrayNotificationBuilder builder = new TrayNotificationBuilder()
+		new TrayNotificationBuilder()
 				.type(Notifications.ERROR)
 				.title("Server connection could not be established")
 				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
-				.animation(Animations.POPUP);
-
-		if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-		{
-			builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-		}
-
-		builder.build().showAndDismiss(Duration.seconds(10));
+				.animation(Animations.POPUP)
+				.build().showAndDismiss(Duration.seconds(10));
 	}
 
 	// TODO(MSC) Delete as soon as the Changelog dialog is removed
@@ -351,14 +342,8 @@ public class Client extends Application
 				{
 					Platform.runLater(() ->
 					{
-						TrayNotificationBuilder builder = new TrayNotificationBuilder();
-
-						if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
-						{
-							builder = builder.stylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
-						}
-
-						final TrayNotification notification = builder.title("Update Available")
+						final TrayNotification notification = new TrayNotificationBuilder()
+								.title("Update Available")
 								.message("Click here to update to the latest version. Not updating might lead to problems.")
 								.animation(Animations.SLIDE)
 								.build();
