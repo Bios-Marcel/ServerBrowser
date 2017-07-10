@@ -234,11 +234,13 @@ public class Client extends Application
 		alert.setHeaderText("Your client has been updated | Changelog");
 
 		final StringBuilder updateText = new StringBuilder();
-		updateText.append("- New Dark Theme (Can be activated on settings page)");
+		updateText.append("- New Menu that lets u see screenshots and chat logs");
 		updateText.append(System.lineSeparator());
-		updateText.append("- Bug Fix where adding servers that can't be reached leaded to nothing happening");
+		updateText.append("- Minor UI Changes");
 		updateText.append(System.lineSeparator());
-		updateText.append("- Refactoring of Layout");
+		updateText.append("- SA-MP Legacy settings can now be changed on the settings page");
+		updateText.append(System.lineSeparator());
+		updateText.append("- Almost all dialogs have been replaced with tray notifications");
 
 		alert.setContentText(updateText.toString());
 		alert.show();

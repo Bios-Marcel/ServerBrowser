@@ -47,6 +47,14 @@
 	-fx-border-radius: 0.0 !important;
 }
 
+/**
+ * Hyperlink
+ */
+ 
+.hyperlink
+{
+	-fx-padding: -2.0 0.0 -2.0 0.0;
+}
 
 /**
  * TabePane
