@@ -121,7 +121,6 @@ public class SettingsController implements ViewController
 		imeCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.IME, imeCheckBox));
 		directModeCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.DIRECT_MODE, directModeCheckBox));
 		noNameTagStatusCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySAMPSettings.NO_NAME_TAG_STATUS, noNameTagStatusCheckBox));
-
 	}
 
 	private void changeLegacyBooleanSetting(final String key, final CheckBox checkBox)
