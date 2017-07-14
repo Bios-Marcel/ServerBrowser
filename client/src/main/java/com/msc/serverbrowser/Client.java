@@ -45,11 +45,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * TODO(MSC):
- * <ul>
- * <li>Improve applying of DarkTheme to TrayNotifications (Default style setting?)</li>
- * </ul>
- *
  * @since 02.07.2017
  */
 public class Client extends Application
