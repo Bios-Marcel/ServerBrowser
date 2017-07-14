@@ -28,7 +28,7 @@ public class UsernameController implements ViewController
 	@FXML
 	private ListView<String> nameList;
 
-	private final MenuItem	setName		= new MenuItem("Use Username");
+	private final MenuItem	setName		= new MenuItem("Apply Username");
 	private final MenuItem	removeName	= new MenuItem("Remove username");
 
 	private final ContextMenu menu = new ContextMenu(setName, removeName);
@@ -57,6 +57,7 @@ public class UsernameController implements ViewController
 				final String name = usernames.get(0);
 
 				setName.setVisible(true);
+				removeName.setText("Remove Username");
 				menu.setOnAction(click ->
 				{
 					final MenuItem clickedItem = (MenuItem) click.getTarget();
@@ -78,6 +79,7 @@ public class UsernameController implements ViewController
 			else if (usernames.size() > 1)
 			{// if more than one item is selected
 				setName.setVisible(false);
+				removeName.setText("Remove Usernames");
 				menu.setOnAction(click ->
 				{
 					final MenuItem clickedItem = (MenuItem) click.getTarget();
