@@ -1,0 +1,9 @@
+.scroll-bar
+{
+	-fx-border-width: 0.0px;
+}
+
+.scroll-pane
+{
+	-fx-padding: 0 5 0 0;
+}
