@@ -12,12 +12,13 @@ import com.msc.serverbrowser.logging.Logging;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 
 /**
- * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
- * view (Settings, Servers ...).
+ * Controller for the Main view, e.g. the view that contains the menu bar, the
+ * header and the loaded view (Settings, Servers ...).
  *
  * @author Marcel
  */
@@ -151,8 +152,9 @@ public class MainController implements ViewController
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
 			loader.setController(view.getControllerType().newInstance());
-			activeViewContainer.setContent(loader.load());
-			activeViewContainer.getStylesheets().setAll(view.getStylesheetPath());
+			Parent toLoad = loader.load();
+			toLoad.getStylesheets().setAll(view.getStylesheetPath());
+			activeViewContainer.setContent(toLoad);
 			Client.getInstance().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException exception)
