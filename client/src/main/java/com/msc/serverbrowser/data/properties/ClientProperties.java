@@ -102,7 +102,12 @@ public class ClientProperties
 
 	public static void setProperty(final Property property, final Object value)
 	{
-		if (Objects.nonNull(value))
+		setProperty(property, value, false);
+	}
+
+	private static void setProperty(final Property property, final Object value, final boolean omitCheck)
+	{
+		if (Objects.nonNull(value) && !omitCheck)
 		{// Check will only be performed if its non null
 			checkDataType(property, value.getClass());
 		}
@@ -153,6 +158,7 @@ public class ClientProperties
 
 	public static void restorePropertyToDefault(final Property property)
 	{
-		setProperty(property, property.defaultValue());
+		setProperty(property, property.defaultValue(), true);
+
 	}
 }
