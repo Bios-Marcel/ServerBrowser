@@ -19,7 +19,7 @@ import com.msc.serverbrowser.logging.Logging;
  * @author Marcel
  */
 @SuppressWarnings("javadoc")
-public class LegacySAMPSettings
+public class LegacySettings
 {
 	public static final String	FPS_LIMIT			= "fpslimit";
 	public static final String	PAGE_SIZE			= "pagesize";
@@ -32,9 +32,20 @@ public class LegacySAMPSettings
 	public static final String	DIRECT_MODE			= "directmode";
 	public static final String	NO_NAME_TAG_STATUS	= "nonametagstatus";
 
+	public static final String	FPS_LIMIT_DEFAULT			= "50";
+	public static final String	PAGE_SIZE_DEFAULT			= "10";
+	public static final String	MULTICORE_DEFAULT			= "1";
+	public static final String	TIMESTAMP_DEFAULT			= "0";
+	public static final String	AUDIO_PROXY_OFF_DEFAULT		= "0";
+	public static final String	AUDIO_MESSAGE_OFF_DEFAULT	= "0";
+	public static final String	DISABLE_HEAD_MOVE_DEFAULT	= "0";
+	public static final String	IME_DEFAULT					= "0";
+	public static final String	DIRECT_MODE_DEFAULT			= "0";
+	public static final String	NO_NAME_TAG_STATUS_DEFAULT	= "0";
+
 	/**
-	 * @return {@link Properties} object containing the present legacy SA-MP Settings or an empty
-	 *         {@link Optional}
+	 * @return {@link Properties} object containing the present legacy SA-MP
+	 *         Settings or an empty {@link Optional}
 	 */
 	public static Optional<Properties> getLegacyProperties()
 	{
@@ -52,10 +63,12 @@ public class LegacySAMPSettings
 	}
 
 	/**
-	 * Override the SA-MP legacy settings using the passed {@link Properties} object.
+	 * Override the SA-MP legacy settings using the passed {@link Properties}
+	 * object.
 	 *
 	 * @param properties
-	 *            the {@link Properties} object to overwrite the legacy properties with
+	 *            the {@link Properties} object to overwrite the legacy properties
+	 *            with
 	 */
 	public static void save(final Properties properties)
 	{

@@ -149,7 +149,7 @@
 		</ScrollPane>
 		<ButtonBar VBox.vgrow="NEVER" minHeight="40">
 			<buttons>
-				<Button alignment="CENTER_RIGHT" text="Restore to default" />
+				<Button onAction="#restoreDefaults" alignment="CENTER_RIGHT" text="Restore to default" />
 			</buttons>
 			<padding>
 				<Insets bottom="-5" />
