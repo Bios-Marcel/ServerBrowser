@@ -12,6 +12,13 @@ import com.msc.serverbrowser.logging.Logging;
 
 public class ClientProperties
 {
+	/**
+	 * Returns a proeprties default as an integer if the datatype is correct.
+	 *
+	 * @param property
+	 *            the property to return its default valeu as an integer
+	 * @return the default of the property as integer
+	 */
 	public static Integer getDefaultAsInt(final Property property)
 	{
 		checkDataType(property, Integer.class);
@@ -156,6 +163,12 @@ public class ClientProperties
 		}
 	}
 
+	/**
+	 * Restores a property to its hardcoded default value.
+	 *
+	 * @param property
+	 *            the property restopre its default
+	 */
 	public static void restorePropertyToDefault(final Property property)
 	{
 		setProperty(property, property.defaultValue(), true);

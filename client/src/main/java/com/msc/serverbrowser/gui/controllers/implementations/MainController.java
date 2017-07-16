@@ -17,13 +17,16 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 
 /**
- * Controller for the Main view, e.g. the view that contains the menu bar, the
- * header and the loaded view (Settings, Servers ...).
+ * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
+ * view (Settings, Servers ...).
  *
  * @author Marcel
  */
 public class MainController implements ViewController
 {
+	@FXML
+	private Parent rootPane;
+
 	@FXML
 	private StackPane	menuItemFav;
 	@FXML
@@ -47,10 +50,9 @@ public class MainController implements ViewController
 		/**
 		 * Disable Under Development Features
 		 */
-		// if (!ClientProperties.getPropertyAsBoolean(Property.DEVELOPMENT))
-		// {
-		// ((VBox) menuItemFiles.getParent()).getChildren().remove(menuItemFiles);
-		// }
+		if (!ClientProperties.getPropertyAsBoolean(Property.DEVELOPMENT))
+		{
+		}
 
 		if (ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
 		{
@@ -60,6 +62,7 @@ public class MainController implements ViewController
 		{
 			loadView(Views.valueOf(ClientProperties.getDefaultAsInt(Property.LAST_VIEW)));
 		}
+
 	}
 
 	@FXML
@@ -152,7 +155,7 @@ public class MainController implements ViewController
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
 			loader.setController(view.getControllerType().newInstance());
-			Parent toLoad = loader.load();
+			final Parent toLoad = loader.load();
 			toLoad.getStylesheets().setAll(view.getStylesheetPath());
 			activeViewContainer.setContent(toLoad);
 			Client.getInstance().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
@@ -168,5 +171,16 @@ public class MainController implements ViewController
 	{
 		ClientProperties.setProperty(Property.LAST_VIEW, activeView.getId());
 		System.exit(0); // Make sure that the application doesnt stay open for some reason
+	}
+
+	/**
+	 * Gray out the Root Pane
+	 *
+	 * @param doGrayOut
+	 *            true will gray out out and false will not
+	 */
+	public void grayOut(final boolean doGrayOut)
+	{
+		rootPane.setDisable(doGrayOut);
 	}
 }

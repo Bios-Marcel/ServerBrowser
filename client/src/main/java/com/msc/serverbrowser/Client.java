@@ -24,7 +24,6 @@ import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
-import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.interfaces.DataServiceInterface;
 import com.msc.serverbrowser.interfaces.UpdateServiceInterface;
 import com.msc.serverbrowser.logging.Logging;
@@ -35,14 +34,27 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import lc.kra.system.mouse.GlobalMouseHook;
+import lc.kra.system.mouse.event.GlobalMouseAdapter;
+import lc.kra.system.mouse.event.GlobalMouseEvent;
 
 /**
  * @since 02.07.2017
@@ -134,7 +146,7 @@ public class Client extends Application
 		loadUIAndGetController();
 	}
 
-	private ViewController loadUIAndGetController()
+	private MainController loadUIAndGetController()
 	{
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource(PathConstants.VIEW_PATH + "Main.fxml"));
@@ -178,17 +190,84 @@ public class Client extends Application
 	{
 		stage = primaryStage;
 
-		final ViewController controller = loadUIAndGetController();
+		final MainController controller = loadUIAndGetController();
 
 		primaryStage.getIcons().add(APPLICATION_ICON);
 		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+
+		final Scene primaryScene = primaryStage.getScene();
+
+		((Pane) primaryScene.getRoot()).setMinHeight(480);
+		((Pane) primaryScene.getRoot()).setMinWidth(785);
+
+		primaryScene.getAccelerators().put(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN), () ->
+		{
+			final Node preservedFocusNode = primaryScene.getFocusOwner();
+
+			final Stage commandStage = new Stage(StageStyle.TRANSPARENT);
+
+			final VBox root = new VBox();
+			root.setStyle("-fx-background-radius: 15; -fx-background-color: #202425;");
+			final TextField searchField = new TextField();
+			searchField.setStyle("-fx-background-insets: 12; -fx-border-insets: 12;");
+			searchField.setPromptText("Enter your search query,");
+			root.getChildren().add(searchField);
+
+			final Scene scene = new Scene(root);
+			scene.setFill(new Color(1, 1, 1, 0));
+			scene.setOnKeyPressed(pressed ->
+			{
+				if (pressed.getCode() == KeyCode.ESCAPE)
+				{
+					commandStage.hide();
+				}
+			});
+
+			final GlobalMouseHook mouseHook = new GlobalMouseHook();
+			mouseHook.addMouseListener(new GlobalMouseAdapter() {
+				@Override
+				public void mouseReleased(final GlobalMouseEvent event)
+				{
+					final Parent sceneRoot = primaryScene.getRoot();
+					final Bounds bounds = sceneRoot.localToScreen(sceneRoot.getBoundsInLocal());
+					final Bounds boundsCmd = root.localToScreen(root.getBoundsInLocal());
+
+					if (commandStage.isFocused() && bounds.contains(event.getX(), event.getY()) && !boundsCmd.contains(event.getX(), event.getY()))
+					{
+						Platform.runLater(commandStage::hide);
+					}
+				}
+			});
+
+			commandStage.focusedProperty().addListener((event, oldFocused, newFocused) ->
+			{
+				if (newFocused)
+				{
+					searchField.requestFocus();
+				}
+				else
+				{
+					commandStage.hide();
+				}
+			});
+
+			commandStage.setScene(scene);
+			commandStage.initModality(Modality.APPLICATION_MODAL);
+			scene.getStylesheets().addAll(primaryScene.getStylesheets());
+
+			controller.grayOut(true);
+			commandStage.showAndWait();
+			controller.grayOut(false);
+			preservedFocusNode.requestFocus();
+		});
 
 		// TODO(MSC) Check why this is necessary, in a minimal example this isn't necessary
 		// Usually true by default, but on unix systems that use openjfx, it is false by default
 		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
+
 		{
 			controller.onClose();
 			ClientProperties.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
@@ -196,9 +275,6 @@ public class Client extends Application
 		});
 
 		primaryStage.show();
-
-		primaryStage.setMinWidth(800);
-		primaryStage.setMinHeight(400);
 
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
