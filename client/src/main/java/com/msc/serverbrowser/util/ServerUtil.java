@@ -8,6 +8,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.xerces.impl.io.UTF8Reader;
+
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
@@ -73,33 +75,35 @@ public class ServerUtil
 	public static List<SampServer> retrieveAnnouncedServers() throws Exception
 	{
 		final List<SampServer> servers = new ArrayList<>();
-		final String json = readUrl("http://api.samp.southcla.ws/servers");
 
-		final JsonArray jsonArray = Json.parse(json).asArray();
-		jsonArray.forEach(object ->
+		try (final UTF8Reader reader = new UTF8Reader(new URL("http://api.samp.southcla.ws/v1/servers").openStream()))
 		{
-			final JsonObject jsonServerData = object.asObject();
-			final String address = jsonServerData.getString("ip", "Unknown");
+			final JsonArray jsonArray = Json.parse(reader).asArray();
+			jsonArray.forEach(object ->
+			{
+				final JsonObject jsonServerData = object.asObject();
+				final String address = jsonServerData.getString("ip", "Unknown");
 
-			final String[] addressData = address.split(":");
+				final String[] addressData = address.split(":");
 
-			final SampServer server = new SampServer(addressData[0], address.contains(":") ? Integer.parseInt(addressData[1]) : 7777);
+				final SampServer server = new SampServer(addressData[0], address.contains(":") ? Integer.parseInt(addressData[1]) : 7777);
 
-			server.setPlayers(jsonServerData.getInt("pc", 0));
-			server.setMaxPlayers(jsonServerData.getInt("pm", 0));
-			server.setMode(jsonServerData.getString("gm", "Unknown"));
-			server.setHostname(jsonServerData.getString("hn", "Unknown"));
-			server.setLanguage(jsonServerData.getString("la", "Unknown"));
+				server.setPlayers(jsonServerData.getInt("pc", 0));
+				server.setMaxPlayers(jsonServerData.getInt("pm", 0));
+				server.setMode(jsonServerData.getString("gm", "Unknown"));
+				server.setHostname(jsonServerData.getString("hn", "Unknown"));
+				server.setLanguage(jsonServerData.getString("la", "Unknown"));
 
-			servers.add(server);
-		});
+				servers.add(server);
+			});
 
-		return servers;
+			return servers;
+		}
 	}
 
 	public static SampServer getServerInfo() throws Exception
 	{
-		final String json = readUrl("http://api.samp.southcla.ws/server/ss.southcla.ws");
+		final String json = readUrl("http://api.samp.southcla.ws/v1/server/ss.southcla.ws");
 
 		final JsonObject jsonData = Json.parse(json).asObject();
 		jsonData.forEach(shit ->
