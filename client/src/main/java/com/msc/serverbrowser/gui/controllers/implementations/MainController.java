@@ -10,22 +10,38 @@ import com.msc.serverbrowser.gui.Views;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
- * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
- * view (Settings, Servers ...).
+ * Controller for the Main view, e.g. the view that contains the menu bar, the
+ * header and the loaded view (Settings, Servers ...).
  *
  * @author Marcel
  */
 public class MainController implements ViewController
 {
 	@FXML
-	private Parent rootPane;
+	private Parent				rootPane;
+	@FXML
+	private VBox				commandPane;
+	@FXML
+	private TextField			commandSearchField;
+	@FXML
+	private ListView<String>	searchResultsList;
 
 	@FXML
 	private StackPane	menuItemFav;
@@ -47,6 +63,17 @@ public class MainController implements ViewController
 	@Override
 	public void initialize()
 	{
+		EventHandler<? super KeyEvent> closeCommanPaneListener = pressed ->
+		{
+			if (pressed.getCode() == KeyCode.ESCAPE)
+			{
+				showCommandPane(false);
+			}
+		};
+
+		searchResultsList.setOnKeyPressed(closeCommanPaneListener);
+		commandPane.setOnKeyPressed(closeCommanPaneListener);
+
 		/**
 		 * Disable Under Development Features
 		 */
@@ -173,14 +200,48 @@ public class MainController implements ViewController
 		System.exit(0); // Make sure that the application doesnt stay open for some reason
 	}
 
+	private static Node focusPreserved;
+
 	/**
-	 * Gray out the Root Pane
+	 * Shows or hides the Command Pane, which allows users to directly invoke
+	 * commands, eg. connecting to a server, changing the version, switch the view
+	 * or whatever.
 	 *
-	 * @param doGrayOut
-	 *            true will gray out out and false will not
+	 * @param doShow
+	 *            true will show the Command Pane and false will hide it
 	 */
-	public void grayOut(final boolean doGrayOut)
+	public void showCommandPane(final boolean doShow)
 	{
-		rootPane.setDisable(doGrayOut);
+		Scene scene = rootPane.getScene();
+
+		if (doShow)
+		{
+			if (!commandPane.isVisible())
+			{
+				focusPreserved = scene.getFocusOwner();
+				commandPane.getScene().setOnMouseClicked(clicked ->
+				{
+					final Bounds bounds = rootPane.localToScene(rootPane.getBoundsInLocal());
+					final Bounds boundsCmd = commandPane.localToScene(commandPane.getBoundsInLocal());
+
+					double clickedY = clicked.getSceneY();
+					double clickedX = clicked.getSceneX();
+					if (bounds.contains(clickedX, clickedY) && !boundsCmd.contains(clickedX, clickedY))
+					{
+						showCommandPane(false);
+					}
+				});
+
+				rootPane.setDisable(true);
+				commandPane.setVisible(true);
+				commandSearchField.requestFocus();
+			}
+		}
+		else
+		{
+			rootPane.setDisable(false);
+			commandPane.setVisible(false);
+			focusPreserved.requestFocus();
+		}
 	}
 }

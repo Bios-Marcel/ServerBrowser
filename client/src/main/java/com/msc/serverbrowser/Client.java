@@ -52,9 +52,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import lc.kra.system.mouse.GlobalMouseHook;
-import lc.kra.system.mouse.event.GlobalMouseAdapter;
-import lc.kra.system.mouse.event.GlobalMouseEvent;
 
 /**
  * @since 02.07.2017
@@ -198,70 +195,14 @@ public class Client extends Application
 
 		final Scene primaryScene = primaryStage.getScene();
 
-		((Pane) primaryScene.getRoot()).setMinHeight(480);
-		((Pane) primaryScene.getRoot()).setMinWidth(785);
+		((Pane) primaryScene.getRoot()).setPrefHeight(480);
+		((Pane) primaryScene.getRoot()).setPrefWidth(785);
 
 		primaryScene.getAccelerators().put(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN), () ->
 		{
-			final Node preservedFocusNode = primaryScene.getFocusOwner();
-
-			final Stage commandStage = new Stage(StageStyle.TRANSPARENT);
-
-			final VBox root = new VBox();
-			root.setStyle("-fx-background-radius: 15; -fx-background-color: #202425;");
-			final TextField searchField = new TextField();
-			searchField.setStyle("-fx-background-insets: 12; -fx-border-insets: 12;");
-			searchField.setPromptText("Enter your search query,");
-			root.getChildren().add(searchField);
-
-			final Scene scene = new Scene(root);
-			scene.setFill(new Color(1, 1, 1, 0));
-			scene.setOnKeyPressed(pressed ->
-			{
-				if (pressed.getCode() == KeyCode.ESCAPE)
-				{
-					commandStage.hide();
-				}
-			});
-
-			final GlobalMouseHook mouseHook = new GlobalMouseHook();
-			mouseHook.addMouseListener(new GlobalMouseAdapter() {
-				@Override
-				public void mouseReleased(final GlobalMouseEvent event)
-				{
-					final Parent sceneRoot = primaryScene.getRoot();
-					final Bounds bounds = sceneRoot.localToScreen(sceneRoot.getBoundsInLocal());
-					final Bounds boundsCmd = root.localToScreen(root.getBoundsInLocal());
-
-					if (commandStage.isFocused() && bounds.contains(event.getX(), event.getY()) && !boundsCmd.contains(event.getX(), event.getY()))
-					{
-						Platform.runLater(commandStage::hide);
-					}
-				}
-			});
-
-			commandStage.focusedProperty().addListener((event, oldFocused, newFocused) ->
-			{
-				if (newFocused)
-				{
-					searchField.requestFocus();
-				}
-				else
-				{
-					commandStage.hide();
-				}
-			});
-
-			commandStage.setScene(scene);
-			commandStage.initModality(Modality.APPLICATION_MODAL);
-			scene.getStylesheets().addAll(primaryScene.getStylesheets());
-
-			controller.grayOut(true);
-			commandStage.showAndWait();
-			controller.grayOut(false);
-			preservedFocusNode.requestFocus();
+			controller.showCommandPane(true);
 		});
-
+		
 		// TODO(MSC) Check why this is necessary, in a minimal example this isn't necessary
 		// Usually true by default, but on unix systems that use openjfx, it is false by default
 		primaryStage.setResizable(true);

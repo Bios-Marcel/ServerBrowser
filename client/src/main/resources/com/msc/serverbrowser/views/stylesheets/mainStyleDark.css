@@ -412,3 +412,10 @@
     -fx-background-color: transparent ;
     -fx-background-insets: 0.0px ;
 }
+
+#commandPane
+{
+	-fx-background-radius: 15.0;
+	-fx-background-color: #202425;
+	-fx-padding: 12.0;
+}

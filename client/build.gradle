@@ -11,7 +11,6 @@ buildscript {
 	repositories {
 		jcenter()
 		maven { url 'https://jitpack.io' }
-		maven { url 'https://raw.github.com/kristian/system-hook/mvn-repo/' }
 	}
 }
 
@@ -22,7 +21,6 @@ mainClassName = "com.msc.serverbrowser.Client"
 repositories
 {
 	maven { url 'https://jitpack.io' }
-	maven { url 'https://raw.github.com/kristian/system-hook/mvn-repo/' }
 }
 
 dependencies {
@@ -30,7 +28,6 @@ dependencies {
 		compile 'org.xerial:sqlite-jdbc:3.19.3'
 		compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
 		compile 'com.github.Bios-Marcel:TrayNotification:1.+'
-		compile 'lc.kra.system:system-hook:3.+'
 				
 		//javapacker for native build. This will only be necessary if the userJvmOptions are used
 		//compile files("${System.properties['java.home']}/../lib/packager.jar")
