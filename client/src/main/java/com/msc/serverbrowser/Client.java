@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
-import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotification;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.constants.PathConstants;
@@ -34,23 +34,17 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
@@ -202,7 +196,7 @@ public class Client extends Application
 		{
 			controller.showCommandPane(true);
 		});
-		
+
 		// TODO(MSC) Check why this is necessary, in a minimal example this isn't necessary
 		// Usually true by default, but on unix systems that use openjfx, it is false by default
 		primaryStage.setResizable(true);
@@ -220,7 +214,7 @@ public class Client extends Application
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
 			final TrayNotificationBuilder builder = new TrayNotificationBuilder()
-					.type(Notifications.INFORMATION)
+					.type(NotificationTypeImplementations.INFORMATION)
 					.title("Your client has been updated")
 					.message("Click here to see the latest changelog.")
 					.animation(Animations.SLIDE);
@@ -267,7 +261,7 @@ public class Client extends Application
 	public static void displayNoConnectionDialog()
 	{
 		new TrayNotificationBuilder()
-				.type(Notifications.ERROR)
+				.type(NotificationTypeImplementations.ERROR)
 				.title("Server connection could not be established")
 				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
 				.animation(Animations.POPUP)

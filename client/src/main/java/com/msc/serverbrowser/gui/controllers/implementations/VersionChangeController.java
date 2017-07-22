@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
-import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
@@ -195,7 +195,7 @@ public class VersionChangeController implements ViewController
 		else
 		{
 			new TrayNotificationBuilder()
-					.type(Notifications.ERROR)
+					.type(NotificationTypeImplementations.ERROR)
 					.title("GTA couldn't be located")
 					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
 					.animation(Animations.POPUP)

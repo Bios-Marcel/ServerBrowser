@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 import java.util.regex.PatternSyntaxException;
 
 import com.github.plushaze.traynotification.animations.Animations;
-import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.entities.Player;
@@ -258,7 +258,7 @@ public abstract class ServerListControllerMain implements ViewController
 			else
 			{
 				new TrayNotificationBuilder()
-						.type(Notifications.ERROR)
+						.type(NotificationTypeImplementations.ERROR)
 						.title("Add to favourites")
 						.message("Server couldn't be added to favourites, because the address doesn't seem to be valid.")
 						.animation(Animations.POPUP)
@@ -288,7 +288,7 @@ public abstract class ServerListControllerMain implements ViewController
 	private static void showCantConnectToServerError()
 	{
 		new TrayNotificationBuilder()
-				.type(Notifications.ERROR)
+				.type(NotificationTypeImplementations.ERROR)
 				.title("Can't connect to Server")
 				.message("The address that you have entered, doesn't seem to be valid.")
 				.animation(Animations.POPUP)
