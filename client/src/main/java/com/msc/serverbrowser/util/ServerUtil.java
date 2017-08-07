@@ -8,8 +8,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.xerces.impl.io.UTF8Reader;
-
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
@@ -76,29 +74,31 @@ public class ServerUtil
 	{
 		final List<SampServer> servers = new ArrayList<>();
 
-		try (final UTF8Reader reader = new UTF8Reader(new URL("http://api.samp.southcla.ws/v1/servers").openStream()))
-		{
-			final JsonArray jsonArray = Json.parse(reader).asArray();
-			jsonArray.forEach(object ->
-			{
-				final JsonObject jsonServerData = object.asObject();
-				final String address = jsonServerData.getString("ip", "Unknown");
+		// try (final UTF8Reader reader = new UTF8Reader(new
+		// URL("http://api.samp.southcla.ws/v1/servers").openStream()))
+		// {
+		// final JsonArray jsonArray = Json.parse(reader).asArray();
+		// jsonArray.forEach(object ->
+		// {
+		// final JsonObject jsonServerData = object.asObject();
+		// final String address = jsonServerData.getString("ip", "Unknown");
+		//
+		// final String[] addressData = address.split(":");
+		//
+		// final SampServer server = new SampServer(addressData[0],
+		// address.contains(":") ? Integer.parseInt(addressData[1]) : 7777);
+		//
+		// server.setPlayers(jsonServerData.getInt("pc", 0));
+		// server.setMaxPlayers(jsonServerData.getInt("pm", 0));
+		// server.setMode(jsonServerData.getString("gm", "Unknown"));
+		// server.setHostname(jsonServerData.getString("hn", "Unknown"));
+		// server.setLanguage(jsonServerData.getString("la", "Unknown"));
+		//
+		// servers.add(server);
+		// });
 
-				final String[] addressData = address.split(":");
-
-				final SampServer server = new SampServer(addressData[0], address.contains(":") ? Integer.parseInt(addressData[1]) : 7777);
-
-				server.setPlayers(jsonServerData.getInt("pc", 0));
-				server.setMaxPlayers(jsonServerData.getInt("pm", 0));
-				server.setMode(jsonServerData.getString("gm", "Unknown"));
-				server.setHostname(jsonServerData.getString("hn", "Unknown"));
-				server.setLanguage(jsonServerData.getString("la", "Unknown"));
-
-				servers.add(server);
-			});
-
-			return servers;
-		}
+		return servers;
+		// }
 	}
 
 	public static SampServer getServerInfo() throws Exception
