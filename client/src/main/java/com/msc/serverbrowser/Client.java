@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
-import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotification;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.constants.PathConstants;
@@ -199,11 +199,9 @@ public class Client extends Application
 		{
 			controller.showCommandPane(true);
 		});
-
-		// TODO(MSC) Check why this is necessary, in a minimal example this isn't
-		// necessary
-		// Usually true by default, but on unix systems that use openjfx, it is false by
-		// default
+		
+		// TODO(MSC) Check why this is necessary, in a minimal example this isn't necessary
+		// Usually true by default, but on unix systems that use openjfx, it is false by default
 		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
@@ -219,7 +217,7 @@ public class Client extends Application
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
 			final TrayNotificationBuilder builder = new TrayNotificationBuilder()
-					.type(Notifications.INFORMATION)
+					.type(NotificationTypeImplementations.INFORMATION)
 					.title("Your client has been updated")
 					.message("Click here to see the latest changelog.")
 					.animation(Animations.SLIDE);

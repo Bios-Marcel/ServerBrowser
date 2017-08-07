@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
-import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
@@ -111,7 +111,7 @@ public class FilesController implements ViewController
 		catch (final IOException exception)
 		{
 			new TrayNotificationBuilder()
-					.type(Notifications.ERROR)
+					.type(NotificationTypeImplementations.ERROR)
 					.animation(Animations.POPUP)
 					.title("Chatlog couldn't be cleared")
 					.message("For more information, please check the logfiles.")

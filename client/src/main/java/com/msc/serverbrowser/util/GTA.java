@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
-import com.github.plushaze.traynotification.notification.Notifications;
+import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
@@ -287,7 +287,7 @@ public class GTA
 		else
 		{
 			new TrayNotificationBuilder()
-					.type(Notifications.ERROR)
+					.type(NotificationTypeImplementations.ERROR)
 					.title("GTA couldn't be located")
 					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
 					.animation(Animations.POPUP)
