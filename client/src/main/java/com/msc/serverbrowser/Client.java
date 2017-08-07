@@ -199,9 +199,11 @@ public class Client extends Application
 		{
 			controller.showCommandPane(true);
 		});
-		
-		// TODO(MSC) Check why this is necessary, in a minimal example this isn't necessary
-		// Usually true by default, but on unix systems that use openjfx, it is false by default
+
+		// TODO(MSC) Check why this is necessary, in a minimal example this isn't
+		// necessary
+		// Usually true by default, but on unix systems that use openjfx, it is false by
+		// default
 		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
@@ -265,7 +267,7 @@ public class Client extends Application
 	public static void displayNoConnectionDialog()
 	{
 		new TrayNotificationBuilder()
-				.type(Notifications.ERROR)
+				.type(NotificationTypeImplementations.ERROR)
 				.title("Server connection could not be established")
 				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
 				.animation(Animations.SLIDE)
