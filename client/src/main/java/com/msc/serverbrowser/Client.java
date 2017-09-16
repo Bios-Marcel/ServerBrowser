@@ -53,8 +53,8 @@ import javafx.util.Duration;
 public class Client extends Application
 {
 	/**
-	 * Default public IP, can be changed on startup using <code>-s</code> / <code>-server</code>
-	 * followed by a domain, IP or hostname.
+	 * Default public IP, can be changed on startup using <code>-s</code> /
+	 * <code>-server</code> followed by a domain, IP or hostname.
 	 */
 	private static String serverToConnectTo = "ts3.sa-mpservers.com";
 
@@ -189,16 +189,21 @@ public class Client extends Application
 
 		final Scene primaryScene = primaryStage.getScene();
 
-		((Pane) primaryScene.getRoot()).setPrefHeight(480);
-		((Pane) primaryScene.getRoot()).setPrefWidth(785);
+		// Set the preferred with of the root container to size the window correctly
+		final Pane root = (Pane) primaryScene.getRoot();
+		root.setPrefHeight(480);
+		root.setPrefWidth(785);
 
+		// Ctrl + Shift + P to open Command Pane
 		primaryScene.getAccelerators().put(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN), () ->
 		{
 			controller.showCommandPane(true);
 		});
 
-		// TODO(MSC) Check why this is necessary, in a minimal example this isn't necessary
-		// Usually true by default, but on unix systems that use openjfx, it is false by default
+		// TODO(MSC) Check why this is necessary, in a minimal example this isn't
+		// necessary
+		// Usually true by default, but on unix systems that use openjfx, it is false by
+		// default
 		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
@@ -256,7 +261,8 @@ public class Client extends Application
 	}
 
 	/**
-	 * Displays a dialog that tells the user that the server connection couldn't be established.
+	 * Displays a dialog that tells the user that the server connection couldn't be
+	 * established.
 	 */
 	public static void displayNoConnectionDialog()
 	{
@@ -264,7 +270,7 @@ public class Client extends Application
 				.type(NotificationTypeImplementations.ERROR)
 				.title("Server connection could not be established")
 				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
-				.animation(Animations.POPUP)
+				.animation(Animations.SLIDE)
 				.build().showAndDismiss(Duration.seconds(10));
 	}
 
@@ -293,8 +299,8 @@ public class Client extends Application
 	}
 
 	/**
-	 * Creates files and folders that are necessary for the application to run properly and migrates
-	 * old xml data.
+	 * Creates files and folders that are necessary for the application to run
+	 * properly and migrates old xml data.
 	 */
 	private static void initClient()
 	{
@@ -307,8 +313,8 @@ public class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an update is available
-	 * the user will be asked if he wants to update.
+	 * Compares the local version number to the one lying on the server. If an
+	 * update is available the user will be asked if he wants to update.
 	 */
 	private static void checkVersion()
 	{

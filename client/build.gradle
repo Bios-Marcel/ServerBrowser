@@ -3,6 +3,7 @@
 * Shadow generates a fat JAR.
 * Proguard is an optimizer.
 */
+
 buildscript {
 	dependencies {
 		classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.2'
@@ -27,7 +28,7 @@ dependencies {
 		compile 'com.github.sarxos:windows-registry-util:0.3'
 		compile 'org.xerial:sqlite-jdbc:3.19.3'
 		compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
-		compile 'com.github.Bios-Marcel:TrayNotification:1.+'
+		compile 'com.github.Bios-Marcel:TrayNotification:1.3.1'
 				
 		//javapacker for native build. This will only be necessary if the userJvmOptions are used
 		//compile files("${System.properties['java.home']}/../lib/packager.jar")
@@ -50,9 +51,15 @@ shadowJar {
 	exclude 'org/sqlite/native/Linux/ppc64/**'
 	exclude 'org/sqlite/native/FreeBSD/**'
 	exclude 'org/sqlite/native/Mac/**'
-	//Theoretically, in a distant future, one could kill 32bit support...
+	//Theoretically, in a distant future, one could kill windows 32bit support...
 	//exclude 'org/sqlite/native/Windows/x86/**'
 
+	//Linux x86 bit support already killed
+	exclude 'org/sqlite/native/Linux/x86/**'
+	
+	//Trash
+	exclude 'META-INF/maven/**'
+	
 	//Merges all service file under "META-INF/services" to one
 	mergeServiceFiles()
 }

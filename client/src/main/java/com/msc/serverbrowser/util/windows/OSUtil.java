@@ -3,6 +3,8 @@ package com.msc.serverbrowser.util.windows;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.logging.Logging;
@@ -27,21 +29,22 @@ public class OSUtil
 	 * Opens a website using the default browser. It will automatically apply http:// infront of the
 	 * url if not existant already.
 	 *
-	 * @param url
+	 * @param urlAsString
 	 *            website to visit
 	 */
-	public static void browse(final String url)
+	public static void browse(final String urlAsString)
 	{
 		final Desktop desktop = Desktop.getDesktop();
-		final String fixedUrl = StringUtil.fixUrlIfNecessary(url);
+		final String fixedUrl = StringUtil.fixUrlIfNecessary(urlAsString);
 
 		try
 		{
-			desktop.browse(URI.create(fixedUrl));
+			final URL url = new URL(fixedUrl);
+			desktop.browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
 		}
-		catch (final IOException exception)
+		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't visit website '" + url + "' (" + fixedUrl + ").", exception);
+			Logging.logger().log(Level.WARNING, "Couldn't visit website '" + urlAsString + "' (" + fixedUrl + ").", exception);
 		}
 	}
 }

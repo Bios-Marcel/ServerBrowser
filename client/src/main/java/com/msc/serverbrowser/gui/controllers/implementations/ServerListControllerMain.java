@@ -20,7 +20,6 @@ import com.msc.serverbrowser.entities.SampServer;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.query.SampQuery;
 import com.msc.serverbrowser.util.GTA;
-import com.msc.serverbrowser.util.ObjectUtil;
 import com.msc.serverbrowser.util.StringUtil;
 import com.msc.serverbrowser.util.windows.OSUtil;
 
@@ -270,7 +269,7 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private void onClickConnect()
 	{
-		final String[] ipAndPort = ObjectUtil.orElse(addressTextField.getText(), "").split("[:]");
+		final String[] ipAndPort = Optional.ofNullable(addressTextField.getText()).orElse("").split("[:]");
 		if (ipAndPort.length == 1)
 		{
 			tryToConnect(ipAndPort[0], 7777);
