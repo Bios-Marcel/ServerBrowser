@@ -25,6 +25,7 @@
 ### Eclipse Patch ###
 # Eclipse Core		
 **/.project
+**/.prefs
 
 # JDT-specific (Eclipse Java Development Tools)		
 **/.classpath
