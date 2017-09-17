@@ -20,7 +20,6 @@ It is a multi-project consisting of 3 subprojects
 ```
 ServerBrowser			The parent project
 |__ client				The Windows GUI client with which humans interact
-|__ server				The Unix daemon with which the client interacts via a sockets API
 ```
 
 ### Building with gradle
