@@ -3,7 +3,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 import java.util.List;
 
 import com.msc.serverbrowser.data.Favourites;
-import com.msc.serverbrowser.entities.SampServer;
+import com.msc.serverbrowser.data.SampServer;
 
 /**
  * ViewController for the favourite servers list view.

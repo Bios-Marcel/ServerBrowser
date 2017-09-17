@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.query;
+package com.msc.serverbrowser.util;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

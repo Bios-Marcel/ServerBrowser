@@ -1,0 +1,76 @@
+package com.msc.serverbrowser.util;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
+
+import org.kohsuke.github.GHRelease;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
+import org.kohsuke.github.RateLimitHandler;
+
+import com.msc.serverbrowser.data.properties.ClientProperties;
+import com.msc.serverbrowser.data.properties.Property;
+import com.msc.serverbrowser.logging.Logging;
+
+/**
+ * Contains to update the client to newer version.
+ *
+ * @author Marcel
+ * @since 16.09.2017
+ */
+public class UpdateUtil
+{
+	/**
+	 * Checks if the currently installed version is the latest.
+	 *
+	 * @return true if it is up to date, otherwise false
+	 */
+	public static Boolean isUpToDate()
+	{
+		final String lastTagName = ClientProperties.getPropertyAsString(Property.LAST_TAG_NAME);
+		return lastTagName.equals(getLatestTagName());
+	}
+
+	private static String getLatestTagName()
+	{
+		try
+		{
+			final GitHub gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build();
+			final GHRepository repository = gitHub.getRepository("Bios-Marcel/ServerBrowser");
+			final List<GHRelease> releases = repository.listReleases().asList();
+			if (releases.size() >= 1)
+			{
+				final GHRelease release = releases.get(0);
+				return release.getTagName();
+			}
+		}
+		catch (final IOException exception)
+		{
+			Logging.logger().log(Level.SEVERE, "Couldn't retrieve latest version information.", exception);
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieves the URL to download the latest version.
+	 *
+	 * @return An {@link Optional} of the latest version or {@link Optional#empty()}
+	 * @throws IOException
+	 *             if there was an error querying github
+	 */
+	public static String getLatestVersionURL() throws IOException
+	{
+		final GitHub gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build();
+		final GHRepository repository = gitHub.getRepository("Bios-Marcel/ServerBrowser");
+		final List<GHRelease> releases = repository.listReleases().asList();
+		if (releases.size() >= 1)
+		{
+			final GHRelease release = releases.get(0);
+			return release.getAssets().get(0).getBrowserDownloadUrl();
+		}
+		return null;
+	}
+}

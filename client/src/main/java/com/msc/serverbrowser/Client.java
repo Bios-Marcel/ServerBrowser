@@ -1,18 +1,11 @@
 package com.msc.serverbrowser;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Objects;
 import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
@@ -22,13 +15,10 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
-import com.msc.serverbrowser.data.rmi.CustomRMIClientSocketFactory;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
-import com.msc.serverbrowser.interfaces.DataServiceInterface;
-import com.msc.serverbrowser.interfaces.UpdateServiceInterface;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtil;
-import com.msc.serverbrowser.util.Hashing;
+import com.msc.serverbrowser.util.UpdateUtil;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -39,9 +29,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -52,12 +39,6 @@ import javafx.util.Duration;
  */
 public class Client extends Application
 {
-	/**
-	 * Default public IP, can be changed on startup using <code>-s</code> /
-	 * <code>-server</code> followed by a domain, IP or hostname.
-	 */
-	private static String serverToConnectTo = "ts3.sa-mpservers.com";
-
 	/**
 	 * Application icon that can be used everywhere where necessary.
 	 */
@@ -71,15 +52,6 @@ public class Client extends Application
 	 * Windows Registry.
 	 */
 	public static Registry registry;
-
-	/**
-	 * Interface to the app server.
-	 */
-	public static DataServiceInterface		remoteDataService;
-	/**
-	 * Interface to the update server.
-	 */
-	public static UpdateServiceInterface	remoteUpdateService;
 
 	private Stage stage;
 
@@ -98,35 +70,8 @@ public class Client extends Application
 	{
 		instance = this;
 		initClient();
-		establishConnection();
 		loadUI(primaryStage);
 		new Thread(() -> checkVersion()).start();
-	}
-
-	/**
-	 * Establishes the connection with the rmi server.
-	 */
-	public static void establishConnection()
-	{
-		if (Objects.isNull(remoteDataService) || Objects.isNull(remoteUpdateService))
-		{
-			try
-			{
-				registry = LocateRegistry.getRegistry(serverToConnectTo, 1099, new CustomRMIClientSocketFactory());
-				remoteDataService = (DataServiceInterface) registry.lookup(DataServiceInterface.INTERFACE_NAME);
-				remoteUpdateService = (UpdateServiceInterface) registry.lookup(UpdateServiceInterface.INTERFACE_NAME);
-
-				if (ClientProperties.getPropertyAsBoolean(Property.NOTIFY_SERVER_ON_STARTUP))
-				{
-					remoteDataService.tellServerThatYouUseTheApp(Locale.getDefault().toString());
-				}
-			}
-			catch (RemoteException | NotBoundException exception)
-			{
-				Logging.logger().log(Level.SEVERE, "Couldn't connect to RMI Server.", exception);
-				Platform.runLater(() -> displayNoConnectionDialog());
-			}
-		}
 	}
 
 	/**
@@ -151,16 +96,15 @@ public class Client extends Application
 			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
 			{
 				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyleDark.css");
-				TrayNotificationBuilder.setDefaultStylesheet(PathConstants.STYLESHEET_PATH + "trayDark.css");
+				scene.getStylesheets().add("/styles/trayDark.css");
 			}
 			else
 			{
 				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyle.css");
-				TrayNotificationBuilder.setDefaultStylesheet(null);
+				scene.getStylesheets().add("/styles/defaultStyle.css");
 			}
 
 			stage.setScene(scene);
-
 		}
 		catch (final Exception exception)
 		{
@@ -183,28 +127,14 @@ public class Client extends Application
 
 		final MainController controller = loadUIAndGetController();
 
+		TrayNotificationBuilder.setDefaultOwner(stage);
+
 		primaryStage.getIcons().add(APPLICATION_ICON);
 		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
 		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+		primaryStage.setResizable(true);
 
 		final Scene primaryScene = primaryStage.getScene();
-
-		// Set the preferred with of the root container to size the window correctly
-		final Pane root = (Pane) primaryScene.getRoot();
-		root.setPrefHeight(480);
-		root.setPrefWidth(785);
-
-		// Ctrl + Shift + P to open Command Pane
-		primaryScene.getAccelerators().put(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN), () ->
-		{
-			controller.showCommandPane(true);
-		});
-
-		// TODO(MSC) Check why this is necessary, in a minimal example this isn't
-		// necessary
-		// Usually true by default, but on unix systems that use openjfx, it is false by
-		// default
-		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
 
@@ -215,6 +145,11 @@ public class Client extends Application
 		});
 
 		primaryStage.show();
+
+		// Set the preferred with of the root container to size the window correctly
+		final Pane root = (Pane) primaryScene.getRoot();
+		root.setPrefHeight(480);
+		root.setPrefWidth(785);
 
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
@@ -261,8 +196,7 @@ public class Client extends Application
 	}
 
 	/**
-	 * Displays a dialog that tells the user that the server connection couldn't be
-	 * established.
+	 * Displays a dialog that tells the user that the server connection couldn't be established.
 	 */
 	public static void displayNoConnectionDialog()
 	{
@@ -299,8 +233,8 @@ public class Client extends Application
 	}
 
 	/**
-	 * Creates files and folders that are necessary for the application to run
-	 * properly and migrates old xml data.
+	 * Creates files and folders that are necessary for the application to run properly and migrates
+	 * old xml data.
 	 */
 	private static void initClient()
 	{
@@ -313,46 +247,27 @@ public class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an
-	 * update is available the user will be asked if he wants to update.
+	 * Compares the local version number to the one lying on the server. If an update is available
+	 * the user will be asked if he wants to update.
 	 */
 	private static void checkVersion()
 	{
-		if (Objects.nonNull(remoteDataService))
-		{// Connection with server was not successful
-			try
-			{
-				final String localVersion = Hashing.verifyChecksum(getOwnJarFile().toString());
-				final String remoteVersion = remoteUpdateService.getLatestVersionChecksum();
 
-				if (!localVersion.equals(remoteVersion))
-				{
-					Platform.runLater(() ->
-					{
-						final TrayNotification notification = new TrayNotificationBuilder()
-								.title("Update Available")
-								.message("Click here to update to the latest version. Not updating might lead to problems.")
-								.animation(Animations.SLIDE)
-								.build();
+		if (!UpdateUtil.isUpToDate())
+		{
+			Platform.runLater(() ->
+			{
+				final TrayNotification notification = new TrayNotificationBuilder()
+						.title("Update Available")
+						.message("Click here to update to the latest version. Not updating might lead to problems.")
+						.animation(Animations.SLIDE)
+						.build();
 
-						notification.setOnMouseClicked(__ -> updateLauncher());
-						notification.showAndWait();
-					});
-				}
-			}
-			catch (final FileNotFoundException notFound)
-			{
-				Logging.logger().log(Level.INFO, "Couldn't retrieve Update Info, the client is most likely being run in an ide.", notFound);
-			}
-			catch (final NoSuchAlgorithmException nonExistentAlgorithm)
-			{
-				Logging.logger().log(Level.INFO, "The used Hashing-Algorithm doesan't exist.", nonExistentAlgorithm);
-			}
-			catch (final IOException updateException)
-			{
-				Logging.logger().log(Level.SEVERE, "Couldn't retrieve Update Info.", updateException);
-			}
+				notification.setOnMouseClicked(__ -> updateLauncher());
+				notification.showAndWait();
+			});
 		}
+
 	}
 
 	/**
@@ -362,7 +277,8 @@ public class Client extends Application
 	{
 		try
 		{
-			final URI url = new URI(remoteUpdateService.getLatestVersionURL());
+			final String updateUrl = UpdateUtil.getLatestVersionURL();
+			final URI url = new URI(updateUrl);
 			FileUtil.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
 			ClientProperties.setProperty(Property.SHOW_CHANGELOG, true);
 			selfRestart();
@@ -420,18 +336,6 @@ public class Client extends Application
 	 */
 	public static void main(final String[] args)
 	{
-		if (args.length >= 2)
-		{
-			for (int i = 0; i < args.length; i++)
-			{
-				final String arg = args[i];
-				if (arg.equals("-s") || arg.equals("-server"))
-				{
-					serverToConnectTo = args[i + 1];
-				}
-			}
-		}
-
 		Application.launch(args);
 	}
 

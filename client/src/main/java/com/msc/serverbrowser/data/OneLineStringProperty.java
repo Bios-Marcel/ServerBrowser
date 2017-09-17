@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.entities;
+package com.msc.serverbrowser.data;
 
 import java.util.Objects;
 
@@ -13,11 +13,18 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class OneLineStringProperty extends SimpleStringProperty
 {
+	/**
+	 * Default Constructor
+	 */
 	public OneLineStringProperty()
 	{
 		super();
 	}
 
+	/**
+	 * @param initialValue
+	 *            the initial value for this property
+	 */
 	public OneLineStringProperty(final String initialValue)
 	{
 		super(replaceLineBreaks(initialValue));

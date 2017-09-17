@@ -3,6 +3,7 @@ package com.msc.serverbrowser.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.msc.serverbrowser.entities.SampServer;
+import com.msc.serverbrowser.data.SampServer;
 
 public class ServerUtil
 {
@@ -44,13 +45,10 @@ public class ServerUtil
 		return servers;
 	}
 
-	private static String readUrl(final String urlString) throws Exception
+	private static String readUrl(final String urlString) throws MalformedURLException, IOException
 	{
-		BufferedReader reader = null;
-		try
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(urlString).openStream())))
 		{
-			final URL url = new URL(urlString);
-			reader = new BufferedReader(new InputStreamReader(url.openStream()));
 			final StringBuffer buffer = new StringBuffer();
 			int read;
 			final char[] chars = new char[1024];
@@ -61,16 +59,9 @@ public class ServerUtil
 
 			return buffer.toString();
 		}
-		finally
-		{
-			if (reader != null)
-			{
-				reader.close();
-			}
-		}
 	}
 
-	public static List<SampServer> retrieveAnnouncedServers() throws Exception
+	public static List<SampServer> retrieveAnnouncedServers() throws MalformedURLException, IOException
 	{
 		final List<SampServer> servers = new ArrayList<>();
 		final String json = readUrl("http://api.samp.southcla.ws/v1/servers");

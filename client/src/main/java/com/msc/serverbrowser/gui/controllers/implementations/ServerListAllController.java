@@ -1,19 +1,12 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
-import java.util.zip.GZIPInputStream;
 
-import com.msc.serverbrowser.Client;
-import com.msc.serverbrowser.entities.SampServer;
-import com.msc.serverbrowser.entities.SampServerSerializeable;
+import com.msc.serverbrowser.data.SampServer;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.ServerUtil;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -27,54 +20,24 @@ public class ServerListAllController extends ServerListControllerMain
 {
 	private Thread serverLookup;
 
-	private static Object deserialzieAndDecompress(final byte[] data)
-	{
-		try (final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
-				final GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
-				final ObjectInputStream objectInputStream = new ObjectInputStream(gzipInputStream);)
-		{
-			final Object object = objectInputStream.readObject();
-			return object;
-		}
-		catch (final IOException | ClassNotFoundException exception)
-		{
-			Logging.logger().log(Level.SEVERE, "Error deserializing and decompressing data", exception);
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize()
 	{
 		super.initialize();
 
-		serverTable.setPlaceholder(new Label("Loading server list, please wait a moment."));
+		serverTable.setPlaceholder(new Label("Fetching servers, please wait a moment."));
 
 		serverLookup = new Thread(() ->
 		{
-
-			if (Objects.nonNull(Client.remoteDataService))
+			try
 			{
-				try
-				{
-					final byte[] serializedData = Client.remoteDataService.getAllServers();
-					final List<SampServerSerializeable> serializedServers = (List<SampServerSerializeable>) deserialzieAndDecompress(serializedData);
-
-					servers.addAll(serializedServers.stream()
-							.map(SampServer::new)
-							.collect(Collectors.toSet()));
-					Platform.runLater(() -> serverTable.refresh());
-				}
-				catch (final RemoteException exception)
-				{
-					Logging.logger().log(Level.SEVERE, "Couldn't retrieve data from server.", exception);
-					Platform.runLater(() -> serverTable.setPlaceholder(new Label("Server connection couldn't be established.")));
-				}
+				servers.addAll(ServerUtil.retrieveAnnouncedServers());
+				Platform.runLater(() -> serverTable.refresh());
 			}
-			else
+			catch (final IOException exception)
 			{
-				Platform.runLater(() -> serverTable.setPlaceholder(new Label("Server connection couldn't be established.")));
+				Logging.logger().log(Level.SEVERE, "Couldn't retrieve data from announce api.", exception);
+				Platform.runLater(() -> serverTable.setPlaceholder(new Label("Couldn't fetch servers")));
 			}
 
 			Platform.runLater(() -> updateGlobalInfo());

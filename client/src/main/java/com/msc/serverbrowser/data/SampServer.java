@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.entities;
+package com.msc.serverbrowser.data;
 
 import java.util.Objects;
 
@@ -26,21 +26,6 @@ public class SampServer
 	{
 		addressProperty.set(address);
 		portProperty.set(port);
-	}
-
-	public SampServer(final SampServerSerializeable server)
-	{
-		hostnameProperty.set(server.getHostname());
-		addressProperty.set(server.getAddress());
-		portProperty.set(server.getPort());
-		playersProperty.set(server.getPlayers());
-		maxPlayersProperty.set(server.getMaxPlayers());
-		modeProperty.set(server.getMode());
-		languageProperty.set(server.getLanguage());
-		lagcompProperty.set(server.getLagcomp());
-		versionProperty.set(server.getVersion());
-		websiteProperty.set(server.getWebsite());
-		updatePlayersAndMaxPlayers();
 	}
 
 	public StringProperty hostnameProperty()

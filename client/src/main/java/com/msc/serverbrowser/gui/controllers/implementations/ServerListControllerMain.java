@@ -15,11 +15,11 @@ import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.data.Favourites;
-import com.msc.serverbrowser.entities.Player;
-import com.msc.serverbrowser.entities.SampServer;
+import com.msc.serverbrowser.data.Player;
+import com.msc.serverbrowser.data.SampServer;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
-import com.msc.serverbrowser.query.SampQuery;
 import com.msc.serverbrowser.util.GTA;
+import com.msc.serverbrowser.util.SampQuery;
 import com.msc.serverbrowser.util.StringUtil;
 import com.msc.serverbrowser.util.windows.OSUtil;
 

@@ -22,7 +22,8 @@ public enum Property
 	ALLOW_CLOSE_GTA(10, false, Boolean.class),
 	ALLOW_CLOSE_SAMP(11, false, Boolean.class),
 	SHOW_CHANGELOG_AFTER_UPDATE(12, true, Boolean.class),
-	DEVELOPMENT(13, false, Boolean.class);
+	DEVELOPMENT(13, false, Boolean.class),
+	LAST_TAG_NAME(14, "1.3", String.class);
 
 	private int id;
 

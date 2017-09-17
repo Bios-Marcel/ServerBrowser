@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.entities;
+package com.msc.serverbrowser.data;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

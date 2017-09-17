@@ -10,10 +10,14 @@ import java.util.logging.Level;
 import com.msc.serverbrowser.data.SQLDatabase;
 import com.msc.serverbrowser.logging.Logging;
 
+/**
+ * @author Marcel
+ * @since 17.09.2017
+ */
 public class ClientProperties
 {
 	/**
-	 * Returns a proeprties default as an integer if the datatype is correct.
+	 * Returns a properties default as an integer if the datatype is correct.
 	 *
 	 * @param property
 	 *            the property to return its default valeu as an integer
@@ -26,6 +30,13 @@ public class ClientProperties
 		return Integer.parseInt(property.defaultValue());
 	}
 
+	/**
+	 * Retrieves a value for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @return the value for the given {@link Property}
+	 */
 	public static String getPropertyAsString(final Property property)
 	{
 		String value = property.defaultValue();
@@ -52,6 +63,13 @@ public class ClientProperties
 
 	}
 
+	/**
+	 * Retrieves a value for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @return the value for the given {@link Property}
+	 */
 	public static Integer getPropertyAsInt(final Property property)
 	{
 		checkDataType(property, Integer.class);
@@ -72,6 +90,13 @@ public class ClientProperties
 		return value;
 	}
 
+	/**
+	 * Retrieves a value for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @return the value for the given {@link Property}
+	 */
 	public static Float getPropertyAsFloat(final Property property)
 	{
 		checkDataType(property, Float.class);
@@ -92,6 +117,13 @@ public class ClientProperties
 		return value;
 	}
 
+	/**
+	 * Retrieves a value for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @return the value for the given {@link Property}
+	 */
 	public static Boolean getPropertyAsBoolean(final Property property)
 	{
 		checkDataType(property, Boolean.class);
@@ -107,6 +139,14 @@ public class ClientProperties
 		}
 	}
 
+	/**
+	 * Sets a value for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @param value
+	 *            the value that will be set
+	 */
 	public static void setProperty(final Property property, final Object value)
 	{
 		setProperty(property, value, false);
@@ -132,24 +172,56 @@ public class ClientProperties
 		SQLDatabase.getInstance().execute(statement);
 	}
 
+	/**
+	 * Sets a value as an {@link Float} for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @param value
+	 *            the value that will be set
+	 */
 	public static void setProperty(final Property property, final Float value)
 	{
 		nullCheck(value);
 		setProperty(property, (Object) value);
 	}
 
+	/**
+	 * Sets a value as an {@link Integer} for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @param value
+	 *            the value that will be set
+	 */
 	public static void setProperty(final Property property, final Integer value)
 	{
 		nullCheck(value);
 		setProperty(property, (Object) value);
 	}
 
+	/**
+	 * Sets a value as a {@link Boolean} for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @param value
+	 *            the value that will be set
+	 */
 	public static void setProperty(final Property property, final Boolean value)
 	{
 		nullCheck(value);
 		setProperty(property, (Object) value);
 	}
 
+	/**
+	 * Sets a value as a {@link String} for a specific key from {@link Property}.
+	 *
+	 * @param property
+	 *            the key
+	 * @param value
+	 *            the value that will be set
+	 */
 	public static void setProperty(final Property property, final String value)
 	{
 		setProperty(property, (Object) value);

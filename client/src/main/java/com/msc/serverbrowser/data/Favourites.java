@@ -14,10 +14,8 @@ import java.util.Objects;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.constants.PathConstants;
-import com.msc.serverbrowser.entities.SampServer;
-import com.msc.serverbrowser.entities.SampServerBuilder;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.query.SampQuery;
+import com.msc.serverbrowser.util.SampQuery;
 
 /**
  * Contains static methods for setting and retrieving favourite servers

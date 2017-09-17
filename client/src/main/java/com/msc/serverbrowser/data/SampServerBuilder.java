@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.entities;
+package com.msc.serverbrowser.data;
 
 public class SampServerBuilder
 {
