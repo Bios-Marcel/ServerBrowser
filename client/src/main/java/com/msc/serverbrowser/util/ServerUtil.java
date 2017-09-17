@@ -63,10 +63,16 @@ public class ServerUtil
 
 	public static List<SampServer> retrieveAnnouncedServers() throws MalformedURLException, IOException
 	{
+		return fetchFromAPI("http://api.samp.southcla.ws/v1/servers");
+	}
+
+	private static List<SampServer> fetchFromAPI(final String apiAddress) throws MalformedURLException, IOException
+	{
 		final List<SampServer> servers = new ArrayList<>();
-		final String json = readUrl("http://api.samp.southcla.ws/v1/servers");
+		final String json = readUrl(apiAddress);
 
 		final JsonArray jsonArray = Json.parse(json).asArray();
+
 		jsonArray.forEach(object ->
 		{
 			final JsonObject jsonServerData = object.asObject();

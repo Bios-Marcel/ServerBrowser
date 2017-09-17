@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
@@ -29,12 +28,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
+ * This is the main class of the client.
+ *
+ * @author Marcel
  * @since 02.07.2017
  */
 public class Client extends Application
@@ -48,14 +49,11 @@ public class Client extends Application
 	 */
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	/**
-	 * Windows Registry.
-	 */
-	public static Registry registry;
-
 	private Stage stage;
 
 	private static Client instance;
+
+	private MainController mainController;
 
 	/**
 	 * @return the clients singleton instance
@@ -86,8 +84,8 @@ public class Client extends Application
 	{
 		final FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource(PathConstants.VIEW_PATH + "Main.fxml"));
-		final MainController controller = new MainController();
-		loader.setController(controller);
+		mainController = new MainController();
+		loader.setController(mainController);
 		try
 		{
 			final Parent root = loader.load();
@@ -112,7 +110,7 @@ public class Client extends Application
 			System.exit(0);
 		}
 
-		return controller;
+		return mainController;
 	}
 
 	/**
@@ -134,8 +132,6 @@ public class Client extends Application
 		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
 		primaryStage.setResizable(true);
 
-		final Scene primaryScene = primaryStage.getScene();
-
 		primaryStage.setOnCloseRequest(close ->
 
 		{
@@ -145,11 +141,6 @@ public class Client extends Application
 		});
 
 		primaryStage.show();
-
-		// Set the preferred with of the root container to size the window correctly
-		final Pane root = (Pane) primaryScene.getRoot();
-		root.setPrefHeight(480);
-		root.setPrefWidth(785);
 
 		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
@@ -173,7 +164,7 @@ public class Client extends Application
 	 *             <li>Completly new dialog</li>
 	 *             <li>Open textfile</li>
 	 *             <li>Open Webpage (Github Release)</li>
-	 *             <li>Show mardown formatted file</li>
+	 *             <li>Show markdown formatted file</li>
 	 *             </ul>
 	 *             </p>
 	 */
@@ -348,5 +339,13 @@ public class Client extends Application
 	public void setTitle(final String title)
 	{
 		stage.setTitle(title);
+	}
+
+	/**
+	 * @return the {@link MainController} that is currently in use
+	 */
+	public MainController getMainController()
+	{
+		return mainController;
 	}
 }

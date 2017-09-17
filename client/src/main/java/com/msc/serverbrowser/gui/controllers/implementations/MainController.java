@@ -175,6 +175,22 @@ public class MainController implements ViewController
 		}
 	}
 
+	/**
+	 * @return the current view
+	 */
+	public Views getActiveView()
+	{
+		return activeView;
+	}
+
+	/**
+	 * Reloads the current view.
+	 */
+	public void reloadView()
+	{
+		loadView(activeView);
+	}
+
 	@Override
 	public void onClose()
 	{

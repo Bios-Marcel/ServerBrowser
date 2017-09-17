@@ -26,4 +26,5 @@ public class PathConstants
 	public static final String	SAMP_CFG		= SAMP_PATH + File.separator + "sa-mp.cfg";
 	public static final String	SAMP_CHATLOG	= SAMP_PATH + "\\chatlog.txt";
 	public static final String	SAMP_USERDATA	= SAMP_PATH + "\\USERDATA.DAT";
+	public static final String	OUTPUT_ZIP		= SAMPEX_PATH + File.separator + "temp.zip";
 }

@@ -35,16 +35,15 @@ public class OSUtil
 	public static void browse(final String urlAsString)
 	{
 		final Desktop desktop = Desktop.getDesktop();
-		final String fixedUrl = StringUtil.fixUrlIfNecessary(urlAsString);
 
 		try
 		{
-			final URL url = new URL(fixedUrl);
+			final URL url = new URL(StringUtil.fixUrlIfNecessary(urlAsString));
 			desktop.browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't visit website '" + urlAsString + "' (" + fixedUrl + ").", exception);
+			Logging.logger().log(Level.WARNING, "Couldn't visit website '" + urlAsString + "'", exception);
 		}
 	}
 }

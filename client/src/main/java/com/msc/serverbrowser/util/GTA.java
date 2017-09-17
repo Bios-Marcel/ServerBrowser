@@ -17,6 +17,7 @@ import com.github.sarxos.winreg.WindowsRegistry;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
+import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.windows.OSUtil;
 
@@ -132,7 +133,7 @@ public class GTA
 	 *
 	 * @return {@link Optional} of installed versions version number or an empty {@link Optional}
 	 */
-	public static Optional<String> getInstalledVersion()
+	public static Optional<SAMPVersion> getInstalledVersion()
 	{
 		if (!OSUtil.isWindows())
 		{// OS not supported
@@ -157,19 +158,19 @@ public class GTA
 		switch ((int) file.length())
 		{
 			case 2199552:
-				return Optional.of("0.3.7");
+				return Optional.of(SAMPVersion.ZeroThreeSeven);
 			case 1093632:
-				return Optional.of("0.3z");
+				return Optional.of(SAMPVersion.ZeroThreeZ);
 			case 2084864:
-				return Optional.of("0.3x");
+				return Optional.of(SAMPVersion.ZeroThreeX);
 			case 1998848:
-				return Optional.of("0.3e");
+				return Optional.of(SAMPVersion.ZeroThreeE);
 			case 2015232:
-				return Optional.of("0.3d");
+				return Optional.of(SAMPVersion.ZeroThreeD);
 			case 1511424:
-				return Optional.of("0.3c");
+				return Optional.of(SAMPVersion.ZeroThreeC);
 			case 610304:
-				return Optional.of("0.3a");
+				return Optional.of(SAMPVersion.ZeroThreeA);
 			default:
 				return Optional.empty();
 		}

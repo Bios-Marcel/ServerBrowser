@@ -243,10 +243,19 @@ public abstract class ServerListControllerMain implements ViewController
 	@FXML
 	private void onClickAddToFavourites()
 	{
-		if (Objects.nonNull(addressTextField.getText()))
+		final String address = addressTextField.getText();
+		if (Objects.nonNull(address) && !address.isEmpty())
 		{
 			final String[] ipAndPort = addressTextField.getText().split("[:]");
-			if (ipAndPort.length == 2 && validatePort(ipAndPort[1]))
+			if (ipAndPort.length == 1)
+			{
+				final SampServer newServer = Favourites.addServerToFavourites(ipAndPort[0], 7777);
+				if (!servers.contains(newServer))
+				{
+					servers.add(newServer);
+				}
+			}
+			else if (ipAndPort.length == 2 && validatePort(ipAndPort[1]))
 			{
 				final SampServer newServer = Favourites.addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 				if (!servers.contains(newServer))
@@ -326,8 +335,12 @@ public abstract class ServerListControllerMain implements ViewController
 
 			if (!versionFilter.getSelectionModel().isEmpty())
 			{
-				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString();
-				doesVersionFilterApply = server.getVersion().toLowerCase().contains(versionFilterSetting.toLowerCase());
+				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString().toLowerCase();
+
+				// TODO(MSC) Only necessary because i don't retrieve the version when querying
+				// southclaws api. I should request a change in the api.
+				final String serverVersion = Objects.isNull(server.getVersion()) ? "" : server.getVersion();
+				doesVersionFilterApply = serverVersion.toLowerCase().contains(versionFilterSetting);
 			}
 
 			final String nameFilterSetting = nameFilter.getText().toLowerCase();
@@ -546,7 +559,7 @@ public abstract class ServerListControllerMain implements ViewController
 							if (StringUtil.isValidURL(websiteFixed))
 							{
 								websiteLink.setUnderline(true);
-								websiteLink.setOnAction(hyperlinkTemp -> OSUtil.browse(websiteFixed));
+								websiteLink.setOnAction(__ -> OSUtil.browse(server.getWebsite()));
 							}
 
 							if (playerList.isEmpty())
