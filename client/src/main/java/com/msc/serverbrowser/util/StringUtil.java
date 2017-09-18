@@ -12,12 +12,11 @@ public class StringUtil
 	 */
 	public static String fixUrlIfNecessary(final String url)
 	{
-		String website = url;
-		if (!website.startsWith("http://") || !website.startsWith("https://"))
+		if (!url.startsWith("http://") || !url.startsWith("https://"))
 		{
-			website = "http://" + website;
+			return "http://" + url;
 		}
-		return website;
+		return url;
 	}
 
 	/**
@@ -29,7 +28,7 @@ public class StringUtil
 	 */
 	public static boolean stringToBoolean(final String toBeConverted)
 	{
-		return toBeConverted.equalsIgnoreCase("true") || toBeConverted.equals("1");
+		return "true".equalsIgnoreCase(toBeConverted) || "1".equals(toBeConverted);
 	}
 
 	public static String getHexChars(final String string)

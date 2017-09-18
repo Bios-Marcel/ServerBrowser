@@ -490,9 +490,7 @@ public abstract class ServerListControllerMain implements ViewController
 	{
 		playerTable.getItems().clear();
 		playerTable.setPlaceholder(new Label("Retrieving..."));
-
 		serverAddress.setText(server.getAddress() + ":" + server.getPort());
-
 		serverLagcomp.setText("Retrieving ...");
 		serverPing.setText("Retrieving ...");
 		serverPassword.setText("Retrieving ...");
@@ -510,9 +508,7 @@ public abstract class ServerListControllerMain implements ViewController
 		{
 			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort()))
 			{
-
 				final Optional<String[]> infoOptional = query.getBasicServerInfo();
-
 				final Optional<Map<String, String>> serverRulesOptional = query.getServersRules();
 
 				if (infoOptional.isPresent() && serverRulesOptional.isPresent())
@@ -520,10 +516,10 @@ public abstract class ServerListControllerMain implements ViewController
 					final String[] info = infoOptional.get();
 					final Map<String, String> serverRules = serverRulesOptional.get();
 
-					final int players = Integer.parseInt(info[1]);
+					final int activePlayers = Integer.parseInt(info[1]);
 					final int maxPlayers = Integer.parseInt(info[2]);
 
-					server.setPlayers(players);
+					server.setPlayers(activePlayers);
 					server.setMaxPlayers(maxPlayers);
 					server.setHostname(info[3]);
 					server.setMode(info[4]);
@@ -534,15 +530,7 @@ public abstract class ServerListControllerMain implements ViewController
 					server.setMap(serverRules.get("mapname"));
 
 					final ObservableList<Player> playerList = FXCollections.observableArrayList();
-
-					query.getBasicPlayerInfo().ifPresent(basicPlayers ->
-					{
-						for (final String[] basicPlayer : basicPlayers)
-						{
-							playerList.add(new Player(basicPlayer[0], basicPlayer[1]));
-						}
-					});
-
+					query.getBasicPlayerInfo().ifPresent(players -> playerList.addAll(players));
 					final long ping = query.getPing();
 
 					if (!serverInfoUpdateThread.isInterrupted())
@@ -587,22 +575,24 @@ public abstract class ServerListControllerMain implements ViewController
 			{
 				if (!serverInfoUpdateThread.isInterrupted())
 				{
-					Platform.runLater(() ->
-					{
-						serverPing.setText("Server Offline");
-						serverPassword.setText("");
-						mapLabel.setText("");
-						serverLagcomp.setText("");
-						websiteLink.setText("");
-						// Not using setVisible because i dont want the items to resize or anything
-						websiteLink.setOnAction(null);
-						playerTable.setPlaceholder(new Label("Couldn't retrieve players, server is offline."));
-					});
+					Platform.runLater(() -> displayOfflineInformation());
 				}
 			}
 		});
 
 		serverInfoUpdateThread.start();
+	}
+
+	private void displayOfflineInformation()
+	{
+		serverPing.setText("Server Offline");
+		serverPassword.setText("");
+		mapLabel.setText("");
+		serverLagcomp.setText("");
+		websiteLink.setText("");
+		// Not using setVisible because i dont want the items to resize or anything
+		websiteLink.setOnAction(null);
+		playerTable.setPlaceholder(new Label("Server is offline."));
 	}
 
 	/**
