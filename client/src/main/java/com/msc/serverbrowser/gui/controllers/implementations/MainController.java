@@ -10,6 +10,7 @@ import com.msc.serverbrowser.gui.Views;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -189,6 +190,6 @@ public class MainController implements ViewController
 	public void onClose()
 	{
 		ClientProperties.setProperty(Property.LAST_VIEW, activeView.getId());
-		System.exit(0); // Make sure that the application doesnt stay open for some reason
+		Platform.exit(); // Make sure that the application doesnt stay open for some reason
 	}
 }

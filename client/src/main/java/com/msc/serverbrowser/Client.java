@@ -43,17 +43,18 @@ public class Client extends Application
 	/**
 	 * Application icon that can be used everywhere where necessary.
 	 */
-	public static final Image	APPLICATION_ICON	= new Image(Client.class.getResourceAsStream("/com/msc/serverbrowser/icons/icon.png"));
+	public static final Image	APPLICATION_ICON	= new Image(
+			Client.class.getResourceAsStream("/com/msc/serverbrowser/icons/icon.png"));
 	/**
 	 * Name of the application, as displayed to people.
 	 */
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private Stage stage;
+	private Stage				stage;
 
-	private static Client instance;
+	private static Client		instance;
 
-	private MainController mainController;
+	private MainController		mainController;
 
 	/**
 	 * @return the clients singleton instance
@@ -107,7 +108,7 @@ public class Client extends Application
 		catch (final Exception exception)
 		{
 			Logging.logger().log(Level.SEVERE, "Couldn't load UI", exception);
-			System.exit(0);
+			Platform.exit();
 		}
 
 		return mainController;
@@ -142,7 +143,8 @@ public class Client extends Application
 
 		primaryStage.show();
 
-		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG) && ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
+		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG)
+				&& ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
 		{
 			final TrayNotificationBuilder builder = new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.INFORMATION)
@@ -187,14 +189,16 @@ public class Client extends Application
 	}
 
 	/**
-	 * Displays a dialog that tells the user that the server connection couldn't be established.
+	 * Displays a dialog that tells the user that the server connection couldn't be
+	 * established.
 	 */
 	public static void displayNoConnectionDialog()
 	{
 		new TrayNotificationBuilder()
 				.type(NotificationTypeImplementations.ERROR)
 				.title("Server connection could not be established")
-				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
+				.message(
+						"The server connection doesn't seeem to be established, try again later, for more information check the log files.")
 				.animation(Animations.SLIDE)
 				.build().showAndDismiss(Duration.seconds(10));
 	}
@@ -224,7 +228,8 @@ public class Client extends Application
 	}
 
 	/**
-	 * Creates files and folders that are necessary for the application to run properly and migrates
+	 * Creates files and folders that are necessary for the application to run
+	 * properly and migrates
 	 * old xml data.
 	 */
 	private static void initClient()
@@ -238,7 +243,8 @@ public class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an update is available
+	 * Compares the local version number to the one lying on the server. If an
+	 * update is available
 	 * the user will be asked if he wants to update.
 	 */
 	private static void checkVersion()
@@ -311,7 +317,7 @@ public class Client extends Application
 		try
 		{
 			builder.start();
-			System.exit(0);
+			Platform.exit();
 		}
 		catch (final IOException exception)
 		{

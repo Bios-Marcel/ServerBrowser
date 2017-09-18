@@ -56,85 +56,94 @@ import javafx.util.Duration;
  */
 public abstract class ServerListControllerMain implements ViewController
 {
-	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
+	private final ObjectProperty<Predicate<? super SampServer>>	filterProperty					= new SimpleObjectProperty<>();
 
 	@FXML
-	private TextField addressTextField;
+	private TextField											addressTextField;
 
-	private final static StringProperty serverAddressProperty = new SimpleStringProperty();
+	private final static StringProperty							serverAddressProperty			= new SimpleStringProperty();
 
 	/**
-	 * This Table contains all available servers / favourite servers, depending on the active view.
+	 * This Table contains all available servers / favourite servers, depending on
+	 * the active view.
 	 */
 	@FXML
-	protected TableView<SampServer> serverTable;
+	protected TableView<SampServer>								serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		playerCount;
+	protected Label												playerCount;
 	/**
 	 * Displays the amount of all slots on all Servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		slotCount;
+	protected Label												slotCount;
 	/**
 	 * Number of servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		serverCount;
+	protected Label												serverCount;
 	@FXML
-	private TextField	serverAddress;
+	private TextField											serverAddress;
 	@FXML
-	private Label		serverLagcomp;
+	private Label												serverLagcomp;
 	@FXML
-	private Label		serverPing;
+	private Label												serverPing;
 	@FXML
-	private Label		serverPassword;
+	private Label												serverPassword;
 	@FXML
-	private Label		mapLabel;
+	private Label												mapLabel;
 	@FXML
-	private Hyperlink	websiteLink;
+	private Hyperlink											websiteLink;
 
 	@FXML
-	private TableView<Player>				playerTable;
+	private TableView<Player>									playerTable;
 	@FXML
-	private TableColumn<SampServer, String>	columnPlayers;
+	private TableColumn<SampServer, String>						columnPlayers;
 
 	/**
 	 * When clicked, all selected servers will be added to favourites.
 	 */
-	protected MenuItem			addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
+	protected MenuItem											addToFavouritesMenuItem			= new MenuItem(
+			"Add to Favourites");
 	/**
 	 * When clicked, all selected servers will be removed from favourites.
 	 */
-	protected MenuItem			removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
-	private final MenuItem		visitWebsiteMenuItem			= new MenuItem("Visit Website");
-	private final MenuItem		connectMenuItem					= new MenuItem("Connect to Server");
-	private final MenuItem		copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
-	private final ContextMenu	menu							= new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
+	protected MenuItem											removeFromFavouritesMenuItem	= new MenuItem(
+			"Remove from Favourites");
+	private final MenuItem										visitWebsiteMenuItem			= new MenuItem(
+			"Visit Website");
+	private final MenuItem										connectMenuItem					= new MenuItem(
+			"Connect to Server");
+	private final MenuItem										copyIpAddressAndPortMenuItem	= new MenuItem(
+			"Copy IP Address and Port");
+	private final ContextMenu									menu							= new ContextMenu(
+			connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem,
+			copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	@FXML
-	private CheckBox			regexCheckBox;
+	private CheckBox											regexCheckBox;
 	@FXML
-	private TextField			nameFilter;
+	private TextField											nameFilter;
 	@FXML
-	private TextField			modeFilter;
+	private TextField											modeFilter;
 	@FXML
-	private TextField			languageFilter;
+	private TextField											languageFilter;
 	@FXML
-	private ComboBox<String>	versionFilter;
+	private ComboBox<String>									versionFilter;
 
-	private int	playersPlaying	= 0;
-	private int	maxSlots		= 0;
+	private int													playersPlaying					= 0;
+	private int													maxSlots						= 0;
 
 	/**
 	 * Holds all servers that might be displayed in {@link #serverTable}.
 	 */
-	protected ObservableList<SampServer> servers = FXCollections.observableArrayList();
+	protected ObservableList<SampServer>						servers							= FXCollections
+			.observableArrayList();
 
-	private static Thread serverInfoUpdateThread;
+	private static Thread										serverInfoUpdateThread;
 
 	@Override
 	public void initialize()
@@ -257,7 +266,8 @@ public abstract class ServerListControllerMain implements ViewController
 			}
 			else if (ipAndPort.length == 2 && validatePort(ipAndPort[1]))
 			{
-				final SampServer newServer = Favourites.addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
+				final SampServer newServer = Favourites.addServerToFavourites(ipAndPort[0],
+						Integer.parseInt(ipAndPort[1]));
 				if (!servers.contains(newServer))
 				{
 					servers.add(newServer);
@@ -268,7 +278,8 @@ public abstract class ServerListControllerMain implements ViewController
 				new TrayNotificationBuilder()
 						.type(NotificationTypeImplementations.ERROR)
 						.title("Add to favourites")
-						.message("Server couldn't be added to favourites, because the address doesn't seem to be valid.")
+						.message(
+								"Server couldn't be added to favourites, because the address doesn't seem to be valid.")
 						.animation(Animations.POPUP)
 						.build().showAndDismiss(Duration.seconds(10));
 			}
@@ -335,7 +346,8 @@ public abstract class ServerListControllerMain implements ViewController
 
 			if (!versionFilter.getSelectionModel().isEmpty())
 			{
-				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString().toLowerCase();
+				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString()
+						.toLowerCase();
 
 				// TODO(MSC) Only necessary because i don't retrieve the version when querying
 				// southclaws api. I should request a change in the api.
@@ -413,31 +425,32 @@ public abstract class ServerListControllerMain implements ViewController
 		{
 			final MenuItem clickedItem = (MenuItem) action.getTarget();
 
-			if (clickedItem == connectMenuItem)
+			if (clickedItem.equals(connectMenuItem))
 			{
 				final SampServer server = serverList.get(0);
 				tryToConnect(server.getAddress(), server.getPort());
 			}
-			else if (clickedItem == visitWebsiteMenuItem)
+			else if (clickedItem.equals(visitWebsiteMenuItem))
 			{
 				final SampServer server = serverList.get(0);
 				OSUtil.browse(server.getWebsite());
 			}
-			else if (clickedItem == addToFavouritesMenuItem)
+			else if (clickedItem.equals(addToFavouritesMenuItem))
 			{
 				serverList.forEach(Favourites::addServerToFavourites);
 			}
-			else if (clickedItem == removeFromFavouritesMenuItem)
+			else if (clickedItem.equals(removeFromFavouritesMenuItem))
 			{
 				serverList.forEach(Favourites::removeServerFromFavourites);
 				servers.removeAll(serverList);
 			}
-			else if (clickedItem == copyIpAddressAndPortMenuItem)
+			else if (clickedItem.equals(copyIpAddressAndPortMenuItem))
 			{
 
 				final SampServer server = serverList.get(0);
 				System.out.println(StringUtil.getHexChars(server.getMode()));
-				final StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
+				final StringSelection stringSelection = new StringSelection(
+						server.getAddress() + ":" + server.getPort());
 				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, null);
 			}
@@ -447,7 +460,8 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	/**
-	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a
+	 * Connects to a server, depending on if it is passworded, the user will be
+	 * asked to enter a
 	 * password. If the server is not reachable the user can not connect.
 	 *
 	 * @param address
@@ -482,7 +496,8 @@ public abstract class ServerListControllerMain implements ViewController
 	}
 
 	/**
-	 * Updates the data that the {@link SampServer} holds and displays the correct values on the UI.
+	 * Updates the data that the {@link SampServer} holds and displays the correct
+	 * values on the UI.
 	 *
 	 * @param server
 	 *            the {@link SampServer} object to update locally
@@ -570,7 +585,8 @@ public abstract class ServerListControllerMain implements ViewController
 
 							if (playerTable.getItems().isEmpty() && server.getPlayers() >= 100)
 							{
-								final Label label = new Label("Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
+								final Label label = new Label(
+										"Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
 								label.setWrapText(true);
 								label.setAlignment(Pos.CENTER);
 								playerTable.setPlaceholder(label);

@@ -54,8 +54,10 @@ class FileUtilityTest
 	}
 
 	/**
-	 * Tests that a given ZIP archive has the correct content. The test data needs to have a
-	 * corresponding "*.sha512sum" in the same folder with gets used to validate the file content
+	 * Tests that a given ZIP archive has the correct content. The test data needs
+	 * to have a
+	 * corresponding "*.sha512sum" in the same folder with gets used to validate the
+	 * file content
 	 * survived the zipping without alteration.
 	 *
 	 * @param testDataName
@@ -91,7 +93,8 @@ class FileUtilityTest
 			final String name = split[1].substring(1);
 			final Path pathToUnzippedFile = get(tempDirectory.toString(), name);
 
-			assertTrue(exists(pathToUnzippedFile), "The unzipped file does not exist where expected: " + pathToUnzippedFile + ".");
+			assertTrue(exists(pathToUnzippedFile),
+					"The unzipped file does not exist where expected: " + pathToUnzippedFile + ".");
 
 			final String shaOfUnzipped = toHex(shaDigester.digest(readAllBytes(pathToUnzippedFile)));
 			assertEquals(sha512, shaOfUnzipped);
@@ -106,7 +109,7 @@ class FileUtilityTest
 	 *            some byte array
 	 * @return lower case hex dump with leading zeros intact
 	 */
-	static String toHex(final byte[] bytes)
+	private static String toHex(final byte[] bytes)
 	{
 		final BigInteger bigInteger = new BigInteger(1, bytes);
 		return String.format("%0" + (bytes.length << 1) + "x", bigInteger);
