@@ -36,7 +36,8 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
- * Controls the Files view which allows you to look at your taken screenshots, your chatlogs and
+ * Controls the Files view which allows you to look at your taken screenshots,
+ * your chatlogs and
  * your saved positions.
  *
  * @author Marcel
@@ -46,27 +47,28 @@ public class FilesController implements ViewController
 {
 	// Screenshots
 	@FXML
-	private StackPane		imageContainer;
+	private StackPane						imageContainer;
 	@FXML
-	private ComboBox<File>	screenshotComboBox;
+	private ComboBox<File>					screenshotComboBox;
 	@FXML
-	private Label			takenValue;
+	private Label							takenValue;
 	@FXML
-	private Label			sizeValue;
+	private Label							sizeValue;
 
-	private File						presentImage;
-	private final ObservableList<File>	screenshots	= FXCollections.observableArrayList();
+	private File							presentImage;
+	private final ObservableList<File>		screenshots		= FXCollections.observableArrayList();
 
 	/**
 	 * Compares {@link File files} depending against their last modified date.
 	 */
-	private static final Comparator<File> fileComparator = (fileOne, fileTwo) -> new Long(fileOne.lastModified()).compareTo(new Long(fileTwo.lastModified()));
+	private static final Comparator<File>	fileComparator	= (fileOne, fileTwo) -> new Long(fileOne.lastModified())
+			.compareTo(new Long(fileTwo.lastModified()));
 
 	// Saved Positions
 
 	// Chatlogs
 	@FXML
-	private TextArea contentTextArea;
+	private TextArea						contentTextArea;
 
 	@Override
 	public void initialize()
@@ -167,7 +169,8 @@ public class FilesController implements ViewController
 		sizeValue.setText(StringUtil.humanReadableByteCount(presentImage.length()));
 		final Instant timeAsInstant = Instant.ofEpochMilli(presentImage.lastModified());
 		final LocalDateTime localDateTime = LocalDateTime.ofInstant(timeAsInstant, ZoneId.systemDefault());
-		final String localDateTimeFormatted = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(localDateTime);
+		final String localDateTimeFormatted = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+				.format(localDateTime);
 		takenValue.setText(localDateTimeFormatted);
 
 		Platform.runLater(() ->
@@ -237,12 +240,13 @@ public class FilesController implements ViewController
 	 *            the {@link File} to create a {@link URI} for
 	 * @return {@link URI} pointing to the passed {@link File}
 	 */
-	private URI pathToImage(final File nextImage)
+	private static URI pathToImage(final File nextImage)
 	{
 		try
 		{
 			final URL url = new URL("file:/" + nextImage.getAbsolutePath());
-			return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+			return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
+					url.getQuery(), url.getRef());
 		}
 		catch (final Exception exception)
 		{

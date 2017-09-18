@@ -13,21 +13,20 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
-import com.msc.serverbrowser.util.Encoding;
-
 /**
  * Provides Methods for retrieving information from a SA-MP Server.
  *
  * @author Marcel
- * @see <a href="http://wiki.sa-mp.com/wiki/Query_Mechanism">Wiki SA-MP - Query Mechanism</a>
+ * @see <a href="http://wiki.sa-mp.com/wiki/Query_Mechanism">Wiki SA-MP - Query
+ *      Mechanism</a>
  */
 public class SampQuery implements AutoCloseable
 {
-	private static final String	PACKET_GET_SERVERINFO			= "i";
-	private static final String	PACKET_GET_RULES				= "r";
-	private static final String	PACKET_MIRROR_CHARACTERS		= "p0101";
-	private static final String	PACKET_GET_BASIC_PLAYERINFO		= "c";
-	private static final String	PACKET_GET_DETAILED_PLAYERINFO	= "d";
+	private static final String		PACKET_GET_SERVERINFO			= "i";
+	private static final String		PACKET_GET_RULES				= "r";
+	private static final String		PACKET_MIRROR_CHARACTERS		= "p0101";
+	private static final String		PACKET_GET_BASIC_PLAYERINFO		= "c";
+	private static final String		PACKET_GET_DETAILED_PLAYERINFO	= "d";
 
 	private final DatagramSocket	socket;
 	private final InetAddress		server;
@@ -35,7 +34,8 @@ public class SampQuery implements AutoCloseable
 	private final int				serverPort;
 
 	/**
-	 * Configures the socket and the address that will be used for doing the queries.
+	 * Configures the socket and the address that will be used for doing the
+	 * queries.
 	 *
 	 * @param serverAddress
 	 *            hostname / ip
@@ -44,7 +44,8 @@ public class SampQuery implements AutoCloseable
 	 * @param timeout
 	 *            the maximum time, that the socket tries connecting
 	 * @throws Exception
-	 *             Thrown if the connection is closed unexpectedly / has never beenopened properly
+	 *             Thrown if the connection is closed unexpectedly / has never
+	 *             beenopened properly
 	 */
 	public SampQuery(final String serverAddress, final int serverPort, final int timeout) throws Exception
 	{
@@ -76,7 +77,8 @@ public class SampQuery implements AutoCloseable
 	 */
 	private void checkConnection() throws Exception
 	{
-		// TODO(MSC) Check if server deactivated querying, since this will only tell if the server
+		// TODO(MSC) Check if server deactivated querying, since this will only tell if
+		// the server
 		// is online, but will still work with servers that have deactivated querying
 		send(PACKET_MIRROR_CHARACTERS);
 		final String reply = receive();
@@ -169,7 +171,8 @@ public class SampQuery implements AutoCloseable
 	 * Returns a two dimensional String array of basic player information.
 	 * </p>
 	 * <p>
-	 * Every entry in the first dimension equals one player. If you were to retrieve one of those,
+	 * Every entry in the first dimension equals one player. If you were to retrieve
+	 * one of those,
 	 * the rest would look the following:
 	 * </p>
 	 * <code>
@@ -217,7 +220,8 @@ public class SampQuery implements AutoCloseable
 	 * Returns a two dimensional String array of detailed player information.
 	 * </p>
 	 * <p>
-	 * Every entry in the first dimension equals one player. If you were to retrieve one of those,
+	 * Every entry in the first dimension equals one player. If you were to retrieve
+	 * one of those,
 	 * the rest would look the following:
 	 * </p>
 	 * <code>
@@ -317,7 +321,8 @@ public class SampQuery implements AutoCloseable
 	 * <li>Byte 11+: Data</li>
 	 * </ul>
 	 * <p>
-	 * Because the Data contains multiple informations that we do not care for as of now, we are
+	 * Because the Data contains multiple informations that we do not care for as of
+	 * now, we are
 	 * setting the byte buffers initial position to eleven.
 	 * </p>
 	 *
@@ -325,7 +330,7 @@ public class SampQuery implements AutoCloseable
 	 *            byte array to be wrapped
 	 * @return the {@link ByteBuffer} that wraps the byte array
 	 */
-	private ByteBuffer wrapReply(final byte[] reply)
+	private static ByteBuffer wrapReply(final byte[] reply)
 	{
 		final ByteBuffer buffer = ByteBuffer.wrap(reply);
 		buffer.order(ByteOrder.LITTLE_ENDIAN);

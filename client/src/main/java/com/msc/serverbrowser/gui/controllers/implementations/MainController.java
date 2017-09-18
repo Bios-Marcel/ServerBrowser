@@ -20,7 +20,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
- * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
+ * Controller for the Main view, e.g. the view that contains the menu bar, the
+ * header and the loaded
  * view (Settings, Servers ...).
  *
  * @author Marcel
@@ -37,32 +38,25 @@ public class MainController implements ViewController
 	private ListView<String>	searchResultsList;
 
 	@FXML
-	private StackPane	menuItemFav;
+	private StackPane			menuItemFav;
 	@FXML
-	private StackPane	menuItemAll;
+	private StackPane			menuItemAll;
 	@FXML
-	private StackPane	menuItemUser;
+	private StackPane			menuItemUser;
 	@FXML
-	private StackPane	menuItemVersion;
+	private StackPane			menuItemVersion;
 	@FXML
-	private StackPane	menuItemFiles;
+	private StackPane			menuItemFiles;
 	@FXML
-	private StackPane	menuItemSettings;
+	private StackPane			menuItemSettings;
 
 	@FXML
-	private ScrollPane	activeViewContainer;
-	private Views		activeView;
+	private ScrollPane			activeViewContainer;
+	private Views				activeView;
 
 	@Override
 	public void initialize()
 	{
-		/**
-		 * Disable Under Development Features
-		 */
-		if (!ClientProperties.getPropertyAsBoolean(Property.DEVELOPMENT))
-		{
-		}
-
 		if (ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
 		{
 			loadView(Views.valueOf(ClientProperties.getPropertyAsInt(Property.LAST_VIEW)));
