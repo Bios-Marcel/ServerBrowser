@@ -14,15 +14,11 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
- * Controller for the Main view, e.g. the view that contains the menu bar, the
- * header and the loaded
+ * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
  * view (Settings, Servers ...).
  *
  * @author Marcel
@@ -30,30 +26,21 @@ import javafx.scene.layout.VBox;
 public class MainController implements ViewController
 {
 	@FXML
-	private Parent				rootPane;
+	private StackPane	menuItemFav;
 	@FXML
-	private VBox				commandPane;
+	private StackPane	menuItemAll;
 	@FXML
-	private TextField			commandSearchField;
+	private StackPane	menuItemUser;
 	@FXML
-	private ListView<String>	searchResultsList;
+	private StackPane	menuItemVersion;
+	@FXML
+	private StackPane	menuItemFiles;
+	@FXML
+	private StackPane	menuItemSettings;
 
 	@FXML
-	private StackPane			menuItemFav;
-	@FXML
-	private StackPane			menuItemAll;
-	@FXML
-	private StackPane			menuItemUser;
-	@FXML
-	private StackPane			menuItemVersion;
-	@FXML
-	private StackPane			menuItemFiles;
-	@FXML
-	private StackPane			menuItemSettings;
-
-	@FXML
-	private ScrollPane			activeViewContainer;
-	private Views				activeView;
+	private ScrollPane	activeViewContainer;
+	private Views		activeView;
 
 	@Override
 	public void initialize()

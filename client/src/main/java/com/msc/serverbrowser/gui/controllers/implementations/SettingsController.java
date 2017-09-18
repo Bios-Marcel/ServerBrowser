@@ -67,9 +67,9 @@ public class SettingsController implements ViewController
 	@FXML
 	private CheckBox			noNameTagStatusCheckBox;
 
-	// Connection Settings
-	@FXML
-	private CheckBox askForUsernameOnConnectCheckBox;
+	// TODO(MSC) Connection Settings
+	// @FXML
+	// private CheckBox askForUsernameOnConnectCheckBox;
 
 	@Override
 	public void initialize()
@@ -143,7 +143,7 @@ public class SettingsController implements ViewController
 		initLegacySettings(latestOrNewProperties);
 	}
 
-	private void changeLegacyIntegerSetting(final String key, Integer value)
+	private void changeLegacyIntegerSetting(final String key, final Integer value)
 	{
 		final Properties latestOrNewProperties = LegacySettings.getLegacyProperties().orElse(new Properties());
 		latestOrNewProperties.put(key, value.toString());
@@ -181,10 +181,9 @@ public class SettingsController implements ViewController
 	}
 
 	/**
-	 * Does a one way binding of a {@link CheckBox} to a {@link Property}. Initially
-	 * sets the value of the {@link CheckBox} according to the {@link Property
-	 * Properties} value. As soon as the {@link CheckBox} value changes, the
-	 * {@link Property} value will also change.
+	 * Does a one way binding of a {@link CheckBox} to a {@link Property}. Initially sets the value
+	 * of the {@link CheckBox} according to the {@link Property Properties} value. As soon as the
+	 * {@link CheckBox} value changes, the {@link Property} value will also change.
 	 *
 	 * @param box
 	 *            the {@link CheckBox} to be set up
@@ -201,11 +200,8 @@ public class SettingsController implements ViewController
 	}
 
 	/**
-	 * Restores all settings to default.
-	 * 
-	 * Some settings like {@link Property#DEVELOPMENT} and
-	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change
-	 * those anyways.
+	 * Restores all settings to default. Some settings like {@link Property#DEVELOPMENT} and
+	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change those anyways.
 	 */
 	@FXML
 	private void restoreDefaults()
@@ -224,13 +220,13 @@ public class SettingsController implements ViewController
 		changeLegacyBooleanSetting(LegacySettings.AUDIO_PROXY_OFF, StringUtil.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.DIRECT_MODE, StringUtil.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.DISABLE_HEAD_MOVE, StringUtil.stringToBoolean(LegacySettings.DISABLE_HEAD_MOVE_DEFAULT));
-		changeLegacyIntegerSetting(LegacySettings.FPS_LIMIT,Integer.parseInt(LegacySettings.FPS_LIMIT_DEFAULT));
-		changeLegacyIntegerSetting(LegacySettings.PAGE_SIZE,Integer.parseInt(LegacySettings.PAGE_SIZE_DEFAULT));
+		changeLegacyIntegerSetting(LegacySettings.FPS_LIMIT, Integer.parseInt(LegacySettings.FPS_LIMIT_DEFAULT));
+		changeLegacyIntegerSetting(LegacySettings.PAGE_SIZE, Integer.parseInt(LegacySettings.PAGE_SIZE_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.IME, StringUtil.stringToBoolean(LegacySettings.IME_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.MULTICORE, StringUtil.stringToBoolean(LegacySettings.MULTICORE_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.TIMESTAMP, StringUtil.stringToBoolean(LegacySettings.TIMESTAMP_DEFAULT));
 	}
-	
+
 	@Override
 	public void onClose()
 	{
