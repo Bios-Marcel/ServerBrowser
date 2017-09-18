@@ -56,8 +56,8 @@
 
 .titled-pane .title
 {
-	-fx-background-radius: 0.0 !important;
-	-fx-border-radius: 0.0 !important;
+	-fx-background-radius: 0.0;
+	-fx-border-radius: 0.0;
 }
 
 /**
@@ -136,7 +136,7 @@
 
 .clickedItem
 {
-	-fx-background-color: #1F5FAE !important; 
+	-fx-background-color: #1F5FAE; 
 }
 
 .copyableLabel, .copyableLabel:focused 

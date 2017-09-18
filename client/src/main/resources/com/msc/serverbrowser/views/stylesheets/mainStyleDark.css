@@ -95,7 +95,7 @@
 
 .list-view .list-cell:empty
 {
-	-fx-background-color: inherit !important;
+	-fx-background-color: inherit;
 }
 
 /**
@@ -113,7 +113,7 @@
 
 .titled-pane .content
 {
-	-fx-border-width: 0.0 !important;
+	-fx-border-width: 0.0;
 }
 
 .titled-pane .arrow
@@ -256,12 +256,6 @@
 	-fx-background-color: -component-inner-color !important;
 }
 
-.tab:selected > .tab-container > .focus-indicator
-{
-	-fx-background-color: transparent !important;	
-	-fx-border-color: transparent !important;
-}
-
 .tab
 {
 	-fx-border-width: 1.0;
@@ -276,7 +270,7 @@
 
 .tab:selected
 {
-	-fx-border-color: white !important;
+	-fx-border-color: white;
 }
 
 .tab .tab-container .focus-indicator
@@ -360,7 +354,7 @@
 .clickedItem
 {
 	/* The important keeps the color from being override by the MenuItem:hover color */
-	-fx-background-color: -special-button-color !important;
+	-fx-background-color: -special-button-color;
 }
 
 /**
