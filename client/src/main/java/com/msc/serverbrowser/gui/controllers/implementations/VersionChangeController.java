@@ -14,7 +14,7 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.gui.SAMPVersion;
-import com.msc.serverbrowser.gui.Views;
+import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtil;
@@ -134,7 +134,7 @@ public class VersionChangeController implements ViewController
 				{
 					Platform.runLater(() ->
 					{
-						if (mainController.getActiveView() == Views.VERSION_CHANGER)
+						if (mainController.getActiveView() == View.VERSION_CHANGER)
 						{
 							mainController.reloadView();
 						}

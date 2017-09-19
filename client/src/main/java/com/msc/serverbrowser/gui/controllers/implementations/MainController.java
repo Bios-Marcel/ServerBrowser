@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
-import com.msc.serverbrowser.gui.Views;
+import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 
@@ -18,7 +18,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 
 /**
- * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
+ * Controller for the Main view, e.g. the view that contains the menu bar, the
+ * header and the loaded
  * view (Settings, Servers ...).
  *
  * @author Marcel
@@ -40,18 +41,18 @@ public class MainController implements ViewController
 
 	@FXML
 	private ScrollPane	activeViewContainer;
-	private Views		activeView;
+	private View		activeView;
 
 	@Override
 	public void initialize()
 	{
 		if (ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
 		{
-			loadView(Views.valueOf(ClientProperties.getPropertyAsInt(Property.LAST_VIEW)));
+			loadView(View.valueOf(ClientProperties.getPropertyAsInt(Property.LAST_VIEW)));
 		}
 		else
 		{
-			loadView(Views.valueOf(ClientProperties.getDefaultAsInt(Property.LAST_VIEW)));
+			loadView(View.valueOf(ClientProperties.getDefaultAsInt(Property.LAST_VIEW)));
 		}
 
 	}
@@ -59,40 +60,40 @@ public class MainController implements ViewController
 	@FXML
 	private void onServersFavMenuItemClicked()
 	{
-		loadView(Views.SERVERS_FAV);
+		loadView(View.SERVERS_FAV);
 	}
 
 	@FXML
 	private void onServersAllMenuItemClicked()
 	{
-		loadView(Views.SERVERS_ALL);
+		loadView(View.SERVERS_ALL);
 	}
 
 	@FXML
 	private void onUsernameMenuItemClicked()
 	{
-		loadView(Views.USERNAME_CHANGER);
+		loadView(View.USERNAME_CHANGER);
 	}
 
 	@FXML
 	private void onVersionMenuItemClicked()
 	{
-		loadView(Views.VERSION_CHANGER);
+		loadView(View.VERSION_CHANGER);
 	}
 
 	@FXML
 	private void onFileMenuItemClicked()
 	{
-		loadView(Views.FILES);
+		loadView(View.FILES);
 	}
 
 	@FXML
 	private void onSettingsMenuItemClicked()
 	{
-		loadView(Views.SETTINGS);
+		loadView(View.SETTINGS);
 	}
 
-	private void loadView(final Views view)
+	private void loadView(final View view)
 	{
 		final String CLICKED_STYLE_CLASS = "clickedItem";
 
@@ -105,41 +106,33 @@ public class MainController implements ViewController
 
 		switch (view)
 		{
-			case VERSION_CHANGER:
-			{
-				menuItemVersion.getStyleClass().add(CLICKED_STYLE_CLASS);
-				break;
-			}
-			case USERNAME_CHANGER:
-			{
-				menuItemUser.getStyleClass().add(CLICKED_STYLE_CLASS);
-				break;
-			}
-			case SETTINGS:
-			{
-				menuItemSettings.getStyleClass().add(CLICKED_STYLE_CLASS);
-				break;
-			}
 			case SERVERS_FAV:
-			{
 				menuItemFav.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
-			}
 			case SERVERS_ALL:
-			{
 				menuItemAll.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
-			}
+			case USERNAME_CHANGER:
+				menuItemUser.getStyleClass().add(CLICKED_STYLE_CLASS);
+				break;
+			case VERSION_CHANGER:
+				menuItemVersion.getStyleClass().add(CLICKED_STYLE_CLASS);
+				break;
 			case FILES:
 				menuItemFiles.getStyleClass().add(CLICKED_STYLE_CLASS);
 				break;
+			case SETTINGS:
+				menuItemSettings.getStyleClass().add(CLICKED_STYLE_CLASS);
+				break;
+			default:
+				throw new IllegalArgumentException("This View hasn't been implemented or is invalid: " + view);
 		}
 
 		loadFXML(view);
 		activeView = view;
 	}
 
-	private void loadFXML(final Views view)
+	private void loadFXML(final View view)
 	{
 		try
 		{
@@ -160,7 +153,7 @@ public class MainController implements ViewController
 	/**
 	 * @return the current view
 	 */
-	public Views getActiveView()
+	public View getActiveView()
 	{
 		return activeView;
 	}

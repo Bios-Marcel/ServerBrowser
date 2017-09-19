@@ -6,7 +6,7 @@ import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.LegacySettings;
 import com.msc.serverbrowser.data.properties.Property;
-import com.msc.serverbrowser.gui.Views;
+import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.StringUtil;
 
@@ -94,7 +94,7 @@ public class SettingsController implements ViewController
 		{
 			final Boolean rememberLastViewOld = ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW);
 			ClientProperties.setProperty(Property.REMEMBER_LAST_VIEW, true);
-			ClientProperties.setProperty(Property.LAST_VIEW, Views.SETTINGS.getId());
+			ClientProperties.setProperty(Property.LAST_VIEW, View.SETTINGS.getId());
 
 			Client.getInstance().reloadUI();
 

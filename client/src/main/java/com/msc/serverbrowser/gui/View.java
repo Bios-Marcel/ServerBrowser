@@ -17,7 +17,7 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
  *
  * @author Marcel
  */
-public enum Views
+public enum View
 {
 	@SuppressWarnings("javadoc")
 	SERVERS_FAV(1, "Servers | Favourites", ServerListFavController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH + "serverListStyle.css"),
@@ -42,18 +42,18 @@ public enum Views
 
 	private String fxmlPath;
 
-	private final static Map<Integer, Views> idMapping = new HashMap<>();
+	private final static Map<Integer, View> idMapping = new HashMap<>();
 
 	// Create Mapping in order to be able to find an enum value by simply providing its id.
 	static
 	{
-		for (final Views view : Views.values())
+		for (final View view : View.values())
 		{
-			Views.idMapping.put(view.getId(), view);
+			View.idMapping.put(view.getId(), view);
 		}
 	}
 
-	private Views(final int id, final String title, final Class<? extends ViewController> necessaryController, final String fxmlPath,
+	private View(final int id, final String title, final Class<? extends ViewController> necessaryController, final String fxmlPath,
 			final String stylesheetPathCss)
 	{
 		this.id = id;
@@ -110,8 +110,8 @@ public enum Views
 	 *            id to check against
 	 * @return the found Enum Value
 	 */
-	public static Views valueOf(final int idToGet)
+	public static View valueOf(final int idToGet)
 	{
-		return Views.idMapping.get(idToGet);
+		return View.idMapping.get(idToGet);
 	}
 }

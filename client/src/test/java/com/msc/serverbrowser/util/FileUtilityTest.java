@@ -34,21 +34,21 @@ class FileUtilityTest
 	private static MessageDigest shaDigester;
 
 	@BeforeAll
-	static void createShaEncoder() throws NoSuchAlgorithmException
+	public static void createShaEncoder() throws NoSuchAlgorithmException
 	{
 		shaDigester = MessageDigest.getInstance("SHA-512");
 	}
 
 	@Test
 	@DisplayName("Given a zipped file, when __unzip__ is called, then it should be correctly decompressed.")
-	void testSimpleFileunzip() throws IOException, URISyntaxException
+	public void testSimpleFileunzip() throws IOException, URISyntaxException
 	{
 		testUnzipWithGivenFileWithSha("test_file.txt");
 	}
 
 	@Test
 	@DisplayName("Given a zipped directory, when __unzip__ is called, then it should be correctly decompressed.")
-	void testDirectoryUnzip() throws URISyntaxException, IOException
+	public void testDirectoryUnzip() throws URISyntaxException, IOException
 	{
 		testUnzipWithGivenFileWithSha("test_dir");
 	}
