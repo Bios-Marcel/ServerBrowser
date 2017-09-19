@@ -54,7 +54,7 @@ import javafx.util.Duration;
 /**
  * @since 02.07.2017
  */
-public abstract class ServerListControllerMain implements ViewController
+public abstract class AbstractServerListController implements ViewController
 {
 	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
 

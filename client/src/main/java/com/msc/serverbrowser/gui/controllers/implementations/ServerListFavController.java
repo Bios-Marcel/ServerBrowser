@@ -10,7 +10,7 @@ import com.msc.serverbrowser.data.SampServer;
  *
  * @author Marcel
  */
-public class ServerListFavController extends ServerListControllerMain
+public class ServerListFavController extends AbstractServerListController
 {
 	@Override
 	public void initialize()

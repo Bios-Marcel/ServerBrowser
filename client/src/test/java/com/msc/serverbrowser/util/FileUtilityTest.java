@@ -54,11 +54,9 @@ class FileUtilityTest
 	}
 
 	/**
-	 * Tests that a given ZIP archive has the correct content. The test data needs
-	 * to have a
-	 * corresponding "*.sha512sum" in the same folder with gets used to validate the
-	 * file content
-	 * survived the zipping without alteration.
+	 * Tests if a given ZIP archive has the correct content. The test data needs to
+	 * have a corresponding <code>*.sha512sum</code> in the same folder with gets
+	 * used to validate the file content survived the zipping without alteration.
 	 *
 	 * @param testDataName
 	 *            Full path to the ZIP under test.
