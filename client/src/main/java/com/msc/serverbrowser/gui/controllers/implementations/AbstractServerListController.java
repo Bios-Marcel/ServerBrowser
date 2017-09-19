@@ -539,7 +539,7 @@ public abstract class AbstractServerListController implements ViewController
 						Platform.runLater(() ->
 						{
 							serverPassword.setText(info[0].equals("0") ? "No" : "Yes");
-							serverPing.setText("" + ping);
+							serverPing.setText(String.valueOf(ping));
 							mapLabel.setText(server.getMap());
 							websiteLink.setText(server.getWebsite());
 
@@ -610,9 +610,9 @@ public abstract class AbstractServerListController implements ViewController
 			maxSlots += server.getMaxPlayers();
 		}
 
-		serverCount.setText(serverTable.getItems().size() + "");
-		playerCount.setText(playersPlaying + "");
-		slotCount.setText(maxSlots - playersPlaying + "");
+		serverCount.setText(String.valueOf(serverTable.getItems().size()));
+		playerCount.setText(String.valueOf(playersPlaying));
+		slotCount.setText(String.valueOf(maxSlots - playersPlaying));
 	}
 
 	@Override

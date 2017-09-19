@@ -125,15 +125,15 @@ public class SampQuery implements AutoCloseable
 
 				// Password Yes / No
 				final short password = buffer.get();
-				serverInfo[0] = "" + password;
+				serverInfo[0] = String.valueOf(password);
 
 				// Players connected
 				final short players = buffer.getShort();
-				serverInfo[1] = "" + players;
+				serverInfo[1] = String.valueOf(players);
 
 				// Max Players
 				final short maxPlayers = buffer.getShort();
-				serverInfo[2] = "" + maxPlayers;
+				serverInfo[2] = String.valueOf(maxPlayers);
 
 				// Hostname
 				int len = buffer.getInt();
@@ -299,21 +299,20 @@ public class SampQuery implements AutoCloseable
 		try
 		{
 			final StringTokenizer tok = new StringTokenizer(serverAddress, ".");
-
-			String packetData = "SAMP";
+			final StringBuffer packetData = new StringBuffer("SAMP");
 
 			while (tok.hasMoreTokens())
 			{
-				packetData += (char) Integer.parseInt(tok.nextToken());
+				packetData.append((char) Integer.parseInt(tok.nextToken()));
 			}
 
-			packetData += (char) (serverPort & 0xFF);
-			packetData += (char) (serverPort >> 8 & 0xFF);
-			packetData += type;
+			packetData.append((char) (serverPort & 0xFF));
+			packetData.append((char) (serverPort >> 8 & 0xFF));
+			packetData.append(type);
 
-			final byte[] data = packetData.getBytes(StandardCharsets.US_ASCII);
-
+			final byte[] data = packetData.toString().getBytes(StandardCharsets.US_ASCII);
 			final DatagramPacket sendPacket = new DatagramPacket(data, data.length, server, serverPort);
+
 			return Optional.ofNullable(sendPacket);
 		}
 		catch (@SuppressWarnings("unused") final Exception exception)

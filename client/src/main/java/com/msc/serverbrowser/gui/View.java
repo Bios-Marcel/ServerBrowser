@@ -17,19 +17,14 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
  *
  * @author Marcel
  */
+@SuppressWarnings("javadoc")
 public enum View
 {
-	@SuppressWarnings("javadoc")
 	SERVERS_FAV(1, "Servers | Favourites", ServerListFavController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH + "serverListStyle.css"),
-	@SuppressWarnings("javadoc")
 	SERVERS_ALL(2, "Servers | All", ServerListAllController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH + "serverListStyle.css"),
-	@SuppressWarnings("javadoc")
 	USERNAME_CHANGER(3, "Username Changer", UsernameController.class, PathConstants.VIEW_PATH + "Username.fxml", PathConstants.STYLESHEET_PATH + "usernameStyle.css"),
-	@SuppressWarnings("javadoc")
 	VERSION_CHANGER(4, "Version Changer", VersionChangeController.class, PathConstants.VIEW_PATH + "Version.fxml", PathConstants.STYLESHEET_PATH + "versionStyle.css"),
-	@SuppressWarnings("javadoc")
 	SETTINGS(5, "Settings", SettingsController.class, PathConstants.VIEW_PATH + "Settings.fxml", PathConstants.STYLESHEET_PATH + "settingsStyle.css"),
-	@SuppressWarnings("javadoc")
 	FILES(6, "Files", FilesController.class, PathConstants.VIEW_PATH + "Files.fxml", PathConstants.STYLESHEET_PATH + "filesStyle.css");
 
 	private final int id;
