@@ -31,7 +31,7 @@ public class ServerListAllController extends AbstractServerListController
 		{
 			try
 			{
-				servers.addAll(ServerUtil.retrieveAnnouncedServers());
+				servers.addAll(ServerUtil.fetchServersFromSouthclaws());
 				Platform.runLater(() -> serverTable.refresh());
 			}
 			catch (final IOException exception)

@@ -50,7 +50,7 @@ public class OneLineStringProperty extends SimpleStringProperty
 		 * Replacing \r\n first and afterwards leftover \n by doing it like that, i never replace a
 		 * single line break by two spaces
 		 */
-		final String toSet = Objects.isNull(value) ? null : value.replace("\r\n", " ").replace("\n", " ").trim();
+		final String toSet = Objects.isNull(value) ? "" : value.replace("\r\n", " ").replace("\n", " ").trim();
 		return toSet;
 	}
 }

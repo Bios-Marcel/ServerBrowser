@@ -3,6 +3,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +181,14 @@ public abstract class AbstractServerListController implements ViewController
 				final List<SampServer> serverList = serverTable.getSelectionModel().getSelectedItems();
 				final SampServer rowItem = row.getItem();
 
-				if (!serverTable.getSelectionModel().getSelectedIndices().contains(row.getIndex()))
+				if (serverTable.getSelectionModel().getSelectedIndices().contains(row.getIndex()))
+				{
+					if (!serverList.isEmpty() && clicked.getButton().equals(MouseButton.SECONDARY))
+					{
+						displayMenu(serverList, clicked.getScreenX(), clicked.getScreenY());
+					}
+				}
+				else
 				{
 					if (Objects.nonNull(rowItem))
 					{
@@ -193,13 +201,6 @@ public abstract class AbstractServerListController implements ViewController
 					else
 					{
 						serverTable.getSelectionModel().clearSelection();
-					}
-				}
-				else
-				{
-					if (!serverList.isEmpty() && clicked.getButton().equals(MouseButton.SECONDARY))
-					{
-						displayMenu(serverList, clicked.getScreenX(), clicked.getScreenY());
 					}
 				}
 
@@ -326,10 +327,10 @@ public abstract class AbstractServerListController implements ViewController
 	{
 		filterProperty.set(server ->
 		{
-			boolean doesNameFilterApply = true;
-			boolean doesModeFilterApply = true;
-			boolean doesLanguageFilterApply = true;
-			boolean doesVersionFilterApply = true;
+			boolean nameFilterApplies = true;
+			boolean modeFilterApplies = true;
+			boolean languageFilterApplies = true;
+			boolean versionFilterApplies = true;
 
 			if (!versionFilter.getSelectionModel().isEmpty())
 			{
@@ -339,7 +340,7 @@ public abstract class AbstractServerListController implements ViewController
 				// TODO(MSC) Only necessary because i don't retrieve the version when querying
 				// southclaws api. I should request a change in the api.
 				final String serverVersion = Objects.isNull(server.getVersion()) ? "" : server.getVersion();
-				doesVersionFilterApply = serverVersion.toLowerCase().contains(versionFilterSetting);
+				versionFilterApplies = serverVersion.toLowerCase().contains(versionFilterSetting);
 			}
 
 			final String nameFilterSetting = nameFilter.getText().toLowerCase();
@@ -352,18 +353,18 @@ public abstract class AbstractServerListController implements ViewController
 
 			if (regexCheckBox.isSelected())
 			{
-				doesNameFilterApply = regexFilter(hostname, nameFilterSetting);
-				doesModeFilterApply = regexFilter(mode, modeFilterSetting);
-				doesLanguageFilterApply = regexFilter(language, languageFilterSetting);
+				nameFilterApplies = regexFilter(hostname, nameFilterSetting);
+				modeFilterApplies = regexFilter(mode, modeFilterSetting);
+				languageFilterApplies = regexFilter(language, languageFilterSetting);
 			}
 			else
 			{
-				doesNameFilterApply = hostname.contains(nameFilterSetting);
-				doesModeFilterApply = mode.contains(modeFilterSetting);
-				doesLanguageFilterApply = language.contains(languageFilterSetting);
+				nameFilterApplies = hostname.contains(nameFilterSetting);
+				modeFilterApplies = mode.contains(modeFilterSetting);
+				languageFilterApplies = language.contains(languageFilterSetting);
 			}
 
-			return doesNameFilterApply && doesModeFilterApply && doesVersionFilterApply && doesLanguageFilterApply;
+			return nameFilterApplies && modeFilterApplies && versionFilterApplies && languageFilterApplies;
 		});
 
 		updateGlobalInfo();
@@ -474,7 +475,7 @@ public abstract class AbstractServerListController implements ViewController
 				GTA.connectToServer(address + ":" + port);
 			}
 		}
-		catch (@SuppressWarnings("unused") final Exception exception)
+		catch (@SuppressWarnings("unused") final IOException exception)
 		{
 			showCantConnectToServerError();
 		}

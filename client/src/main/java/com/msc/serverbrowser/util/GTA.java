@@ -1,9 +1,11 @@
 package com.msc.serverbrowser.util;
 
 import java.awt.Desktop;
+import java.awt.Desktop.Action;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -194,18 +196,23 @@ public class GTA
 			return false;
 		}
 
-		Logging.logger().log(Level.INFO, "Connecting using protocol.");
 		try
 		{
-			final Desktop d = Desktop.getDesktop();
-			d.browse(new URI("samp://" + ipAndPort));
-			return true;
+			Logging.logger().log(Level.INFO, "Connecting using protocol.");
+			final Desktop desktop = Desktop.getDesktop();
+
+			if (desktop.isSupported(Action.BROWSE))
+			{
+				desktop.browse(new URI("samp://" + ipAndPort));
+				return true;
+			}
 		}
-		catch (final Exception exception)
+		catch (final IOException | URISyntaxException exception)
 		{
-			exception.printStackTrace();
-			return false;
+			Logging.logger().log(Level.WARNING, "Error connecting to server.", exception);
 		}
+
+		return false;
 	}
 
 	/**

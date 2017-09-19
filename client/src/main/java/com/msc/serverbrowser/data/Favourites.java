@@ -79,16 +79,16 @@ public class Favourites
 	 */
 	public static void addServerToFavourites(final SampServer server)
 	{
-		if (!isFavourite(server))
+		if (isFavourite(server))
+		{
+			Logging.logger().info("Server wasn't added, because it already is a favourite.");
+		}
+		else
 		{
 			String statement = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
 			statement = escapeFormat(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
 					.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
 			SQLDatabase.getInstance().execute(statement);
-		}
-		else
-		{
-			Logging.logger().info("Server wasn't added, because it already is a favourite.");
 		}
 	}
 

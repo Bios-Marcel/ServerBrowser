@@ -40,23 +40,22 @@ import javafx.util.Duration;
  * @author Marcel
  * @since 02.07.2017
  */
-public class Client extends Application
+public final class Client extends Application
 {
 	/**
 	 * Application icon that can be used everywhere where necessary.
 	 */
-	public static final Image	APPLICATION_ICON	= new Image(
-			Client.class.getResourceAsStream("/com/msc/serverbrowser/icons/icon.png"));
+	public static final Image	APPLICATION_ICON	= new Image(Client.class.getResourceAsStream("/com/msc/serverbrowser/icons/icon.png"));
 	/**
 	 * Name of the application, as displayed to people.
 	 */
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private Stage				stage;
+	private Stage stage;
 
-	private static Client		instance;
+	private static Client instance;
 
-	private MainController		mainController;
+	private MainController mainController;
 
 	/**
 	 * @return the clients singleton instance
@@ -132,7 +131,7 @@ public class Client extends Application
 
 			stage.setScene(scene);
 		}
-		catch (final Exception exception)
+		catch (final IOException exception)
 		{
 			Logging.logger().log(Level.SEVERE, "Couldn't load UI", exception);
 			Platform.exit();
@@ -221,16 +220,14 @@ public class Client extends Application
 	}
 
 	/**
-	 * Displays a dialog that tells the user that the server connection couldn't be
-	 * established.
+	 * Displays a dialog that tells the user that the server connection couldn't be established.
 	 */
 	public static void displayNoConnectionDialog()
 	{
 		new TrayNotificationBuilder()
 				.type(NotificationTypeImplementations.ERROR)
 				.title("Server connection could not be established")
-				.message(
-						"The server connection doesn't seeem to be established, try again later, for more information check the log files.")
+				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
 				.animation(Animations.SLIDE)
 				.build().showAndDismiss(Duration.seconds(10));
 	}
@@ -260,8 +257,7 @@ public class Client extends Application
 	}
 
 	/**
-	 * Creates files and folders that are necessary for the application to run
-	 * properly and migrates
+	 * Creates files and folders that are necessary for the application to run properly and migrates
 	 * old xml data.
 	 */
 	private static void initClient()
@@ -275,8 +271,7 @@ public class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an
-	 * update is available
+	 * Compares the local version number to the one lying on the server. If an update is available
 	 * the user will be asked if he wants to update.
 	 */
 	private static void checkVersion()
@@ -290,6 +285,7 @@ public class Client extends Application
 		}
 		catch (final IOException exception)
 		{
+			Logging.logger().log(Level.WARNING, "Couldn't check for newer version.", exception);
 			Platform.runLater(() -> displayCantRetrieveUpdate());
 		}
 
@@ -362,7 +358,6 @@ public class Client extends Application
 	 */
 	private static void selfRestart()
 	{
-		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 		final File currentJar = getOwnJarFile();
 
 		if (!currentJar.getName().endsWith(".jar"))
@@ -370,15 +365,16 @@ public class Client extends Application
 			return;
 		}
 
+		final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 		final List<String> command = new ArrayList<>();
+
 		command.add(javaBin);
 		command.add("-jar");
 		command.add(currentJar.getPath());
 
-		final ProcessBuilder builder = new ProcessBuilder(command);
-
 		try
 		{
+			final ProcessBuilder builder = new ProcessBuilder(command);
 			builder.start();
 			Platform.exit();
 		}

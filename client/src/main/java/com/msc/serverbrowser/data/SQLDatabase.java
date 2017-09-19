@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.logging.Logging;
 
-public class SQLDatabase
+public final class SQLDatabase
 {
 	private static final String DB_LOCATION = PathConstants.SAMPEX_PATH + File.separator + "samp.db";
 

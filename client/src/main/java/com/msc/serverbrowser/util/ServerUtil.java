@@ -25,8 +25,7 @@ public class ServerUtil
 			openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 			try (final BufferedReader in = new BufferedReader(new InputStreamReader(openConnection.getInputStream())))
 			{
-				String inputLine;
-				while ((inputLine = in.readLine()) != null)
+				in.lines().forEach(inputLine ->
 				{
 					final String[] data = inputLine.split(":");
 					final SampServer server = new SampServer(data[0], Integer.parseInt(data[1]));
@@ -34,7 +33,7 @@ public class ServerUtil
 					{
 						servers.add(server);
 					}
-				}
+				});
 			}
 		}
 		catch (@SuppressWarnings("unused") final IOException exception)
@@ -50,18 +49,14 @@ public class ServerUtil
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(urlString).openStream())))
 		{
 			final StringBuffer buffer = new StringBuffer();
-			int read;
-			final char[] chars = new char[1024];
-			while ((read = reader.read(chars)) != -1)
-			{
-				buffer.append(chars, 0, read);
-			}
+
+			reader.lines().forEach(buffer::append);
 
 			return buffer.toString();
 		}
 	}
 
-	public static List<SampServer> retrieveAnnouncedServers() throws MalformedURLException, IOException
+	public static List<SampServer> fetchServersFromSouthclaws() throws MalformedURLException, IOException
 	{
 		return fetchFromAPI("http://api.samp.southcla.ws/v1/servers");
 	}
@@ -92,32 +87,5 @@ public class ServerUtil
 		});
 
 		return servers;
-	}
-
-	public static SampServer getServerInfo() throws Exception
-	{
-		final String json = readUrl("http://api.samp.southcla.ws/v1/server/ss.southcla.ws");
-
-		final JsonObject jsonData = Json.parse(json).asObject();
-		jsonData.forEach(shit ->
-		{
-			System.out.println(shit.getName());
-			if (shit.getName().equals("ru"))
-			{
-				shit.getValue().asObject().forEach(value ->
-				{
-					System.out.println(value.getName() + ":" + value.getValue());
-				});
-			}
-			else if (shit.getName().equals("pl"))
-			{
-				shit.getValue().asArray().forEach(value ->
-				{
-					System.out.println(value.asString());
-				});
-			}
-		});
-
-		return null;
 	}
 }

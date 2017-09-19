@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -44,10 +46,12 @@ public class SampQuery implements AutoCloseable
 	 *            port
 	 * @param timeout
 	 *            the maximum time, that the socket tries connecting
-	 * @throws Exception
+	 * @throws SocketException
 	 *             Thrown if the connection is closed unexpectedly / has never beenopened properly
+	 * @throws UnknownHostException
+	 *             if the host is unknown
 	 */
-	public SampQuery(final String serverAddress, final int serverPort, final int timeout) throws Exception
+	public SampQuery(final String serverAddress, final int serverPort, final int timeout) throws SocketException, UnknownHostException
 	{
 		this.serverAddress = serverAddress;
 		this.server = InetAddress.getByName(serverAddress);
@@ -64,10 +68,12 @@ public class SampQuery implements AutoCloseable
 	 *            hostname / ip
 	 * @param serverPort
 	 *            port
-	 * @throws Exception
+	 * @throws SocketException
 	 *             if the connection couldn't be established
+	 * @throws UnknownHostException
+	 *             if the host is unknown
 	 */
-	public SampQuery(final String serverAddress, final int serverPort) throws Exception
+	public SampQuery(final String serverAddress, final int serverPort) throws SocketException, UnknownHostException
 	{
 		this(serverAddress, serverPort, 1250);
 	}
@@ -75,7 +81,7 @@ public class SampQuery implements AutoCloseable
 	/**
 	 * Returns whether a successful connection was made.
 	 */
-	private void checkConnection() throws Exception
+	private void checkConnection() throws SocketException
 	{
 		// TODO(MSC) Check if server deactivated querying, since this will only tell if
 		// the server
@@ -85,12 +91,12 @@ public class SampQuery implements AutoCloseable
 		// Removed the checks if the reply was valid, i think its not even necessary
 		if (Objects.isNull(reply))
 		{
-			throw new Exception("Couldn't connect to Server");
+			throw new SocketException("Couldn't connect to Server");
 		}
 	}
 
 	@Override
-	public void close() throws Exception
+	public void close() throws SocketException
 	{
 		socket.close();
 	}

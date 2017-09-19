@@ -36,7 +36,7 @@ public enum View
 
 	private final String title;
 
-	private Class<? extends ViewController> necessaryController;
+	private Class<? extends ViewController> controllerType;
 
 	private String stylesheetPath;
 
@@ -53,12 +53,12 @@ public enum View
 		}
 	}
 
-	private View(final int id, final String title, final Class<? extends ViewController> necessaryController, final String fxmlPath,
+	private View(final int id, final String title, final Class<? extends ViewController> controllerType, final String fxmlPath,
 			final String stylesheetPathCss)
 	{
 		this.id = id;
 		this.title = title;
-		this.necessaryController = necessaryController;
+		this.controllerType = controllerType;
 		this.stylesheetPath = stylesheetPathCss;
 		this.fxmlPath = fxmlPath;
 	}
@@ -84,7 +84,7 @@ public enum View
 	 */
 	public Class<? extends ViewController> getControllerType()
 	{
-		return necessaryController;
+		return controllerType;
 	}
 
 	/**
