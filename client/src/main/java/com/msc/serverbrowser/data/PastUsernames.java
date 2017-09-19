@@ -13,7 +13,7 @@ import com.msc.serverbrowser.logging.Logging;
  *
  * @author Marcel
  */
-public class PastUsernames
+public final class PastUsernames
 {
 	private PastUsernames()
 	{
@@ -67,7 +67,7 @@ public class PastUsernames
 			}
 			catch (final SQLException exception)
 			{
-				Logging.logger().log(Level.SEVERE, "Error while retrieving past usernames", exception);
+				Logging.log(Level.SEVERE, "Error while retrieving past usernames", exception);
 			}
 		});
 

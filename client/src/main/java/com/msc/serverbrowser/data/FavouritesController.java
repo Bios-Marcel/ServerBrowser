@@ -24,9 +24,9 @@ import com.msc.serverbrowser.util.SampQuery;
  *
  * @author Marcel
  */
-public class Favourites
+public final class FavouritesController
 {
-	private Favourites()
+	private FavouritesController()
 	{
 		// Constructor to prevent instantiation
 	}
@@ -65,7 +65,7 @@ public class Favourites
 		}
 		catch (final SocketException | UnknownHostException exception)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.", exception);
+			Logging.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.", exception);
 			server.setHostname(UNKNOWN);
 			server.setLanguage(UNKNOWN);
 			server.setMode(UNKNOWN);
@@ -90,7 +90,7 @@ public class Favourites
 	{
 		if (isFavourite(server))
 		{
-			Logging.logger().info("Server wasn't added, because it already is a favourite.");
+			Logging.info("Server wasn't added, because it already is a favourite.");
 		}
 		else
 		{
@@ -183,7 +183,7 @@ public class Favourites
 			}
 			catch (final SQLException exception)
 			{
-				Logging.logger().log(Level.SEVERE, "Error while retrieving favourites", exception);
+				Logging.log(Level.SEVERE, "Error while retrieving favourites", exception);
 			}
 		});
 

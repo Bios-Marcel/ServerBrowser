@@ -17,11 +17,11 @@ import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
 import com.github.sarxos.winreg.WindowsRegistry;
 import com.msc.serverbrowser.data.PastUsernames;
-import com.msc.serverbrowser.data.properties.ClientProperties;
+import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.windows.OSUtil;
+import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -32,7 +32,7 @@ import javafx.util.Duration;
  *
  * @author Marcel
  */
-public class GTAController
+public final class GTAController
 {
 	private GTAController()
 	{
@@ -49,7 +49,7 @@ public class GTAController
 	 */
 	public static void applyUsername()
 	{
-		if (!OSUtil.isWindows())
+		if (!OSUtility.isWindows())
 		{
 			return;
 		}
@@ -62,7 +62,7 @@ public class GTAController
 		}
 		catch (final RegistryException e)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't set username.", e);
+			Logging.log(Level.WARNING, "Couldn't set username.", e);
 		}
 
 	}
@@ -75,7 +75,7 @@ public class GTAController
 	 */
 	private static String retrieveUsernameFromRegistry()
 	{
-		if (!OSUtil.isWindows())
+		if (!OSUtility.isWindows())
 		{
 			return "You are on Linux ;D";
 		}
@@ -86,7 +86,7 @@ public class GTAController
 		}
 		catch (final Exception exception)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't retrieve Username from registry.", exception);
+			Logging.log(Level.WARNING, "Couldn't retrieve Username from registry.", exception);
 			return "404 Name not found";
 		}
 	}
@@ -98,12 +98,12 @@ public class GTAController
 	 */
 	public static Optional<String> getGtaPath()
 	{
-		if (!OSUtil.isWindows())
+		if (!OSUtility.isWindows())
 		{
 			return Optional.of("You are on Linux ;D");
 		}
 
-		final String property = ClientProperties.getPropertyAsString(Property.SAMP_PATH);
+		final String property = ClientPropertiesController.getPropertyAsString(Property.SAMP_PATH);
 
 		if (Objects.isNull(property) || property.isEmpty())
 		{
@@ -119,7 +119,7 @@ public class GTAController
 	 */
 	public static String getGtaPathUnsafe()
 	{
-		if (!OSUtil.isWindows())
+		if (!OSUtility.isWindows())
 		{
 			return "You are on Linux ;D";
 		}
@@ -130,7 +130,7 @@ public class GTAController
 		}
 		catch (final RegistryException exception)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't retrieve GTA path.", exception);
+			Logging.log(Level.WARNING, "Couldn't retrieve GTA path.", exception);
 			return null;
 		}
 	}
@@ -142,7 +142,7 @@ public class GTAController
 	 */
 	public static Optional<SAMPVersion> getInstalledVersion()
 	{
-		if (!OSUtil.isWindows())
+		if (!OSUtility.isWindows())
 		{// OS not supported
 			return Optional.empty();
 		}
@@ -196,14 +196,14 @@ public class GTAController
 	 */
 	private static boolean connectToServerUsingProtocol(final String ipAndPort)
 	{
-		if (!OSUtil.isWindows())
+		if (!OSUtility.isWindows())
 		{
 			return false;
 		}
 
 		try
 		{
-			Logging.logger().log(Level.INFO, "Connecting using protocol.");
+			Logging.log(Level.INFO, "Connecting using protocol.");
 			final Desktop desktop = Desktop.getDesktop();
 
 			if (desktop.isSupported(Action.BROWSE))
@@ -214,7 +214,7 @@ public class GTAController
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.logger().log(Level.WARNING, "Error connecting to server.", exception);
+			Logging.log(Level.WARNING, "Error connecting to server.", exception);
 		}
 
 		return false;
@@ -244,7 +244,7 @@ public class GTAController
 	 */
 	private static void kill(final String processName)
 	{
-		if (!OSUtil.isWindows())
+		if (!OSUtility.isWindows())
 		{
 			return;
 		}
@@ -255,7 +255,7 @@ public class GTAController
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Couldn't kill " + processName, exception);
+			Logging.log(Level.SEVERE, "Couldn't kill " + processName, exception);
 		}
 	}
 
@@ -270,7 +270,7 @@ public class GTAController
 	 */
 	public static void connectToServer(final String ipAndPort, final String password)
 	{
-		if (ClientProperties.getPropertyAsBoolean(Property.ALLOW_CLOSE_GTA))
+		if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CLOSE_GTA))
 		{
 			killGTA();
 		}
@@ -280,7 +280,7 @@ public class GTAController
 		{
 			try
 			{
-				Logging.logger().log(Level.INFO, "Connecting using executeable.");
+				Logging.log(Level.INFO, "Connecting using executeable.");
 				final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
 				builder.directory(new File(gtaPath.get()));
 				builder.start();
@@ -293,7 +293,7 @@ public class GTAController
 				}
 				else
 				{
-					Logging.logger().log(Level.WARNING, "Couldn't connect to server", exception);
+					Logging.log(Level.WARNING, "Couldn't connect to server", exception);
 				}
 			}
 		}

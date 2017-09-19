@@ -11,7 +11,7 @@ import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.kohsuke.github.RateLimitHandler;
 
-import com.msc.serverbrowser.data.properties.ClientProperties;
+import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.logging.Logging;
 
@@ -21,8 +21,13 @@ import com.msc.serverbrowser.logging.Logging;
  * @author Marcel
  * @since 16.09.2017
  */
-public class UpdateUtil
+public final class UpdateUtility
 {
+	private UpdateUtility()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	/**
 	 * Checks if the currently installed version is the latest.
 	 *
@@ -32,7 +37,7 @@ public class UpdateUtil
 	 */
 	public static Boolean isUpToDate() throws IOException
 	{
-		final String lastTagName = ClientProperties.getPropertyAsString(Property.LAST_TAG_NAME);
+		final String lastTagName = ClientPropertiesController.getPropertyAsString(Property.LAST_TAG_NAME);
 		final Optional<String> latestTagName = getLatestTagName();
 
 		if (latestTagName.isPresent())
@@ -58,7 +63,7 @@ public class UpdateUtil
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Couldn't retrieve latest version information.", exception);
+			Logging.log(Level.SEVERE, "Couldn't retrieve latest version information.", exception);
 		}
 		return Optional.empty();
 	}

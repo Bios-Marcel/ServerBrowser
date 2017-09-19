@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author Marcel
  */
-public class HashingUtility
+public final class HashingUtility
 {
 	private HashingUtility()
 	{

@@ -2,7 +2,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.util.List;
 
-import com.msc.serverbrowser.data.Favourites;
+import com.msc.serverbrowser.data.FavouritesController;
 import com.msc.serverbrowser.data.SampServer;
 
 /**
@@ -17,7 +17,7 @@ public class ServerListFavController extends AbstractServerListController
 	{
 		super.initialize();
 
-		servers.addAll(Favourites.getFavourites());
+		servers.addAll(FavouritesController.getFavourites());
 	}
 
 	@Override

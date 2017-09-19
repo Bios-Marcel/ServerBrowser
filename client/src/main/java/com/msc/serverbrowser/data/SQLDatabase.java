@@ -13,6 +13,12 @@ import java.util.logging.Level;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.logging.Logging;
 
+/**
+ * Class for accessing the local SQL Lite database.
+ *
+ * @author Marcel
+ * @since 19.09.2017
+ */
 public final class SQLDatabase
 {
 	private static final String DB_LOCATION = PathConstants.SAMPEX_PATH + File.separator + "samp.db";
@@ -70,7 +76,7 @@ public final class SQLDatabase
 		}
 		catch (final SQLException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Error while initializing local Database connection.", exception);
+			Logging.log(Level.SEVERE, "Error while initializing local Database connection.", exception);
 		}
 	}
 
@@ -89,7 +95,7 @@ public final class SQLDatabase
 		}
 		catch (final SQLException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Couldn't execute query.", exception);
+			Logging.log(Level.SEVERE, "Couldn't execute query.", exception);
 			return false;
 		}
 	}
@@ -109,7 +115,7 @@ public final class SQLDatabase
 		}
 		catch (final SQLException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Failed to execute SQL query!", exception);
+			Logging.log(Level.SEVERE, "Failed to execute SQL query!", exception);
 			return Optional.empty();
 		}
 	}

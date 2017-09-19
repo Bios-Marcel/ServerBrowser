@@ -4,13 +4,13 @@ package com.msc.serverbrowser.util;
  * @author Marcel
  * @since 19.09.2017
  */
-public class StringUtility
+public final class StringUtility
 {
 	private StringUtility()
 	{
-		//Constructor to prevent instantiation
+		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Puts <code>http://</code> infront of the url if not it already has <code>http://</code> or
 	 * <code>https://</code> infront of it.

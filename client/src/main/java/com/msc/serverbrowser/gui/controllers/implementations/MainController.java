@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.Client;
-import com.msc.serverbrowser.data.properties.ClientProperties;
+import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
@@ -46,13 +46,13 @@ public class MainController implements ViewController
 	@Override
 	public void initialize()
 	{
-		if (ClientProperties.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
+		if (ClientPropertiesController.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
 		{
-			loadView(View.valueOf(ClientProperties.getPropertyAsInt(Property.LAST_VIEW)));
+			loadView(View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)));
 		}
 		else
 		{
-			loadView(View.valueOf(ClientProperties.getDefaultAsInt(Property.LAST_VIEW)));
+			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)));
 		}
 
 	}
@@ -146,7 +146,7 @@ public class MainController implements ViewController
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Couldn't load view.", exception);
+			Logging.log(Level.SEVERE, "Couldn't load view.", exception);
 		}
 	}
 
@@ -169,7 +169,7 @@ public class MainController implements ViewController
 	@Override
 	public void onClose()
 	{
-		ClientProperties.setProperty(Property.LAST_VIEW, activeView.getId());
+		ClientPropertiesController.setProperty(Property.LAST_VIEW, activeView.getId());
 		Platform.exit(); // Make sure that the application doesnt stay open for some reason
 	}
 }

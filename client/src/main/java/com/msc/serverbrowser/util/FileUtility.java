@@ -1,7 +1,6 @@
 package com.msc.serverbrowser.util;
 
 import static java.io.File.separator;
-import static java.lang.String.format;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,7 +22,7 @@ import com.msc.serverbrowser.logging.Logging;
  * @author Marcel
  * @since 01.07.2017
  */
-public class FileUtility
+public final class FileUtility
 {
 	private FileUtility()
 	{
@@ -75,7 +74,7 @@ public class FileUtility
 				final long size = zipEntry.getSize();
 				final long compressedSize = zipEntry.getCompressedSize();
 
-				Logging.logger().fine(() -> format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
+				Logging.info(String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
 
 				// Do we need to create a directory ?
 				final File file = new File(outputLocation + separator + name);

@@ -10,7 +10,7 @@ import javax.swing.filechooser.FileSystemView;
  * @author Marcel
  */
 @SuppressWarnings("javadoc")
-public class PathConstants
+public final class PathConstants
 {
 	// Internal Paths
 	public static final String	VIEW_PATH		= "/com/msc/serverbrowser/views/";
@@ -27,4 +27,9 @@ public class PathConstants
 	public static final String	SAMP_CHATLOG	= SAMP_PATH + "\\chatlog.txt";
 	public static final String	SAMP_USERDATA	= SAMP_PATH + "\\USERDATA.DAT";
 	public static final String	OUTPUT_ZIP		= SAMPEX_PATH + File.separator + "temp.zip";
+
+	private PathConstants()
+	{
+		// Constructor to prevent instantiation
+	}
 }

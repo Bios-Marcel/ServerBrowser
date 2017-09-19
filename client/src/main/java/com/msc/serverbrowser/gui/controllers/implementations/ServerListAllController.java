@@ -36,7 +36,7 @@ public class ServerListAllController extends AbstractServerListController
 			}
 			catch (final IOException exception)
 			{
-				Logging.logger().log(Level.SEVERE, "Couldn't retrieve data from announce api.", exception);
+				Logging.log(Level.SEVERE, "Couldn't retrieve data from announce api.", exception);
 				Platform.runLater(() -> serverTable.setPlaceholder(new Label("Couldn't fetch servers")));
 			}
 

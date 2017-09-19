@@ -13,13 +13,13 @@ import com.github.plushaze.traynotification.notification.NotificationTypeImpleme
 import com.github.plushaze.traynotification.notification.TrayNotification;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.constants.PathConstants;
-import com.msc.serverbrowser.data.properties.ClientProperties;
+import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtility;
-import com.msc.serverbrowser.util.UpdateUtil;
-import com.msc.serverbrowser.util.windows.OSUtil;
+import com.msc.serverbrowser.util.UpdateUtility;
+import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -114,7 +114,7 @@ public final class Client extends Application
 			final Parent root = loader.load();
 			final Scene scene = new Scene(root);
 
-			if (ClientProperties.getPropertyAsBoolean(Property.USE_DARK_THEME))
+			if (ClientPropertiesController.getPropertyAsBoolean(Property.USE_DARK_THEME))
 			{
 				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyleDark.css");
 				scene.getStylesheets().add("/styles/trayDark.css");
@@ -129,7 +129,7 @@ public final class Client extends Application
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Couldn't load UI", exception);
+			Logging.log(Level.SEVERE, "Couldn't load UI", exception);
 			Platform.exit();
 		}
 
@@ -151,21 +151,21 @@ public final class Client extends Application
 		TrayNotificationBuilder.setDefaultOwner(stage);
 
 		primaryStage.getIcons().add(APPLICATION_ICON);
-		primaryStage.setMaximized(ClientProperties.getPropertyAsBoolean(Property.MAXIMIZED));
-		primaryStage.setFullScreen(ClientProperties.getPropertyAsBoolean(Property.FULLSCREEN));
+		primaryStage.setMaximized(ClientPropertiesController.getPropertyAsBoolean(Property.MAXIMIZED));
+		primaryStage.setFullScreen(ClientPropertiesController.getPropertyAsBoolean(Property.FULLSCREEN));
 		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
 		{
 			controller.onClose();
-			ClientProperties.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
-			ClientProperties.setProperty(Property.FULLSCREEN, primaryStage.isFullScreen());
+			ClientPropertiesController.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
+			ClientPropertiesController.setProperty(Property.FULLSCREEN, primaryStage.isFullScreen());
 		});
 
 		primaryStage.show();
 
-		final boolean showChanelog = ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG);
-		final boolean changelogEnabled = ClientProperties.getPropertyAsBoolean(Property.CHANGELOG_ENABLED);
+		final boolean showChanelog = ClientPropertiesController.getPropertyAsBoolean(Property.SHOW_CHANGELOG);
+		final boolean changelogEnabled = ClientPropertiesController.getPropertyAsBoolean(Property.CHANGELOG_ENABLED);
 
 		if (showChanelog && changelogEnabled)
 		{
@@ -238,14 +238,14 @@ public final class Client extends Application
 	{
 		try
 		{
-			if (!UpdateUtil.isUpToDate())
+			if (!UpdateUtility.isUpToDate())
 			{
 				Platform.runLater(() -> displayUpdateNotification());
 			}
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't check for newer version.", exception);
+			Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
 			Platform.runLater(() -> displayCantRetrieveUpdate());
 		}
 
@@ -277,7 +277,7 @@ public final class Client extends Application
 
 		trayNotification.setOnMouseClicked(clicked ->
 		{
-			OSUtil.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
+			OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
 			trayNotification.dismiss();
 		});
 
@@ -291,17 +291,17 @@ public final class Client extends Application
 	{
 		try
 		{
-			final String updateUrl = UpdateUtil.getLatestVersionURL();
+			final String updateUrl = UpdateUtility.getLatestVersionURL();
 			final URI url = new URI(updateUrl);
 			final String targetLocation = getOwnJarFile().getPath().toString();
 
 			FileUtility.downloadFile(url.toString(), targetLocation);
-			ClientProperties.setProperty(Property.SHOW_CHANGELOG, true);
+			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, true);
 			selfRestart();
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Couldn't retrieve update.", exception);
+			Logging.log(Level.SEVERE, "Couldn't retrieve update.", exception);
 		}
 	}
 
@@ -340,7 +340,7 @@ public final class Client extends Application
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Couldn't selfrestart.", exception);
+			Logging.log(Level.SEVERE, "Couldn't selfrestart.", exception);
 		}
 	}
 

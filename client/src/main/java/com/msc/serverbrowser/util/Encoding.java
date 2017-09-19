@@ -11,8 +11,13 @@ import org.mozilla.universalchardet.UniversalDetector;
  *
  * @author Marcel
  */
-public class Encoding
+public final class Encoding
 {
+	private Encoding()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	private static UniversalDetector detector = new UniversalDetector(null);
 
 	/**

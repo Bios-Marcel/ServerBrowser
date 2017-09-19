@@ -15,14 +15,14 @@ import java.util.regex.PatternSyntaxException;
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
-import com.msc.serverbrowser.data.Favourites;
+import com.msc.serverbrowser.data.FavouritesController;
 import com.msc.serverbrowser.data.Player;
 import com.msc.serverbrowser.data.SampServer;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.GTAController;
 import com.msc.serverbrowser.util.SampQuery;
 import com.msc.serverbrowser.util.StringUtility;
-import com.msc.serverbrowser.util.windows.OSUtil;
+import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -250,7 +250,7 @@ public abstract class AbstractServerListController implements ViewController
 			final String[] ipAndPort = addressTextField.getText().split("[:]");
 			if (ipAndPort.length == 1)
 			{
-				final SampServer newServer = Favourites.addServerToFavourites(ipAndPort[0], 7777);
+				final SampServer newServer = FavouritesController.addServerToFavourites(ipAndPort[0], 7777);
 				if (!servers.contains(newServer))
 				{
 					servers.add(newServer);
@@ -258,7 +258,7 @@ public abstract class AbstractServerListController implements ViewController
 			}
 			else if (ipAndPort.length == 2 && validatePort(ipAndPort[1]))
 			{
-				final SampServer newServer = Favourites.addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
+				final SampServer newServer = FavouritesController.addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 				if (!servers.contains(newServer))
 				{
 					servers.add(newServer);
@@ -423,15 +423,15 @@ public abstract class AbstractServerListController implements ViewController
 			else if (clickedItem.equals(visitWebsiteMenuItem))
 			{
 				final SampServer server = serverList.get(0);
-				OSUtil.browse(server.getWebsite());
+				OSUtility.browse(server.getWebsite());
 			}
 			else if (clickedItem.equals(addToFavouritesMenuItem))
 			{
-				serverList.forEach(Favourites::addServerToFavourites);
+				serverList.forEach(FavouritesController::addServerToFavourites);
 			}
 			else if (clickedItem.equals(removeFromFavouritesMenuItem))
 			{
-				serverList.forEach(Favourites::removeServerFromFavourites);
+				serverList.forEach(FavouritesController::removeServerFromFavourites);
 				servers.removeAll(serverList);
 			}
 			else if (clickedItem.equals(copyIpAddressAndPortMenuItem))
@@ -549,7 +549,7 @@ public abstract class AbstractServerListController implements ViewController
 							if (StringUtility.isValidURL(websiteFixed))
 							{
 								websiteLink.setUnderline(true);
-								websiteLink.setOnAction(__ -> OSUtil.browse(server.getWebsite()));
+								websiteLink.setOnAction(__ -> OSUtility.browse(server.getWebsite()));
 							}
 
 							if (playerList.isEmpty())
@@ -571,7 +571,7 @@ public abstract class AbstractServerListController implements ViewController
 						});
 					}
 
-					Favourites.updateServerData(server);
+					FavouritesController.updateServerData(server);
 				}
 			}
 			catch (@SuppressWarnings("unused") final Exception exception)

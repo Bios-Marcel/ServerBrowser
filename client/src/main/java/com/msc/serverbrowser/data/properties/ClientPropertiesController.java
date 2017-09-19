@@ -14,8 +14,13 @@ import com.msc.serverbrowser.logging.Logging;
  * @author Marcel
  * @since 17.09.2017
  */
-public class ClientProperties
+public final class ClientPropertiesController
 {
+	private ClientPropertiesController()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	/**
 	 * Returns a properties default as an integer if the datatype is correct.
 	 *
@@ -55,7 +60,7 @@ public class ClientProperties
 			}
 			catch (final SQLException exception)
 			{
-				Logging.logger().log(Level.SEVERE, "Could not set the property as a String.", exception);
+				Logging.log(Level.SEVERE, "Could not set the property as a String.", exception);
 			}
 		}
 
@@ -84,7 +89,7 @@ public class ClientProperties
 		}
 		catch (final NumberFormatException e)
 		{
-			Logging.logger().log(Level.SEVERE, "Invalid property value, property: " + property, e);
+			Logging.log(Level.SEVERE, "Invalid property value, property: " + property, e);
 		}
 
 		return value;
@@ -111,7 +116,7 @@ public class ClientProperties
 		}
 		catch (final NumberFormatException e)
 		{
-			Logging.logger().log(Level.SEVERE, "Invalid property value, property: " + property, e);
+			Logging.log(Level.SEVERE, "Invalid property value, property: " + property, e);
 		}
 
 		return value;

@@ -123,7 +123,7 @@ public class VersionChangeController implements ViewController
 				}
 				catch (final IOException | IllegalArgumentException exception)
 				{
-					Logging.logger().log(Level.SEVERE, "Error Updating client.", exception);
+					Logging.log(Level.SEVERE, "Error Updating client.", exception);
 				}
 
 				currentlyInstalling = Optional.empty();

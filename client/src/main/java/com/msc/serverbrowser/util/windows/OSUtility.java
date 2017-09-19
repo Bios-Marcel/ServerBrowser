@@ -10,11 +10,19 @@ import java.util.logging.Level;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.StringUtility;
 
-public class OSUtil
+/**
+ * @author Marcel
+ * @since 19.09.2017
+ */
+public final class OSUtility
 {
+	private OSUtility()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	/**
-	 * Preserved os name, since it won't change anyways and reading from a variable
-	 * is faster.
+	 * Preserved os name, since it won't change anyways and reading from a variable is faster.
 	 */
 	private final static String OS = System.getProperty("os.name").toLowerCase();
 
@@ -27,8 +35,7 @@ public class OSUtil
 	}
 
 	/**
-	 * Opens a website using the default browser. It will automatically apply
-	 * http:// infront of the
+	 * Opens a website using the default browser. It will automatically apply http:// infront of the
 	 * url if not existant already.
 	 *
 	 * @param urlAsString
@@ -41,14 +48,12 @@ public class OSUtil
 		try
 		{
 			final String fixedUrl = StringUtility.fixUrlIfNecessary(urlAsString);
-			System.out.println("Totlly fixed: " + fixedUrl);
 			final URL url = new URL(fixedUrl);
-			desktop.browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
-					url.getQuery(), url.getRef()));
+			desktop.browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't visit website '" + urlAsString + "'", exception);
+			Logging.log(Level.WARNING, "Couldn't visit website '" + urlAsString + "'", exception);
 		}
 	}
 }

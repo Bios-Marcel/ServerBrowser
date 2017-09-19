@@ -14,7 +14,11 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.msc.serverbrowser.data.SampServer;
 
-public class ServerUtility
+/**
+ * @author Marcel
+ * @since 19.09.2017
+ */
+public final class ServerUtility
 {
 	private ServerUtility()
 	{
@@ -23,6 +27,13 @@ public class ServerUtility
 
 	private static final String UNKNOWN = "Unknown";
 
+	/**
+	 * Retrieves servers from the SA-MP masterlist for the given version.
+	 *
+	 * @param version
+	 *            to filter for
+	 * @return List of {@link SampServer} instances
+	 */
 	public static List<SampServer> retrieveMasterlistServers(final String version)
 	{
 		final List<SampServer> servers = new ArrayList<>();

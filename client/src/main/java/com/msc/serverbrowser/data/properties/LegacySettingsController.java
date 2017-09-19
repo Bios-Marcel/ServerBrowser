@@ -15,11 +15,11 @@ import com.msc.serverbrowser.logging.Logging;
  * <p>
  * <a href="http://wiki.sa-mp.com/wiki/Sa-mp.cfg.html">SA-MP.cfg Wiki</a>
  * </p>
- * 
+ *
  * @author Marcel
  */
 @SuppressWarnings("javadoc")
-public class LegacySettings
+public final class LegacySettingsController
 {
 	public static final String	FPS_LIMIT			= "fpslimit";
 	public static final String	PAGE_SIZE			= "pagesize";
@@ -43,9 +43,14 @@ public class LegacySettings
 	public static final String	DIRECT_MODE_DEFAULT			= "0";
 	public static final String	NO_NAME_TAG_STATUS_DEFAULT	= "0";
 
+	private LegacySettingsController()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	/**
-	 * @return {@link Properties} object containing the present legacy SA-MP
-	 *         Settings or an empty {@link Optional}
+	 * @return {@link Properties} object containing the present legacy SA-MP Settings or an empty
+	 *         {@link Optional}
 	 */
 	public static Optional<Properties> getLegacyProperties()
 	{
@@ -57,18 +62,16 @@ public class LegacySettings
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Error while loading SA_MP legacy properties.", exception);
+			Logging.log(Level.SEVERE, "Error while loading SA_MP legacy properties.", exception);
 			return Optional.empty();
 		}
 	}
 
 	/**
-	 * Override the SA-MP legacy settings using the passed {@link Properties}
-	 * object.
+	 * Override the SA-MP legacy settings using the passed {@link Properties} object.
 	 *
 	 * @param properties
-	 *            the {@link Properties} object to overwrite the legacy properties
-	 *            with
+	 *            the {@link Properties} object to overwrite the legacy properties with
 	 */
 	public static void save(final Properties properties)
 	{
@@ -78,7 +81,7 @@ public class LegacySettings
 		}
 		catch (final IOException exception)
 		{
-			Logging.logger().log(Level.SEVERE, "Error while saving SA_MP legacy properties.", exception);
+			Logging.log(Level.SEVERE, "Error while saving SA_MP legacy properties.", exception);
 		}
 	}
 }

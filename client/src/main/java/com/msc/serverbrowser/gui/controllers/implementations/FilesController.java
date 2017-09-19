@@ -117,7 +117,7 @@ public class FilesController implements ViewController
 					.message("For more information, please check the logfiles.")
 					.build().showAndDismiss(Duration.seconds(10));
 
-			Logging.logger().log(Level.WARNING, "Couldn't clear chatlog", exception);
+			Logging.log(Level.WARNING, "Couldn't clear chatlog", exception);
 		}
 	}
 
@@ -170,7 +170,7 @@ public class FilesController implements ViewController
 		}
 		catch (final MalformedURLException | URISyntaxException exception)
 		{
-			Logging.logger().log(Level.WARNING, "Couldn't load image: " + presentImage.getAbsoluteFile(), exception);
+			Logging.log(Level.WARNING, "Couldn't load image: " + presentImage.getAbsoluteFile(), exception);
 		}
 
 		if (pathToImage.isPresent())
