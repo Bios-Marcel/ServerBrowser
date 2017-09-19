@@ -44,7 +44,7 @@ public class StringUtil
 	{
 		final char[] chars = string.toCharArray();
 
-		final StringBuilder charsAsHex = new StringBuilder();
+		final StringBuilder charsAsHex = new StringBuilder(21);
 
 		charsAsHex.append("Number of chars: (" + chars.length + ") ");
 

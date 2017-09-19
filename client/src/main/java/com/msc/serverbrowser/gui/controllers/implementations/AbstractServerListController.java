@@ -57,6 +57,8 @@ import javafx.util.Duration;
  */
 public abstract class AbstractServerListController implements ViewController
 {
+	private static final String RETRIEVING = "Retrieving...";
+
 	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
 
 	@FXML
@@ -490,13 +492,13 @@ public abstract class AbstractServerListController implements ViewController
 	protected void updateServerInfo(final SampServer server)
 	{
 		playerTable.getItems().clear();
-		playerTable.setPlaceholder(new Label("Retrieving..."));
+		playerTable.setPlaceholder(new Label(RETRIEVING));
 		serverAddress.setText(server.getAddress() + ":" + server.getPort());
-		serverLagcomp.setText("Retrieving ...");
-		serverPing.setText("Retrieving ...");
-		serverPassword.setText("Retrieving ...");
-		mapLabel.setText("Retrieving ...");
-		websiteLink.setText("Retrieving ...");
+		serverLagcomp.setText(RETRIEVING);
+		serverPing.setText(RETRIEVING);
+		serverPassword.setText(RETRIEVING);
+		mapLabel.setText(RETRIEVING);
+		websiteLink.setText(RETRIEVING);
 		websiteLink.setUnderline(false);
 		websiteLink.setOnAction(null);
 

@@ -1,6 +1,8 @@
 package com.msc.serverbrowser.data;
 
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +26,8 @@ import com.msc.serverbrowser.util.SampQuery;
  */
 public class Favourites
 {
+	private static final String UNKNOWN = "Unknown";
+
 	/**
 	 * Adds a new server to the favourites and downloads its information.
 	 *
@@ -54,15 +58,15 @@ public class Favourites
 				server.setVersion(rules.get("version"));
 			});
 		}
-		catch (final Exception exception)
+		catch (final SocketException | UnknownHostException exception)
 		{
 			Logging.logger().log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.", exception);
-			server.setHostname("Unknown");
-			server.setLanguage("Unknown");
-			server.setMode("Unknown");
-			server.setWebsite("Unknown");
-			server.setVersion("Unknown");
-			server.setLagcomp("Unknown");
+			server.setHostname(UNKNOWN);
+			server.setLanguage(UNKNOWN);
+			server.setMode(UNKNOWN);
+			server.setWebsite(UNKNOWN);
+			server.setVersion(UNKNOWN);
+			server.setLagcomp(UNKNOWN);
 			server.setPlayers(0);
 			server.setMaxPlayers(0);
 		}
@@ -172,9 +176,9 @@ public class Favourites
 							.build());
 				}
 			}
-			catch (final SQLException e)
+			catch (final SQLException exception)
 			{
-				e.printStackTrace();
+				Logging.logger().log(Level.SEVERE, "Error while retrieving favourites", exception);
 			}
 		});
 

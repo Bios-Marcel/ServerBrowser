@@ -16,6 +16,8 @@ import com.msc.serverbrowser.data.SampServer;
 
 public class ServerUtil
 {
+	private static final String UNKNOWN = "Unknown";
+
 	public static List<SampServer> retrieveMasterlistServers(final String version)
 	{
 		final List<SampServer> servers = new ArrayList<>();
@@ -71,7 +73,7 @@ public class ServerUtil
 		jsonArray.forEach(object ->
 		{
 			final JsonObject jsonServerData = object.asObject();
-			final String address = jsonServerData.getString("ip", "Unknown");
+			final String address = jsonServerData.getString("ip", UNKNOWN);
 
 			final String[] addressData = address.split(":");
 
@@ -79,9 +81,9 @@ public class ServerUtil
 
 			server.setPlayers(jsonServerData.getInt("pc", 0));
 			server.setMaxPlayers(jsonServerData.getInt("pm", 0));
-			server.setMode(jsonServerData.getString("gm", "Unknown"));
-			server.setHostname(jsonServerData.getString("hn", "Unknown"));
-			server.setLanguage(jsonServerData.getString("la", "Unknown"));
+			server.setMode(jsonServerData.getString("gm", UNKNOWN));
+			server.setHostname(jsonServerData.getString("hn", UNKNOWN));
+			server.setLanguage(jsonServerData.getString("la", UNKNOWN));
 
 			servers.add(server);
 		});

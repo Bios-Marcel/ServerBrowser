@@ -23,14 +23,10 @@ import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -204,19 +200,7 @@ public final class Client extends Application
 	@Deprecated
 	private void showChangelog()
 	{
-		final Alert alert = new Alert(AlertType.INFORMATION);
-		setupDialog(alert);
-		alert.setTitle(APPLICATION_NAME + "- Changelog");
-		alert.setHeaderText("Your client has been updated | Changelog");
-
-		final StringBuilder updateText = new StringBuilder();
-
-		updateText.append("- More configurable SA-MP legacy settings");
-		updateText.append(System.lineSeparator() + System.lineSeparator());
-
-		alert.setContentText(updateText.toString());
-		alert.show();
-		ClientProperties.setProperty(Property.SHOW_CHANGELOG, false);
+		// TODO(MSC) Remake
 	}
 
 	/**
@@ -230,30 +214,6 @@ public final class Client extends Application
 				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
 				.animation(Animations.SLIDE)
 				.build().showAndDismiss(Duration.seconds(10));
-	}
-
-	/**
-	 * <p>
-	 * Sets up a dialog; performs the following actions:
-	 * </p>
-	 * <ul>
-	 * <li>sets stylesheets</li>
-	 * <li>sets the owner stage</li>
-	 * <li>sets the modality</li>
-	 * <li>sets the icon</li>
-	 * </ul>
-	 *
-	 * @param alert
-	 *            the {@link Alert} that will be set up
-	 */
-	@Deprecated
-	private void setupDialog(final Alert alert)
-	{
-		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(APPLICATION_ICON);
-		final ObservableList<String> clientStylesheets = stage.getScene().getStylesheets();
-		alert.getDialogPane().getStylesheets().addAll(clientStylesheets);
-		alert.initOwner(stage);
-		alert.initModality(Modality.APPLICATION_MODAL);
 	}
 
 	/**

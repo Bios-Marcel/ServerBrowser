@@ -315,7 +315,7 @@ public class SampQuery implements AutoCloseable
 
 			return Optional.ofNullable(sendPacket);
 		}
-		catch (@SuppressWarnings("unused") final Exception exception)
+		catch (@SuppressWarnings("unused") final NumberFormatException exception)
 		{
 			return Optional.empty();
 		}

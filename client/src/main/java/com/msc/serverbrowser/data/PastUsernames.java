@@ -4,6 +4,9 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
+import com.msc.serverbrowser.logging.Logging;
 
 /**
  * Contains methods for adding and removing past usernames.
@@ -57,9 +60,9 @@ public class PastUsernames
 					usernames.add(resultSet.getString("username"));
 				}
 			}
-			catch (final SQLException e)
+			catch (final SQLException exception)
 			{
-				e.printStackTrace();
+				Logging.logger().log(Level.SEVERE, "Error while retrieving past usernames", exception);
 			}
 		});
 
