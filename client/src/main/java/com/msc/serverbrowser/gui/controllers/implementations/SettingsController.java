@@ -8,7 +8,7 @@ import com.msc.serverbrowser.data.properties.LegacySettings;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
-import com.msc.serverbrowser.util.StringUtil;
+import com.msc.serverbrowser.util.StringUtility;
 
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -162,21 +162,21 @@ public class SettingsController implements ViewController
 
 	private void initLegacySettings(final Properties legacyProperties)
 	{
-		final boolean multicore = StringUtil.stringToBoolean(legacyProperties
+		final boolean multicore = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettings.MULTICORE, LegacySettings.MULTICORE_DEFAULT));
-		final boolean audioMsgOff = StringUtil.stringToBoolean(legacyProperties
+		final boolean audioMsgOff = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettings.AUDIO_MESSAGE_OFF, LegacySettings.AUDIO_MESSAGE_OFF_DEFAULT));
-		final boolean audioProxyOff = StringUtil.stringToBoolean(legacyProperties
+		final boolean audioProxyOff = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettings.AUDIO_PROXY_OFF, LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
-		final boolean timestamp = StringUtil.stringToBoolean(legacyProperties
+		final boolean timestamp = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettings.TIMESTAMP, LegacySettings.TIMESTAMP_DEFAULT));
-		final boolean disableHeadMove = StringUtil.stringToBoolean(legacyProperties
+		final boolean disableHeadMove = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettings.DISABLE_HEAD_MOVE, LegacySettings.DISABLE_HEAD_MOVE_DEFAULT));
-		final boolean ime = StringUtil.stringToBoolean(legacyProperties
+		final boolean ime = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettings.IME, LegacySettings.IME_DEFAULT));
-		final boolean noNameTagStatus = StringUtil.stringToBoolean(legacyProperties
+		final boolean noNameTagStatus = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettings.NO_NAME_TAG_STATUS, LegacySettings.NO_NAME_TAG_STATUS_DEFAULT));
-		final boolean directMode = StringUtil.stringToBoolean(legacyProperties
+		final boolean directMode = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettings.DIRECT_MODE, LegacySettings.DIRECT_MODE_DEFAULT));
 
 		final int fpsLimit = Integer
@@ -238,20 +238,20 @@ public class SettingsController implements ViewController
 
 		// Legacy Settigs
 		changeLegacyBooleanSetting(LegacySettings.AUDIO_MESSAGE_OFF,
-				StringUtil.stringToBoolean(LegacySettings.AUDIO_MESSAGE_OFF_DEFAULT));
+				StringUtility.stringToBoolean(LegacySettings.AUDIO_MESSAGE_OFF_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.AUDIO_PROXY_OFF,
-				StringUtil.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
+				StringUtility.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.DIRECT_MODE,
-				StringUtil.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
+				StringUtility.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.DISABLE_HEAD_MOVE,
-				StringUtil.stringToBoolean(LegacySettings.DISABLE_HEAD_MOVE_DEFAULT));
+				StringUtility.stringToBoolean(LegacySettings.DISABLE_HEAD_MOVE_DEFAULT));
 		changeLegacyIntegerSetting(LegacySettings.FPS_LIMIT, Integer.parseInt(LegacySettings.FPS_LIMIT_DEFAULT));
 		changeLegacyIntegerSetting(LegacySettings.PAGE_SIZE, Integer.parseInt(LegacySettings.PAGE_SIZE_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettings.IME, StringUtil.stringToBoolean(LegacySettings.IME_DEFAULT));
+		changeLegacyBooleanSetting(LegacySettings.IME, StringUtility.stringToBoolean(LegacySettings.IME_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.MULTICORE,
-				StringUtil.stringToBoolean(LegacySettings.MULTICORE_DEFAULT));
+				StringUtility.stringToBoolean(LegacySettings.MULTICORE_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.TIMESTAMP,
-				StringUtil.stringToBoolean(LegacySettings.TIMESTAMP_DEFAULT));
+				StringUtility.stringToBoolean(LegacySettings.TIMESTAMP_DEFAULT));
 	}
 
 	@Override

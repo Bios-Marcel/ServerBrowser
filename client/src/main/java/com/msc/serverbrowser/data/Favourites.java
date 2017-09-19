@@ -26,6 +26,11 @@ import com.msc.serverbrowser.util.SampQuery;
  */
 public class Favourites
 {
+	private Favourites()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	private static final String UNKNOWN = "Unknown";
 
 	/**

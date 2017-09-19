@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.StringUtil;
+import com.msc.serverbrowser.util.StringUtility;
 
 public class OSUtil
 {
@@ -40,7 +40,7 @@ public class OSUtil
 
 		try
 		{
-			final String fixedUrl = StringUtil.fixUrlIfNecessary(urlAsString);
+			final String fixedUrl = StringUtility.fixUrlIfNecessary(urlAsString);
 			System.out.println("Totlly fixed: " + fixedUrl);
 			final URL url = new URL(fixedUrl);
 			desktop.browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),

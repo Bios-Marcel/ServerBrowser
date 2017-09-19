@@ -23,8 +23,13 @@ import com.msc.serverbrowser.logging.Logging;
  * @author Marcel
  * @since 01.07.2017
  */
-public class FileUtil
+public class FileUtility
 {
+	private FileUtility()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	/**
 	 * Downloads a file and saves it to the given location.
 	 *

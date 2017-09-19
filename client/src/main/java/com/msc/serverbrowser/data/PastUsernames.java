@@ -15,6 +15,11 @@ import com.msc.serverbrowser.logging.Logging;
  */
 public class PastUsernames
 {
+	private PastUsernames()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	/**
 	 * Adds a username to the past usernames list.
 	 *

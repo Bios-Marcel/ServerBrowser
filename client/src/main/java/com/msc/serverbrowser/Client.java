@@ -17,7 +17,7 @@ import com.msc.serverbrowser.data.properties.ClientProperties;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.FileUtil;
+import com.msc.serverbrowser.util.FileUtility;
 import com.msc.serverbrowser.util.UpdateUtil;
 import com.msc.serverbrowser.util.windows.OSUtil;
 
@@ -295,7 +295,7 @@ public final class Client extends Application
 			final URI url = new URI(updateUrl);
 			final String targetLocation = getOwnJarFile().getPath().toString();
 
-			FileUtil.downloadFile(url.toString(), targetLocation);
+			FileUtility.downloadFile(url.toString(), targetLocation);
 			ClientProperties.setProperty(Property.SHOW_CHANGELOG, true);
 			selfRestart();
 		}

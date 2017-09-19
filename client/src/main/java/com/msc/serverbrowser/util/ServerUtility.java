@@ -14,8 +14,13 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.msc.serverbrowser.data.SampServer;
 
-public class ServerUtil
+public class ServerUtility
 {
+	private ServerUtility()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	private static final String UNKNOWN = "Unknown";
 
 	public static List<SampServer> retrieveMasterlistServers(final String version)

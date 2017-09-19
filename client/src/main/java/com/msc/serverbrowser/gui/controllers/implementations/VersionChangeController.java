@@ -17,8 +17,8 @@ import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.FileUtil;
-import com.msc.serverbrowser.util.GTA;
+import com.msc.serverbrowser.util.FileUtility;
+import com.msc.serverbrowser.util.GTAController;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -98,15 +98,15 @@ public class VersionChangeController implements ViewController
 	private void installAction(final Button button)
 	{
 		final SAMPVersion toInstall = (SAMPVersion) button.getUserData();
-		final Optional<SAMPVersion> installedVersion = GTA.getInstalledVersion();
+		final Optional<SAMPVersion> installedVersion = GTAController.getInstalledVersion();
 
 		if (installedVersion.isPresent())
 		{
 			setAllButtonsDisabled(true);
 			button.setText("Installing ...");
 
-			GTA.killSamp();
-			GTA.killGTA();
+			GTAController.killSamp();
+			GTAController.killGTA();
 
 			// TODO(MSC) Check JavaFX Threading API (Task / Service)
 			// Using a thread here, incase someone wants to keep using the app meanwhile
@@ -116,10 +116,10 @@ public class VersionChangeController implements ViewController
 				try
 				{
 					currentlyInstalling = Optional.of(toInstall);
-					final Optional<String> gtaPath = GTA.getGtaPath();
+					final Optional<String> gtaPath = GTAController.getGtaPath();
 					downloadedFile = Optional
-							.of(FileUtil.downloadFile("http://164.132.193.101/sampversion/" + toInstall.getVersionIdentifier() + ".zip", PathConstants.OUTPUT_ZIP));
-					FileUtil.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
+							.of(FileUtility.downloadFile("http://164.132.193.101/sampversion/" + toInstall.getVersionIdentifier() + ".zip", PathConstants.OUTPUT_ZIP));
+					FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
 				}
 				catch (final IOException | IllegalArgumentException exception)
 				{
@@ -161,7 +161,7 @@ public class VersionChangeController implements ViewController
 	 */
 	private void updateButtonStates()
 	{
-		final Optional<SAMPVersion> installedVersion = GTA.getInstalledVersion();
+		final Optional<SAMPVersion> installedVersion = GTAController.getInstalledVersion();
 		final boolean ongoingInstallation = currentlyInstalling.isPresent();
 
 		installedVersion.ifPresent(version ->

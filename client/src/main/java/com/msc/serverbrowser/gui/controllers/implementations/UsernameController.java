@@ -2,7 +2,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
-import com.msc.serverbrowser.util.GTA;
+import com.msc.serverbrowser.util.GTAController;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,7 +36,7 @@ public class UsernameController implements ViewController
 	@Override
 	public void initialize()
 	{
-		usernameTextField.textProperty().bindBidirectional(GTA.usernameProperty);
+		usernameTextField.textProperty().bindBidirectional(GTAController.usernameProperty);
 
 		nameList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -102,7 +102,7 @@ public class UsernameController implements ViewController
 	@FXML
 	private void applyUsername()
 	{
-		GTA.applyUsername();
+		GTAController.applyUsername();
 		nameList.setItems(FXCollections.observableArrayList(PastUsernames.getPastUsernames()));
 	}
 

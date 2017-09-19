@@ -6,7 +6,7 @@ import java.util.logging.Level;
 
 import com.msc.serverbrowser.data.SampServer;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.ServerUtil;
+import com.msc.serverbrowser.util.ServerUtility;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -31,7 +31,7 @@ public class ServerListAllController extends AbstractServerListController
 		{
 			try
 			{
-				servers.addAll(ServerUtil.fetchServersFromSouthclaws());
+				servers.addAll(ServerUtility.fetchServersFromSouthclaws());
 				Platform.runLater(() -> serverTable.refresh());
 			}
 			catch (final IOException exception)

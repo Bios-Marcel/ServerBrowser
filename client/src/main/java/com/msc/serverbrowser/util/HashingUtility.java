@@ -11,8 +11,13 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author Marcel
  */
-public class Hashing
+public class HashingUtility
 {
+	private HashingUtility()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	/**
 	 * Gets a files SHA-256 Checksum.
 	 *

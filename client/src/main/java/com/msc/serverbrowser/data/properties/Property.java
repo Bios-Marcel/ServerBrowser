@@ -1,6 +1,6 @@
 package com.msc.serverbrowser.data.properties;
 
-import com.msc.serverbrowser.util.GTA;
+import com.msc.serverbrowser.util.GTAController;
 
 /**
  * Enum that holds all existant properties.
@@ -17,7 +17,7 @@ public enum Property
 	NOTIFY_SERVER_ON_STARTUP(5, true, Boolean.class),
 	REMEMBER_LAST_VIEW(6, true, Boolean.class),
 	ASK_FOR_NAME_ON_CONNECT(7, false, Boolean.class),
-	SAMP_PATH(8, GTA.getGtaPathUnsafe(), String.class),
+	SAMP_PATH(8, GTAController.getGtaPathUnsafe(), String.class),
 	USE_DARK_THEME(9, false, Boolean.class),
 	ALLOW_CLOSE_GTA(10, false, Boolean.class),
 	ALLOW_CLOSE_SAMP(11, false, Boolean.class),

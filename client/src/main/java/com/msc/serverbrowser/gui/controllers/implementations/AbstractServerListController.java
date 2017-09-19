@@ -19,9 +19,9 @@ import com.msc.serverbrowser.data.Favourites;
 import com.msc.serverbrowser.data.Player;
 import com.msc.serverbrowser.data.SampServer;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
-import com.msc.serverbrowser.util.GTA;
+import com.msc.serverbrowser.util.GTAController;
 import com.msc.serverbrowser.util.SampQuery;
-import com.msc.serverbrowser.util.StringUtil;
+import com.msc.serverbrowser.util.StringUtility;
 import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.application.Platform;
@@ -438,7 +438,7 @@ public abstract class AbstractServerListController implements ViewController
 			{
 
 				final SampServer server = serverList.get(0);
-				System.out.println(StringUtil.getHexChars(server.getMode()));
+				System.out.println(StringUtility.getHexChars(server.getMode()));
 				final StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
 				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, null);
@@ -470,11 +470,11 @@ public abstract class AbstractServerListController implements ViewController
 				dialog.setHeaderText("Enter the servers password (Leave empty if u think there is none).");
 
 				final Optional<String> result = dialog.showAndWait();
-				result.ifPresent(password -> GTA.connectToServer(address + ":" + port, password));
+				result.ifPresent(password -> GTAController.connectToServer(address + ":" + port, password));
 			}
 			else
 			{
-				GTA.connectToServer(address + ":" + port);
+				GTAController.connectToServer(address + ":" + port);
 			}
 		}
 		catch (@SuppressWarnings("unused") final IOException exception)
@@ -545,8 +545,8 @@ public abstract class AbstractServerListController implements ViewController
 							mapLabel.setText(server.getMap());
 							websiteLink.setText(server.getWebsite());
 
-							final String websiteFixed = StringUtil.fixUrlIfNecessary(server.getWebsite().toLowerCase());
-							if (StringUtil.isValidURL(websiteFixed))
+							final String websiteFixed = StringUtility.fixUrlIfNecessary(server.getWebsite().toLowerCase());
+							if (StringUtility.isValidURL(websiteFixed))
 							{
 								websiteLink.setUnderline(true);
 								websiteLink.setOnAction(__ -> OSUtil.browse(server.getWebsite()));

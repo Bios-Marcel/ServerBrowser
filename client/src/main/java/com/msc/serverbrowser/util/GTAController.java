@@ -32,8 +32,13 @@ import javafx.util.Duration;
  *
  * @author Marcel
  */
-public class GTA
+public class GTAController
 {
+	private GTAController()
+	{
+		// Constructor to prevent instantiation
+	}
+
 	/**
 	 * Holds the users username.
 	 */
@@ -181,9 +186,9 @@ public class GTA
 
 	/**
 	 * Connects to the given server (IP and Port) using an empty (no) password. Other than
-	 * {@link GTA#connectToServer(String)} and {@link GTA#connectToServer(String, String)}, this
-	 * method uses the <code>samp://</code> protocol to connect to make the samp launcher connect to
-	 * the server.
+	 * {@link GTAController#connectToServer(String)} and
+	 * {@link GTAController#connectToServer(String, String)}, this method uses the
+	 * <code>samp://</code> protocol to connect to make the samp launcher connect to the server.
 	 *
 	 * @param ipAndPort
 	 *            the server to connect to
@@ -308,7 +313,7 @@ public class GTA
 	 *
 	 * @param ipAndPort
 	 *            the server to connect to
-	 * @see GTA#connectToServer(String, String)
+	 * @see GTAController#connectToServer(String, String)
 	 */
 	public static void connectToServer(final String ipAndPort)
 	{

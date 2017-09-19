@@ -25,7 +25,7 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.StringUtil;
+import com.msc.serverbrowser.util.StringUtility;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -176,7 +176,7 @@ public class FilesController implements ViewController
 		if (pathToImage.isPresent())
 		{
 			imageContainer.setStyle("-fx-background-image: url(\"" + pathToImage + "\");");
-			sizeValue.setText(StringUtil.humanReadableByteCount(presentImage.length()));
+			sizeValue.setText(StringUtility.humanReadableByteCount(presentImage.length()));
 			final Instant timeAsInstant = Instant.ofEpochMilli(presentImage.lastModified());
 			final LocalDateTime localDateTime = LocalDateTime.ofInstant(timeAsInstant, ZoneId.systemDefault());
 			final String localDateTimeFormatted = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
