@@ -26,12 +26,12 @@ import com.msc.serverbrowser.util.SampQuery;
  */
 public final class FavouritesController
 {
+	private static final String UNKNOWN = "Unknown";
+
 	private FavouritesController()
 	{
 		// Constructor to prevent instantiation
 	}
-
-	private static final String UNKNOWN = "Unknown";
 
 	/**
 	 * Adds a new server to the favourites and downloads its information.

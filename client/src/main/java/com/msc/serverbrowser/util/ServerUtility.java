@@ -8,11 +8,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.msc.serverbrowser.data.SampServer;
+import com.msc.serverbrowser.logging.Logging;
 
 /**
  * @author Marcel
@@ -20,12 +22,12 @@ import com.msc.serverbrowser.data.SampServer;
  */
 public final class ServerUtility
 {
+	private static final String UNKNOWN = "Unknown";
+
 	private ServerUtility()
 	{
 		// Constructor to prevent instantiation
 	}
-
-	private static final String UNKNOWN = "Unknown";
 
 	/**
 	 * Retrieves servers from the SA-MP masterlist for the given version.
@@ -54,9 +56,9 @@ public final class ServerUtility
 				});
 			}
 		}
-		catch (@SuppressWarnings("unused") final IOException exception)
+		catch (final IOException exception)
 		{
-			// Do nthn
+			Logging.log(Level.SEVERE, "Error retrieving servers from masterlist.", exception);
 		}
 
 		return servers;

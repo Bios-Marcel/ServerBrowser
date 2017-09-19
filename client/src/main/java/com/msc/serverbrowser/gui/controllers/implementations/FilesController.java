@@ -94,9 +94,9 @@ public class FilesController implements ViewController
 
 			// Replace Color Codes TODO(MSC) Implement Color feature
 		}
-		catch (@SuppressWarnings("unused") final IOException exception)
+		catch (final IOException exception)
 		{
-			// TODO (MSC) Literally anything
+			Logging.log(Level.SEVERE, "Error loading chatlog.", exception);
 		}
 	}
 

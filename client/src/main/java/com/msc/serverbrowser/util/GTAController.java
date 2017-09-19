@@ -34,15 +34,15 @@ import javafx.util.Duration;
  */
 public final class GTAController
 {
-	private GTAController()
-	{
-		// Constructor to prevent instantiation
-	}
-
 	/**
 	 * Holds the users username.
 	 */
 	public static StringProperty usernameProperty = new SimpleStringProperty(retrieveUsernameFromRegistry());
+
+	private GTAController()
+	{
+		// Constructor to prevent instantiation
+	}
 
 	/**
 	 * Writes the actual username (from registry) into the past usernames list and sets the new name

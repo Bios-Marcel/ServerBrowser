@@ -13,12 +13,12 @@ import org.mozilla.universalchardet.UniversalDetector;
  */
 public final class Encoding
 {
+	private static UniversalDetector detector = new UniversalDetector(null);
+
 	private Encoding()
 	{
 		// Constructor to prevent instantiation
 	}
-
-	private static UniversalDetector detector = new UniversalDetector(null);
 
 	/**
 	 * Tries to decode a given byte array using the given charset. As a fallback

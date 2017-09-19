@@ -16,15 +16,15 @@ import com.msc.serverbrowser.util.StringUtility;
  */
 public final class OSUtility
 {
-	private OSUtility()
-	{
-		// Constructor to prevent instantiation
-	}
-
 	/**
 	 * Preserved os name, since it won't change anyways and reading from a variable is faster.
 	 */
 	private final static String OS = System.getProperty("os.name").toLowerCase();
+
+	private OSUtility()
+	{
+		// Constructor to prevent instantiation
+	}
 
 	/**
 	 * @return true if the system is windows (most likely), otherwise false
