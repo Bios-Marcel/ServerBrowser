@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
@@ -18,6 +19,7 @@ import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.FileUtil;
 import com.msc.serverbrowser.util.UpdateUtil;
+import com.msc.serverbrowser.util.windows.OSUtil;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -74,11 +76,36 @@ public class Client extends Application
 	}
 
 	/**
-	 * Loads the UI as if the Client has just been started.
+	 * Reloads the UI keeps the size correct.
 	 */
-	public void loadUI()
+	public void reloadUI()
 	{
+		final boolean wasMaximized = stage.isMaximized();
+
+		double width = 0;
+		double height = 0;
+
+		if (wasMaximized)
+		{// Demaximize to remaximize later for a correct layout
+			stage.setMaximized(false);
+		}
+		else
+		{
+			width = stage.getWidth();
+			height = stage.getHeight();
+		}
+
 		loadUIAndGetController();
+
+		if (wasMaximized)
+		{
+			stage.setMaximized(true);
+		}
+		else
+		{
+			stage.setWidth(width);
+			stage.setHeight(height);
+		}
 	}
 
 	private MainController loadUIAndGetController()
@@ -99,7 +126,7 @@ public class Client extends Application
 			}
 			else
 			{
-				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyle.css");
+				scene.getStylesheets().add(PathConstants.STYLESHEET_PATH + "mainStyleLight.css");
 				scene.getStylesheets().add("/styles/defaultStyle.css");
 			}
 
@@ -134,7 +161,6 @@ public class Client extends Application
 		primaryStage.setResizable(true);
 
 		primaryStage.setOnCloseRequest(close ->
-
 		{
 			controller.onClose();
 			ClientProperties.setProperty(Property.MAXIMIZED, primaryStage.isMaximized());
@@ -143,18 +169,24 @@ public class Client extends Application
 
 		primaryStage.show();
 
-		if (ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG)
-				&& ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG_AFTER_UPDATE))
+		final boolean showChanelog = ClientProperties.getPropertyAsBoolean(Property.SHOW_CHANGELOG);
+		final boolean changelogEnabled = ClientProperties.getPropertyAsBoolean(Property.CHANGELOG_ENABLED);
+
+		if (showChanelog && changelogEnabled)
 		{
-			final TrayNotificationBuilder builder = new TrayNotificationBuilder()
+			final TrayNotification trayNotification = new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.INFORMATION)
 					.title("Your client has been updated")
 					.message("Click here to see the latest changelog.")
-					.animation(Animations.SLIDE);
+					.animation(Animations.SLIDE)
+					.build();
 
-			final TrayNotification notification = builder.build();
-			notification.setOnMouseClicked(__ -> showChangelog());
-			notification.showAndWait();
+			trayNotification.setOnMouseClicked(__ ->
+			{
+				showChangelog();
+				trayNotification.dismiss();
+			});
+			trayNotification.showAndWait();
 		}
 	}
 
@@ -203,7 +235,6 @@ public class Client extends Application
 				.build().showAndDismiss(Duration.seconds(10));
 	}
 
-	// TODO(MSC) Delete as soon as the Changelog dialog is removed
 	/**
 	 * <p>
 	 * Sets up a dialog; performs the following actions:
@@ -218,6 +249,7 @@ public class Client extends Application
 	 * @param alert
 	 *            the {@link Alert} that will be set up
 	 */
+	@Deprecated
 	private void setupDialog(final Alert alert)
 	{
 		((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(APPLICATION_ICON);
@@ -249,22 +281,51 @@ public class Client extends Application
 	 */
 	private static void checkVersion()
 	{
-
-		if (!UpdateUtil.isUpToDate())
+		try
 		{
-			Platform.runLater(() ->
+			if (!UpdateUtil.isUpToDate())
 			{
-				final TrayNotification notification = new TrayNotificationBuilder()
-						.title("Update Available")
-						.message("Click here to update to the latest version. Not updating might lead to problems.")
-						.animation(Animations.SLIDE)
-						.build();
-
-				notification.setOnMouseClicked(__ -> updateLauncher());
-				notification.showAndWait();
-			});
+				Platform.runLater(() -> displayUpdateNotification());
+			}
+		}
+		catch (final IOException exception)
+		{
+			Platform.runLater(() -> displayCantRetrieveUpdate());
 		}
 
+	}
+
+	private static void displayUpdateNotification()
+	{
+		final TrayNotification trayNotification = new TrayNotificationBuilder()
+				.title("Update Available")
+				.message("Click here to update to the latest version.")
+				.animation(Animations.SLIDE)
+				.build();
+
+		trayNotification.setOnMouseClicked(__ ->
+		{
+			updateLauncher();
+			trayNotification.dismiss();
+		});
+		trayNotification.showAndWait();
+	}
+
+	private static void displayCantRetrieveUpdate()
+	{
+		final TrayNotification trayNotification = new TrayNotificationBuilder()
+				.message("Latest version informations couldn't be retrieved, click to update manually.")
+				.animation(Animations.POPUP)
+				.title("Updating")
+				.build();
+
+		trayNotification.setOnMouseClicked(clicked ->
+		{
+			OSUtil.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
+			trayNotification.dismiss();
+		});
+
+		trayNotification.showAndWait();
 	}
 
 	/**
@@ -276,7 +337,9 @@ public class Client extends Application
 		{
 			final String updateUrl = UpdateUtil.getLatestVersionURL();
 			final URI url = new URI(updateUrl);
-			FileUtil.downloadFile(url.toString(), getOwnJarFile().getPath().toString());
+			final String targetLocation = getOwnJarFile().getPath().toString();
+
+			FileUtil.downloadFile(url.toString(), targetLocation);
 			ClientProperties.setProperty(Property.SHOW_CHANGELOG, true);
 			selfRestart();
 		}
@@ -307,7 +370,7 @@ public class Client extends Application
 			return;
 		}
 
-		final ArrayList<String> command = new ArrayList<>();
+		final List<String> command = new ArrayList<>();
 		command.add(javaBin);
 		command.add("-jar");
 		command.add(currentJar.getPath());

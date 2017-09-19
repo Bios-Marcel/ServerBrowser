@@ -251,13 +251,14 @@
  * Tabs
  */
 
-.tab
+.tab .headers-region
 {
-	-fx-background-color: -component-inner-color !important;
+	-fx-min-size: Infinity;
 }
 
 .tab
 {
+	-fx-background-color: -component-inner-color !important;
 	-fx-border-width: 1.0;
 	-fx-border-color: -border-color;
 }

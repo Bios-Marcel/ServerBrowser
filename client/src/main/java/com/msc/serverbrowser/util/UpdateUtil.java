@@ -27,14 +27,23 @@ public class UpdateUtil
 	 * Checks if the currently installed version is the latest.
 	 *
 	 * @return true if it is up to date, otherwise false
+	 * @throws IOException
+	 *             if the latest tag name couldn't be retrieved.
 	 */
-	public static Boolean isUpToDate()
+	public static Boolean isUpToDate() throws IOException
 	{
 		final String lastTagName = ClientProperties.getPropertyAsString(Property.LAST_TAG_NAME);
-		return lastTagName.equals(getLatestTagName());
+		final Optional<String> latestTagName = getLatestTagName();
+
+		if (latestTagName.isPresent())
+		{
+			return lastTagName.equals(latestTagName.get());
+		}
+
+		throw new IOException("Error retrieving update.");
 	}
 
-	private static String getLatestTagName()
+	private static Optional<String> getLatestTagName()
 	{
 		try
 		{
@@ -44,14 +53,14 @@ public class UpdateUtil
 			if (releases.size() >= 1)
 			{
 				final GHRelease release = releases.get(0);
-				return release.getTagName();
+				return Optional.ofNullable(release.getTagName());
 			}
 		}
 		catch (final IOException exception)
 		{
 			Logging.logger().log(Level.SEVERE, "Couldn't retrieve latest version information.", exception);
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**

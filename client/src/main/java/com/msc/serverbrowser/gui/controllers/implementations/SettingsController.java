@@ -96,7 +96,7 @@ public class SettingsController implements ViewController
 			ClientProperties.setProperty(Property.REMEMBER_LAST_VIEW, true);
 			ClientProperties.setProperty(Property.LAST_VIEW, Views.SETTINGS.getId());
 
-			Client.getInstance().loadUI();
+			Client.getInstance().reloadUI();
 
 			ClientProperties.setProperty(Property.REMEMBER_LAST_VIEW, rememberLastViewOld);
 		});
@@ -106,7 +106,7 @@ public class SettingsController implements ViewController
 		setupCheckBox(allowCloseGtaCheckBox, Property.ALLOW_CLOSE_GTA);
 
 		// Update Properties
-		setupCheckBox(showChangelogCheckBox, Property.SHOW_CHANGELOG_AFTER_UPDATE);
+		setupCheckBox(showChangelogCheckBox, Property.CHANGELOG_ENABLED);
 
 		// SA-MP properties
 		final Properties legacyProperties = LegacySettings.getLegacyProperties().orElse(new Properties());
@@ -212,7 +212,7 @@ public class SettingsController implements ViewController
 		ClientProperties.restorePropertyToDefault(Property.NOTIFY_SERVER_ON_STARTUP);
 		ClientProperties.restorePropertyToDefault(Property.REMEMBER_LAST_VIEW);
 		ClientProperties.restorePropertyToDefault(Property.USE_DARK_THEME);
-		ClientProperties.restorePropertyToDefault(Property.SHOW_CHANGELOG_AFTER_UPDATE);
+		ClientProperties.restorePropertyToDefault(Property.CHANGELOG_ENABLED);
 		ClientProperties.restorePropertyToDefault(Property.SAMP_PATH);
 
 		// Legacy Settigs
