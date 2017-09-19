@@ -25,25 +25,25 @@ public class SettingsController implements ViewController
 {
 	// General Settings
 	@FXML
-	private TextField	sampPathTextField;
+	private TextField			sampPathTextField;
 	@FXML
-	private CheckBox	notifyServerOnStartupCheckBox;
+	private CheckBox			notifyServerOnStartupCheckBox;
 	@FXML
-	private CheckBox	rememberLastViewCheckBox;
+	private CheckBox			rememberLastViewCheckBox;
 
 	// Appearance Settings
 	@FXML
-	private CheckBox darkThemeCheckBox;
+	private CheckBox			darkThemeCheckBox;
 
 	// Permission Settings
 	@FXML
-	private CheckBox	allowCloseSampCheckBox;
+	private CheckBox			allowCloseSampCheckBox;
 	@FXML
-	private CheckBox	allowCloseGtaCheckBox;
+	private CheckBox			allowCloseGtaCheckBox;
 
 	// Update Settings
 	@FXML
-	private CheckBox showChangelogCheckBox;
+	private CheckBox			showChangelogCheckBox;
 
 	// SA-MP Settings
 	@FXML
@@ -112,17 +112,26 @@ public class SettingsController implements ViewController
 		final Properties legacyProperties = LegacySettings.getLegacyProperties().orElse(new Properties());
 		initLegacySettings(legacyProperties);
 
-		fpsLimitSpinner.valueProperty().addListener(changed -> changeLegacyIntegerSetting(LegacySettings.FPS_LIMIT, fpsLimitSpinner));
-		pageSizeSpinner.valueProperty().addListener(changed -> changeLegacyIntegerSetting(LegacySettings.PAGE_SIZE, pageSizeSpinner));
+		fpsLimitSpinner.valueProperty()
+				.addListener(changed -> changeLegacyIntegerSetting(LegacySettings.FPS_LIMIT, fpsLimitSpinner));
+		pageSizeSpinner.valueProperty()
+				.addListener(changed -> changeLegacyIntegerSetting(LegacySettings.PAGE_SIZE, pageSizeSpinner));
 
-		multicoreCheckbox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.MULTICORE, multicoreCheckbox));
-		audioMsgOffCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.AUDIO_MESSAGE_OFF, audioMsgOffCheckBox));
-		audioproxyCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.AUDIO_PROXY_OFF, audioproxyCheckBox));
-		timestampsCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.TIMESTAMP, timestampsCheckBox));
-		disableHeadMoveCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.DISABLE_HEAD_MOVE, disableHeadMoveCheckBox));
+		multicoreCheckbox
+				.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.MULTICORE, multicoreCheckbox));
+		audioMsgOffCheckBox.setOnAction(
+				action -> changeLegacyBooleanSetting(LegacySettings.AUDIO_MESSAGE_OFF, audioMsgOffCheckBox));
+		audioproxyCheckBox
+				.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.AUDIO_PROXY_OFF, audioproxyCheckBox));
+		timestampsCheckBox
+				.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.TIMESTAMP, timestampsCheckBox));
+		disableHeadMoveCheckBox.setOnAction(
+				action -> changeLegacyBooleanSetting(LegacySettings.DISABLE_HEAD_MOVE, disableHeadMoveCheckBox));
 		imeCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.IME, imeCheckBox));
-		directModeCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.DIRECT_MODE, directModeCheckBox));
-		noNameTagStatusCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.NO_NAME_TAG_STATUS, noNameTagStatusCheckBox));
+		directModeCheckBox
+				.setOnAction(action -> changeLegacyBooleanSetting(LegacySettings.DIRECT_MODE, directModeCheckBox));
+		noNameTagStatusCheckBox.setOnAction(
+				action -> changeLegacyBooleanSetting(LegacySettings.NO_NAME_TAG_STATUS, noNameTagStatusCheckBox));
 	}
 
 	private void changeLegacyBooleanSetting(final String key, final CheckBox checkBox)
@@ -153,20 +162,28 @@ public class SettingsController implements ViewController
 
 	private void initLegacySettings(final Properties legacyProperties)
 	{
-		final boolean multicore = legacyProperties.getProperty(LegacySettings.MULTICORE, LegacySettings.MULTICORE_DEFAULT).equals("1") ? true : false;
-		final boolean audioMsgOff = legacyProperties.getProperty(LegacySettings.AUDIO_MESSAGE_OFF, LegacySettings.AUDIO_MESSAGE_OFF_DEFAULT).equals("1") ? true : false;
-		final boolean audioProxyOff = legacyProperties.getProperty(LegacySettings.AUDIO_PROXY_OFF, LegacySettings.AUDIO_PROXY_OFF_DEFAULT).equals("1") ? true : false;
-		final boolean timestamp = legacyProperties.getProperty(LegacySettings.TIMESTAMP, LegacySettings.TIMESTAMP_DEFAULT).equals("1") ? true : false;
+		final boolean multicore = StringUtil.stringToBoolean(legacyProperties
+				.getProperty(LegacySettings.MULTICORE, LegacySettings.MULTICORE_DEFAULT));
+		final boolean audioMsgOff = StringUtil.stringToBoolean(legacyProperties
+				.getProperty(LegacySettings.AUDIO_MESSAGE_OFF, LegacySettings.AUDIO_MESSAGE_OFF_DEFAULT));
+		final boolean audioProxyOff = StringUtil.stringToBoolean(legacyProperties
+				.getProperty(LegacySettings.AUDIO_PROXY_OFF, LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
+		final boolean timestamp = StringUtil.stringToBoolean(legacyProperties
+				.getProperty(LegacySettings.TIMESTAMP, LegacySettings.TIMESTAMP_DEFAULT));
+		final boolean disableHeadMove = StringUtil.stringToBoolean(legacyProperties
+				.getProperty(LegacySettings.DISABLE_HEAD_MOVE, LegacySettings.DISABLE_HEAD_MOVE_DEFAULT));
+		final boolean ime = StringUtil.stringToBoolean(legacyProperties
+				.getProperty(LegacySettings.IME, LegacySettings.IME_DEFAULT));
+		final boolean noNameTagStatus = StringUtil.stringToBoolean(legacyProperties
+				.getProperty(LegacySettings.NO_NAME_TAG_STATUS, LegacySettings.NO_NAME_TAG_STATUS_DEFAULT));
+		final boolean directMode = StringUtil.stringToBoolean(legacyProperties
+				.getProperty(LegacySettings.DIRECT_MODE, LegacySettings.DIRECT_MODE_DEFAULT));
 
-		final boolean disableHeadMove = legacyProperties.getProperty(LegacySettings.DISABLE_HEAD_MOVE, LegacySettings.DISABLE_HEAD_MOVE_DEFAULT).equals("1") ? true : false;
-		final boolean ime = legacyProperties.getProperty(LegacySettings.IME, LegacySettings.IME_DEFAULT).equals("1") ? true : false;
-		final boolean noNameTagStatus = legacyProperties.getProperty(LegacySettings.NO_NAME_TAG_STATUS, LegacySettings.NO_NAME_TAG_STATUS_DEFAULT).equals("1") ? true
-				: false;
-		final boolean directMode = legacyProperties.getProperty(LegacySettings.DIRECT_MODE, LegacySettings.DIRECT_MODE_DEFAULT).equals("1") ? true : false;
-
-		final int fpsLimit = Integer.parseInt(legacyProperties.getProperty(LegacySettings.FPS_LIMIT, LegacySettings.FPS_LIMIT_DEFAULT));
+		final int fpsLimit = Integer
+				.parseInt(legacyProperties.getProperty(LegacySettings.FPS_LIMIT, LegacySettings.FPS_LIMIT_DEFAULT));
 		fpsLimitSpinner.getValueFactory().setValue(fpsLimit);
-		final int pageSize = Integer.parseInt(legacyProperties.getProperty(LegacySettings.PAGE_SIZE, LegacySettings.PAGE_SIZE_DEFAULT));
+		final int pageSize = Integer
+				.parseInt(legacyProperties.getProperty(LegacySettings.PAGE_SIZE, LegacySettings.PAGE_SIZE_DEFAULT));
 		pageSizeSpinner.getValueFactory().setValue(pageSize);
 
 		multicoreCheckbox.setSelected(multicore);
@@ -181,8 +198,10 @@ public class SettingsController implements ViewController
 	}
 
 	/**
-	 * Does a one way binding of a {@link CheckBox} to a {@link Property}. Initially sets the value
-	 * of the {@link CheckBox} according to the {@link Property Properties} value. As soon as the
+	 * Does a one way binding of a {@link CheckBox} to a {@link Property}. Initially
+	 * sets the value
+	 * of the {@link CheckBox} according to the {@link Property Properties} value.
+	 * As soon as the
 	 * {@link CheckBox} value changes, the {@link Property} value will also change.
 	 *
 	 * @param box
@@ -200,8 +219,10 @@ public class SettingsController implements ViewController
 	}
 
 	/**
-	 * Restores all settings to default. Some settings like {@link Property#DEVELOPMENT} and
-	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change those anyways.
+	 * Restores all settings to default. Some settings like
+	 * {@link Property#DEVELOPMENT} and
+	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change
+	 * those anyways.
 	 */
 	@FXML
 	private void restoreDefaults()
@@ -216,15 +237,21 @@ public class SettingsController implements ViewController
 		ClientProperties.restorePropertyToDefault(Property.SAMP_PATH);
 
 		// Legacy Settigs
-		changeLegacyBooleanSetting(LegacySettings.AUDIO_MESSAGE_OFF, StringUtil.stringToBoolean(LegacySettings.AUDIO_MESSAGE_OFF_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettings.AUDIO_PROXY_OFF, StringUtil.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettings.DIRECT_MODE, StringUtil.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettings.DISABLE_HEAD_MOVE, StringUtil.stringToBoolean(LegacySettings.DISABLE_HEAD_MOVE_DEFAULT));
+		changeLegacyBooleanSetting(LegacySettings.AUDIO_MESSAGE_OFF,
+				StringUtil.stringToBoolean(LegacySettings.AUDIO_MESSAGE_OFF_DEFAULT));
+		changeLegacyBooleanSetting(LegacySettings.AUDIO_PROXY_OFF,
+				StringUtil.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
+		changeLegacyBooleanSetting(LegacySettings.DIRECT_MODE,
+				StringUtil.stringToBoolean(LegacySettings.AUDIO_PROXY_OFF_DEFAULT));
+		changeLegacyBooleanSetting(LegacySettings.DISABLE_HEAD_MOVE,
+				StringUtil.stringToBoolean(LegacySettings.DISABLE_HEAD_MOVE_DEFAULT));
 		changeLegacyIntegerSetting(LegacySettings.FPS_LIMIT, Integer.parseInt(LegacySettings.FPS_LIMIT_DEFAULT));
 		changeLegacyIntegerSetting(LegacySettings.PAGE_SIZE, Integer.parseInt(LegacySettings.PAGE_SIZE_DEFAULT));
 		changeLegacyBooleanSetting(LegacySettings.IME, StringUtil.stringToBoolean(LegacySettings.IME_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettings.MULTICORE, StringUtil.stringToBoolean(LegacySettings.MULTICORE_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettings.TIMESTAMP, StringUtil.stringToBoolean(LegacySettings.TIMESTAMP_DEFAULT));
+		changeLegacyBooleanSetting(LegacySettings.MULTICORE,
+				StringUtil.stringToBoolean(LegacySettings.MULTICORE_DEFAULT));
+		changeLegacyBooleanSetting(LegacySettings.TIMESTAMP,
+				StringUtil.stringToBoolean(LegacySettings.TIMESTAMP_DEFAULT));
 	}
 
 	@Override
