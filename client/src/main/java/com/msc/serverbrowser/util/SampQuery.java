@@ -306,9 +306,10 @@ public class SampQuery implements AutoCloseable
 				packetData.append((char) Integer.parseInt(tok.nextToken()));
 			}
 
-			packetData.append((char) (serverPort & 0xFF));
-			packetData.append((char) (serverPort >> 8 & 0xFF));
-			packetData.append(type);
+			packetData
+					.append((char) (serverPort & 0xFF))
+					.append((char) (serverPort >> 8 & 0xFF))
+					.append(type);
 
 			final byte[] data = packetData.toString().getBytes(StandardCharsets.US_ASCII);
 			final DatagramPacket sendPacket = new DatagramPacket(data, data.length, server, serverPort);
