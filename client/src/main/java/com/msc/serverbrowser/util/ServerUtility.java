@@ -41,8 +41,10 @@ public final class ServerUtility
 		final List<SampServer> servers = new ArrayList<>();
 		try
 		{
-			final URLConnection openConnection = new URL("http://lists.sa-mp.com/" + version + "/servers").openConnection();
-			openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+			final URLConnection openConnection = new URL("http://lists.sa-mp.com/" + version + "/servers")
+					.openConnection();
+			openConnection.addRequestProperty("User-Agent",
+					"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 			try (final BufferedReader in = new BufferedReader(new InputStreamReader(openConnection.getInputStream())))
 			{
 				in.lines().forEach(inputLine ->
@@ -95,7 +97,8 @@ public final class ServerUtility
 
 			final String[] addressData = address.split(":");
 
-			final SampServer server = new SampServer(addressData[0], address.contains(":") ? Integer.parseInt(addressData[1]) : 7777);
+			final SampServer server = new SampServer(addressData[0],
+					address.contains(":") ? Integer.parseInt(addressData[1]) : 7777);
 
 			server.setPlayers(jsonServerData.getInt("pc", 0));
 			server.setMaxPlayers(jsonServerData.getInt("pm", 0));
@@ -108,4 +111,30 @@ public final class ServerUtility
 
 		return servers;
 	}
+
+	/**
+	 * Validates the given port.
+	 *
+	 * @param portAsString
+	 *            the port to be validated
+	 * @return true if it is an integer and between 0 and 65535
+	 */
+	public static boolean isPortValid(final String portAsString)
+	{
+		final int portNumber = StringUtility.parseInteger(portAsString).orElse(-1);
+		return isPortValid(portNumber);
+	}
+
+	/**
+	 * Validates the given port.
+	 *
+	 * @param portNumber
+	 *            the port to be validated
+	 * @return true if it is between 0 and 65535
+	 */
+	public static boolean isPortValid(final Integer portNumber)
+	{
+		return portNumber >= 0 && portNumber <= 65535;
+	}
+
 }

@@ -21,6 +21,7 @@ import com.msc.serverbrowser.data.SampServer;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.GTAController;
 import com.msc.serverbrowser.util.SampQuery;
+import com.msc.serverbrowser.util.ServerUtility;
 import com.msc.serverbrowser.util.StringUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
@@ -272,7 +273,7 @@ public class AbstractServerListController implements ViewController
 					servers.add(newServer);
 				}
 			}
-			else if (ipAndPort.length == 2 && isPortValid(ipAndPort[1]))
+			else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1]))
 			{
 				final SampServer newServer = FavouritesController.addServerToFavourites(ipAndPort[0],
 						Integer.parseInt(ipAndPort[1]));
@@ -302,7 +303,7 @@ public class AbstractServerListController implements ViewController
 		{
 			tryToConnect(ipAndPort[0], 7777);
 		}
-		else if (ipAndPort.length == 2 && isPortValid(ipAndPort[1]))
+		else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1]))
 		{
 			tryToConnect(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 		}
@@ -320,33 +321,6 @@ public class AbstractServerListController implements ViewController
 				.message("The address that you have entered, doesn't seem to be valid.")
 				.animation(Animations.POPUP)
 				.build().showAndDismiss(Duration.seconds(10));
-	}
-
-	// TODO(MSC) Consider moving those methods somewhere else.
-
-	/**
-	 * Validates the given port.
-	 *
-	 * @param portAsString
-	 *            the port to be validated
-	 * @return true if it is an integer and between 0 and 65535
-	 */
-	private static boolean isPortValid(final String portAsString)
-	{
-		final int portNumber = StringUtility.parseInteger(portAsString).orElse(-1);
-		return isPortValid(portNumber);
-	}
-
-	/**
-	 * Validates the given port.
-	 *
-	 * @param portNumber
-	 *            the port to be validated
-	 * @return true if it is between 0 and 65535
-	 */
-	private static boolean isPortValid(final Integer portNumber)
-	{
-		return portNumber >= 0 && portNumber <= 65535;
 	}
 
 	@FXML

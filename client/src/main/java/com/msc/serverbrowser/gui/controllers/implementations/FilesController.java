@@ -70,13 +70,6 @@ public class FilesController implements ViewController
 	@FXML
 	private TextArea						contentTextArea;
 
-	/**
-	 * Empty Constructor.
-	 */
-	public FilesController()
-	{
-	}
-
 	@Override
 	public void initialize()
 	{

@@ -20,14 +20,6 @@ public class ServerListAllController extends AbstractServerListController
 {
 	private Thread serverLookup;
 
-	/**
-	 * Empty Constructor.
-	 */
-	public ServerListAllController()
-	{
-		super();
-	}
-
 	@Override
 	public void initialize()
 	{
