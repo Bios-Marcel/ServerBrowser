@@ -43,6 +43,13 @@ public class MainController implements ViewController
 	private ScrollPane	activeViewContainer;
 	private View		activeView;
 
+	/**
+	 * Empty Constructor.
+	 */
+	public MainController()
+	{
+	}
+
 	@Override
 	public void initialize()
 	{

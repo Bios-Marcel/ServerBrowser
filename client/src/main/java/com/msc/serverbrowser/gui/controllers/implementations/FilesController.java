@@ -38,7 +38,8 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
- * Controls the Files view which allows you to look at your taken screenshots, your chatlogs and
+ * Controls the Files view which allows you to look at your taken screenshots,
+ * your chatlogs and
  * your saved positions.
  *
  * @author Marcel
@@ -48,25 +49,33 @@ public class FilesController implements ViewController
 {
 	// Screenshots
 	@FXML
-	private StackPane		imageContainer;
+	private StackPane						imageContainer;
 	@FXML
-	private ComboBox<File>	screenshotComboBox;
+	private ComboBox<File>					screenshotComboBox;
 	@FXML
-	private Label			takenValue;
+	private Label							takenValue;
 	@FXML
-	private Label			sizeValue;
+	private Label							sizeValue;
 
-	private File						presentImage;
-	private final ObservableList<File>	screenshots	= FXCollections.observableArrayList();
+	private File							presentImage;
+	private final ObservableList<File>		screenshots		= FXCollections.observableArrayList();
 
 	/**
 	 * Compares {@link File files} depending against their last modified date.
 	 */
-	private static final Comparator<File> fileComparator = (fileOne, fileTwo) -> new Long(fileOne.lastModified()).compareTo(new Long(fileTwo.lastModified()));
+	private static final Comparator<File>	fileComparator	= (fileOne, fileTwo) -> Long.valueOf(fileOne.lastModified())
+			.compareTo(Long.valueOf(fileTwo.lastModified()));
 
 	// Chatlogs
 	@FXML
-	private TextArea contentTextArea;
+	private TextArea						contentTextArea;
+
+	/**
+	 * Empty Constructor.
+	 */
+	public FilesController()
+	{
+	}
 
 	@Override
 	public void initialize()
@@ -256,7 +265,8 @@ public class FilesController implements ViewController
 	private static URI pathToImage(final File nextImage) throws MalformedURLException, URISyntaxException
 	{
 		final URL url = new URL("file:/" + nextImage.getAbsolutePath());
-		return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+		return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
+				url.getQuery(), url.getRef());
 	}
 
 	@Override

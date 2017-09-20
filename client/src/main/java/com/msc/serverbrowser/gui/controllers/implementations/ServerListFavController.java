@@ -12,6 +12,14 @@ import com.msc.serverbrowser.data.SampServer;
  */
 public class ServerListFavController extends AbstractServerListController
 {
+	/**
+	 * Empty Constructor.
+	 */
+	public ServerListFavController()
+	{
+		super();
+	}
+
 	@Override
 	public void initialize()
 	{

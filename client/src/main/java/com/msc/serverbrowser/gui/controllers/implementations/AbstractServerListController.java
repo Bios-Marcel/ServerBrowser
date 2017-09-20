@@ -55,7 +55,7 @@ import javafx.util.Duration;
 /**
  * @since 02.07.2017
  */
-public abstract class AbstractServerListController implements ViewController
+public class AbstractServerListController implements ViewController
 {
 	private static final String									RETRIEVING						= "Retrieving...";
 
@@ -144,6 +144,14 @@ public abstract class AbstractServerListController implements ViewController
 			.observableArrayList();
 
 	private static Thread										serverInfoUpdateThread;
+
+	/**
+	 * Empty Constructor.
+	 */
+	protected AbstractServerListController()
+	{
+		// Prevent instantiation from outside.
+	}
 
 	@Override
 	public void initialize()
@@ -455,7 +463,6 @@ public abstract class AbstractServerListController implements ViewController
 			{
 
 				final SampServer server = serverList.get(0);
-				System.out.println(StringUtility.getHexChars(server.getMode()));
 				final StringSelection stringSelection = new StringSelection(
 						server.getAddress() + ":" + server.getPort());
 				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
