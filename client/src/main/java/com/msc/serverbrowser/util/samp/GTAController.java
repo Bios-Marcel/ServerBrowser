@@ -84,7 +84,7 @@ public final class GTAController
 		{
 			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName");
 		}
-		catch (final Exception exception)
+		catch (final RegistryException exception)
 		{
 			Logging.log(Level.WARNING, "Couldn't retrieve Username from registry.", exception);
 			return "404 Name not found";
@@ -109,7 +109,7 @@ public final class GTAController
 		{
 			return Optional.empty();
 		}
-		return property.endsWith("\\") ? Optional.of(property) : Optional.of(property + "\\");
+		return Optional.of(property.endsWith(File.separator) ? property : property + File.separator);
 	}
 
 	/**

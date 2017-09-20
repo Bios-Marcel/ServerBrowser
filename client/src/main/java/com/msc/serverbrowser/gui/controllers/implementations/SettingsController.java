@@ -85,8 +85,8 @@ public class SettingsController implements ViewController
 		sampPathTextField.setText(ClientPropertiesController.getPropertyAsString(Property.SAMP_PATH));
 		sampPathTextField.textProperty().addListener(changed ->
 		{
-			final String newValue = sampPathTextField.getText();
-			ClientPropertiesController.setProperty(Property.SAMP_PATH, newValue.trim().isEmpty() ? null : newValue);
+			final String newValue = sampPathTextField.getText().trim();
+			ClientPropertiesController.setProperty(Property.SAMP_PATH, newValue);
 		});
 		setupCheckBox(notifyServerOnStartupCheckBox, Property.NOTIFY_SERVER_ON_STARTUP);
 		setupCheckBox(rememberLastViewCheckBox, Property.REMEMBER_LAST_VIEW);
