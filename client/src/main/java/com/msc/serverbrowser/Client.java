@@ -179,29 +179,11 @@ public final class Client extends Application
 
 			trayNotification.setOnMouseClicked(__ ->
 			{
-				showChangelog();
+				OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
 				trayNotification.dismiss();
 			});
 			trayNotification.showAndWait();
 		}
-	}
-
-	/**
-	 * @deprecated
-	 *             <p>
-	 *             Options:
-	 *             <ul>
-	 *             <li>Completly new dialog</li>
-	 *             <li>Open textfile</li>
-	 *             <li>Open Webpage (Github Release)</li>
-	 *             <li>Show markdown formatted file</li>
-	 *             </ul>
-	 *             </p>
-	 */
-	@Deprecated
-	private void showChangelog()
-	{
-		// TODO(MSC) Remake
 	}
 
 	/**
