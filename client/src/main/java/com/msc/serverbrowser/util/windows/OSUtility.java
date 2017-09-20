@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.StringUtility;
+import com.msc.serverbrowser.util.basic.StringUtility;
 
 /**
  * @author Marcel

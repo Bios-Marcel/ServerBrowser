@@ -25,7 +25,7 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.StringUtility;
+import com.msc.serverbrowser.util.basic.StringUtility;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

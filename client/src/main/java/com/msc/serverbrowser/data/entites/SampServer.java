@@ -1,11 +1,14 @@
-package com.msc.serverbrowser.data;
+package com.msc.serverbrowser.data.entites;
 
 import java.util.Objects;
+
+import com.msc.serverbrowser.util.fx.OneLineStringProperty;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.StringProperty;
 
+@SuppressWarnings("javadoc")
 public class SampServer
 {
 	private final StringProperty	hostnameProperty		= new OneLineStringProperty();
@@ -18,9 +21,9 @@ public class SampServer
 	private final StringProperty	versionProperty			= new OneLineStringProperty();
 	private final StringProperty	mapProperty				= new OneLineStringProperty();
 
-	private final IntegerProperty	portProperty		= new SimpleIntegerProperty();
-	private final IntegerProperty	playersProperty		= new SimpleIntegerProperty();
-	private final IntegerProperty	maxPlayersProperty	= new SimpleIntegerProperty();
+	private final IntegerProperty	portProperty			= new SimpleIntegerProperty();
+	private final IntegerProperty	playersProperty			= new SimpleIntegerProperty();
+	private final IntegerProperty	maxPlayersProperty		= new SimpleIntegerProperty();
 
 	public SampServer(final String address, final Integer port)
 	{
@@ -203,6 +206,12 @@ public class SampServer
 	public void setMap(final String map)
 	{
 		mapProperty.set(map);
+	}
+
+	@Override
+	public String toString()
+	{
+		return getAddress() + ":" + getPort();
 	}
 
 	@Override

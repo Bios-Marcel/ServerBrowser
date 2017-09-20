@@ -1,6 +1,6 @@
-package com.msc.serverbrowser.util;
+package com.msc.serverbrowser.util.basic;
 
-import static com.msc.serverbrowser.util.FileUtility.unzip;
+import static com.msc.serverbrowser.util.basic.FileUtility.unzip;
 import static java.io.File.separator;
 import static java.nio.file.Files.createTempDirectory;
 import static java.nio.file.Files.exists;

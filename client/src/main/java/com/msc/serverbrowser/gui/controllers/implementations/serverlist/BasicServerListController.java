@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.gui.controllers.implementations;
+package com.msc.serverbrowser.gui.controllers.implementations.serverlist;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -17,14 +17,14 @@ import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.data.FavouritesController;
-import com.msc.serverbrowser.data.Player;
-import com.msc.serverbrowser.data.SampServer;
+import com.msc.serverbrowser.data.entites.Player;
+import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.GTAController;
-import com.msc.serverbrowser.util.SampQuery;
 import com.msc.serverbrowser.util.ServerUtility;
-import com.msc.serverbrowser.util.StringUtility;
+import com.msc.serverbrowser.util.basic.StringUtility;
+import com.msc.serverbrowser.util.samp.GTAController;
+import com.msc.serverbrowser.util.samp.SampQuery;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Platform;
@@ -126,8 +126,12 @@ public class BasicServerListController implements ViewController
 	private final MenuItem										copyIpAddressAndPortMenuItem	= new MenuItem(
 			"Copy IP Address and Port");
 	private final ContextMenu									menu							= new ContextMenu(
-			connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem,
-			copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
+			connectMenuItem,
+			new SeparatorMenuItem(),
+			addToFavouritesMenuItem,
+			removeFromFavouritesMenuItem,
+			copyIpAddressAndPortMenuItem,
+			visitWebsiteMenuItem);
 
 	@FXML
 	private CheckBox											regexCheckBox;

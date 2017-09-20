@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.util;
+package com.msc.serverbrowser.util.basic;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

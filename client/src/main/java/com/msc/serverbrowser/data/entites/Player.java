@@ -1,8 +1,9 @@
-package com.msc.serverbrowser.data;
+package com.msc.serverbrowser.data.entites;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+@SuppressWarnings("javadoc")
 public class Player
 {
 	private final StringProperty	playerName	= new SimpleStringProperty();

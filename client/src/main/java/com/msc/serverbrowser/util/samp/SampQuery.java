@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.util;
+package com.msc.serverbrowser.util.samp;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -17,7 +17,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
-import com.msc.serverbrowser.data.Player;
+import com.msc.serverbrowser.data.entites.Player;
+import com.msc.serverbrowser.util.basic.Encoding;
 
 /**
  * Provides Methods for retrieving information from a SA-MP Server.

@@ -13,20 +13,23 @@ import javax.swing.filechooser.FileSystemView;
 public final class PathConstants
 {
 	// Internal Paths
-	public static final String	VIEW_PATH		= "/com/msc/serverbrowser/views/";
-	public static final String	STYLESHEET_PATH	= VIEW_PATH + "stylesheets/";
+	public static final String	VIEW_PATH				= "/com/msc/serverbrowser/views/";
+	public static final String	STYLESHEET_PATH			= VIEW_PATH + "stylesheets/";
+	public static final String	APPLICATION_ICON_PATH	= "/com/msc/serverbrowser/icons/icon.png";
 
 	// Application specific Paths
-	public static final String	USER_PATH	= System.getProperty("user.home") + File.separator;
-	public static final String	SAMPEX_PATH	= USER_PATH + "sampex";
+	public static final String	USER_PATH				= System.getProperty("user.home") + File.separator;
+	public static final String	SAMPEX_PATH				= USER_PATH + "sampex";
 
 	// GTA / SAMP specific Paths
-	public static final String	GTA_USER_FILES	= FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator + "GTA San Andreas User Files";
-	public static final String	SAMP_PATH		= GTA_USER_FILES + File.separator + "SAMP";
-	public static final String	SAMP_CFG		= SAMP_PATH + File.separator + "sa-mp.cfg";
-	public static final String	SAMP_CHATLOG	= SAMP_PATH + "\\chatlog.txt";
-	public static final String	SAMP_USERDATA	= SAMP_PATH + "\\USERDATA.DAT";
-	public static final String	OUTPUT_ZIP		= SAMPEX_PATH + File.separator + "temp.zip";
+	public static final String	GTA_USER_FILES			= FileSystemView.getFileSystemView().getDefaultDirectory()
+			.getPath() + File.separator + "GTA San Andreas User Files";
+	public static final String	SAMP_PATH				= GTA_USER_FILES + File.separator + "SAMP";
+	public static final String	SAMP_CFG				= SAMP_PATH + File.separator + "sa-mp.cfg";
+	public static final String	SAMP_CHATLOG			= SAMP_PATH + "\\chatlog.txt";
+	public static final String	SAMP_USERDATA			= SAMP_PATH + "\\USERDATA.DAT";
+	public static final String	SAMP__DOWNLOAD_LOCATION	= "http://164.132.193.101/sampversion/";
+	public static final String	OUTPUT_ZIP				= SAMPEX_PATH + File.separator + "temp.zip";
 
 	private PathConstants()
 	{

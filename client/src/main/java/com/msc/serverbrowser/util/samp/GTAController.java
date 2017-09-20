@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.util;
+package com.msc.serverbrowser.util.samp;
 
 import java.awt.Desktop;
 import java.awt.Desktop.Action;
@@ -55,7 +55,7 @@ public final class GTAController
 			return;
 		}
 
-		killSamp();
+		killSAMP();
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try
 		{
@@ -208,7 +208,7 @@ public final class GTAController
 	/**
 	 * Kills SA-MP using the command line.
 	 */
-	public static void killSamp()
+	public static void killSAMP()
 	{
 		kill("samp.exe");
 	}

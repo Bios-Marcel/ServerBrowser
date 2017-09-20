@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -17,8 +16,8 @@ import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.FileUtility;
-import com.msc.serverbrowser.util.GTAController;
+import com.msc.serverbrowser.util.basic.FileUtility;
+import com.msc.serverbrowser.util.samp.GTAController;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -40,7 +39,7 @@ public class VersionChangeController implements ViewController
 	private final List<Button>				buttons				= new ArrayList<>();
 
 	@FXML
-	private VBox buttonContainer;
+	private VBox							buttonContainer;
 
 	@Override
 	public void initialize()
@@ -50,7 +49,8 @@ public class VersionChangeController implements ViewController
 	}
 
 	/**
-	 * Will create an {@link HBox} for every {@link SAMPVersion}, said {@link HBox} will contain a
+	 * Will create an {@link HBox} for every {@link SAMPVersion}, said {@link HBox}
+	 * will contain a
 	 * {@link Label} and a {@link Button}.
 	 */
 	private void createAndSetupButtons()
@@ -105,7 +105,7 @@ public class VersionChangeController implements ViewController
 			setAllButtonsDisabled(true);
 			button.setText("Installing ...");
 
-			GTAController.killSamp();
+			GTAController.killSAMP();
 			GTAController.killGTA();
 
 			// TODO(MSC) Check JavaFX Threading API (Task / Service)
@@ -117,8 +117,10 @@ public class VersionChangeController implements ViewController
 				{
 					currentlyInstalling = Optional.of(toInstall);
 					final Optional<String> gtaPath = GTAController.getGtaPath();
-					downloadedFile = Optional
-							.of(FileUtility.downloadFile("http://164.132.193.101/sampversion/" + toInstall.getVersionIdentifier() + ".zip", PathConstants.OUTPUT_ZIP));
+					final String willBeDownloaded = PathConstants.SAMP__DOWNLOAD_LOCATION
+							+ toInstall.getVersionIdentifier() + ".zip";
+
+					downloadedFile = Optional.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
 					FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
 				}
 				catch (final IOException | IllegalArgumentException exception)
@@ -128,18 +130,7 @@ public class VersionChangeController implements ViewController
 
 				currentlyInstalling = Optional.empty();
 				downloadedFile.ifPresent(File::delete);
-
-				final MainController mainController = Client.getInstance().getMainController();
-				if (Objects.nonNull(mainController))
-				{
-					Platform.runLater(() ->
-					{
-						if (mainController.getActiveView() == View.VERSION_CHANGER)
-						{
-							mainController.reloadView();
-						}
-					});
-				}
+				Platform.runLater(() -> Client.getInstance().reloadViewIfLoaded(View.VERSION_CHANGER));
 			});
 
 			thread.start();
@@ -149,14 +140,16 @@ public class VersionChangeController implements ViewController
 			new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
 					.title("GTA couldn't be located")
-					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
+					.message(
+							"If this isn't correct, please head to the settings view and manually enter your GTA path.")
 					.animation(Animations.POPUP)
 					.build().showAndDismiss(Duration.seconds(10));
 		}
 	}
 
 	/**
-	 * Decides which buttons will be enabled and what text every button will have, depending on if
+	 * Decides which buttons will be enabled and what text every button will have,
+	 * depending on if
 	 * an installation is going on and what is currently installed.
 	 */
 	private void updateButtonStates()
@@ -168,8 +161,8 @@ public class VersionChangeController implements ViewController
 		{
 			for (final Button button : buttons)
 			{
-				// Safe cast, because i only use this method to indicate what version this button
-				// reflects, noone has access on the outside.
+				// Safe cast, because i only use this method to indicate what version this
+				// button reflects, noone has access on the outside.
 				final SAMPVersion buttonVersion = (SAMPVersion) button.getUserData();
 
 				if (buttonVersion == version)

@@ -1,9 +1,9 @@
-package com.msc.serverbrowser.gui.controllers.implementations;
+package com.msc.serverbrowser.gui.controllers.implementations.serverlist;
 
 import java.util.List;
 
 import com.msc.serverbrowser.data.FavouritesController;
-import com.msc.serverbrowser.data.SampServer;
+import com.msc.serverbrowser.data.entites.SampServer;
 
 /**
  * ViewController for the favourite servers list view.

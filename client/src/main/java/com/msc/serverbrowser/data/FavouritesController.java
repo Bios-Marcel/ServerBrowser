@@ -16,8 +16,9 @@ import java.util.Objects;
 import java.util.logging.Level;
 
 import com.msc.serverbrowser.constants.PathConstants;
+import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.SampQuery;
+import com.msc.serverbrowser.util.samp.SampQuery;
 
 /**
  * Contains static methods for setting and retrieving favourite servers
@@ -65,7 +66,7 @@ public final class FavouritesController
 		}
 		catch (final SocketException | UnknownHostException exception)
 		{
-			Logging.log(Level.WARNING, "Couldn't update Server info, server wills till be added to favourites.", exception);
+			Logging.log(Level.WARNING, "Error updating server information.", exception);
 			server.setHostname(UNKNOWN);
 			server.setLanguage(UNKNOWN);
 			server.setMode(UNKNOWN);
@@ -76,6 +77,7 @@ public final class FavouritesController
 			server.setMaxPlayers(0);
 		}
 
+		Logging.log(Level.INFO, "Adding server to favourites: " + server);
 		addServerToFavourites(server);
 		return server;
 	}
@@ -95,8 +97,17 @@ public final class FavouritesController
 		else
 		{
 			String statement = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
-			statement = escapeFormat(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
-					.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
+			statement = escapeFormat(statement,
+					server.getHostname(),
+					server.getAddress(),
+					server.getLagcomp(),
+					server.getLanguage(),
+					server.getPlayers().toString(),
+					server.getMaxPlayers().toString(),
+					server.getMode(),
+					server.getPort().toString(),
+					server.getVersion(),
+					server.getWebsite());
 			SQLDatabase.getInstance().execute(statement);
 		}
 	}
@@ -122,8 +133,17 @@ public final class FavouritesController
 	public static void updateServerData(final SampServer server)
 	{
 		String statement = "UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
-		statement = escapeFormat(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server.getMaxPlayers()
-				.toString(), server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
+		statement = escapeFormat(statement,
+				server.getHostname(),
+				server.getLagcomp(),
+				server.getLanguage(),
+				server.getPlayers().toString(),
+				server.getMaxPlayers().toString(),
+				server.getMode(),
+				server.getVersion(),
+				server.getWebsite(),
+				server.getAddress(),
+				server.getPort().toString());
 		SQLDatabase.getInstance().execute(statement);
 	}
 
@@ -169,16 +189,16 @@ public final class FavouritesController
 			{
 				while (resultSet.next())
 				{
-					servers.add(new SampServerBuilder(resultSet.getString("ip"), resultSet.getInt("port"))
-							.setHostname(resultSet.getString("hostname"))
-							.setPlayers(resultSet.getInt("players"))
-							.setMaxPlayers(resultSet.getInt("maxplayers"))
-							.setMode(resultSet.getString("mode"))
-							.setLanguage(resultSet.getString("language"))
-							.setWebsite(resultSet.getString("website"))
-							.setLagcomp(resultSet.getString("lagcomp"))
-							.setVersion(resultSet.getString("version"))
-							.build());
+					final SampServer server = new SampServer(resultSet.getString("ip"), resultSet.getInt("port"));
+					server.setHostname(resultSet.getString("hostname"));
+					server.setPlayers(resultSet.getInt("players"));
+					server.setMaxPlayers(resultSet.getInt("maxplayers"));
+					server.setMode(resultSet.getString("mode"));
+					server.setLanguage(resultSet.getString("language"));
+					server.setWebsite(resultSet.getString("website"));
+					server.setLagcomp(resultSet.getString("lagcomp"));
+					server.setVersion(resultSet.getString("version"));
+					servers.add(server);
 				}
 			}
 			catch (final SQLException exception)
@@ -206,8 +226,8 @@ public final class FavouritesController
 			// Skiping trash at the beginning
 			buffer.position(buffer.position() + 8);
 
-			final int sc = buffer.getInt();
-			for (int i = 0; i < sc; i++)
+			final int serverCount = buffer.getInt();
+			for (int i = 0; i < serverCount; i++)
 			{
 				final byte[] ipBytes = new byte[buffer.getInt()];
 				buffer.get(ipBytes);
@@ -228,8 +248,9 @@ public final class FavouritesController
 
 			return legacyFavourites;
 		}
-		catch (@SuppressWarnings("unused") final IOException exception)
+		catch (final IOException exception)
 		{
+			Logging.log(Level.WARNING, "Error loading legacy favourites.", exception);
 			return legacyFavourites;
 		}
 	}

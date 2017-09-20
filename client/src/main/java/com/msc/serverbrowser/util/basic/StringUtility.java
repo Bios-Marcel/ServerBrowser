@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.util;
+package com.msc.serverbrowser.util.basic;
 
 import java.util.Optional;
 

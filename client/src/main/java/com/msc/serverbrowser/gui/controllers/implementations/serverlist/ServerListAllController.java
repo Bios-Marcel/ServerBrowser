@@ -1,10 +1,10 @@
-package com.msc.serverbrowser.gui.controllers.implementations;
+package com.msc.serverbrowser.gui.controllers.implementations.serverlist;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.msc.serverbrowser.data.SampServer;
+import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.ServerUtility;
 

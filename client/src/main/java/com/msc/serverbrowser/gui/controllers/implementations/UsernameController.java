@@ -2,7 +2,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
-import com.msc.serverbrowser.util.GTAController;
+import com.msc.serverbrowser.util.samp.GTAController;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

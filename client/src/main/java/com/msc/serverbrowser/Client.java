@@ -15,10 +15,11 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
+import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.FileUtility;
 import com.msc.serverbrowser.util.UpdateUtility;
+import com.msc.serverbrowser.util.basic.FileUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Application;
@@ -41,17 +42,18 @@ public final class Client extends Application
 	/**
 	 * Application icon that can be used everywhere where necessary.
 	 */
-	public static final Image	APPLICATION_ICON	= new Image(Client.class.getResourceAsStream("/com/msc/serverbrowser/icons/icon.png"));
+	public static final Image	APPLICATION_ICON	= new Image(
+			Client.class.getResourceAsStream(PathConstants.APPLICATION_ICON_PATH));
 	/**
 	 * Name of the application, as displayed to people.
 	 */
 	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
 
-	private Stage stage;
+	private Stage				stage;
 
-	private static Client instance;
+	private static Client		instance;
 
-	private MainController mainController;
+	private MainController		mainController;
 
 	/**
 	 * @return the clients singleton instance
@@ -204,20 +206,23 @@ public final class Client extends Application
 	}
 
 	/**
-	 * Displays a dialog that tells the user that the server connection couldn't be established.
+	 * Displays a dialog that tells the user that the server connection couldn't be
+	 * established.
 	 */
 	public static void displayNoConnectionDialog()
 	{
 		new TrayNotificationBuilder()
 				.type(NotificationTypeImplementations.ERROR)
 				.title("Server connection could not be established")
-				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
+				.message(
+						"The server connection doesn't seeem to be established, try again later, for more information check the log files.")
 				.animation(Animations.SLIDE)
 				.build().showAndDismiss(Duration.seconds(10));
 	}
 
 	/**
-	 * Creates files and folders that are necessary for the application to run properly and migrates
+	 * Creates files and folders that are necessary for the application to run
+	 * properly and migrates
 	 * old xml data.
 	 */
 	private static void initClient()
@@ -231,7 +236,8 @@ public final class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an update is available
+	 * Compares the local version number to the one lying on the server. If an
+	 * update is available
 	 * the user will be asked if he wants to update.
 	 */
 	private static void checkVersion()
@@ -367,10 +373,16 @@ public final class Client extends Application
 	}
 
 	/**
-	 * @return the {@link MainController} that is currently in use
+	 * Reloads the active view, incase it is the given one.
+	 *
+	 * @param view
+	 *            the view to reload
 	 */
-	public MainController getMainController()
+	public void reloadViewIfLoaded(final View view)
 	{
-		return mainController;
+		if (mainController.getActiveView() == view)
+		{
+			mainController.reloadView();
+		}
 	}
 }

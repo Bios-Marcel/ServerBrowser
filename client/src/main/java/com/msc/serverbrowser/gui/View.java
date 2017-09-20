@@ -5,11 +5,11 @@ import java.util.Map;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.gui.controllers.implementations.FilesController;
-import com.msc.serverbrowser.gui.controllers.implementations.ServerListAllController;
-import com.msc.serverbrowser.gui.controllers.implementations.ServerListFavController;
 import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
 import com.msc.serverbrowser.gui.controllers.implementations.UsernameController;
 import com.msc.serverbrowser.gui.controllers.implementations.VersionChangeController;
+import com.msc.serverbrowser.gui.controllers.implementations.serverlist.ServerListAllController;
+import com.msc.serverbrowser.gui.controllers.implementations.serverlist.ServerListFavController;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 
 /**

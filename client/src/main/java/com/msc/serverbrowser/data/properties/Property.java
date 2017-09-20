@@ -1,6 +1,6 @@
 package com.msc.serverbrowser.data.properties;
 
-import com.msc.serverbrowser.util.GTAController;
+import com.msc.serverbrowser.util.samp.GTAController;
 
 /**
  * Enum that holds all existant properties.

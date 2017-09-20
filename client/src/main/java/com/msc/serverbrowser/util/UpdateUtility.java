@@ -44,11 +44,10 @@ public final class UpdateUtility
 		{
 			return lastTagName.equals(latestTagName.get());
 		}
-
-		throw new IOException("Error retrieving update.");
+		return false;
 	}
 
-	private static Optional<String> getLatestTagName()
+	private static Optional<String> getLatestTagName() throws IOException
 	{
 		try
 		{
@@ -64,7 +63,9 @@ public final class UpdateUtility
 		catch (final IOException exception)
 		{
 			Logging.log(Level.SEVERE, "Couldn't retrieve latest version information.", exception);
+			throw exception;
 		}
+
 		return Optional.empty();
 	}
 

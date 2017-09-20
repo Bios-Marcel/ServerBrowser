@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.data;
+package com.msc.serverbrowser.util.fx;
 
 import java.util.Objects;
 
