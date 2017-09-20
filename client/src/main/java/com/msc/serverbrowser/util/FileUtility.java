@@ -58,7 +58,8 @@ public final class FileUtility
 	 * @param outputLocation
 	 *            zip file output folder
 	 * @throws IOException
-	 *             if there was an error reading the zip file or writing the unzipped data
+	 *             if there was an error reading the zip file or writing the
+	 *             unzipped data
 	 */
 	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException
 	{
@@ -74,7 +75,8 @@ public final class FileUtility
 				final long size = zipEntry.getSize();
 				final long compressedSize = zipEntry.getCompressedSize();
 
-				Logging.info(String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
+				Logging.info(
+						String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
 
 				// Do we need to create a directory ?
 				final File file = new File(outputLocation + separator + name);
@@ -92,7 +94,7 @@ public final class FileUtility
 
 				// Extract the file
 				try (final InputStream inputStream = zipFile.getInputStream(zipEntry);
-						final FileOutputStream outputStream = new FileOutputStream(file);)
+						final FileOutputStream outputStream = new FileOutputStream(file))
 				{
 					/*
 					 * The buffer is the max amount of bytes kept in RAM during any given time while
@@ -100,9 +102,9 @@ public final class FileUtility
 					 * multiple of those values for best performance.
 					 */
 					final byte[] bytes = new byte[8192];
-					int length;
-					while ((length = inputStream.read(bytes)) >= 0)
+					while (inputStream.available() > 0)
 					{
+						final int length = inputStream.read(bytes);
 						outputStream.write(bytes, 0, length);
 					}
 				}

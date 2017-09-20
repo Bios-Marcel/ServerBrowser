@@ -55,7 +55,7 @@ public final class UpdateUtility
 			final GitHub gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build();
 			final GHRepository repository = gitHub.getRepository("Bios-Marcel/ServerBrowser");
 			final List<GHRelease> releases = repository.listReleases().asList();
-			if (releases.size() >= 1)
+			if (!releases.isEmpty())
 			{
 				final GHRelease release = releases.get(0);
 				return Optional.ofNullable(release.getTagName());
