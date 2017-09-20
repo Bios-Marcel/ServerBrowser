@@ -32,6 +32,7 @@ public final class ServerUtility
 	/**
 	 * Retrieves servers from the SA-MP masterlist for the given version.
 	 *
+	 *
 	 * @param version
 	 *            to filter for
 	 * @return List of {@link SampServer} instances
@@ -78,6 +79,13 @@ public final class ServerUtility
 		}
 	}
 
+	/**
+	 * Queries Southclaws Rest API for servers.
+	 *
+	 * @return a {@link List} of {@link SampServer SampServers}
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	public static List<SampServer> fetchServersFromSouthclaws() throws MalformedURLException, IOException
 	{
 		return fetchFromAPI("http://api.samp.southcla.ws/v1/servers");

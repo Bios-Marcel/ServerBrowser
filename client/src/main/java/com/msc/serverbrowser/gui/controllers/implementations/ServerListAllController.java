@@ -16,7 +16,7 @@ import javafx.scene.control.Label;
  *
  * @author Marcel
  */
-public class ServerListAllController extends AbstractServerListController
+public class ServerListAllController extends BasicServerListController
 {
 	private Thread serverLookup;
 

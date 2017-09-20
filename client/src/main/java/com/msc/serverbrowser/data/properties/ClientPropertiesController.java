@@ -79,20 +79,9 @@ public final class ClientPropertiesController
 	{
 		checkDataType(property, Integer.class);
 
-		Integer value = 0;
-
 		final String originalValue = getPropertyAsString(property);
 
-		try
-		{
-			value = Integer.parseInt(originalValue);
-		}
-		catch (final NumberFormatException e)
-		{
-			Logging.log(Level.SEVERE, "Invalid property value, property: " + property, e);
-		}
-
-		return value;
+		return Integer.parseInt(originalValue);
 	}
 
 	/**
@@ -106,20 +95,9 @@ public final class ClientPropertiesController
 	{
 		checkDataType(property, Float.class);
 
-		Float value = 0.0F;
-
 		final String originalValue = getPropertyAsString(property);
 
-		try
-		{
-			value = Float.parseFloat(originalValue);
-		}
-		catch (final NumberFormatException e)
-		{
-			Logging.log(Level.SEVERE, "Invalid property value, property: " + property, e);
-		}
-
-		return value;
+		return Float.parseFloat(originalValue);
 	}
 
 	/**
@@ -140,7 +118,8 @@ public final class ClientPropertiesController
 	{
 		if (!property.datatype().equals(datatype))
 		{
-			throw new IllegalArgumentException("Datatype is " + datatype.getName() + " ; Expected: " + property.datatype().getName());
+			throw new IllegalArgumentException(
+					"Datatype is " + datatype.getName() + " ; Expected: " + property.datatype().getName());
 		}
 	}
 

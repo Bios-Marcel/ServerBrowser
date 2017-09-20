@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 import java.util.regex.PatternSyntaxException;
 
 import com.github.plushaze.traynotification.animations.Animations;
@@ -19,6 +20,7 @@ import com.msc.serverbrowser.data.FavouritesController;
 import com.msc.serverbrowser.data.Player;
 import com.msc.serverbrowser.data.SampServer;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
+import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.GTAController;
 import com.msc.serverbrowser.util.SampQuery;
 import com.msc.serverbrowser.util.ServerUtility;
@@ -56,7 +58,7 @@ import javafx.util.Duration;
 /**
  * @since 02.07.2017
  */
-public class AbstractServerListController implements ViewController
+public class BasicServerListController implements ViewController
 {
 	private static final String									RETRIEVING						= "Retrieving...";
 
@@ -149,7 +151,7 @@ public class AbstractServerListController implements ViewController
 	/**
 	 * Empty Constructor.
 	 */
-	protected AbstractServerListController()
+	protected BasicServerListController()
 	{
 		// Prevent instantiation from outside.
 	}
@@ -158,22 +160,17 @@ public class AbstractServerListController implements ViewController
 	public void initialize()
 	{
 		final FilteredList<SampServer> filteredServers = new FilteredList<>(servers);
-		filteredServers.predicateProperty().bind(filterProperty);
 		final SortedList<SampServer> sortedServers = new SortedList<>(filteredServers);
 
-		serverTable.comparatorProperty().addListener(changed ->
-		{
-			sortedServers.setComparator(serverTable.comparatorProperty().get());
-			serverTable.refresh();
-		});
-
+		filteredServers.predicateProperty().bind(filterProperty);
+		sortedServers.comparatorProperty().bind(serverTable.comparatorProperty());
 		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
 
 		setPlayerComparator();
 		addServerUpdateListener();
 		setTableRowFactory();
-		serverTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+		serverTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		serverTable.setItems(sortedServers);
 	}
 
@@ -267,31 +264,30 @@ public class AbstractServerListController implements ViewController
 			final String[] ipAndPort = addressTextField.getText().split("[:]");
 			if (ipAndPort.length == 1)
 			{
-				final SampServer newServer = FavouritesController.addServerToFavourites(ipAndPort[0], 7777);
-				if (!servers.contains(newServer))
-				{
-					servers.add(newServer);
-				}
+				addServerToFavourites(ipAndPort[0], 7777);
 			}
 			else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1]))
 			{
-				final SampServer newServer = FavouritesController.addServerToFavourites(ipAndPort[0],
-						Integer.parseInt(ipAndPort[1]));
-				if (!servers.contains(newServer))
-				{
-					servers.add(newServer);
-				}
+				addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 			}
 			else
 			{
 				new TrayNotificationBuilder()
 						.type(NotificationTypeImplementations.ERROR)
 						.title("Add to favourites")
-						.message(
-								"Server couldn't be added to favourites, because the address doesn't seem to be valid.")
+						.message("Can't add to favourites, server address is invalid.")
 						.animation(Animations.POPUP)
 						.build().showAndDismiss(Duration.seconds(10));
 			}
+		}
+	}
+
+	private void addServerToFavourites(final String ip, final int port)
+	{
+		final SampServer newServer = FavouritesController.addServerToFavourites(ip, port);
+		if (!servers.contains(newServer))
+		{
+			servers.add(newServer);
 		}
 	}
 
@@ -435,7 +431,6 @@ public class AbstractServerListController implements ViewController
 			}
 			else if (clickedItem.equals(copyIpAddressAndPortMenuItem))
 			{
-
 				final SampServer server = serverList.get(0);
 				final StringSelection stringSelection = new StringSelection(
 						server.getAddress() + ":" + server.getPort());
@@ -477,8 +472,9 @@ public class AbstractServerListController implements ViewController
 				GTAController.connectToServer(address + ":" + port);
 			}
 		}
-		catch (@SuppressWarnings("unused") final IOException exception)
+		catch (final IOException exception)
 		{
+			Logging.log(Level.WARNING, "Couldn't connect to server.", exception);
 			showCantConnectToServerError();
 		}
 	}
