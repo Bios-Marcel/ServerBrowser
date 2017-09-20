@@ -28,10 +28,10 @@ public class UsernameController implements ViewController
 	@FXML
 	private ListView<String> nameList;
 
-	private final MenuItem	setName		= new MenuItem("Apply Username");
-	private final MenuItem	removeName	= new MenuItem("Remove username");
+	private final MenuItem	applyNameMenuItem	= new MenuItem("Apply Username");
+	private final MenuItem	removeNameMenuItem	= new MenuItem("Remove username");
 
-	private final ContextMenu menu = new ContextMenu(setName, removeName);
+	private final ContextMenu menu = new ContextMenu(applyNameMenuItem, removeNameMenuItem);
 
 	@Override
 	public void initialize()
@@ -56,13 +56,13 @@ public class UsernameController implements ViewController
 			{// If only one item is selected
 				final String name = usernames.get(0);
 
-				setName.setVisible(true);
-				removeName.setText("Remove Username");
+				applyNameMenuItem.setVisible(true);
+				removeNameMenuItem.setText("Remove Username");
 				menu.setOnAction(click ->
 				{
 					final MenuItem clickedItem = (MenuItem) click.getTarget();
 
-					if (clickedItem.equals(setName))
+					if (clickedItem.equals(applyNameMenuItem))
 					{
 						usernameTextField.setText(name);
 						applyUsername();
@@ -78,13 +78,13 @@ public class UsernameController implements ViewController
 			}
 			else if (usernames.size() > 1)
 			{// if more than one item is selected
-				setName.setVisible(false);
-				removeName.setText("Remove Usernames");
+				applyNameMenuItem.setVisible(false);
+				removeNameMenuItem.setText("Remove Usernames");
 				menu.setOnAction(click ->
 				{
 					final MenuItem clickedItem = (MenuItem) click.getTarget();
 
-					if (clickedItem.equals(removeName))
+					if (clickedItem.equals(removeNameMenuItem))
 					{
 						for (final String name : usernames)
 						{

@@ -153,6 +153,14 @@
     -fx-background-color: -component-background-color;
 }
 
+/**
+ * Context Menus
+ */
+ 
+.menu-item:hover, .menu-item:hover > .label
+{
+	-fx-background-color: -component-background-color-selected;
+}
 
 /*
  * Tables
@@ -346,6 +354,7 @@
 {
 	-fx-background-color: -component-background-color-selected;
 }
+
 
 .menuItemIcon
 {
