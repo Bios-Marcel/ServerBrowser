@@ -143,12 +143,13 @@ public class SettingsController implements ViewController
 
 	private void initInformationArea()
 	{
-		final StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder(40);
 
 		builder.append("SA-MP Server Browser")
 				.append(System.lineSeparator())
 				.append(System.lineSeparator())
-				.append("Version: " + ClientPropertiesController.getPropertyAsString(Property.LAST_TAG_NAME));
+				.append("Version: ")
+				.append(ClientPropertiesController.getPropertyAsString(Property.LAST_TAG_NAME));
 
 		informationLabel.setText(builder.toString());
 	}
