@@ -263,6 +263,6 @@ public class FilesController implements ViewController
 	@Override
 	public void onClose()
 	{
-		// TODO Auto-generated method stub
+		// Unused
 	}
 }
