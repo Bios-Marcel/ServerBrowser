@@ -100,15 +100,21 @@ public final class GTAController
 	{
 		if (!OSUtility.isWindows())
 		{
-			return Optional.of("You are on Linux ;D");
+			return Optional.empty();
+		}
+
+		final Optional<String> path = getGtaPathFromRegistry();
+		if (path.isPresent())
+		{
+			return path;
 		}
 
 		final String property = ClientPropertiesController.getPropertyAsString(Property.SAMP_PATH);
-
 		if (Objects.isNull(property) || property.isEmpty())
 		{
 			return Optional.empty();
 		}
+
 		return Optional.of(property.endsWith(File.separator) ? property : property + File.separator);
 	}
 
@@ -117,22 +123,18 @@ public final class GTAController
 	 *
 	 * @return String of the GTA Path or null.
 	 */
-	public static String getGtaPathUnsafe()
+	private static Optional<String> getGtaPathFromRegistry()
 	{
-		if (!OSUtility.isWindows())
-		{
-			return "You are on Linux ;D";
-		}
-
 		try
 		{
-			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe")
-					.replace("gta_sa.exe", "");
+			return Optional.ofNullable(WindowsRegistry.getInstance()
+					.readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe")
+					.replace("gta_sa.exe", ""));
 		}
 		catch (final RegistryException exception)
 		{
 			Logging.log(Level.WARNING, "Couldn't retrieve GTA path.", exception);
-			return null;
+			return Optional.empty();
 		}
 	}
 

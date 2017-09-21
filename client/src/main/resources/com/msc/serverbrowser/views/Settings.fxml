@@ -16,8 +16,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
-	spacing="5">
+<VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" spacing="5" maxWidth="1.7976931348623157E308"
+	maxHeight="1.7976931348623157E308">
 	<children>
 		<ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
 			<content>
@@ -35,9 +35,9 @@
 									<children>
 										<HBox spacing="5.0">
 											<children>
-												<Label maxHeight="1.7976931348623157E308" text="SA-MP Path" />
-												<TextField fx:id="sampPathTextField" maxWidth="1.7976931348623157E308" promptText="Will be automatically detected if left empty"
-													HBox.hgrow="ALWAYS" />
+												<Label maxHeight="1.7976931348623157E308" text="Custom SA-MP Path" />
+												<TextField fx:id="sampPathTextField" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"
+													promptText="Will be automatically detected if left empty" />
 											</children>
 										</HBox>
 										<CheckBox fx:id="notifyServerOnStartupCheckBox" mnemonicParsing="false" text="Notify Server on startup" />
