@@ -47,7 +47,7 @@ public final class UpdateUtility
 		return false;
 	}
 
-	private static Optional<String> getLatestTagName() throws IOException
+	public static Optional<String> getLatestTagName() throws IOException
 	{
 		try
 		{

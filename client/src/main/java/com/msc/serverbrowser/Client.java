@@ -279,7 +279,9 @@ public final class Client extends Application
 			final String targetLocation = getOwnJarFile().getPath().toString();
 
 			FileUtility.downloadFile(url.toString(), targetLocation);
+			final String latestTag = UpdateUtility.getLatestTagName().get();
 			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, true);
+			ClientPropertiesController.setProperty(Property.LAST_TAG_NAME, latestTag);
 			selfRestart();
 		}
 		catch (final IOException | URISyntaxException exception)
