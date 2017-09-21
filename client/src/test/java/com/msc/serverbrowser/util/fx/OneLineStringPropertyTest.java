@@ -28,10 +28,10 @@ public class OneLineStringPropertyTest
 		Assertions.assertEquals("dsf", property.getValue());
 
 		property.setValue(" asd test ");
-		Assertions.assertEquals(" asd test ", property.getValue());
+		Assertions.assertEquals("asd test", property.getValue());
 
 		property.setValue("tesdsdst" + System.lineSeparator() + "tesdsdst");
-		Assertions.assertEquals("tesdsdsttesdsdst", property.getValue());
+		Assertions.assertEquals("tesdsdst tesdsdst", property.getValue());
 
 	}
 }
