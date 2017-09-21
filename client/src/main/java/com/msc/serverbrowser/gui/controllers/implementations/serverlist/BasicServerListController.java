@@ -60,85 +60,93 @@ import javafx.util.Duration;
  */
 public class BasicServerListController implements ViewController
 {
-	private static final String RETRIEVING = "Retrieving...";
+	private static final String									RETRIEVING						= "Retrieving...";
 
-	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
+	private final ObjectProperty<Predicate<? super SampServer>>	filterProperty					= new SimpleObjectProperty<>();
 
 	@FXML
-	private TextField addressTextField;
+	private TextField											addressTextField;
 
-	private final static StringProperty serverAddressProperty = new SimpleStringProperty();
+	private final static StringProperty							serverAddressProperty			= new SimpleStringProperty();
 
 	/**
-	 * This Table contains all available servers / favourite servers, depending on the active view.
+	 * This Table contains all available servers / favourite servers, depending on
+	 * the active view.
 	 */
 	@FXML
-	protected TableView<SampServer> serverTable;
+	protected TableView<SampServer>								serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		playerCount;
+	protected Label												playerCount;
 	/**
 	 * Displays the amount of all slots on all Servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		slotCount;
+	protected Label												slotCount;
 	/**
 	 * Number of servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		serverCount;
+	protected Label												serverCount;
 	@FXML
-	private TextField	serverAddress;
+	private TextField											serverAddress;
 	@FXML
-	private Label		serverLagcomp;
+	private Label												serverLagcomp;
 	@FXML
-	private Label		serverPing;
+	private Label												serverPing;
 	@FXML
-	private Label		serverPassword;
+	private Label												serverPassword;
 	@FXML
-	private Label		mapLabel;
+	private Label												mapLabel;
 	@FXML
-	private Hyperlink	websiteLink;
+	private Hyperlink											websiteLink;
 
 	@FXML
-	private TableView<Player>				playerTable;
+	private TableView<Player>									playerTable;
 	@FXML
-	private TableColumn<SampServer, String>	columnPlayers;
+	private TableColumn<SampServer, String>						columnPlayers;
 
 	/**
 	 * When clicked, all selected servers will be added to favourites.
 	 */
-	protected MenuItem			addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
+	protected MenuItem											addToFavouritesMenuItem			= new MenuItem(
+			"Add to Favourites");
 	/**
 	 * When clicked, all selected servers will be removed from favourites.
 	 */
-	protected MenuItem			removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
-	private final MenuItem		visitWebsiteMenuItem			= new MenuItem("Visit Website");
-	private final MenuItem		connectMenuItem					= new MenuItem("Connect to Server");
-	private final MenuItem		copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
-	private final ContextMenu	menu							= new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
+	protected MenuItem											removeFromFavouritesMenuItem	= new MenuItem(
+			"Remove from Favourites");
+	private final MenuItem										visitWebsiteMenuItem			= new MenuItem(
+			"Visit Website");
+	private final MenuItem										connectMenuItem					= new MenuItem(
+			"Connect to Server");
+	private final MenuItem										copyIpAddressAndPortMenuItem	= new MenuItem(
+			"Copy IP Address and Port");
+	private final ContextMenu									menu							= new ContextMenu(
+			connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem,
+			copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	@FXML
-	private CheckBox			regexCheckBox;
+	private CheckBox											regexCheckBox;
 	@FXML
-	private TextField			nameFilter;
+	private TextField											nameFilter;
 	@FXML
-	private TextField			modeFilter;
+	private TextField											modeFilter;
 	@FXML
-	private TextField			languageFilter;
+	private TextField											languageFilter;
 	@FXML
-	private ComboBox<String>	versionFilter;
+	private ComboBox<String>									versionFilter;
 
 	/**
 	 * Holds all servers that might be displayed in {@link #serverTable}.
 	 */
-	protected ObservableList<SampServer> servers = FXCollections
+	protected ObservableList<SampServer>						servers							= FXCollections
 			.observableArrayList();
 
-	private static Thread serverInfoUpdateThread;
+	private static Thread										serverInfoUpdateThread;
 
 	/**
 	 * Empty Constructor.
@@ -244,7 +252,7 @@ public class BasicServerListController implements ViewController
 		});
 	}
 
-	private void killServerLookupThread()
+	private static void killServerLookupThread()
 	{
 		if (Objects.nonNull(serverInfoUpdateThread))
 		{
@@ -396,6 +404,14 @@ public class BasicServerListController implements ViewController
 	 */
 	protected void displayMenu(final List<SampServer> serverList, final double posX, final double posY)
 	{
+		/*
+		 * TODO(MSC) Refactor;
+		 *
+		 * All this stuff shouldn't be set every time the user requests a menu, instead,
+		 * this
+		 * should be set once when initializing the controller.
+		 */
+
 		final boolean sizeEqualsOne = serverList.size() == 1;
 
 		connectMenuItem.setVisible(sizeEqualsOne);
@@ -429,7 +445,8 @@ public class BasicServerListController implements ViewController
 			else if (clickedItem.equals(copyIpAddressAndPortMenuItem))
 			{
 				final SampServer server = serverList.get(0);
-				final StringSelection stringSelection = new StringSelection(server.getAddress() + ":" + server.getPort());
+				final String addressAndPort = server.getAddress() + ":" + server.getPort();
+				final StringSelection stringSelection = new StringSelection(addressAndPort);
 				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, null);
 			}
@@ -439,7 +456,8 @@ public class BasicServerListController implements ViewController
 	}
 
 	/**
-	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a
+	 * Connects to a server, depending on if it is passworded, the user will be
+	 * asked to enter a
 	 * password. If the server is not reachable the user can not connect.
 	 *
 	 * @param address
@@ -453,7 +471,7 @@ public class BasicServerListController implements ViewController
 		{
 			final Optional<String[]> serverInfo = query.getBasicServerInfo();
 
-			if (serverInfo.isPresent() && !"0".equals(serverInfo.get()[0]))
+			if (serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0]))
 			{
 				final TextInputDialog dialog = new TextInputDialog();
 				dialog.setTitle("Connect to Server");
@@ -475,7 +493,8 @@ public class BasicServerListController implements ViewController
 	}
 
 	/**
-	 * TODO(MSC) Burn it before it lays eggs. Hans, get the Flammenwerfer. Updates the data that the
+	 * TODO(MSC) Burn it before it lays eggs. Hans, get the Flammenwerfer. Updates
+	 * the data that the
 	 * {@link SampServer} holds and displays the correct values on the UI.
 	 *
 	 * @param server
@@ -483,17 +502,7 @@ public class BasicServerListController implements ViewController
 	 */
 	protected void updateServerInfo(final SampServer server)
 	{
-		playerTable.getItems().clear();
-		playerTable.setPlaceholder(new Label(RETRIEVING));
-		serverAddress.setText(server.getAddress() + ":" + server.getPort());
-		serverLagcomp.setText(RETRIEVING);
-		serverPing.setText(RETRIEVING);
-		serverPassword.setText(RETRIEVING);
-		mapLabel.setText(RETRIEVING);
-		websiteLink.setText(RETRIEVING);
-		websiteLink.setUnderline(false);
-		websiteLink.setOnAction(null);
-
+		setVisibleDetailsToRetrieving(server);
 		killServerLookupThread();
 
 		serverInfoUpdateThread = new Thread(() ->
@@ -511,6 +520,7 @@ public class BasicServerListController implements ViewController
 					final int activePlayers = Integer.parseInt(info[1]);
 					final int maxPlayers = Integer.parseInt(info[2]);
 
+					server.setPassworded(StringUtility.stringToBoolean(info[0]));
 					server.setPlayers(activePlayers);
 					server.setMaxPlayers(maxPlayers);
 					server.setHostname(info[3]);
@@ -525,42 +535,7 @@ public class BasicServerListController implements ViewController
 					query.getBasicPlayerInfo().ifPresent(players -> playerList.addAll(players));
 					final long ping = query.getPing();
 
-					if (!serverInfoUpdateThread.isInterrupted())
-					{
-						Platform.runLater(() ->
-						{
-							serverPassword.setText("0".equals(info[0]) ? "No" : "Yes");
-							serverPing.setText(String.valueOf(ping));
-							mapLabel.setText(server.getMap());
-							websiteLink.setText(server.getWebsite());
-
-							final String websiteFixed = StringUtility
-									.fixUrlIfNecessary(server.getWebsite().toLowerCase());
-							if (StringUtility.isValidURL(websiteFixed))
-							{
-								websiteLink.setUnderline(true);
-								websiteLink.setOnAction(__ -> OSUtility.browse(server.getWebsite()));
-							}
-
-							if (playerList.isEmpty())
-							{
-								playerTable.setPlaceholder(new Label("Server is empty"));
-							}
-							playerTable.setItems(playerList);
-
-							if (playerTable.getItems().isEmpty() && server.getPlayers() >= 100)
-							{
-								final Label label = new Label("Sorry, since this server has more than 100 active players, we are not able to retrieve any player related information.");
-								label.setWrapText(true);
-								label.setAlignment(Pos.CENTER);
-								playerTable.setPlaceholder(label);
-							}
-
-							serverLagcomp.setText(server.getLagcomp());
-							updateGlobalInfo();
-						});
-					}
-
+					applyData(server, playerList, ping);
 					FavouritesController.updateServerData(server);
 				}
 			}
@@ -574,6 +549,63 @@ public class BasicServerListController implements ViewController
 		});
 
 		serverInfoUpdateThread.start();
+	}
+
+	private void setVisibleDetailsToRetrieving(final SampServer server)
+	{
+		playerTable.getItems().clear();
+		playerTable.setPlaceholder(new Label(RETRIEVING));
+		serverAddress.setText(server.getAddress() + ":" + server.getPort());
+		serverLagcomp.setText(RETRIEVING);
+		serverPing.setText(RETRIEVING);
+		serverPassword.setText(RETRIEVING);
+		mapLabel.setText(RETRIEVING);
+		websiteLink.setText(RETRIEVING);
+		websiteLink.setUnderline(false);
+		websiteLink.setOnAction(null);
+	}
+
+	private void applyData(final SampServer server, final ObservableList<Player> playerList,
+			final long ping)
+	{
+		if (!serverInfoUpdateThread.isInterrupted())
+		{
+			Platform.runLater(() ->
+			{
+				serverPassword.setText(server.isPassworded() ? "Yes" : "No");
+				serverPing.setText(String.valueOf(ping));
+				mapLabel.setText(server.getMap());
+				websiteLink.setText(server.getWebsite());
+				playerTable.setItems(playerList);
+
+				final String websiteToLower = server.getWebsite().toLowerCase();
+				final String websiteFixed = StringUtility.fixUrlIfNecessary(websiteToLower);
+
+				if (StringUtility.isValidURL(websiteFixed))
+				{
+					websiteLink.setUnderline(true);
+					websiteLink.setOnAction(__ -> OSUtility.browse(server.getWebsite()));
+				}
+
+				final boolean noPlayers = playerList.isEmpty();
+				if (noPlayers)
+				{
+					playerTable.setPlaceholder(new Label("Server is empty"));
+
+					if (server.getPlayers() >= 100)
+					{
+						final String TOO_MUCH_PLAYERS = "Can't retrieve players, if there are more than 100.";
+						final Label label = new Label(TOO_MUCH_PLAYERS);
+						label.setWrapText(true);
+						label.setAlignment(Pos.CENTER);
+						playerTable.setPlaceholder(label);
+					}
+				}
+
+				serverLagcomp.setText(server.getLagcomp());
+				updateGlobalInfo();
+			});
+		}
 	}
 
 	private void displayOfflineInformation()

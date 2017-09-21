@@ -4,13 +4,17 @@ import java.util.Objects;
 
 import com.msc.serverbrowser.util.fx.OneLineStringProperty;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.StringProperty;
 
 @SuppressWarnings("javadoc")
 public class SampServer
 {
+	private final BooleanProperty	passwordedProperty		= new SimpleBooleanProperty();
+
 	private final StringProperty	hostnameProperty		= new OneLineStringProperty();
 	private final StringProperty	addressProperty			= new OneLineStringProperty();
 	private final StringProperty	actualPlayersProperty	= new OneLineStringProperty();
@@ -208,6 +212,21 @@ public class SampServer
 		mapProperty.set(map);
 	}
 
+	public BooleanProperty passwordedPropertyProperty()
+	{
+		return passwordedProperty;
+	}
+
+	public boolean isPassworded()
+	{
+		return passwordedProperty.get();
+	}
+
+	public void setPassworded(final boolean passworded)
+	{
+		passwordedProperty.set(passworded);
+	}
+
 	@Override
 	public String toString()
 	{
@@ -231,4 +250,5 @@ public class SampServer
 	{
 		return (getAddress() + getPort()).hashCode();
 	}
+
 }
