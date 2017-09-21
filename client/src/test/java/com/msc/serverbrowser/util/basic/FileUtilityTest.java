@@ -54,9 +54,9 @@ class FileUtilityTest
 	}
 
 	/**
-	 * Tests if a given ZIP archive has the correct content. The test data needs to
-	 * have a corresponding <code>*.sha512sum</code> in the same folder with gets
-	 * used to validate the file content survived the zipping without alteration.
+	 * Tests if a given ZIP archive has the correct content. The test data needs to have a
+	 * corresponding <code>*.sha512sum</code> in the same folder with gets used to validate the file
+	 * content survived the zipping without alteration.
 	 *
 	 * @param testDataName
 	 *            Full path to the ZIP under test.
@@ -67,7 +67,7 @@ class FileUtilityTest
 	 */
 	private void testUnzipWithGivenFileWithSha(final String testDataName) throws URISyntaxException, IOException
 	{
-		final URL testDataZipUrl = getClass().getResource(separator + testDataName + ".zip");
+		final URL testDataZipUrl = getClass().getResource("/com/msc/serverbrowser/util/basic/" + testDataName + ".zip");
 		assertNotNull(testDataZipUrl, "path to test zip data not correct");
 		final Path testDataZipPath = get(testDataZipUrl.toURI());
 		assertTrue(exists(testDataZipPath), "The zipped file does not exist where expected: " + testDataZipPath + ".");
@@ -91,8 +91,7 @@ class FileUtilityTest
 			final String name = split[1].substring(1);
 			final Path pathToUnzippedFile = get(tempDirectory.toString(), name);
 
-			assertTrue(exists(pathToUnzippedFile),
-					"The unzipped file does not exist where expected: " + pathToUnzippedFile + ".");
+			assertTrue(exists(pathToUnzippedFile), "The unzipped file does not exist where expected: " + pathToUnzippedFile + ".");
 
 			final String shaOfUnzipped = toHex(shaDigester.digest(readAllBytes(pathToUnzippedFile)));
 			assertEquals(sha512, shaOfUnzipped);
