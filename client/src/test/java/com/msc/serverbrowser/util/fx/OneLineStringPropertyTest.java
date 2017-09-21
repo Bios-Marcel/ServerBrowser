@@ -24,14 +24,14 @@ public class OneLineStringPropertyTest
 		property.setValue(null);
 		Assertions.assertEquals("", property.getValue());
 
-		property.setValue("test");
-		Assertions.assertEquals("test", property.getValue());
+		property.setValue("dsf");
+		Assertions.assertEquals("dsf", property.getValue());
 
-		property.setValue(" test test ");
-		Assertions.assertEquals(" test test ", property.getValue());
+		property.setValue(" asd test ");
+		Assertions.assertEquals(" asd test ", property.getValue());
 
-		property.setValue("test" + System.lineSeparator() + "test");
-		Assertions.assertEquals("testtest", property.getValue());
+		property.setValue("tesdsdst" + System.lineSeparator() + "tesdsdst");
+		Assertions.assertEquals("tesdsdsttesdsdst", property.getValue());
 
 	}
 }
