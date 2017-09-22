@@ -183,6 +183,7 @@ public final class Client extends Application
 
 			trayNotification.setOnMouseClicked(__ ->
 			{
+				ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, false);
 				OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
 				trayNotification.dismiss();
 			});

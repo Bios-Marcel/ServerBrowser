@@ -52,7 +52,6 @@ public class OneLineStringProperty extends SimpleStringProperty
 		 * never replace a
 		 * single line break by two spaces
 		 */
-		final String toSet = Objects.isNull(value) ? "" : value.replace("\r\n", " ").replace("\n", " ").trim();
-		return toSet;
+		return Objects.isNull(value) ? "" : value.replace("\r\n", " ").replace("\n", " ").trim();
 	}
 }

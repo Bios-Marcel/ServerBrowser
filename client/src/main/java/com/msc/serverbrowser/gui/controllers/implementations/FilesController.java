@@ -125,7 +125,7 @@ public class FilesController implements ViewController
 
 	private void updateComboBoxContent()
 	{
-		final File sampFolder = new File(PathConstants.SAMP_PATH + "\\screens");
+		final File sampFolder = new File(PathConstants.SAMP_SCREENS);
 		if (sampFolder.exists())
 		{
 			screenshots.setAll(sampFolder.listFiles());

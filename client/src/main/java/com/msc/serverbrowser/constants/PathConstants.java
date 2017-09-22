@@ -25,6 +25,7 @@ public final class PathConstants
 	public static final String	GTA_USER_FILES			= FileSystemView.getFileSystemView().getDefaultDirectory()
 			.getPath() + File.separator + "GTA San Andreas User Files";
 	public static final String	SAMP_PATH				= GTA_USER_FILES + File.separator + "SAMP";
+	public static final String	SAMP_SCREENS			= SAMP_PATH + File.separator + "//screens";
 	public static final String	SAMP_CFG				= SAMP_PATH + File.separator + "sa-mp.cfg";
 	public static final String	SAMP_CHATLOG			= SAMP_PATH + "\\chatlog.txt";
 	public static final String	SAMP_USERDATA			= SAMP_PATH + "\\USERDATA.DAT";
