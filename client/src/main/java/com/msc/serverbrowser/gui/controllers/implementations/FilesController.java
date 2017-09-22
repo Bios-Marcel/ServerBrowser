@@ -195,7 +195,7 @@ public class FilesController implements ViewController
 
 	private Optional<File> getNextScreenshot()
 	{
-		final File sampFolder = new File(PathConstants.SAMP_PATH + "\\screens");
+		final File sampFolder = new File(PathConstants.SAMP_SCREENS);
 
 		if (sampFolder.exists())
 		{
@@ -222,7 +222,7 @@ public class FilesController implements ViewController
 
 	private Optional<File> getPreviousScreenshot()
 	{
-		final File sampFolder = new File(PathConstants.SAMP_PATH + "\\screens");
+		final File sampFolder = new File(PathConstants.SAMP_SCREENS);
 
 		if (sampFolder.exists())
 		{
