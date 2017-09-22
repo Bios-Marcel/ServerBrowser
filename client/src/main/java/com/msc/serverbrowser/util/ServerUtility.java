@@ -7,16 +7,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.msc.serverbrowser.data.entites.SampServer;
-import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.basic.StringUtility;
 
