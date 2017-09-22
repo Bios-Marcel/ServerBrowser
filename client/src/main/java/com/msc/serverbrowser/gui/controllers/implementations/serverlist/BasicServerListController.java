@@ -67,7 +67,7 @@ public class BasicServerListController implements ViewController
 	@FXML
 	private TextField											addressTextField;
 
-	private final static StringProperty							serverAddressProperty			= new SimpleStringProperty();
+	private final static StringProperty							SERVER_ADDRESS_PROPERTY			= new SimpleStringProperty();
 
 	/**
 	 * This Table contains all available servers / favourite servers, depending on
@@ -164,7 +164,7 @@ public class BasicServerListController implements ViewController
 
 		filteredServers.predicateProperty().bind(filterProperty);
 		sortedServers.comparatorProperty().bind(serverTable.comparatorProperty());
-		addressTextField.textProperty().bindBidirectional(serverAddressProperty);
+		addressTextField.textProperty().bindBidirectional(SERVER_ADDRESS_PROPERTY);
 
 		setPlayerComparator();
 		addServerUpdateListener();

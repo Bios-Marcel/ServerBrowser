@@ -63,7 +63,7 @@ public class FilesController implements ViewController
 	/**
 	 * Compares {@link File files} depending against their last modified date.
 	 */
-	private static final Comparator<File>	fileComparator	= (fileOne, fileTwo) -> Long.valueOf(fileOne.lastModified())
+	private static final Comparator<File>	FILE_COMPARATOR	= (fileOne, fileTwo) -> Long.valueOf(fileOne.lastModified())
 			.compareTo(Long.valueOf(fileTwo.lastModified()));
 
 	// Chatlogs
@@ -129,7 +129,7 @@ public class FilesController implements ViewController
 		if (sampFolder.exists())
 		{
 			screenshots.setAll(sampFolder.listFiles());
-			screenshots.sort(fileComparator);
+			screenshots.sort(FILE_COMPARATOR);
 		}
 	}
 
@@ -200,7 +200,7 @@ public class FilesController implements ViewController
 		if (sampFolder.exists())
 		{
 			final List<File> filesInFolder = Arrays.asList(sampFolder.listFiles());
-			filesInFolder.sort(fileComparator);
+			filesInFolder.sort(FILE_COMPARATOR);
 			final int index = filesInFolder.indexOf(presentImage);
 
 			File nextImage;
@@ -227,7 +227,7 @@ public class FilesController implements ViewController
 		if (sampFolder.exists())
 		{
 			final List<File> filesInFolder = Arrays.asList(sampFolder.listFiles());
-			filesInFolder.sort(fileComparator);
+			filesInFolder.sort(FILE_COMPARATOR);
 			final int index = filesInFolder.indexOf(presentImage);
 
 			File nextImage;

@@ -34,6 +34,8 @@ import javafx.scene.layout.VBox;
  */
 public class VersionChangeController implements ViewController
 {
+	private static final String				INSTALL_TEXT		= "Install";
+
 	private static Optional<SAMPVersion>	currentlyInstalling	= Optional.empty();
 	private final List<Button>				buttons				= new ArrayList<>();
 
@@ -66,7 +68,7 @@ public class VersionChangeController implements ViewController
 			title.getStyleClass().add("installLabel");
 			title.setMaxWidth(Double.MAX_VALUE);
 
-			final Button installButton = new Button("Install");
+			final Button installButton = new Button(INSTALL_TEXT);
 			installButton.setUserData(version);
 			installButton.setOnAction(__ -> installAction(installButton));
 			installButton.getStyleClass().add("installButton");
@@ -176,7 +178,7 @@ public class VersionChangeController implements ViewController
 				}
 				else
 				{
-					button.setText("Install");
+					button.setText(INSTALL_TEXT);
 					button.setDisable(ongoingInstallation);
 				}
 			}
