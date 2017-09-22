@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
+import java.util.stream.IntStream;
 
 import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
@@ -152,27 +153,16 @@ public final class UpdateUtility
 		{// If one of the strings had more version parts, we will check those too.
 			final String[] bigger = versionOneParts.length > versionTwoParts.length ? versionOneParts : versionTwoParts;
 			final boolean versionOneWasLonger = bigger == versionOneParts;
-			for (int i = length; i < longest; i++)
+			final boolean foundOneBiggerThanZero = IntStream.range(length, longest)
+					.filter(num -> Integer.parseInt(bigger[num]) != 0)
+					.findAny().isPresent();
+
+			if (foundOneBiggerThanZero)
 			{
-				if (Integer.parseInt(bigger[i]) != 0)
-				{
-					return versionOneWasLonger ? CompareResult.GREATER : CompareResult.LESS;
-				}
+				return versionOneWasLonger ? CompareResult.GREATER : CompareResult.LESS;
 			}
 		}
 
 		return CompareResult.EQUAL;
-	}
-
-	/**
-	 * @author Marcel
-	 * @since 22.09.2017
-	 */
-	@SuppressWarnings("javadoc")
-	public static enum CompareResult
-	{
-		LESS,
-		EQUAL,
-		GREATER;
 	}
 }

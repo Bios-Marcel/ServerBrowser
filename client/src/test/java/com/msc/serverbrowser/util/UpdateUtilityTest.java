@@ -3,8 +3,6 @@ package com.msc.serverbrowser.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.msc.serverbrowser.util.UpdateUtility.CompareResult;
-
 /**
  * @author Marvin
  * @author Marcel
