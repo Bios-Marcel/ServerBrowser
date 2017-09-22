@@ -31,7 +31,8 @@ public final class HashingUtility
 	 * @throws NoSuchAlgorithmException
 	 *             if the used Hashing Algorithm couldn't be found
 	 */
-	public static String verifyChecksum(final String file) throws FileNotFoundException, IOException, NoSuchAlgorithmException
+	public static String verifyChecksum(final String file)
+			throws FileNotFoundException, IOException, NoSuchAlgorithmException
 	{
 		try (final FileInputStream fis = new FileInputStream(file))
 		{

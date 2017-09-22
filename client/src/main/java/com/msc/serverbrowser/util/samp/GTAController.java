@@ -17,11 +17,13 @@ import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
 import com.github.sarxos.winreg.WindowsRegistry;
 import com.msc.serverbrowser.Client;
+import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.basic.FileUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -308,5 +310,32 @@ public final class GTAController
 	public static void connectToServer(final String ipAndPort)
 	{
 		connectToServer(ipAndPort, "");
+	}
+
+	/**
+	 * Checks if a version is cached.
+	 *
+	 * @param version
+	 *            to check
+	 * @return true wenn die Version gecached ist.
+	 */
+	public static boolean isVersionCached(final SAMPVersion version)
+	{
+		final File cachedVersion = new File(
+				PathConstants.CLIENT_CACHE + File.separator + version.getVersionIdentifier() + ".zip");
+
+		if (cachedVersion.exists())
+		{
+			// TODO(MSC) Replace with proper checksum.
+			if (FileUtility.validateFile(cachedVersion, ""))
+			{
+				return true;
+			}
+
+			cachedVersion.delete();
+			return false;
+		}
+
+		return false;
 	}
 }

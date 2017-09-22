@@ -38,16 +38,20 @@ public final class UpdateUtility
 	public static Boolean isUpToDate() throws IOException
 	{
 		final String lastTagName = ClientPropertiesController.getPropertyAsString(Property.LAST_TAG_NAME);
-		final Optional<String> latestTagName = getLatestTagName();
+		final Optional<String> latestTag = getLatestTag();
 
-		if (latestTagName.isPresent())
+		if (latestTag.isPresent())
 		{
-			return lastTagName.equals(latestTagName.get());
+			return lastTagName.equals(latestTag.get());
 		}
 		return false;
 	}
 
-	public static Optional<String> getLatestTagName() throws IOException
+	/**
+	 * @return the tag of the latest github release
+	 * @throws IOException
+	 */
+	public static Optional<String> getLatestTag() throws IOException
 	{
 		try
 		{

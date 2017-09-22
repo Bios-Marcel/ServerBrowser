@@ -9,7 +9,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -110,5 +112,51 @@ public final class FileUtility
 				}
 			}
 		}
+	}
+
+	/**
+	 * Validates a {@link File} against a SHA-512 checksum.
+	 *
+	 * @param file
+	 *            the file that has to be validated
+	 * @param sha512Checksum
+	 *            the checksum to validate against
+	 * @return true if the file was valid, otherwise false
+	 */
+	public static boolean validateFile(final File file, final String sha512Checksum)
+	{
+		try
+		{
+			return HashingUtility.verifyChecksum(file.getAbsolutePath()).equals(sha512Checksum);
+		}
+		catch (NoSuchAlgorithmException | IOException exception)
+		{
+			Logging.log(Level.WARNING, "File invalid: " + file.getAbsolutePath(), exception);
+			return false;
+		}
+	}
+
+	/**
+	 * Deletes a folder recursively. In case it deletes files on partially, files
+	 * that had been deleted already will stay gone.
+	 *
+	 * @param folder
+	 *            will be deleted recursively
+	 * @return true if successful, otherwise false
+	 */
+	public static boolean deleteRecursively(final File folder)
+	{
+		if (folder.isDirectory())
+		{
+			for (final File fileOrFolder : folder.listFiles())
+			{
+				if (!deleteRecursively(fileOrFolder))
+				{
+					return false;
+				}
+			}
+		}
+
+		return folder.delete();
 	}
 }

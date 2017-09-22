@@ -219,6 +219,9 @@ public final class Client extends Application
 		{
 			sampexFolder.mkdir();
 		}
+
+		final File clientCacheFolder = new File(PathConstants.CLIENT_CACHE);
+		clientCacheFolder.mkdirs();
 	}
 
 	/**
@@ -288,7 +291,7 @@ public final class Client extends Application
 			final String targetLocation = getOwnJarFile().getPath().toString();
 
 			FileUtility.downloadFile(url.toString(), targetLocation);
-			final String latestTag = UpdateUtility.getLatestTagName().get();
+			final String latestTag = UpdateUtility.getLatestTag().get();
 			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, true);
 			ClientPropertiesController.setProperty(Property.LAST_TAG_NAME, latestTag);
 			selfRestart();

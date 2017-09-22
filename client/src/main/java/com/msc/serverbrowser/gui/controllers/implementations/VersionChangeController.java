@@ -109,32 +109,38 @@ public class VersionChangeController implements ViewController
 			GTAController.killSAMP();
 			GTAController.killGTA();
 
-			// TODO(MSC) Check JavaFX Threading API (Task / Service)
-			// Using a thread here, incase someone wants to keep using the app meanwhile
-			final Thread thread = new Thread(() ->
+			if (GTAController.isVersionCached(toInstall))
 			{
-				Optional<File> downloadedFile = Optional.empty();
-				try
+				installCachedVersion(toInstall);
+			}
+			else
+			{
+				// TODO(MSC) Check JavaFX Threading API (Task / Service)
+				// Using a thread here, incase someone wants to keep using the app meanwhile
+				new Thread(() ->
 				{
-					currentlyInstalling = Optional.of(toInstall);
-					final Optional<String> gtaPath = GTAController.getGtaPath();
-					final String willBeDownloaded = PathConstants.SAMP__DOWNLOAD_LOCATION
-							+ toInstall.getVersionIdentifier() + ".zip";
+					Optional<File> downloadedFile = Optional.empty();
+					try
+					{
+						currentlyInstalling = Optional.of(toInstall);
+						final Optional<String> gtaPath = GTAController.getGtaPath();
+						final String willBeDownloaded = PathConstants.SAMP__DOWNLOAD_LOCATION
+								+ toInstall.getVersionIdentifier() + ".zip";
 
-					downloadedFile = Optional.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
-					FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
-				}
-				catch (final IOException | IllegalArgumentException exception)
-				{
-					Logging.log(Level.SEVERE, "Error Updating client.", exception);
-				}
+						downloadedFile = Optional
+								.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
+						FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
+					}
+					catch (final IOException | IllegalArgumentException exception)
+					{
+						Logging.log(Level.SEVERE, "Error Updating client.", exception);
+					}
 
-				currentlyInstalling = Optional.empty();
-				downloadedFile.ifPresent(File::delete);
-				Platform.runLater(() -> Client.getInstance().reloadViewIfLoaded(View.VERSION_CHANGER));
-			});
-
-			thread.start();
+					currentlyInstalling = Optional.empty();
+					downloadedFile.ifPresent(File::delete);
+					Platform.runLater(() -> Client.getInstance().reloadViewIfLoaded(View.VERSION_CHANGER));
+				}).start();
+			}
 		}
 		else
 		{
@@ -143,6 +149,28 @@ public class VersionChangeController implements ViewController
 					.title("GTA couldn't be located")
 					.message(
 							"If this isn't correct, please head to the settings view and manually enter your GTA path.")
+					.animation(Animations.POPUP)
+					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+		}
+	}
+
+	private static void installCachedVersion(final SAMPVersion cachedVersion)
+	{
+		try
+		{
+			final File cachedVersionFile = new File(
+					PathConstants.CLIENT_CACHE + File.separator + cachedVersion.getVersionIdentifier() + ".zip");
+
+			FileUtility.unzip(PathConstants.OUTPUT_ZIP, cachedVersionFile.getAbsolutePath());
+		}
+		catch (final IOException exception)
+		{
+			Logging.log(Level.SEVERE, "Error while trying to install SA-MP from cache.", exception);
+
+			new TrayNotificationBuilder()
+					.type(NotificationTypeImplementations.ERROR)
+					.title("Installing SA-MP from Cache")
+					.message("Error while teying to install SA-MP from cache, check logs for further information.")
 					.animation(Animations.POPUP)
 					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 		}

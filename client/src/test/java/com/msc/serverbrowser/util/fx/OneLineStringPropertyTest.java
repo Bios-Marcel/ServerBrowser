@@ -32,6 +32,5 @@ public class OneLineStringPropertyTest
 
 		property.setValue("tesdsdst" + System.lineSeparator() + "tesdsdst");
 		Assertions.assertEquals("tesdsdst tesdsdst", property.getValue());
-
 	}
 }
