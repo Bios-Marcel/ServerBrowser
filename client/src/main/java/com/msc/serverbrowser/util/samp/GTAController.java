@@ -6,6 +6,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -47,8 +51,7 @@ public final class GTAController
 	}
 
 	/**
-	 * Writes the actual username (from registry) into the past usernames list and
-	 * sets the new name
+	 * Writes the actual username (from registry) into the past usernames list and sets the new name
 	 */
 	public static void applyUsername()
 	{
@@ -61,8 +64,7 @@ public final class GTAController
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try
 		{
-			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName",
-					usernameProperty.get());
+			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get());
 		}
 		catch (final RegistryException e)
 		{
@@ -98,8 +100,7 @@ public final class GTAController
 	/**
 	 * Returns the GTA path.
 	 *
-	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA
-	 *         couldn't be found
+	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA couldn't be found
 	 */
 	public static Optional<String> getGtaPath()
 	{
@@ -144,11 +145,9 @@ public final class GTAController
 	}
 
 	/**
-	 * Returns the {@link SAMPVersion} value that represents the currently installed
-	 * samp version.
+	 * Returns the {@link SAMPVersion} value that represents the currently installed samp version.
 	 *
-	 * @return {@link Optional} of installed versions version number or an
-	 *         {@link Optional#empty()}
+	 * @return {@link Optional} of installed versions version number or an {@link Optional#empty()}
 	 */
 	public static Optional<SAMPVersion> getInstalledVersion()
 	{
@@ -165,19 +164,16 @@ public final class GTAController
 		}
 
 		/*
-		 * Bad Practice, will cause an error if Kalcor decides to do a huge update
-		 * someday :P
+		 * Bad Practice, will cause an error if Kalcor decides to do a huge update someday :P
 		 */
 		return SAMPVersion.findVersionByDLLSize((int) file.length());
 	}
 
 	/**
-	 * Connects to the given server (IP and Port) using an empty (no) password.
-	 * Other than
+	 * Connects to the given server (IP and Port) using an empty (no) password. Other than
 	 * {@link GTAController#connectToServer(String)} and
 	 * {@link GTAController#connectToServer(String, String)}, this method uses the
-	 * <code>samp://</code> protocol to connect to make the samp launcher connect to
-	 * the server.
+	 * <code>samp://</code> protocol to connect to make the samp launcher connect to the server.
 	 *
 	 * @param ipAndPort
 	 *            the server to connect to
@@ -249,8 +245,7 @@ public final class GTAController
 	}
 
 	/**
-	 * Connects to the given server (IP and Port) using the given password. Uses the
-	 * commandline to
+	 * Connects to the given server (IP and Port) using the given password. Uses the commandline to
 	 * open samp and connect to the server.
 	 *
 	 * @param ipAndPort
@@ -271,8 +266,7 @@ public final class GTAController
 			try
 			{
 				Logging.log(Level.INFO, "Connecting using executeable.");
-				final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ",
-						ipAndPort, password);
+				final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
 				builder.directory(new File(gtaPath.get()));
 				builder.start();
 			}
@@ -293,8 +287,7 @@ public final class GTAController
 			new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
 					.title("GTA couldn't be located")
-					.message(
-							"If this isn't correct, please head to the settings view and manually enter your GTA path.")
+					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
 					.animation(Animations.POPUP)
 					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 		}
@@ -321,21 +314,44 @@ public final class GTAController
 	 */
 	public static boolean isVersionCached(final SAMPVersion version)
 	{
-		final File cachedVersion = new File(
-				PathConstants.CLIENT_CACHE + File.separator + version.getVersionIdentifier() + ".zip");
+		final File cachedVersion = new File(PathConstants.CLIENT_CACHE + File.separator + version.getVersionIdentifier() + ".zip");
 
 		if (cachedVersion.exists())
 		{
-			// TODO(MSC) Replace with proper checksum.
-			if (FileUtility.validateFile(cachedVersion, ""))
-			{
+			if (FileUtility.validateFile(cachedVersion, version.getHashOfZip()))
+			{// If its valid, we return true
 				return true;
 			}
 
+			// Otherwise, we delete the invalid one and return false
 			cachedVersion.delete();
 			return false;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Caches a file for the specified {@link SAMPVersion}.
+	 *
+	 * @param version
+	 *            Version to cache the file for
+	 * @param toCache
+	 *            file path that should be cached
+	 * @return true if the version was cached, otherwise false
+	 */
+	public static boolean addVersionToCache(final SAMPVersion version, final String toCache)
+	{
+		try
+		{
+			final Path cachedVersion = Paths.get(PathConstants.CLIENT_CACHE + File.separator + version.getVersionIdentifier() + ".zip");
+			Files.copy(Paths.get(toCache), cachedVersion, StandardCopyOption.REPLACE_EXISTING);
+			return true;
+		}
+		catch (final IOException exception)
+		{
+			Logging.log(Level.WARNING, "Error caching version.", exception);
+			return false;
+		}
 	}
 }

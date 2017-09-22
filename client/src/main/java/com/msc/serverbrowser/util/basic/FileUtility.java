@@ -60,8 +60,7 @@ public final class FileUtility
 	 * @param outputLocation
 	 *            zip file output folder
 	 * @throws IOException
-	 *             if there was an error reading the zip file or writing the
-	 *             unzipped data
+	 *             if there was an error reading the zip file or writing the unzipped data
 	 */
 	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException
 	{
@@ -77,8 +76,7 @@ public final class FileUtility
 				final long size = zipEntry.getSize();
 				final long compressedSize = zipEntry.getCompressedSize();
 
-				Logging.info(
-						String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
+				Logging.info(String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
 
 				// Do we need to create a directory ?
 				final File file = new File(outputLocation + separator + name);
@@ -127,7 +125,7 @@ public final class FileUtility
 	{
 		try
 		{
-			return HashingUtility.verifyChecksum(file.getAbsolutePath()).equals(sha512Checksum);
+			return HashingUtility.verifyChecksum(file.getAbsolutePath()).equalsIgnoreCase(sha512Checksum);
 		}
 		catch (NoSuchAlgorithmException | IOException exception)
 		{
@@ -137,8 +135,8 @@ public final class FileUtility
 	}
 
 	/**
-	 * Deletes a folder recursively. In case it deletes files on partially, files
-	 * that had been deleted already will stay gone.
+	 * Deletes a folder recursively. In case it deletes files on partially, files that had been
+	 * deleted already will stay gone.
 	 *
 	 * @param folder
 	 *            will be deleted recursively

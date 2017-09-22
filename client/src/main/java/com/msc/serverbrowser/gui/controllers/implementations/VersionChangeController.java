@@ -12,6 +12,8 @@ import com.github.plushaze.traynotification.notification.NotificationTypeImpleme
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.PathConstants;
+import com.msc.serverbrowser.data.properties.ClientPropertiesController;
+import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
@@ -34,13 +36,13 @@ import javafx.scene.layout.VBox;
  */
 public class VersionChangeController implements ViewController
 {
-	private static final String				INSTALL_TEXT		= "Install";
+	private static final String INSTALL_TEXT = "Install";
 
 	private static Optional<SAMPVersion>	currentlyInstalling	= Optional.empty();
 	private final List<Button>				buttons				= new ArrayList<>();
 
 	@FXML
-	private VBox							buttonContainer;
+	private VBox buttonContainer;
 
 	@Override
 	public void initialize()
@@ -50,8 +52,7 @@ public class VersionChangeController implements ViewController
 	}
 
 	/**
-	 * Will create an {@link HBox} for every {@link SAMPVersion}, said {@link HBox}
-	 * will contain a
+	 * Will create an {@link HBox} for every {@link SAMPVersion}, said {@link HBox} will contain a
 	 * {@link Label} and a {@link Button}.
 	 */
 	private void createAndSetupButtons()
@@ -112,6 +113,7 @@ public class VersionChangeController implements ViewController
 			if (GTAController.isVersionCached(toInstall))
 			{
 				installCachedVersion(toInstall);
+				finishInstalling();
 			}
 			else
 			{
@@ -127,8 +129,11 @@ public class VersionChangeController implements ViewController
 						final String willBeDownloaded = PathConstants.SAMP__DOWNLOAD_LOCATION
 								+ toInstall.getVersionIdentifier() + ".zip";
 
-						downloadedFile = Optional
-								.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
+						downloadedFile = Optional.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
+						if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CACHING_DOWNLOADS))
+						{
+							GTAController.addVersionToCache(toInstall, PathConstants.OUTPUT_ZIP);
+						}
 						FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
 					}
 					catch (final IOException | IllegalArgumentException exception)
@@ -136,9 +141,8 @@ public class VersionChangeController implements ViewController
 						Logging.log(Level.SEVERE, "Error Updating client.", exception);
 					}
 
-					currentlyInstalling = Optional.empty();
 					downloadedFile.ifPresent(File::delete);
-					Platform.runLater(() -> Client.getInstance().reloadViewIfLoaded(View.VERSION_CHANGER));
+					finishInstalling();
 				}).start();
 			}
 		}
@@ -147,21 +151,25 @@ public class VersionChangeController implements ViewController
 			new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
 					.title("GTA couldn't be located")
-					.message(
-							"If this isn't correct, please head to the settings view and manually enter your GTA path.")
+					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
 					.animation(Animations.POPUP)
 					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 		}
+	}
+
+	private void finishInstalling()
+	{
+		currentlyInstalling = Optional.empty();
+		Platform.runLater(() -> Client.getInstance().reloadViewIfLoaded(View.VERSION_CHANGER));
 	}
 
 	private static void installCachedVersion(final SAMPVersion cachedVersion)
 	{
 		try
 		{
-			final File cachedVersionFile = new File(
-					PathConstants.CLIENT_CACHE + File.separator + cachedVersion.getVersionIdentifier() + ".zip");
+			final File cachedVersionFile = new File(PathConstants.CLIENT_CACHE + File.separator + cachedVersion.getVersionIdentifier() + ".zip");
 
-			FileUtility.unzip(PathConstants.OUTPUT_ZIP, cachedVersionFile.getAbsolutePath());
+			FileUtility.unzip(cachedVersionFile.getAbsolutePath(), GTAController.getGtaPath().get());
 		}
 		catch (final IOException exception)
 		{
@@ -170,15 +178,14 @@ public class VersionChangeController implements ViewController
 			new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
 					.title("Installing SA-MP from Cache")
-					.message("Error while teying to install SA-MP from cache, check logs for further information.")
+					.message("Error while trying to install SA-MP from cache, check logs for further information.")
 					.animation(Animations.POPUP)
 					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 		}
 	}
 
 	/**
-	 * Decides which buttons will be enabled and what text every button will have,
-	 * depending on if
+	 * Decides which buttons will be enabled and what text every button will have, depending on if
 	 * an installation is going on and what is currently installed.
 	 */
 	private void updateButtonStates()
