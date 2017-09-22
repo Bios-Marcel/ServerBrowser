@@ -50,6 +50,7 @@ public final class UpdateUtility
 	/**
 	 * @return the tag of the latest github release
 	 * @throws IOException
+	 *             if there was an errors while retrieving data
 	 */
 	public static Optional<String> getLatestTag() throws IOException
 	{
@@ -91,5 +92,87 @@ public final class UpdateUtility
 			return release.getAssets().get(0).getBrowserDownloadUrl();
 		}
 		return null;
+	}
+
+	/**
+	 * Compares two version strings to each other.
+	 *
+	 * @param versionOne
+	 *            first version string
+	 * @param versionTwo
+	 *            second version string
+	 * @return {@link CompareResult#GREATER} if argument one is greater, {@link CompareResult#LESS}
+	 *         if argument one is less and otherwise {@link CompareResult#EQUAL}
+	 * @throws NullPointerException
+	 *             if any of the parameters is null
+	 * @throws NumberFormatException
+	 *             if any of the parameters contains something besides spaces, dots or integral
+	 *             numbers
+	 * @throws IllegalArgumentException
+	 *             if any of the arguments is empty
+	 */
+	public static CompareResult compareVersions(final String versionOne, final String versionTwo) throws NullPointerException, NumberFormatException, IllegalArgumentException
+	{
+		final String trimmedOne = versionOne.trim();
+		final String trimmedTwo = versionTwo.trim();
+
+		if (trimmedOne.isEmpty() || trimmedTwo.isEmpty())
+		{
+			throw new IllegalArgumentException("Empty versionstrings are invalid. (One: '" + trimmedOne + "' Two: '" + trimmedTwo + "')");
+		}
+
+		final String[] versionOneParts = trimmedOne.split("[.]");
+		final String[] versionTwoParts = trimmedTwo.split("[.]");
+
+		final int longest = Integer.max(versionOneParts.length, versionTwoParts.length);
+
+		if (longest > 3)
+		{
+			throw new IllegalArgumentException("The semantic version should only have up to 3 parts, eg: '1.23.2312'.");
+		}
+
+		final int length = Integer.min(versionOneParts.length, versionTwoParts.length);
+
+		for (int i = 0; i < length; i++)
+		{
+			final Integer numberOne = Integer.parseInt(versionOneParts[i]);
+			final Integer numberTwo = Integer.parseInt(versionTwoParts[i]);
+
+			if (numberOne < numberTwo)
+			{
+				return CompareResult.LESS;
+			}
+			if (numberTwo < numberOne)
+			{
+				return CompareResult.GREATER;
+			}
+		}
+
+		if (longest > length)
+		{// If one of the strings had more version parts, we will check those too.
+			final String[] bigger = versionOneParts.length > versionTwoParts.length ? versionOneParts : versionTwoParts;
+			final boolean versionOneWasLonger = bigger == versionOneParts;
+			for (int i = length; i < longest; i++)
+			{
+				if (Integer.parseInt(bigger[i]) != 0)
+				{
+					return versionOneWasLonger ? CompareResult.GREATER : CompareResult.LESS;
+				}
+			}
+		}
+
+		return CompareResult.EQUAL;
+	}
+
+	/**
+	 * @author Marcel
+	 * @since 22.09.2017
+	 */
+	@SuppressWarnings("javadoc")
+	public static enum CompareResult
+	{
+		LESS,
+		EQUAL,
+		GREATER;
 	}
 }
