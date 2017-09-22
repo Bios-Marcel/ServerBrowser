@@ -28,7 +28,6 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 /**
  * @since 02.07.2017
@@ -143,7 +142,7 @@ public class VersionChangeController implements ViewController
 					.message(
 							"If this isn't correct, please head to the settings view and manually enter your GTA path.")
 					.animation(Animations.POPUP)
-					.build().showAndDismiss(Duration.seconds(10));
+					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 		}
 	}
 

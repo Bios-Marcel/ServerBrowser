@@ -23,7 +23,15 @@ import com.msc.serverbrowser.util.basic.StringUtility;
  */
 public final class ServerUtility
 {
-	private static final String UNKNOWN = "Unknown";
+	/**
+	 * The port, that every SA-MP server uses by default.
+	 */
+	public static final Integer	DEFAULT_SAMP_PORT	= 7777;
+
+	private static final String	UNKNOWN				= "Unknown";
+
+	private static final int	MAX_PORT			= 65535;
+	private static final int	MIN_PORT			= 0;
 
 	private ServerUtility()
 	{
@@ -106,8 +114,8 @@ public final class ServerUtility
 
 			final String[] addressData = address.split(":");
 
-			final SampServer server = new SampServer(addressData[0],
-					address.contains(":") ? Integer.parseInt(addressData[1]) : 7777);
+			final int port = address.contains(":") ? Integer.parseInt(addressData[1]) : ServerUtility.DEFAULT_SAMP_PORT;
+			final SampServer server = new SampServer(addressData[0], port);
 
 			server.setPlayers(jsonServerData.getInt("pc", 0));
 			server.setMaxPlayers(jsonServerData.getInt("pm", 0));
@@ -143,7 +151,7 @@ public final class ServerUtility
 	 */
 	public static boolean isPortValid(final Integer portNumber)
 	{
-		return portNumber >= 0 && portNumber <= 65535;
+		return portNumber >= MIN_PORT && portNumber <= MAX_PORT;
 	}
 
 }

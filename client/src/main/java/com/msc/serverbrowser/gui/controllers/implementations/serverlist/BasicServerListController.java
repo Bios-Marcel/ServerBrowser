@@ -16,6 +16,7 @@ import java.util.regex.PatternSyntaxException;
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
+import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.FavouritesController;
 import com.msc.serverbrowser.data.entites.Player;
 import com.msc.serverbrowser.data.entites.SampServer;
@@ -53,92 +54,99 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
-import javafx.util.Duration;
 
 /**
  * @since 02.07.2017
  */
 public class BasicServerListController implements ViewController
 {
-	private static final String RETRIEVING = "Retrieving...";
+	private static final String									RETRIEVING						= "Retrieving...";
 
-	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
+	private final ObjectProperty<Predicate<? super SampServer>>	filterProperty					= new SimpleObjectProperty<>();
 
 	@FXML
-	private TextField addressTextField;
+	private TextField											addressTextField;
 
-	private final static StringProperty serverAddressProperty = new SimpleStringProperty();
+	private final static StringProperty							serverAddressProperty			= new SimpleStringProperty();
 
 	/**
-	 * This Table contains all available servers / favourite servers, depending on the active view.
+	 * This Table contains all available servers / favourite servers, depending on
+	 * the active view.
 	 */
 	@FXML
-	protected TableView<SampServer> serverTable;
+	protected TableView<SampServer>								serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		playerCount;
+	protected Label												playerCount;
 	/**
 	 * Displays the amount of all slots on all Servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		slotCount;
+	protected Label												slotCount;
 	/**
 	 * Number of servers in {@link #serverTable}.
 	 */
 	@FXML
-	protected Label		serverCount;
+	protected Label												serverCount;
 	@FXML
-	private TextField	serverAddress;
+	private TextField											serverAddress;
 	@FXML
-	private Label		serverLagcomp;
+	private Label												serverLagcomp;
 	@FXML
-	private Label		serverPing;
+	private Label												serverPing;
 	@FXML
-	private Label		serverPassword;
+	private Label												serverPassword;
 	@FXML
-	private Label		mapLabel;
+	private Label												mapLabel;
 	@FXML
-	private Hyperlink	websiteLink;
+	private Hyperlink											websiteLink;
 
 	@FXML
-	private TableView<Player>				playerTable;
+	private TableView<Player>									playerTable;
 	@FXML
-	private TableColumn<SampServer, String>	columnPlayers;
+	private TableColumn<SampServer, String>						columnPlayers;
 
 	/**
 	 * When clicked, all selected servers will be added to favourites.
 	 */
-	protected MenuItem			addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
+	protected MenuItem											addToFavouritesMenuItem			= new MenuItem(
+			"Add to Favourites");
 	/**
 	 * When clicked, all selected servers will be removed from favourites.
 	 */
-	protected MenuItem			removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
-	private final MenuItem		visitWebsiteMenuItem			= new MenuItem("Visit Website");
-	private final MenuItem		connectMenuItem					= new MenuItem("Connect to Server");
-	private final MenuItem		copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
-	private final ContextMenu	menu							= new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
+	protected MenuItem											removeFromFavouritesMenuItem	= new MenuItem(
+			"Remove from Favourites");
+	private final MenuItem										visitWebsiteMenuItem			= new MenuItem(
+			"Visit Website");
+	private final MenuItem										connectMenuItem					= new MenuItem(
+			"Connect to Server");
+	private final MenuItem										copyIpAddressAndPortMenuItem	= new MenuItem(
+			"Copy IP Address and Port");
+	private final ContextMenu									menu							= new ContextMenu(
+			connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem,
+			copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	@FXML
-	private CheckBox			regexCheckBox;
+	private CheckBox											regexCheckBox;
 	@FXML
-	private TextField			nameFilter;
+	private TextField											nameFilter;
 	@FXML
-	private TextField			modeFilter;
+	private TextField											modeFilter;
 	@FXML
-	private TextField			languageFilter;
+	private TextField											languageFilter;
 	@FXML
-	private ComboBox<String>	versionFilter;
+	private ComboBox<String>									versionFilter;
 
 	/**
 	 * Holds all servers that might be displayed in {@link #serverTable}.
 	 */
-	protected ObservableList<SampServer> servers = FXCollections
+	protected ObservableList<SampServer>						servers							= FXCollections
 			.observableArrayList();
 
-	private static Thread serverInfoUpdateThread;
+	private static Thread										serverInfoUpdateThread;
 
 	/**
 	 * Empty Constructor.
@@ -261,7 +269,7 @@ public class BasicServerListController implements ViewController
 			final String[] ipAndPort = addressTextField.getText().split("[:]");
 			if (ipAndPort.length == 1)
 			{
-				addServerToFavourites(ipAndPort[0], 7777);
+				addServerToFavourites(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT);
 			}
 			else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1]))
 			{
@@ -274,7 +282,7 @@ public class BasicServerListController implements ViewController
 						.title("Add to favourites")
 						.message("Can't add to favourites, server address is invalid.")
 						.animation(Animations.POPUP)
-						.build().showAndDismiss(Duration.seconds(10));
+						.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 			}
 		}
 	}
@@ -294,7 +302,7 @@ public class BasicServerListController implements ViewController
 		final String[] ipAndPort = Optional.ofNullable(addressTextField.getText()).orElse("").split("[:]");
 		if (ipAndPort.length == 1)
 		{
-			tryToConnect(ipAndPort[0], 7777);
+			tryToConnect(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT);
 		}
 		else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1]))
 		{
@@ -313,7 +321,7 @@ public class BasicServerListController implements ViewController
 				.title("Can't connect to Server")
 				.message("The address that you have entered, doesn't seem to be valid.")
 				.animation(Animations.POPUP)
-				.build().showAndDismiss(Duration.seconds(10));
+				.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 
 	@FXML
@@ -394,7 +402,8 @@ public class BasicServerListController implements ViewController
 	protected void displayMenu(final List<SampServer> serverList, final double posX, final double posY)
 	{
 		/*
-		 * TODO(MSC) Refactor; All this stuff shouldn't be set every time the user requests a menu,
+		 * TODO(MSC) Refactor; All this stuff shouldn't be set every time the user
+		 * requests a menu,
 		 * instead, this should be set once when initializing the controller.
 		 */
 
@@ -442,7 +451,8 @@ public class BasicServerListController implements ViewController
 	}
 
 	/**
-	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a
+	 * Connects to a server, depending on if it is passworded, the user will be
+	 * asked to enter a
 	 * password. If the server is not reachable the user can not connect.
 	 *
 	 * @param address
@@ -478,7 +488,8 @@ public class BasicServerListController implements ViewController
 	}
 
 	/**
-	 * TODO(MSC) Burn it before it lays eggs. Hans, get the Flammenwerfer. Updates the data that the
+	 * TODO(MSC) Burn it before it lays eggs. Hans, get the Flammenwerfer. Updates
+	 * the data that the
 	 * {@link SampServer} holds and displays the correct values on the UI.
 	 *
 	 * @param server

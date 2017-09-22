@@ -1,7 +1,6 @@
 package com.msc.serverbrowser.util.basic;
 
 import static com.msc.serverbrowser.util.basic.FileUtility.unzip;
-import static java.io.File.separator;
 import static java.nio.file.Files.createTempDirectory;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.readAllBytes;
@@ -31,7 +30,8 @@ import org.junit.jupiter.api.Test;
  */
 class FileUtilityTest
 {
-	private static MessageDigest shaDigester;
+	private static final String		PATH_TO_TEST_RESSOURCES	= "/com/msc/serverbrowser/util/basic/";
+	private static MessageDigest	shaDigester;
 
 	@BeforeAll
 	public static void createShaEncoder() throws NoSuchAlgorithmException
@@ -54,8 +54,10 @@ class FileUtilityTest
 	}
 
 	/**
-	 * Tests if a given ZIP archive has the correct content. The test data needs to have a
-	 * corresponding <code>*.sha512sum</code> in the same folder with gets used to validate the file
+	 * Tests if a given ZIP archive has the correct content. The test data needs to
+	 * have a
+	 * corresponding <code>*.sha512sum</code> in the same folder with gets used to
+	 * validate the file
 	 * content survived the zipping without alteration.
 	 *
 	 * @param testDataName
@@ -67,12 +69,12 @@ class FileUtilityTest
 	 */
 	private void testUnzipWithGivenFileWithSha(final String testDataName) throws URISyntaxException, IOException
 	{
-		final URL testDataZipUrl = getClass().getResource("/com/msc/serverbrowser/util/basic/" + testDataName + ".zip");
+		final URL testDataZipUrl = getClass().getResource(PATH_TO_TEST_RESSOURCES + testDataName + ".zip");
 		assertNotNull(testDataZipUrl, "path to test zip data not correct");
 		final Path testDataZipPath = get(testDataZipUrl.toURI());
 		assertTrue(exists(testDataZipPath), "The zipped file does not exist where expected: " + testDataZipPath + ".");
 
-		final URL testDataShaUrl = getClass().getResource(separator + testDataName + ".sha512sum");
+		final URL testDataShaUrl = getClass().getResource(PATH_TO_TEST_RESSOURCES + testDataName + ".sha512sum");
 		assertNotNull(testDataShaUrl, "path to test checksums not correct");
 		final Path testDataShaPath = get(testDataShaUrl.toURI());
 		assertTrue(exists(testDataShaPath), "The shasum file does not exist where expected: " + testDataShaPath + ".");
@@ -91,7 +93,8 @@ class FileUtilityTest
 			final String name = split[1].substring(1);
 			final Path pathToUnzippedFile = get(tempDirectory.toString(), name);
 
-			assertTrue(exists(pathToUnzippedFile), "The unzipped file does not exist where expected: " + pathToUnzippedFile + ".");
+			assertTrue(exists(pathToUnzippedFile),
+					"The unzipped file does not exist where expected: " + pathToUnzippedFile + ".");
 
 			final String shaOfUnzipped = toHex(shaDigester.digest(readAllBytes(pathToUnzippedFile)));
 			assertEquals(sha512, shaOfUnzipped);
