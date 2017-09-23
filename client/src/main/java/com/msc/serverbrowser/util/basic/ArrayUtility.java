@@ -38,4 +38,26 @@ public final class ArrayUtility
 		return Optional.empty();
 	}
 
+	/**
+	 * Checks if the array contains the given item.
+	 *
+	 * @param array
+	 *            the array to search in for
+	 * @param searchFor
+	 *            the item to search for
+	 * @return true if the array contains the item, otherwise false
+	 */
+	public static <T> boolean contains(final T[] array, final T searchFor)
+	{
+		for (final T object : array)
+		{
+			if (object.equals(searchFor))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }

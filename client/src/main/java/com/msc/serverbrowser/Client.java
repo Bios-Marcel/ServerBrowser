@@ -20,6 +20,7 @@ import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.UpdateUtility;
+import com.msc.serverbrowser.util.basic.ArrayUtility;
 import com.msc.serverbrowser.util.basic.FileUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
@@ -72,7 +73,12 @@ public final class Client extends Application
 		instance = this;
 		initClient();
 		loadUI(primaryStage);
-		new Thread(() -> checkVersion()).start();
+
+		// Only check for updates if not in development mode
+		if (!ClientPropertiesController.getPropertyAsBoolean(Property.DEVELOPMENT))
+		{
+			new Thread(() -> checkVersion()).start();
+		}
 	}
 
 	private MainController loadUIAndGetController()
@@ -206,10 +212,13 @@ public final class Client extends Application
 	 */
 	private static void checkVersion()
 	{
+		Logging.log(Level.INFO, "Check for updates.");
+
 		try
 		{
 			if (!UpdateUtility.isUpToDate())
 			{
+				Logging.log(Level.INFO, "Update available.");
 				Platform.runLater(() -> displayUpdateNotification());
 			}
 		}
@@ -218,7 +227,6 @@ public final class Client extends Application
 			Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
 			Platform.runLater(() -> displayCantRetrieveUpdate());
 		}
-
 	}
 
 	private static void displayUpdateNotification()
@@ -324,6 +332,14 @@ public final class Client extends Application
 	 */
 	public static void main(final String[] args)
 	{
+		if (args.length >= 1)
+		{
+			if (ArrayUtility.contains(args, "-d"))
+			{
+				ClientPropertiesController.setProperty(Property.DEVELOPMENT, true);
+			}
+		}
+
 		Application.launch(args);
 	}
 
