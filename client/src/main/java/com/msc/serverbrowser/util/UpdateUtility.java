@@ -15,6 +15,7 @@ import org.kohsuke.github.RateLimitHandler;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.basic.ArrayUtility;
 
 /**
  * Contains to update the client to newer version.
@@ -134,10 +135,10 @@ public final class UpdateUtility
 
 		final int length = Integer.min(versionOneParts.length, versionTwoParts.length);
 
-		for (int i = 0; i < length; i++)
+		for (int index = 0; index < length; index++)
 		{
-			final Integer numberOne = Integer.parseInt(versionOneParts[i]);
-			final Integer numberTwo = Integer.parseInt(versionTwoParts[i]);
+			final Integer numberOne = Integer.parseInt(versionOneParts[index]);
+			final Integer numberTwo = Integer.parseInt(versionTwoParts[index]);
 
 			if (numberOne < numberTwo)
 			{
@@ -151,15 +152,18 @@ public final class UpdateUtility
 
 		if (longest > length)
 		{// If one of the strings had more version parts, we will check those too.
-			final String[] bigger = versionOneParts.length > versionTwoParts.length ? versionOneParts : versionTwoParts;
-			final boolean versionOneWasLonger = bigger == versionOneParts;
+			final String[] bigger = ArrayUtility.getLonger(versionOneParts, versionTwoParts);
 			final boolean foundOneBiggerThanZero = IntStream.range(length, longest)
 					.filter(num -> Integer.parseInt(bigger[num]) != 0)
 					.findAny().isPresent();
 
 			if (foundOneBiggerThanZero)
 			{
-				return versionOneWasLonger ? CompareResult.GREATER : CompareResult.LESS;
+				if (bigger == versionOneParts)
+				{
+					return CompareResult.GREATER;
+				}
+				return CompareResult.LESS;
 			}
 		}
 
