@@ -9,6 +9,7 @@ import java.util.logging.Level;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.basic.StringUtility;
 
 /**
  * Contains convenient methods for interacting with the SA-MP legacy settings.
@@ -21,18 +22,18 @@ import com.msc.serverbrowser.logging.Logging;
 @SuppressWarnings("javadoc")
 public final class LegacySettingsController
 {
-	private static final String	FALSE_AS_INT				= "0";
+	private static final String FALSE_AS_INT = "0";
 
-	public static final String	FPS_LIMIT					= "fpslimit";
-	public static final String	PAGE_SIZE					= "pagesize";
-	public static final String	MULTICORE					= "multicore";
-	public static final String	TIMESTAMP					= "timestamp";
-	public static final String	AUDIO_PROXY_OFF				= "audioproxyoff";
-	public static final String	AUDIO_MESSAGE_OFF			= "audiomsgoff";
-	public static final String	DISABLE_HEAD_MOVE			= "disableheadmove";
-	public static final String	IME							= "ime";
-	public static final String	DIRECT_MODE					= "directmode";
-	public static final String	NO_NAME_TAG_STATUS			= "nonametagstatus";
+	public static final String	FPS_LIMIT			= "fpslimit";
+	public static final String	PAGE_SIZE			= "pagesize";
+	public static final String	MULTICORE			= "multicore";
+	public static final String	TIMESTAMP			= "timestamp";
+	public static final String	AUDIO_PROXY_OFF		= "audioproxyoff";
+	public static final String	AUDIO_MESSAGE_OFF	= "audiomsgoff";
+	public static final String	DISABLE_HEAD_MOVE	= "disableheadmove";
+	public static final String	IME					= "ime";
+	public static final String	DIRECT_MODE			= "directmode";
+	public static final String	NO_NAME_TAG_STATUS	= "nonametagstatus";
 
 	public static final String	FPS_LIMIT_DEFAULT			= "50";
 	public static final String	PAGE_SIZE_DEFAULT			= "10";
@@ -51,8 +52,7 @@ public final class LegacySettingsController
 	}
 
 	/**
-	 * @return {@link Properties} object containing the present legacy SA-MP
-	 *         Settings or an empty
+	 * @return {@link Properties} object containing the present legacy SA-MP Settings or an empty
 	 *         {@link Optional}
 	 */
 	public static Optional<Properties> getLegacyProperties()
@@ -71,12 +71,10 @@ public final class LegacySettingsController
 	}
 
 	/**
-	 * Override the SA-MP legacy settings using the passed {@link Properties}
-	 * object.
+	 * Override the SA-MP legacy settings using the passed {@link Properties} object.
 	 *
 	 * @param properties
-	 *            the {@link Properties} object to overwrite the legacy properties
-	 *            with
+	 *            the {@link Properties} object to overwrite the legacy properties with
 	 */
 	public static void save(final Properties properties)
 	{
@@ -88,5 +86,20 @@ public final class LegacySettingsController
 		{
 			Logging.log(Level.SEVERE, "Error while saving SA_MP legacy properties.", exception);
 		}
+	}
+
+	public static void restoreLegacySettings()
+	{
+		final Properties properties = getLegacyProperties().orElse(new Properties());
+
+		properties.put(LegacySettingsController.AUDIO_MESSAGE_OFF, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT));
+		properties.put(LegacySettingsController.AUDIO_PROXY_OFF, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
+		properties.put(LegacySettingsController.DIRECT_MODE, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
+		properties.put(LegacySettingsController.DISABLE_HEAD_MOVE, StringUtility.stringToBoolean(LegacySettingsController.DISABLE_HEAD_MOVE_DEFAULT));
+		properties.put(LegacySettingsController.FPS_LIMIT, Integer.parseInt(LegacySettingsController.FPS_LIMIT_DEFAULT));
+		properties.put(LegacySettingsController.PAGE_SIZE, Integer.parseInt(LegacySettingsController.PAGE_SIZE_DEFAULT));
+		properties.put(LegacySettingsController.IME, StringUtility.stringToBoolean(LegacySettingsController.IME_DEFAULT));
+		properties.put(LegacySettingsController.MULTICORE, StringUtility.stringToBoolean(LegacySettingsController.MULTICORE_DEFAULT));
+		properties.put(LegacySettingsController.TIMESTAMP, StringUtility.stringToBoolean(LegacySettingsController.TIMESTAMP_DEFAULT));
 	}
 }

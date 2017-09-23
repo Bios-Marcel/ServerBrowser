@@ -26,12 +26,12 @@ public final class ServerUtility
 	/**
 	 * The port, that every SA-MP server uses by default.
 	 */
-	public static final Integer	DEFAULT_SAMP_PORT	= 7777;
+	public static final Integer DEFAULT_SAMP_PORT = 7777;
 
-	private static final String	UNKNOWN				= "Unknown";
+	private static final String UNKNOWN = "Unknown";
 
-	private static final int	MAX_PORT			= 65535;
-	private static final int	MIN_PORT			= 0;
+	private static final int	MAX_PORT	= 65535;
+	private static final int	MIN_PORT	= 0;
 
 	private ServerUtility()
 	{
@@ -40,7 +40,6 @@ public final class ServerUtility
 
 	/**
 	 * Retrieves servers from the SA-MP masterlist for the given version.
-	 *
 	 *
 	 * @param version
 	 *            to filter for
@@ -53,8 +52,7 @@ public final class ServerUtility
 		{
 			final URLConnection openConnection = new URL("http://lists.sa-mp.com/" + version + "/servers")
 					.openConnection();
-			openConnection.addRequestProperty("User-Agent",
-					"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+			openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
 			try (final BufferedReader in = new BufferedReader(new InputStreamReader(openConnection.getInputStream())))
 			{
 				in.lines().forEach(inputLine ->
@@ -92,10 +90,10 @@ public final class ServerUtility
 	 * Queries Southclaws Rest API for servers.
 	 *
 	 * @return a {@link List} of {@link SampServer SampServers}
-	 * @throws MalformedURLException
 	 * @throws IOException
+	 *             when querying Southclaws server has failed
 	 */
-	public static List<SampServer> fetchServersFromSouthclaws() throws MalformedURLException, IOException
+	public static List<SampServer> fetchServersFromSouthclaws() throws IOException
 	{
 		return fetchFromAPI("http://api.samp.southcla.ws/v1/servers");
 	}

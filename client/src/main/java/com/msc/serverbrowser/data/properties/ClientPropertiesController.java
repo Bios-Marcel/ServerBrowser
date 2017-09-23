@@ -118,8 +118,7 @@ public final class ClientPropertiesController
 	{
 		if (!property.datatype().equals(datatype))
 		{
-			throw new IllegalArgumentException(
-					"Datatype is " + datatype.getName() + " ; Expected: " + property.datatype().getName());
+			throw new IllegalArgumentException("Datatype is " + datatype.getName() + " ; Expected: " + property.datatype().getName());
 		}
 	}
 
@@ -228,6 +227,5 @@ public final class ClientPropertiesController
 	public static void restorePropertyToDefault(final Property property)
 	{
 		setProperty(property, property.defaultValue(), true);
-
 	}
 }

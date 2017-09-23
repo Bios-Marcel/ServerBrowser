@@ -6,10 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -21,13 +17,11 @@ import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
 import com.github.sarxos.winreg.WindowsRegistry;
 import com.msc.serverbrowser.Client;
-import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.basic.FileUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -303,55 +297,5 @@ public final class GTAController
 	public static void connectToServer(final String ipAndPort)
 	{
 		connectToServer(ipAndPort, "");
-	}
-
-	/**
-	 * Checks if a version is cached.
-	 *
-	 * @param version
-	 *            to check
-	 * @return true wenn die Version gecached ist.
-	 */
-	public static boolean isVersionCached(final SAMPVersion version)
-	{
-		final File cachedVersion = new File(PathConstants.CLIENT_CACHE + File.separator + version.getVersionIdentifier() + ".zip");
-
-		if (cachedVersion.exists())
-		{
-			if (FileUtility.validateFile(cachedVersion, version.getHashOfZip()))
-			{// If its valid, we return true
-				return true;
-			}
-
-			// Otherwise, we delete the invalid one and return false
-			cachedVersion.delete();
-			return false;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Caches a file for the specified {@link SAMPVersion}.
-	 *
-	 * @param version
-	 *            Version to cache the file for
-	 * @param toCache
-	 *            file path that should be cached
-	 * @return true if the version was cached, otherwise false
-	 */
-	public static boolean addVersionToCache(final SAMPVersion version, final String toCache)
-	{
-		try
-		{
-			final Path cachedVersion = Paths.get(PathConstants.CLIENT_CACHE + File.separator + version.getVersionIdentifier() + ".zip");
-			Files.copy(Paths.get(toCache), cachedVersion, StandardCopyOption.REPLACE_EXISTING);
-			return true;
-		}
-		catch (final IOException exception)
-		{
-			Logging.log(Level.WARNING, "Error caching version.", exception);
-			return false;
-		}
 	}
 }

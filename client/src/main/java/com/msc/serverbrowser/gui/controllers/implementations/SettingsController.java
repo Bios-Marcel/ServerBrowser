@@ -1,20 +1,21 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
-import java.io.File;
+import java.util.Optional;
 import java.util.Properties;
 
 import com.msc.serverbrowser.Client;
-import com.msc.serverbrowser.constants.PathConstants;
+import com.msc.serverbrowser.data.CacheController;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.LegacySettingsController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
-import com.msc.serverbrowser.util.basic.FileUtility;
 import com.msc.serverbrowser.util.basic.StringUtility;
 
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -29,27 +30,27 @@ public class SettingsController implements ViewController
 {
 	// Information
 	@FXML
-	private Label				informationLabel;
+	private Label informationLabel;
 
 	// General Settings
 	@FXML
-	private TextField			sampPathTextField;
+	private TextField	sampPathTextField;
 	@FXML
-	private CheckBox			rememberLastViewCheckBox;
+	private CheckBox	saveLastViewCheckBox;
 
 	// Appearance Settings
 	@FXML
-	private CheckBox			darkThemeCheckBox;
+	private CheckBox darkThemeCheckBox;
 
 	// Permission Settings
 	@FXML
-	private CheckBox			allowCloseSampCheckBox;
+	private CheckBox	allowCloseSampCheckBox;
 	@FXML
-	private CheckBox			allowCloseGtaCheckBox;
+	private CheckBox	allowCloseGtaCheckBox;
 
 	// Update Settings
 	@FXML
-	private CheckBox			showChangelogCheckBox;
+	private CheckBox showChangelogCheckBox;
 
 	// SA-MP Settings
 	@FXML
@@ -77,8 +78,9 @@ public class SettingsController implements ViewController
 	// @FXML
 	// private CheckBox askForUsernameOnConnectCheckBox;
 
+	// Downloads
 	@FXML
-	private CheckBox			allowCachingDownloadsCheckBox;
+	private CheckBox allowCachingDownloadsCheckBox;
 
 	@Override
 	public void initialize()
@@ -87,13 +89,12 @@ public class SettingsController implements ViewController
 
 		// General Properties
 		sampPathTextField.setText(ClientPropertiesController.getPropertyAsString(Property.SAMP_PATH));
-		sampPathTextField.textProperty().addListener(changed ->
+		sampPathTextField.textProperty().addListener((__, ___, newValue) ->
 		{
-			final String newValue = sampPathTextField.getText().trim();
-			ClientPropertiesController.setProperty(Property.SAMP_PATH, newValue);
+			ClientPropertiesController.setProperty(Property.SAMP_PATH, newValue.trim());
 		});
 
-		setupCheckBox(rememberLastViewCheckBox, Property.REMEMBER_LAST_VIEW);
+		setupCheckBox(saveLastViewCheckBox, Property.SAVE_LAST_VIEW);
 
 		// Connection Properties
 		// setupCheckBox(askForUsernameOnConnectCheckBox,
@@ -101,16 +102,15 @@ public class SettingsController implements ViewController
 
 		// Appearance Properties
 		setupCheckBox(darkThemeCheckBox, Property.USE_DARK_THEME);
-		darkThemeCheckBox.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) ->
+		darkThemeCheckBox.selectedProperty().addListener((__, ___, newValue) ->
 		{
-			final Boolean rememberLastViewOld = ClientPropertiesController
-					.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW);
-			ClientPropertiesController.setProperty(Property.REMEMBER_LAST_VIEW, true);
+			final Boolean saveLastViewOld = ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW);
+			ClientPropertiesController.setProperty(Property.SAVE_LAST_VIEW, true);
 			ClientPropertiesController.setProperty(Property.LAST_VIEW, View.SETTINGS.getId());
 
-			Client.getInstance().reloadUI();
+			Client.getInstance().applyTheme();
 
-			ClientPropertiesController.setProperty(Property.REMEMBER_LAST_VIEW, rememberLastViewOld);
+			ClientPropertiesController.setProperty(Property.SAVE_LAST_VIEW, saveLastViewOld);
 		});
 
 		// Permission Properties
@@ -128,33 +128,26 @@ public class SettingsController implements ViewController
 		initLegacySettings(legacyProperties);
 
 		fpsLimitSpinner.valueProperty()
-				.addListener(
-						changed -> changeLegacyIntegerSetting(LegacySettingsController.FPS_LIMIT, fpsLimitSpinner));
+				.addListener(__ -> changeLegacyIntegerSetting(LegacySettingsController.FPS_LIMIT, fpsLimitSpinner.getValue()));
 		pageSizeSpinner.valueProperty()
-				.addListener(
-						changed -> changeLegacyIntegerSetting(LegacySettingsController.PAGE_SIZE, pageSizeSpinner));
+				.addListener(__ -> changeLegacyIntegerSetting(LegacySettingsController.PAGE_SIZE, pageSizeSpinner.getValue()));
 
 		multicoreCheckbox
-				.setOnAction(
-						action -> changeLegacyBooleanSetting(LegacySettingsController.MULTICORE, multicoreCheckbox));
-		audioMsgOffCheckBox.setOnAction(
-				action -> changeLegacyBooleanSetting(LegacySettingsController.AUDIO_MESSAGE_OFF, audioMsgOffCheckBox));
+				.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.MULTICORE, multicoreCheckbox.isSelected()));
+		audioMsgOffCheckBox
+				.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.AUDIO_MESSAGE_OFF, audioMsgOffCheckBox.isSelected()));
 		audioproxyCheckBox
-				.setOnAction(action -> changeLegacyBooleanSetting(LegacySettingsController.AUDIO_PROXY_OFF,
-						audioproxyCheckBox));
+				.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.AUDIO_PROXY_OFF, audioproxyCheckBox.isSelected()));
 		timestampsCheckBox
-				.setOnAction(
-						action -> changeLegacyBooleanSetting(LegacySettingsController.TIMESTAMP, timestampsCheckBox));
+				.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.TIMESTAMP, timestampsCheckBox.isSelected()));
 		disableHeadMoveCheckBox
-				.setOnAction(action -> changeLegacyBooleanSetting(LegacySettingsController.DISABLE_HEAD_MOVE,
-						disableHeadMoveCheckBox));
-		imeCheckBox.setOnAction(action -> changeLegacyBooleanSetting(LegacySettingsController.IME, imeCheckBox));
+				.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.DISABLE_HEAD_MOVE, disableHeadMoveCheckBox.isSelected()));
+		imeCheckBox
+				.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.IME, imeCheckBox.isSelected()));
 		directModeCheckBox
-				.setOnAction(
-						action -> changeLegacyBooleanSetting(LegacySettingsController.DIRECT_MODE, directModeCheckBox));
+				.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.DIRECT_MODE, directModeCheckBox.isSelected()));
 		noNameTagStatusCheckBox
-				.setOnAction(action -> changeLegacyBooleanSetting(LegacySettingsController.NO_NAME_TAG_STATUS,
-						noNameTagStatusCheckBox));
+				.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.NO_NAME_TAG_STATUS, noNameTagStatusCheckBox.isSelected()));
 	}
 
 	private void initInformationArea()
@@ -168,16 +161,6 @@ public class SettingsController implements ViewController
 				.append(ClientPropertiesController.getPropertyAsString(Property.LAST_TAG_NAME));
 
 		informationLabel.setText(builder.toString());
-	}
-
-	private void changeLegacyBooleanSetting(final String key, final CheckBox checkBox)
-	{
-		changeLegacyBooleanSetting(key, checkBox.isSelected());
-	}
-
-	private void changeLegacyIntegerSetting(final String key, final Spinner<Integer> spinner)
-	{
-		changeLegacyIntegerSetting(key, spinner.getValue());
 	}
 
 	private void changeLegacyBooleanSetting(final String key, final Boolean value)
@@ -203,31 +186,25 @@ public class SettingsController implements ViewController
 		final boolean multicore = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettingsController.MULTICORE, LegacySettingsController.MULTICORE_DEFAULT));
 		final boolean audioMsgOff = StringUtility.stringToBoolean(legacyProperties
-				.getProperty(LegacySettingsController.AUDIO_MESSAGE_OFF,
-						LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT));
+				.getProperty(LegacySettingsController.AUDIO_MESSAGE_OFF, LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT));
 		final boolean audioProxyOff = StringUtility.stringToBoolean(legacyProperties
-				.getProperty(LegacySettingsController.AUDIO_PROXY_OFF,
-						LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
+				.getProperty(LegacySettingsController.AUDIO_PROXY_OFF, LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
 		final boolean timestamp = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettingsController.TIMESTAMP, LegacySettingsController.TIMESTAMP_DEFAULT));
 		final boolean disableHeadMove = StringUtility.stringToBoolean(legacyProperties
-				.getProperty(LegacySettingsController.DISABLE_HEAD_MOVE,
-						LegacySettingsController.DISABLE_HEAD_MOVE_DEFAULT));
+				.getProperty(LegacySettingsController.DISABLE_HEAD_MOVE, LegacySettingsController.DISABLE_HEAD_MOVE_DEFAULT));
 		final boolean ime = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettingsController.IME, LegacySettingsController.IME_DEFAULT));
 		final boolean noNameTagStatus = StringUtility.stringToBoolean(legacyProperties
-				.getProperty(LegacySettingsController.NO_NAME_TAG_STATUS,
-						LegacySettingsController.NO_NAME_TAG_STATUS_DEFAULT));
+				.getProperty(LegacySettingsController.NO_NAME_TAG_STATUS, LegacySettingsController.NO_NAME_TAG_STATUS_DEFAULT));
 		final boolean directMode = StringUtility.stringToBoolean(legacyProperties
 				.getProperty(LegacySettingsController.DIRECT_MODE, LegacySettingsController.DIRECT_MODE_DEFAULT));
 
 		final int fpsLimit = Integer
-				.parseInt(legacyProperties.getProperty(LegacySettingsController.FPS_LIMIT,
-						LegacySettingsController.FPS_LIMIT_DEFAULT));
+				.parseInt(legacyProperties.getProperty(LegacySettingsController.FPS_LIMIT, LegacySettingsController.FPS_LIMIT_DEFAULT));
 		fpsLimitSpinner.getValueFactory().setValue(fpsLimit);
 		final int pageSize = Integer
-				.parseInt(legacyProperties.getProperty(LegacySettingsController.PAGE_SIZE,
-						LegacySettingsController.PAGE_SIZE_DEFAULT));
+				.parseInt(legacyProperties.getProperty(LegacySettingsController.PAGE_SIZE, LegacySettingsController.PAGE_SIZE_DEFAULT));
 		pageSizeSpinner.getValueFactory().setValue(pageSize);
 
 		multicoreCheckbox.setSelected(multicore);
@@ -242,10 +219,8 @@ public class SettingsController implements ViewController
 	}
 
 	/**
-	 * Does a one way binding of a {@link CheckBox} to a {@link Property}. Initially
-	 * sets the value
-	 * of the {@link CheckBox} according to the {@link Property Properties} value.
-	 * As soon as the
+	 * Does a one way binding of a {@link CheckBox} to a {@link Property}. Initially sets the value
+	 * of the {@link CheckBox} according to the {@link Property Properties} value. As soon as the
 	 * {@link CheckBox} value changes, the {@link Property} value will also change.
 	 *
 	 * @param box
@@ -256,58 +231,53 @@ public class SettingsController implements ViewController
 	private static void setupCheckBox(final CheckBox box, final Property property)
 	{
 		box.selectedProperty().set(ClientPropertiesController.getPropertyAsBoolean(property));
-		box.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) ->
+		box.selectedProperty().addListener((__, ___, newValue) ->
 		{
 			ClientPropertiesController.setProperty(property, newValue);
 		});
 	}
 
-	@SuppressWarnings("static-method")
 	@FXML
-	private void deleteDownloadCache()
+	private void onClickClearDownloadCache()
 	{
-		final File clientCacheFolder = new File(PathConstants.CLIENT_CACHE);
-		FileUtility.deleteRecursively(clientCacheFolder);
-		clientCacheFolder.mkdirs();
+		CacheController.clearVersionCache();
 	}
 
 	/**
-	 * Restores all settings to default. Some settings like
-	 * {@link Property#DEVELOPMENT} and
-	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change
-	 * those anyways.
+	 * Restores all settings to default. Some settings like {@link Property#DEVELOPMENT} and
+	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change those anyways.
 	 */
 	@FXML
-	private void restoreDefaults()
+	private void onClickRestore()
+	{
+		final Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure, that you want to reset all you settings?", ButtonType.YES, ButtonType.NO);
+		final Optional<ButtonType> result = alert.showAndWait();
+
+		result.ifPresent(button ->
+		{
+			if (button == ButtonType.YES)
+			{
+				restoreApplicationSettings();
+				LegacySettingsController.restoreLegacySettings();
+
+				// Reapply theme, since it might have been changed
+				Client.getInstance().applyTheme();
+				// Assure the view that the displays the correct data.
+				Client.getInstance().reloadViewIfLoaded(View.SETTINGS);
+			}
+		});
+	}
+
+	private void restoreApplicationSettings()
 	{
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_GTA);
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_SAMP);
 		ClientPropertiesController.restorePropertyToDefault(Property.ASK_FOR_NAME_ON_CONNECT);
-		ClientPropertiesController.restorePropertyToDefault(Property.NOTIFY_SERVER_ON_STARTUP);
-		ClientPropertiesController.restorePropertyToDefault(Property.REMEMBER_LAST_VIEW);
+		ClientPropertiesController.restorePropertyToDefault(Property.SAVE_LAST_VIEW);
 		ClientPropertiesController.restorePropertyToDefault(Property.USE_DARK_THEME);
 		ClientPropertiesController.restorePropertyToDefault(Property.CHANGELOG_ENABLED);
 		ClientPropertiesController.restorePropertyToDefault(Property.SAMP_PATH);
-
-		// Legacy Settigs
-		changeLegacyBooleanSetting(LegacySettingsController.AUDIO_MESSAGE_OFF,
-				StringUtility.stringToBoolean(LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettingsController.AUDIO_PROXY_OFF,
-				StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettingsController.DIRECT_MODE,
-				StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettingsController.DISABLE_HEAD_MOVE,
-				StringUtility.stringToBoolean(LegacySettingsController.DISABLE_HEAD_MOVE_DEFAULT));
-		changeLegacyIntegerSetting(LegacySettingsController.FPS_LIMIT,
-				Integer.parseInt(LegacySettingsController.FPS_LIMIT_DEFAULT));
-		changeLegacyIntegerSetting(LegacySettingsController.PAGE_SIZE,
-				Integer.parseInt(LegacySettingsController.PAGE_SIZE_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettingsController.IME,
-				StringUtility.stringToBoolean(LegacySettingsController.IME_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettingsController.MULTICORE,
-				StringUtility.stringToBoolean(LegacySettingsController.MULTICORE_DEFAULT));
-		changeLegacyBooleanSetting(LegacySettingsController.TIMESTAMP,
-				StringUtility.stringToBoolean(LegacySettingsController.TIMESTAMP_DEFAULT));
+		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CACHING_DOWNLOADS);
 	}
 
 	@Override

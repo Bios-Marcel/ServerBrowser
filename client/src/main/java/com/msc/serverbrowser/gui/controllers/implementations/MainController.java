@@ -46,7 +46,7 @@ public class MainController implements ViewController
 	@Override
 	public void initialize()
 	{
-		if (ClientPropertiesController.getPropertyAsBoolean(Property.REMEMBER_LAST_VIEW))
+		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW))
 		{
 			loadView(View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)));
 		}

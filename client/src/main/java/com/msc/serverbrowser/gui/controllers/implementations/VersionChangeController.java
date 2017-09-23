@@ -12,6 +12,7 @@ import com.github.plushaze.traynotification.notification.NotificationTypeImpleme
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.PathConstants;
+import com.msc.serverbrowser.data.CacheController;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.SAMPVersion;
@@ -110,7 +111,7 @@ public class VersionChangeController implements ViewController
 			GTAController.killSAMP();
 			GTAController.killGTA();
 
-			if (GTAController.isVersionCached(toInstall))
+			if (CacheController.isVersionCached(toInstall))
 			{
 				installCachedVersion(toInstall);
 				finishInstalling();
@@ -132,7 +133,7 @@ public class VersionChangeController implements ViewController
 						downloadedFile = Optional.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
 						if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CACHING_DOWNLOADS))
 						{
-							GTAController.addVersionToCache(toInstall, PathConstants.OUTPUT_ZIP);
+							CacheController.addVersionToCache(toInstall, PathConstants.OUTPUT_ZIP);
 						}
 						FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
 					}
