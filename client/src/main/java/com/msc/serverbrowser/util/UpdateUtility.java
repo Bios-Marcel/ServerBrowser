@@ -143,7 +143,7 @@ public final class UpdateUtility
 		final boolean noBiggerOneFoundYet = !result.isPresent();
 		if (noBiggerOneFoundYet && arrayNotEquallyLong)
 		{// If one of the strings had more version parts, we will check those too.
-			final String[] bigger = ArrayUtility.getLonger(versionOneParts, versionTwoParts);
+			final String[] bigger = ArrayUtility.getLonger(versionOneParts, versionTwoParts).get();
 			final boolean foundOneBiggerThanZero = IntStream.range(length, longest)
 					.filter(num -> Integer.parseInt(bigger[num]) != 0)
 					.findAny().isPresent();

@@ -1,6 +1,6 @@
 package com.msc.serverbrowser.util.basic;
 
-import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Marcel
@@ -24,9 +24,18 @@ public final class ArrayUtility
 	 * @throws NullPointerException
 	 *             if any of the arrays is null
 	 */
-	public static <T> T[] getLonger(final T[] arrayOne, final T[] arrayTwo) throws NullPointerException
+	public static <T> Optional<T[]> getLonger(final T[] arrayOne, final T[] arrayTwo) throws NullPointerException
 	{
-		return Objects.requireNonNull(arrayOne).length > Objects.requireNonNull(arrayTwo).length ? arrayOne : arrayTwo;
+		if (arrayOne.length > arrayTwo.length)
+		{
+			return Optional.of(arrayOne);
+		}
+		else if (arrayTwo.length > arrayOne.length)
+		{
+			return Optional.of(arrayTwo);
+		}
+
+		return Optional.empty();
 	}
 
 }
