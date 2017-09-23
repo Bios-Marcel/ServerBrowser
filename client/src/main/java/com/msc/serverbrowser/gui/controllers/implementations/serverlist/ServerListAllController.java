@@ -1,10 +1,9 @@
 package com.msc.serverbrowser.gui.controllers.implementations.serverlist;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 
-import com.msc.serverbrowser.data.entites.SampServer;
+import com.msc.serverbrowser.gui.components.SampServerTableMode;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.ServerUtility;
 
@@ -26,12 +25,13 @@ public class ServerListAllController extends BasicServerListController
 		super.initialize();
 
 		serverTable.setPlaceholder(new Label("Fetching servers, please wait a moment."));
+		serverTable.setServerTableMode(SampServerTableMode.ALL);
 
 		serverLookup = new Thread(() ->
 		{
 			try
 			{
-				servers.addAll(ServerUtility.fetchServersFromSouthclaws());
+				serverTable.addAll(ServerUtility.fetchServersFromSouthclaws());
 				Platform.runLater(() -> serverTable.refresh());
 			}
 			catch (final IOException exception)
@@ -44,15 +44,6 @@ public class ServerListAllController extends BasicServerListController
 		});
 
 		serverLookup.start();
-	}
-
-	@Override
-	protected void displayMenu(final List<SampServer> selectedServers, final double posX, final double posY)
-	{
-		super.displayMenu(selectedServers, posX, posY);
-
-		addToFavouritesMenuItem.setVisible(true);
-		removeFromFavouritesMenuItem.setVisible(false);
 	}
 
 	@Override

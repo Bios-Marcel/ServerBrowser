@@ -22,10 +22,12 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.basic.StringUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.TextInputDialog;
 
 /**
  * Contains utility methods for interacting with native samp stuff.
@@ -161,6 +163,55 @@ public final class GTAController
 		 * Bad Practice, will cause an error if Kalcor decides to do a huge update someday :P
 		 */
 		return SAMPVersion.findVersionByDLLSize((int) file.length());
+	}
+
+	/**
+	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a
+	 * password. If the server is not reachable the user can not connect.
+	 *
+	 * @param address
+	 *            server address
+	 * @param port
+	 *            server port
+	 */
+	public static void tryToConnect(final String address, final Integer port)
+	{
+		try (final SampQuery query = new SampQuery(address, port))
+		{
+			final Optional<String[]> serverInfo = query.getBasicServerInfo();
+
+			if (serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0]))
+			{
+				final TextInputDialog dialog = new TextInputDialog();
+				dialog.setTitle("Connect to Server");
+				dialog.setHeaderText("Enter the servers password (Leave empty if u think there is none).");
+
+				final Optional<String> result = dialog.showAndWait();
+				result.ifPresent(password -> GTAController.connectToServer(address + ":" + port, password));
+			}
+			else
+			{
+				GTAController.connectToServer(address + ":" + port);
+			}
+		}
+		catch (final IOException exception)
+		{
+			Logging.log(Level.WARNING, "Couldn't connect to server.", exception);
+			showCantConnectToServerError();
+		}
+	}
+
+	/**
+	 * Shows a TrayNotification that states, that connecting to the server wasn't possible.
+	 */
+	public static void showCantConnectToServerError()
+	{
+		new TrayNotificationBuilder()
+				.type(NotificationTypeImplementations.ERROR)
+				.title("Can't connect to Server")
+				.message("The address that you have entered, doesn't seem to be valid.")
+				.animation(Animations.POPUP)
+				.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 
 	/**

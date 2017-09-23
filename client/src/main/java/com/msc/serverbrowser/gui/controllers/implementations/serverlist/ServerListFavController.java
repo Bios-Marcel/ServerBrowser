@@ -1,9 +1,7 @@
 package com.msc.serverbrowser.gui.controllers.implementations.serverlist;
 
-import java.util.List;
-
 import com.msc.serverbrowser.data.FavouritesController;
-import com.msc.serverbrowser.data.entites.SampServer;
+import com.msc.serverbrowser.gui.components.SampServerTableMode;
 
 /**
  * ViewController for the favourite servers list view.
@@ -17,15 +15,8 @@ public class ServerListFavController extends BasicServerListController
 	{
 		super.initialize();
 
-		servers.addAll(FavouritesController.getFavourites());
-	}
+		serverTable.setServerTableMode(SampServerTableMode.FAVOURITES);
 
-	@Override
-	protected void displayMenu(final List<SampServer> selectedServers, final double posX, final double posY)
-	{
-		super.displayMenu(selectedServers, posX, posY);
-
-		addToFavouritesMenuItem.setVisible(false);
-		removeFromFavouritesMenuItem.setVisible(true);
+		serverTable.addAll(FavouritesController.getFavourites());
 	}
 }
