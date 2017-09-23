@@ -61,15 +61,15 @@ public class BasicServerListController implements ViewController
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
 	 */
-	@FXML protected Label	playerCount;
+	@FXML private Label		playerCount;
 	/**
 	 * Displays the amount of all slots on all Servers in {@link #serverTable}.
 	 */
-	@FXML protected Label	slotCount;
+	@FXML private Label		slotCount;
 	/**
 	 * Number of servers in {@link #serverTable}.
 	 */
-	@FXML protected Label	serverCount;
+	@FXML private Label		serverCount;
 	@FXML private TextField	serverAddress;
 	@FXML private Label		serverLagcomp;
 	@FXML private Label		serverPing;
@@ -87,6 +87,11 @@ public class BasicServerListController implements ViewController
 	@FXML private ComboBox<String>	versionFilter;
 
 	private static Thread serverInfoUpdateThread;
+
+	@FXML private TableColumn<SampServer, String>	columnHostname;
+	@FXML private TableColumn<SampServer, String>	columnMode;
+	@FXML private TableColumn<SampServer, String>	columnLanguage;
+	@FXML private TableColumn<SampServer, String>	columnVersion;
 
 	/**
 	 * Empty Constructor.
@@ -114,7 +119,18 @@ public class BasicServerListController implements ViewController
 			final int p1 = Integer.parseInt(o1.replaceAll("[/](.*)", ""));
 			final int p2 = Integer.parseInt(o2.replaceAll("[/](.*)", ""));
 
-			return p1 < p2 ? -1 : p1 == p2 ? 0 : 1;
+			if (p1 < p2)
+			{
+				return -1;
+			}
+			else if (p1 == p2)
+			{
+				return 0;
+			}
+			else
+			{
+				return 1;
+			}
 		});
 	}
 
@@ -271,14 +287,14 @@ public class BasicServerListController implements ViewController
 		}
 	}
 
+	// TODO(MSC) Burn it before it lays eggs. Hans, get the Flammenwerfer.
 	/**
-	 * TODO(MSC) Burn it before it lays eggs. Hans, get the Flammenwerfer. Updates the data that the
-	 * {@link SampServer} holds and displays the correct values on the UI.
+	 * Updates the data that the {@link SampServer} holds and displays the correct values on the UI.
 	 *
 	 * @param server
 	 *            the {@link SampServer} object to update locally
 	 */
-	protected void updateServerInfo(final SampServer server)
+	private void updateServerInfo(final SampServer server)
 	{
 		setVisibleDetailsToRetrieving(server);
 		killServerLookupThread();

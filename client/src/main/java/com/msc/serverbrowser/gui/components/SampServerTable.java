@@ -166,7 +166,7 @@ public class SampServerTable extends TableView<SampServer>
 	 * @param posY
 	 *            Y coodrinate
 	 */
-	protected void displayMenu(final List<SampServer> serverList, final double posX, final double posY)
+	private void displayMenu(final List<SampServer> serverList, final double posX, final double posY)
 	{
 		final boolean sizeEqualsOne = serverList.size() == 1;
 
