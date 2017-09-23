@@ -13,7 +13,7 @@ import javafx.beans.property.StringProperty;
 @SuppressWarnings("javadoc")
 public class SampServer
 {
-	private final BooleanProperty	passwordedProperty		= new SimpleBooleanProperty();
+	private final BooleanProperty passwordedProperty = new SimpleBooleanProperty();
 
 	private final StringProperty	hostnameProperty		= new OneLineStringProperty();
 	private final StringProperty	addressProperty			= new OneLineStringProperty();
@@ -25,14 +25,19 @@ public class SampServer
 	private final StringProperty	versionProperty			= new OneLineStringProperty();
 	private final StringProperty	mapProperty				= new OneLineStringProperty();
 
-	private final IntegerProperty	portProperty			= new SimpleIntegerProperty();
-	private final IntegerProperty	playersProperty			= new SimpleIntegerProperty();
-	private final IntegerProperty	maxPlayersProperty		= new SimpleIntegerProperty();
+	private final IntegerProperty	portProperty		= new SimpleIntegerProperty();
+	private final IntegerProperty	playersProperty		= new SimpleIntegerProperty();
+	private final IntegerProperty	maxPlayersProperty	= new SimpleIntegerProperty();
 
 	public SampServer(final String address, final Integer port)
 	{
-		addressProperty.set(address);
-		portProperty.set(port);
+		setAddress(address);
+		setPort(port);
+	}
+
+	public BooleanProperty passwordedPropertyProperty()
+	{
+		return passwordedProperty;
 	}
 
 	public StringProperty hostnameProperty()
@@ -75,11 +80,6 @@ public class SampServer
 		return actualPlayersProperty;
 	}
 
-	public void updatePlayersAndMaxPlayers()
-	{
-		actualPlayersProperty.set(playersProperty.get() + "/" + maxPlayersProperty.get());
-	}
-
 	public IntegerProperty playersProperty()
 	{
 		return playersProperty;
@@ -98,6 +98,11 @@ public class SampServer
 	public StringProperty mapProperty()
 	{
 		return mapProperty;
+	}
+
+	public boolean isPassworded()
+	{
+		return passwordedProperty.get();
 	}
 
 	public String getHostname()
@@ -153,6 +158,11 @@ public class SampServer
 	public String getMap()
 	{
 		return mapProperty.get();
+	}
+
+	public void setPassworded(final boolean passworded)
+	{
+		passwordedProperty.set(passworded);
 	}
 
 	public void setAddress(final String address)
@@ -212,19 +222,9 @@ public class SampServer
 		mapProperty.set(map);
 	}
 
-	public BooleanProperty passwordedPropertyProperty()
+	private void updatePlayersAndMaxPlayers()
 	{
-		return passwordedProperty;
-	}
-
-	public boolean isPassworded()
-	{
-		return passwordedProperty.get();
-	}
-
-	public void setPassworded(final boolean passworded)
-	{
-		passwordedProperty.set(passworded);
+		actualPlayersProperty.set(playersProperty.get() + "/" + maxPlayersProperty.get());
 	}
 
 	@Override
@@ -234,14 +234,14 @@ public class SampServer
 	}
 
 	@Override
-	public boolean equals(final Object obj)
+	public boolean equals(final Object object)
 	{
-		if (Objects.isNull(obj) || !obj.getClass().equals(SampServer.class))
+		if (Objects.isNull(object) || !object.getClass().equals(SampServer.class))
 		{
 			return false;
 		}
 
-		final SampServer compare = (SampServer) obj;
+		final SampServer compare = (SampServer) object;
 		return compare == this || getAddress().equals(compare.getAddress()) && getPort().equals(compare.getPort());
 	}
 
