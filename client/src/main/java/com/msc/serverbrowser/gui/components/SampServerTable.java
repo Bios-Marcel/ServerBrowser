@@ -49,8 +49,8 @@ public class SampServerTable extends TableView<SampServer>
 
 	private final ObservableList<SampServer> servers = getItems();
 
-	final FilteredList<SampServer>	filteredServers	= new FilteredList<>(servers);
-	final SortedList<SampServer>	sortedServers	= new SortedList<>(filteredServers);
+	private final FilteredList<SampServer>	filteredServers	= new FilteredList<>(servers);
+	private final SortedList<SampServer>	sortedServers	= new SortedList<>(filteredServers);
 
 	/**
 	 * Contructor; sets the TableRowFactory, the ContextMenu Actions and table settings.
@@ -68,12 +68,12 @@ public class SampServerTable extends TableView<SampServer>
 	{
 		final List<SampServer> selectedServers = getSelectionModel().getSelectedItems();
 
-		if (selectedServers.size() >= 1)
+		if (selectedServers.isEmpty())
 		{
-			return Optional.ofNullable(selectedServers.get(0));
+			return Optional.empty();
 		}
 
-		return Optional.empty();
+		return Optional.ofNullable(selectedServers.get(0));
 	}
 
 	private void setMenuItemDefaultActions()
