@@ -4,14 +4,16 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e9eab6cb5644617a590ef4e81a2e466)](https://www.codacy.com/app/Bios-Marcel/ServerBrowser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Bios-Marcel/ServerBrowser&amp;utm_campaign=Badge_Grade)
 
 ## Description
-This program enables you to access a list of over 1000 SA-MP Servers, join them, save them as your favorites or search for specific servers.
-In addition to that it includes a Version Changer (0.3a - 0.3.7) and a list of past user names.
+
+This application allows you to view a vast amount of SA-MP servers, filter them, save them as your favourites and play on them.
+You won't loose your original favourites, since those will be taken over.
+Also it includes a SA-MP version changer, access to SA-MP legacy settings, screenshots and chatlogs.
 
 ## Documentation
 
-Documentation is currently available under the following link:
+Javadoc is available under: https://sa-mpservers.com/doc/overview-summary.html
 
-[Documentation](https://sa-mpservers.com/doc/overview-summary.html)
+User Documentation (not complete) is available under: https://github.com/Bios-Marcel/ServerBrowser/wiki
 
 ## You want to help?
 You can help by [reporting bugs](https://github.com/Bios-Marcel/ServerBrowser/issues), [recommending new features](https://github.com/Bios-Marcel/ServerBrowser/issues) or [creating pull requests](https://github.com/Bios-Marcel/ServerBrowser/pulls).
@@ -22,12 +24,14 @@ This project is managed using [gradle](https://gradle.org).
 
 ### Structure
 
-It is a multi-project consisting of 3 subprojects
+It is a multi-project consisting of 1 subprojects
 
 ```
 ServerBrowser			The parent project
 |__ client				The Windows GUI client with which humans interact
 ```
+
+The fact, that this is a multi-project is due to two components that don't exist anymore, this will soon be refactored.
 
 ### Building with gradle
 
@@ -64,7 +68,7 @@ Or run it from the parent project by prefixing the task with the subprojects nam
 $ ./gradlew client:run
 ```
 
-Assemble and test the build outputs. You will find the results in the __build__ folders of __client__ and __server__.
+Assemble and test the build outputs. You will find the results in the __build__ folder of __client__.
 
 ``` shell
 $ ./gradlew build
@@ -86,7 +90,7 @@ Eclipse will instantly reload the fresh project settings files.
 
 ### Pipeline
 
-__ServerBrowser__ utilizes advanced build techniques in order to assemble and optimize the output. The goal is to build the smallest possible 'self-contained' executable for Windows for the client. __shared__ is simply a library project and as such produces a JAR and the server get assembled to a distribution ZIP with executable scripts for all platforms. 
+__ServerBrowser__ utilizes advanced build techniques in order to assemble and optimize the output. The goal is to build the smallest possible 'self-contained' executable for Windows for the client.
 
 __self-contained__ in this context means the JVM is bundled with the output.
 
