@@ -88,11 +88,6 @@ public class BasicServerListController implements ViewController
 
 	private static Thread serverInfoUpdateThread;
 
-	@FXML private TableColumn<SampServer, String>	columnHostname;
-	@FXML private TableColumn<SampServer, String>	columnMode;
-	@FXML private TableColumn<SampServer, String>	columnLanguage;
-	@FXML private TableColumn<SampServer, String>	columnVersion;
-
 	/**
 	 * Empty Constructor.
 	 */
