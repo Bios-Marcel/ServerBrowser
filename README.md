@@ -9,6 +9,39 @@ This application allows you to view a vast amount of SA-MP servers, filter them,
 You won't loose your original favourites, since those will be taken over.
 Also it includes a SA-MP version changer, access to SA-MP legacy settings, screenshots and chatlogs.
 
+## Installation
+
+Overall, you have 3 options:
+
+#### Downloading the latest launcher.jar file
+
+The latest `launcher.jar` is available under https://github.com/Bios-Marcel/ServerBrowser/releases/latest , but it will **require** you to have Java 8 or later installed, i strongly suggest installing **Java 9**, since future versions of this project will use **Java 9**.
+
+#### Downloading the latest Installer
+
+The latest installer is also available under https://github.com/Bios-Marcel/ServerBrowser/releases/latest
+Unlike when using the `launcher.jar` file, the installer **won't require** you to download anything other than the installer himself.
+
+#### Build all the stuff yourself
+
+Incase you are paranoid and scared that i might have infected the files in the release section, feel free to build the project yourself.
+For further information on how to build the project, check the [Build Section](https://github.com/Bios-Marcel/ServerBrowser#build) below
+
+## Troubleshooting
+
+#### Your client isn't able to fetch servers
+
+If your Client isn't able to fetch any servers anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).
+
+The second thing you might want to check, is your firewall. Make sure you haven't blocked the application itself.
+
+#### Your client doesn't start anymore
+
+In case your client doesn't start anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).
+
+If downloading the latest version of the client doens't help, try removing your currently installed Java runtime, if you have never installed a Java runtime, deinstall the ServerBrowser using the default Windows uninstalling procedure. After deleting Java and/or the ServerBrowser reinstall it.
+
+
 ## Documentation
 
 Javadoc is available under: https://sa-mpservers.com/doc/overview-summary.html
@@ -24,7 +57,7 @@ This project is managed using [gradle](https://gradle.org).
 
 ### Structure
 
-It is a multi-project consisting of 1 subprojects
+It is a multi-project consisting of 1 subproject
 
 ```
 ServerBrowser			The parent project
@@ -157,12 +190,6 @@ $ ./gradlew jfxGenerateKeyStore
 ```
 
 None of these files should __ever__ be commited to version control !
-
-## Troubleshooting
-
-If your Client isn't able to connect to the server anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).
-
-The second thing you might want to check, is your firewall. Make sure you haven't blocked port 1099 or the application itself.
 
 ## You need help?
 [Send me an E-Mail](mailto:marceloschr@gmail.com)
