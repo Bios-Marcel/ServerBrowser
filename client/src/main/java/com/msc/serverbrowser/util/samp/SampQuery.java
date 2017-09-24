@@ -344,7 +344,6 @@ public class SampQuery implements AutoCloseable
 			}
 		}
 
-		System.out.println("Didnt send");
 		return false;
 	}
 
