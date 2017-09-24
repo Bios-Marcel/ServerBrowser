@@ -41,6 +41,25 @@ In case your client doesn't start anymore, the first thing you should do, is to 
 
 If downloading the latest version of the client doens't help, try removing your currently installed Java runtime, if you have never installed a Java runtime, deinstall the ServerBrowser using the default Windows uninstalling procedure. After deleting Java and/or the ServerBrowser reinstall it.
 
+## Pictures
+
+There is a light and a dark theme, here are screenshots including the light theme only:
+
+![Favourites](https://i.imgur.com/78i7MbM.png)
+
+![Servers](https://i.imgur.com/o6hAFAx.png)
+
+![Past Usernames](https://i.imgur.com/hkTck4d.png)
+
+![Version Changer](https://i.imgur.com/uijZ3ZG.png)
+
+![Screenshots](https://i.imgur.com/rmtqjfJ.png)
+
+![Chatlogs](https://i.imgur.com/TN6UnJ7.png)
+
+![Settings](https://i.imgur.com/rum16VT.png)
+
+![Settings 2](https://i.imgur.com/vFqytVY.png)
 
 ## Documentation
 
