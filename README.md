@@ -44,7 +44,7 @@ If downloading the latest version of the client doens't help, try removing your 
 
 ## Documentation
 
-Javadoc is available under: https://sa-mpservers.com/doc/overview-summary.html
+Javadoc is available under: https://bios-marcel.github.io/ServerBrowser/overview-summary.html
 
 User Documentation (not complete) is available under: https://github.com/Bios-Marcel/ServerBrowser/wiki
 
