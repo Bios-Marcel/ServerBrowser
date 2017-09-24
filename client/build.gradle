@@ -108,7 +108,7 @@ jfx {
     useLibFolderContentForManifestClasspath = true
     
     // this is used for files below "src/main/deploy", e.g. "src/main/deploy/windows/$rootProject.name.ico"
-    appName = "$rootProject.name"
+    appName = "SA-MP-ServerBrowser"
     additionalAppResources = 'src/main/additionalFiles'
     jfxMainAppJarName = "$appName"+"-"+"$projectVersion"+".jar"
     
@@ -117,7 +117,7 @@ jfx {
 
     // gradle jfxGenerateKeyStore
     keyStore = "src/main/deploy/keystore.jks"
-    keyStoreAlias = "$projectVendor"+"-"+"$appName"
+    keyStoreAlias = "$projectVendor"+"-"+"$rootProject.name"
     // assumes you have a file "local.properties" which does NOT get version controlled!
     keyStorePassword = "$localSecretKeystorePassword"
     keyPassword = "$localSecretKeyPassword"

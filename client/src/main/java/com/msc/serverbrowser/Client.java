@@ -52,7 +52,7 @@ public final class Client extends Application
 	/**
 	 * Name of the application, as displayed to people.
 	 */
-	public static final String	APPLICATION_NAME	= "SA-MP Client Extension";
+	public static final String	APPLICATION_NAME	= "SA-MP Server Browser";
 
 	/**
 	 * Default Dismiss-{@link Duration} that is used for TrayNotifications.

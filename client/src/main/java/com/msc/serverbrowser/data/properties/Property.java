@@ -20,7 +20,7 @@ public enum Property
 	ALLOW_CLOSE_SAMP(11, false, Boolean.class),
 	CHANGELOG_ENABLED(12, true, Boolean.class),
 	DEVELOPMENT(13, false, Boolean.class),
-	LAST_TAG_NAME(14, "1.3.5", String.class),
+	LAST_TAG_NAME(14, "1.3.6", String.class),
 	ALLOW_CACHING_DOWNLOADS(15, true, Boolean.class);
 
 	private int id;
