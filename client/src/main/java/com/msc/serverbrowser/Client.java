@@ -345,6 +345,9 @@ public final class Client extends Application
 	public static void main(final String[] args)
 	{
 		readApplicationArguments(args);
+
+		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));
+
 		Application.launch(args);
 	}
 
