@@ -1,0 +1,16 @@
+com.msc.serverbrowser
+com.msc.serverbrowser.constants
+com.msc.serverbrowser.data
+com.msc.serverbrowser.data.entites
+com.msc.serverbrowser.data.properties
+com.msc.serverbrowser.gui
+com.msc.serverbrowser.gui.components
+com.msc.serverbrowser.gui.controllers.implementations
+com.msc.serverbrowser.gui.controllers.implementations.serverlist
+com.msc.serverbrowser.gui.controllers.interfaces
+com.msc.serverbrowser.logging
+com.msc.serverbrowser.util
+com.msc.serverbrowser.util.basic
+com.msc.serverbrowser.util.fx
+com.msc.serverbrowser.util.samp
+com.msc.serverbrowser.util.windows
