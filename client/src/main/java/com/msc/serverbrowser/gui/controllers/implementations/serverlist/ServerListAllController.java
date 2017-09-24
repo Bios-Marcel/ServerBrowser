@@ -1,8 +1,10 @@
 package com.msc.serverbrowser.gui.controllers.implementations.serverlist;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 
+import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.gui.components.SampServerTableMode;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.ServerUtility;
@@ -31,8 +33,12 @@ public class ServerListAllController extends BasicServerListController
 		{
 			try
 			{
-				serverTable.addAll(ServerUtility.fetchServersFromSouthclaws());
-				Platform.runLater(() -> serverTable.refresh());
+				final List<SampServer> serversToAdd = ServerUtility.fetchServersFromSouthclaws();
+				Platform.runLater(() ->
+				{
+					serverTable.addAll(serversToAdd);
+					serverTable.refresh();
+				});
 			}
 			catch (final IOException exception)
 			{

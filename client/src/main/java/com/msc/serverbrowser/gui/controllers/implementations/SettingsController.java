@@ -29,58 +29,40 @@ import javafx.scene.control.TextField;
 public class SettingsController implements ViewController
 {
 	// Information
-	@FXML
-	private Label informationLabel;
+	@FXML private Label informationLabel;
 
 	// General Settings
-	@FXML
-	private TextField	sampPathTextField;
-	@FXML
-	private CheckBox	saveLastViewCheckBox;
+	@FXML private TextField	sampPathTextField;
+	@FXML private CheckBox	saveLastViewCheckBox;
 
 	// Appearance Settings
-	@FXML
-	private CheckBox darkThemeCheckBox;
+	@FXML private CheckBox darkThemeCheckBox;
 
 	// Permission Settings
-	@FXML
-	private CheckBox	allowCloseSampCheckBox;
-	@FXML
-	private CheckBox	allowCloseGtaCheckBox;
+	@FXML private CheckBox	allowCloseSampCheckBox;
+	@FXML private CheckBox	allowCloseGtaCheckBox;
 
 	// Update Settings
-	@FXML
-	private CheckBox showChangelogCheckBox;
+	@FXML private CheckBox showChangelogCheckBox;
 
 	// SA-MP Settings
-	@FXML
-	private Spinner<Integer>	fpsLimitSpinner;
-	@FXML
-	private Spinner<Integer>	pageSizeSpinner;
-	@FXML
-	private CheckBox			audioproxyCheckBox;
-	@FXML
-	private CheckBox			timestampsCheckBox;
-	@FXML
-	private CheckBox			multicoreCheckbox;
-	@FXML
-	private CheckBox			audioMsgOffCheckBox;
-	@FXML
-	private CheckBox			disableHeadMoveCheckBox;
-	@FXML
-	private CheckBox			imeCheckBox;
-	@FXML
-	private CheckBox			directModeCheckBox;
-	@FXML
-	private CheckBox			noNameTagStatusCheckBox;
+	@FXML private Spinner<Integer>	fpsLimitSpinner;
+	@FXML private Spinner<Integer>	pageSizeSpinner;
+	@FXML private CheckBox			audioproxyCheckBox;
+	@FXML private CheckBox			timestampsCheckBox;
+	@FXML private CheckBox			multicoreCheckbox;
+	@FXML private CheckBox			audioMsgOffCheckBox;
+	@FXML private CheckBox			disableHeadMoveCheckBox;
+	@FXML private CheckBox			imeCheckBox;
+	@FXML private CheckBox			directModeCheckBox;
+	@FXML private CheckBox			noNameTagStatusCheckBox;
 
 	// TODO(MSC) Connection Settings
 	// @FXML
 	// private CheckBox askForUsernameOnConnectCheckBox;
 
 	// Downloads
-	@FXML
-	private CheckBox allowCachingDownloadsCheckBox;
+	@FXML private CheckBox allowCachingDownloadsCheckBox;
 
 	@Override
 	public void initialize()
@@ -251,6 +233,9 @@ public class SettingsController implements ViewController
 	private void onClickRestore()
 	{
 		final Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure, that you want to reset all you settings?", ButtonType.YES, ButtonType.NO);
+		alert.setTitle("Reset settings");
+		Client.insertAlertOwner(alert);
+
 		final Optional<ButtonType> result = alert.showAndWait();
 
 		result.ifPresent(button ->

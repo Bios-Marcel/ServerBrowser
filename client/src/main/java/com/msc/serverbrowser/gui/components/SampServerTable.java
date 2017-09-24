@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.FavouritesController;
 import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.util.samp.GTAController;
@@ -20,12 +21,16 @@ import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
 /**
@@ -60,6 +65,7 @@ public class SampServerTable extends TableView<SampServer>
 		setItems(sortedServers);
 
 		getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		setKeyActions();
 		setTableRowFactory();
 		setMenuItemDefaultActions();
 	}
@@ -74,6 +80,18 @@ public class SampServerTable extends TableView<SampServer>
 		}
 
 		return Optional.ofNullable(selectedServers.get(0));
+	}
+
+	private void setKeyActions()
+	{
+		setOnKeyReleased(released ->
+		{
+			if (tableMode == SampServerTableMode.FAVOURITES && released.getCode() == KeyCode.DELETE)
+			{
+				deleteSelectedFavourites();
+			}
+		});
+
 	}
 
 	private void setMenuItemDefaultActions()
@@ -94,12 +112,7 @@ public class SampServerTable extends TableView<SampServer>
 			serverList.forEach(FavouritesController::addServerToFavourites);
 		});
 
-		removeFromFavouritesMenuItem.setOnAction(__ ->
-		{
-			final List<SampServer> serverList = getSelectionModel().getSelectedItems();
-			serverList.forEach(FavouritesController::removeServerFromFavourites);
-			servers.removeAll(serverList);
-		});
+		removeFromFavouritesMenuItem.setOnAction(__ -> deleteSelectedFavourites());
 
 		copyIpAddressAndPortMenuItem.setOnAction(__ ->
 		{
@@ -112,6 +125,24 @@ public class SampServerTable extends TableView<SampServer>
 				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, null);
 			});
+		});
+	}
+
+	private void deleteSelectedFavourites()
+	{
+		final Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure, that you want to delete the selected servers from your favourites.", ButtonType.YES, ButtonType.NO);
+		Client.insertAlertOwner(alert);
+		alert.setTitle("Delete favourites");
+		final Optional<ButtonType> result = alert.showAndWait();
+
+		result.ifPresent(buttonType ->
+		{
+			if (buttonType == ButtonType.YES)
+			{
+				final List<SampServer> serverList = getSelectionModel().getSelectedItems();
+				serverList.forEach(FavouritesController::removeServerFromFavourites);
+				servers.removeAll(serverList);
+			}
 		});
 	}
 

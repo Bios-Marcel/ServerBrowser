@@ -32,6 +32,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -82,6 +83,17 @@ public final class Client extends Application
 		{
 			new Thread(() -> checkVersion()).start();
 		}
+	}
+
+	/**
+	 * Sets the current {@link Client} stage as the clients owner.
+	 *
+	 * @param alert
+	 *            the alert to set the owner in
+	 */
+	public static void insertAlertOwner(final Alert alert)
+	{
+		alert.initOwner(getInstance().stage);
 	}
 
 	private MainController loadUIAndGetController()
@@ -251,8 +263,9 @@ public final class Client extends Application
 
 		trayNotification.setOnMouseClicked(__ ->
 		{
-			updateLauncher();
+			getInstance().stage.hide();
 			trayNotification.dismiss();
+			updateLauncher();
 		});
 		trayNotification.showAndWait();
 	}
