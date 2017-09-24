@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +47,7 @@ public final class Client extends Application
 	/**
 	 * Application icon that can be used everywhere where necessary.
 	 */
-	public static final Image	APPLICATION_ICON	= new Image(Client.class.getResourceAsStream(PathConstants.APPLICATION_ICON_PATH));
+	public static final Image	APPLICATION_ICON	= new Image(Client.class.getResourceAsStream(PathConstants.APP_ICON_PATH));
 	/**
 	 * Name of the application, as displayed to people.
 	 */
@@ -202,6 +205,15 @@ public final class Client extends Application
 			sampexFolder.mkdir();
 		}
 
+		try
+		{
+			Files.copy(Client.class.getResourceAsStream("/com/msc/serverbrowser/tools/sampcmd.exe"), Paths.get(PathConstants.SAMP_CMD), StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch (final IOException exception)
+		{
+			Logging.log(Level.WARNING, "Error copying SAMP CMD to sampex folder.", exception);
+		}
+
 		final File clientCacheFolder = new File(PathConstants.CLIENT_CACHE);
 		clientCacheFolder.mkdirs();
 	}
@@ -328,9 +340,15 @@ public final class Client extends Application
 	 * Programs entry point, it also intitializes specific when passed as args.
 	 *
 	 * @param args
-	 *            used to determine what backend to connect to
+	 *            evaluated by {@link #readApplicationArguments}
 	 */
 	public static void main(final String[] args)
+	{
+		readApplicationArguments(args);
+		Application.launch(args);
+	}
+
+	private static void readApplicationArguments(final String[] args)
 	{
 		if (args.length >= 1)
 		{
@@ -339,8 +357,6 @@ public final class Client extends Application
 				ClientPropertiesController.setProperty(Property.DEVELOPMENT, true);
 			}
 		}
-
-		Application.launch(args);
 	}
 
 	/**
