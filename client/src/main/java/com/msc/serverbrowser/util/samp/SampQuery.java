@@ -24,24 +24,21 @@ import com.msc.serverbrowser.util.basic.Encoding;
  * Provides Methods for retrieving information from a SA-MP Server.
  *
  * @author Marcel
- * @see <a href="http://wiki.sa-mp.com/wiki/Query_Mechanism">Wiki SA-MP - Query
- *      Mechanism</a>
+ * @see <a href="http://wiki.sa-mp.com/wiki/Query_Mechanism">Wiki SA-MP - Query Mechanism</a>
  */
 public class SampQuery implements AutoCloseable
 {
-	private static final String		PACKET_GET_SERVERINFO		= "i";
-	private static final String		PACKET_GET_RULES			= "r";
-	private static final String		PACKET_MIRROR_CHARACTERS	= "p0101";
-	private static final String		PACKET_GET_BASIC_PLAYERINFO	= "c";
+	private static final String	PACKET_GET_SERVERINFO		= "i";
+	private static final String	PACKET_GET_RULES			= "r";
+	private static final String	PACKET_MIRROR_CHARACTERS	= "p0101";
+	private static final String	PACKET_GET_BASIC_PLAYERINFO	= "c";
 
 	private final DatagramSocket	socket;
 	private final InetAddress		server;
-	private final String			serverAddress;
 	private final int				serverPort;
 
 	/**
-	 * Configures the socket and the address that will be used for doing the
-	 * queries.
+	 * Configures the socket and the address that will be used for doing the queries.
 	 *
 	 * @param serverAddress
 	 *            hostname / ip
@@ -50,15 +47,13 @@ public class SampQuery implements AutoCloseable
 	 * @param timeout
 	 *            the maximum time, that the socket tries connecting
 	 * @throws SocketException
-	 *             Thrown if the connection is closed unexpectedly / has never
-	 *             been opened properly
+	 *             Thrown if the connection is closed unexpectedly / has never been opened properly
 	 * @throws UnknownHostException
 	 *             if the host is unknown
 	 */
 	public SampQuery(final String serverAddress, final int serverPort, final int timeout)
 			throws SocketException, UnknownHostException
 	{
-		this.serverAddress = serverAddress;
 		this.server = InetAddress.getByName(serverAddress);
 		socket = new DatagramSocket();
 		socket.setSoTimeout(timeout);
@@ -178,12 +173,10 @@ public class SampQuery implements AutoCloseable
 	}
 
 	/**
-	 * Returns an {@link Optional} of a {@link List} of {@link Player} objects,
-	 * containing all
+	 * Returns an {@link Optional} of a {@link List} of {@link Player} objects, containing all
 	 * players on the server.
 	 *
-	 * @return an {@link Optional} containg a {@link List} of {@link Player Players}
-	 *         or an empty
+	 * @return an {@link Optional} containg a {@link List} of {@link Player Players} or an empty
 	 *         {@link Optional} incase the query failed.
 	 */
 	public Optional<List<Player>> getBasicPlayerInfo()
@@ -272,8 +265,7 @@ public class SampQuery implements AutoCloseable
 	 * <li>Byte 11+: Data</li>
 	 * </ul>
 	 * <p>
-	 * Because the Data contains multiple informations that we do not care for as of
-	 * now, we are
+	 * Because the Data contains multiple informations that we do not care for as of now, we are
 	 * setting the byte buffers initial position to eleven.
 	 * </p>
 	 *
@@ -306,7 +298,7 @@ public class SampQuery implements AutoCloseable
 	{
 		try
 		{
-			final StringTokenizer tok = new StringTokenizer(serverAddress, ".");
+			final StringTokenizer tok = new StringTokenizer(server.getHostAddress(), ".");
 			final StringBuffer packetData = new StringBuffer("SAMP");
 
 			while (tok.hasMoreTokens())
@@ -351,6 +343,8 @@ public class SampQuery implements AutoCloseable
 				return false;
 			}
 		}
+
+		System.out.println("Didnt send");
 		return false;
 	}
 

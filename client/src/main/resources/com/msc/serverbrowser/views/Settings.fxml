@@ -15,13 +15,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
-	xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+		<ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
 			<content>
-				<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
-					xmlns:fx="http://javafx.com/fxml/1">
+				<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 					<children>
 						<TitledPane text="Information">
 							<content>
@@ -35,8 +33,7 @@
 										<HBox spacing="5.0">
 											<children>
 												<Label maxHeight="1.7976931348623157E308" text="Custom SA-MP Path" />
-												<TextField fx:id="sampPathTextField" maxWidth="1.7976931348623157E308" promptText="Will be automatically detected if left empty"
-													HBox.hgrow="ALWAYS" />
+												<TextField fx:id="sampPathTextField" maxWidth="1.7976931348623157E308" promptText="Will be automatically detected if left empty" HBox.hgrow="ALWAYS" />
 											</children>
 										</HBox>
 										<CheckBox fx:id="saveLastViewCheckBox" mnemonicParsing="false" text="Remember last view" />
@@ -104,10 +101,8 @@
 							<content>
 								<VBox spacing="5.0">
 									<children>
-										<CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false"
-											text="Allow this application to shut down San Andreas Multiplayer Client" />
-										<CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false"
-											text="Allow this application to shut down Grand Theft Auto: San Andreas" />
+										<CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false" text="Allow this application to shut down San Andreas Multiplayer Client" />
+										<CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" text="Allow this application to shut down Grand Theft Auto: San Andreas" />
 									</children>
 								</VBox>
 							</content>
@@ -127,9 +122,8 @@
 									<children>
 										<HBox spacing="5.0">
 											<children>
-												<CheckBox fx:id="allowCachingDownloadsCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-													mnemonicParsing="false" text="Allow caching downloaded SA-MP versions" HBox.hgrow="ALWAYS" />
-												<Button onAction="#onClickClearDownloadCache" mnemonicParsing="false" text="Clear cache" />
+												<CheckBox fx:id="allowCachingDownloadsCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Allow caching downloaded SA-MP versions" HBox.hgrow="ALWAYS" />
+												<Button mnemonicParsing="false" onAction="#onClickClearDownloadCache" text="Clear cache" />
 											</children>
 										</HBox>
 									</children>
