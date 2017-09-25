@@ -3,6 +3,7 @@ package com.msc.serverbrowser.util.basic;
 import static java.io.File.separator;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +13,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -58,6 +58,26 @@ public final class FileUtility
 	}
 
 	/**
+	 * Copies a file overwriting the target if existant
+	 *
+	 * @param source
+	 *            source file
+	 * @param target
+	 *            target file/location
+	 * @throws IOException
+	 *             if there was an error during the copy action
+	 */
+	public static void copyOverwrite(final String source, final String target) throws IOException
+	{
+		try (FileInputStream fileInputStream = new FileInputStream(source);
+				final ReadableByteChannel readableByteChannel = Channels.newChannel(fileInputStream);
+				final FileOutputStream fileOutputStream = new FileOutputStream(target);)
+		{
+			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+		}
+	}
+
+	/**
 	 * Downloads a file and saves it to the given location.
 	 *
 	 * @param url
@@ -65,8 +85,7 @@ public final class FileUtility
 	 * @param outputPath
 	 *            the path where to save the downloaded file
 	 * @param progressProperty
-	 *            a property that will contain the current download process from 0.0
-	 *            to 1.0
+	 *            a property that will contain the current download process from 0.0 to 1.0
 	 * @return the downloaded file
 	 * @throws IOException
 	 *             if an errors occurs while writing the file or opening the stream
@@ -92,6 +111,13 @@ public final class FileUtility
 		}
 	}
 
+	/**
+	 * @param url
+	 *            the file url
+	 * @return the filesize
+	 * @throws IOException
+	 *             if there was an error during the web request
+	 */
 	public static int getOnlineFileSize(final URL url) throws IOException
 	{
 		HttpURLConnection conn = null;
@@ -104,7 +130,7 @@ public final class FileUtility
 		}
 		finally
 		{
-			if (Objects.nonNull(conn))
+			if (conn != null)
 			{
 				conn.disconnect();
 			}
@@ -119,8 +145,7 @@ public final class FileUtility
 	 * @param outputLocation
 	 *            zip file output folder
 	 * @throws IOException
-	 *             if there was an error reading the zip file or writing the
-	 *             unzipped data
+	 *             if there was an error reading the zip file or writing the unzipped data
 	 */
 	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException
 	{
@@ -136,8 +161,7 @@ public final class FileUtility
 				final long size = zipEntry.getSize();
 				final long compressedSize = zipEntry.getCompressedSize();
 
-				Logging.info(
-						String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
+				Logging.info(String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
 
 				// Do we need to create a directory ?
 				final File file = new File(outputLocation + separator + name);
@@ -196,8 +220,7 @@ public final class FileUtility
 	}
 
 	/**
-	 * Deletes a folder recursively. In case it deletes files on partially, files
-	 * that had been
+	 * Deletes a folder recursively. In case it deletes files on partially, files that had been
 	 * deleted already will stay gone.
 	 *
 	 * @param folder

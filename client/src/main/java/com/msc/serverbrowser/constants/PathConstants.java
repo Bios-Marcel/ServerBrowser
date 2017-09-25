@@ -20,6 +20,8 @@ public final class PathConstants
 	// Application specific Paths
 	public static final String	USER_PATH		= System.getProperty("user.home") + File.separator;
 	public static final String	SAMPEX_PATH		= USER_PATH + "sampex";
+	public static final String	SAMPEX_LOG		= PathConstants.SAMPEX_PATH + File.separator + "Log.log";
+	public static final String	SAMPEX_TEMP_JAR	= PathConstants.SAMPEX_PATH + File.separator + "temp.jar";
 	public static final String	CACHE			= SAMPEX_PATH + File.separator + "cache";
 	public static final String	CLIENT_CACHE	= CACHE + File.separator + "clientversions";
 	public static final String	SAMP_CMD		= SAMPEX_PATH + File.separator + "sampcmd.exe";

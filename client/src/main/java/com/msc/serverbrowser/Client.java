@@ -1,5 +1,6 @@
 package com.msc.serverbrowser;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -79,9 +80,10 @@ public final class Client extends Application
 		loadUI(primaryStage);
 
 		// Only check for updates if not in development mode
-		if (!ClientPropertiesController.getPropertyAsBoolean(Property.DEVELOPMENT))
+		if (!ClientPropertiesController.getPropertyAsBoolean(Property.DEVELOPMENT)
+				&& ClientPropertiesController.getPropertyAsBoolean(Property.AUTOMTAIC_UPDATES))
 		{
-			new Thread(() -> checkVersion()).start();
+			new Thread(() -> checkForUpdates()).start();
 		}
 	}
 
@@ -234,38 +236,41 @@ public final class Client extends Application
 	 * Compares the local version number to the one lying on the server. If an update is available
 	 * the user will be asked if he wants to update.
 	 */
-	private static void checkVersion()
+	public static void checkForUpdates()
 	{
 		Logging.log(Level.INFO, "Check for updates.");
 
-		try
+		new Thread(() ->
 		{
-			if (!UpdateUtility.isUpToDate())
+			try
 			{
-				Logging.log(Level.INFO, "Update available.");
-				Platform.runLater(() -> displayUpdateNotification());
+				if (!UpdateUtility.isUpToDate())
+				{
+					Logging.log(Level.INFO, "Downloading update.");
+					downloadUpdate();
+					Logging.log(Level.INFO, "Download of the updated has been finished.");
+					Platform.runLater(() -> displayUpdateNotification());
+				}
 			}
-		}
-		catch (final IOException exception)
-		{
-			Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
-			Platform.runLater(() -> displayCantRetrieveUpdate());
-		}
+			catch (final IOException exception)
+			{
+				Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
+				Platform.runLater(() -> displayCantRetrieveUpdate());
+			}
+		}).start();
 	}
 
 	private static void displayUpdateNotification()
 	{
 		final TrayNotification trayNotification = new TrayNotificationBuilder()
-				.title("Update Available")
-				.message("Click here to update to the latest version.")
+				.title("Update Client")
+				.message("An update has been downloaded, click here to restart your client.")
 				.animation(Animations.SLIDE)
 				.build();
 
 		trayNotification.setOnMouseClicked(__ ->
 		{
-			getInstance().stage.hide();
-			trayNotification.dismiss();
-			updateLauncher();
+			finishUpdate();
 		});
 		trayNotification.showAndWait();
 	}
@@ -290,23 +295,51 @@ public final class Client extends Application
 	/**
 	 * Downloads the latest version and restarts the client.
 	 */
-	private static void updateLauncher()
+	private static void downloadUpdate()
 	{
 		try
 		{
 			final String updateUrl = UpdateUtility.getLatestVersionURL();
 			final URI url = new URI(updateUrl);
-			final String targetLocation = getOwnJarFile().getPath().toString();
+			FileUtility.downloadFile(url.toString(), PathConstants.SAMPEX_TEMP_JAR);
+		}
+		catch (final IOException | URISyntaxException exception)
+		{
+			Logging.log(Level.SEVERE, "Couldn't retrieve update.", exception);
+		}
+	}
 
-			FileUtility.downloadFile(url.toString(), targetLocation);
+	private static void finishUpdate()
+	{
+		try
+		{
+			FileUtility.copyOverwrite(PathConstants.SAMPEX_TEMP_JAR, getOwnJarFile().getPath());
 			final String latestTag = UpdateUtility.getLatestTag().get();
 			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, true);
 			ClientPropertiesController.setProperty(Property.LAST_TAG_NAME, latestTag);
 			selfRestart();
 		}
-		catch (final IOException | URISyntaxException exception)
+		catch (final IOException exception)
 		{
-			Logging.log(Level.SEVERE, "Couldn't retrieve update.", exception);
+			Logging.log(Level.SEVERE, "Failed to update.", exception);
+			final TrayNotification notification = new TrayNotificationBuilder()
+					.title("Applying Update")
+					.message("Couldn't apply update, click for more information")
+					.type(NotificationTypeImplementations.ERROR)
+					.build();
+
+			notification.setOnMouseClicked(__ ->
+			{
+				try
+				{
+					Desktop.getDesktop().open(new File(PathConstants.SAMPEX_LOG));
+				}
+				catch (final IOException couldntOpenlogfile)
+				{
+					Logging.log(Level.WARNING, "Error opening logfile.", couldntOpenlogfile);
+				}
+			});
+
 		}
 	}
 
@@ -366,13 +399,8 @@ public final class Client extends Application
 
 	private static void readApplicationArguments(final String[] args)
 	{
-		if (args.length >= 1)
-		{
-			if (ArrayUtility.contains(args, "-d"))
-			{
-				ClientPropertiesController.setProperty(Property.DEVELOPMENT, true);
-			}
-		}
+		final boolean containsDevelopmentFlag = ArrayUtility.contains(args, "-d");
+		ClientPropertiesController.setProperty(Property.DEVELOPMENT, containsDevelopmentFlag);
 	}
 
 	/**

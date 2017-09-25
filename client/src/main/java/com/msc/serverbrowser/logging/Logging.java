@@ -1,6 +1,5 @@
 package com.msc.serverbrowser.logging;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -38,7 +37,7 @@ public final class Logging
 		instance.setLevel(Level.INFO);
 		try
 		{
-			final FileHandler filehandler = new FileHandler(PathConstants.SAMPEX_PATH + File.separator + "Log.log");
+			final FileHandler filehandler = new FileHandler(PathConstants.SAMPEX_LOG);
 			final SimpleFormatter formatter = new SimpleFormatter();
 			filehandler.setFormatter(formatter);
 			instance.addHandler(filehandler);

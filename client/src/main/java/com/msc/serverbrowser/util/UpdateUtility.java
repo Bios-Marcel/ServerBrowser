@@ -59,13 +59,11 @@ public final class UpdateUtility
 	{
 		try
 		{
-			final GitHub gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build();
-			final GHRepository repository = gitHub.getRepository("Bios-Marcel/ServerBrowser");
-			final List<GHRelease> releases = repository.listReleases().asList();
-			if (!releases.isEmpty())
+			final Optional<GHRelease> release = getRelease();
+
+			if (release.isPresent())
 			{
-				final GHRelease release = releases.get(0);
-				return Optional.ofNullable(release.getTagName());
+				return Optional.ofNullable(release.get().getTagName());
 			}
 		}
 		catch (final IOException exception)
@@ -86,15 +84,30 @@ public final class UpdateUtility
 	 */
 	public static String getLatestVersionURL() throws IOException
 	{
+		final Optional<GHRelease> release = getRelease();
+
+		if (release.isPresent())
+		{
+			return release.get().getAssets().get(0).getBrowserDownloadUrl();
+		}
+		return null;
+	}
+
+	/**
+	 * @return a {@link GHRelease} for the latest ServerBrowser release
+	 * @throws IOException
+	 *             if there was an error querying github
+	 */
+	public static Optional<GHRelease> getRelease() throws IOException
+	{
 		final GitHub gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build();
 		final GHRepository repository = gitHub.getRepository("Bios-Marcel/ServerBrowser");
 		final List<GHRelease> releases = repository.listReleases().asList();
 		if (!releases.isEmpty())
 		{
-			final GHRelease release = releases.get(0);
-			return release.getAssets().get(0).getBrowserDownloadUrl();
+			return Optional.ofNullable(releases.get(0));
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**

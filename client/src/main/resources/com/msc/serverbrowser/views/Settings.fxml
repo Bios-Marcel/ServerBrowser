@@ -112,6 +112,12 @@
 								<VBox spacing="5.0">
 									<children>
 										<CheckBox fx:id="showChangelogCheckBox" mnemonicParsing="false" text="Show Changelog after the application has been updated" />
+										<HBox spacing="5">
+											<children>
+												<CheckBox fx:id="enableAutomaticUpdatesCheckBox" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Automatic updates" />
+												<Button fx:id="manualUpdateButton" onAction="#onClickManualUpdate" text="Check for updates" />
+											</children>
+										</HBox>
 									</children>
 								</VBox>
 							</content>

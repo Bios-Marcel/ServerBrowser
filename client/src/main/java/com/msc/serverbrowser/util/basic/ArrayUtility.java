@@ -1,5 +1,6 @@
 package com.msc.serverbrowser.util.basic;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -49,6 +50,11 @@ public final class ArrayUtility
 	 */
 	public static <T> boolean contains(final T[] array, final T searchFor)
 	{
+		if (Objects.isNull(array) || array.length == 0)
+		{
+			return false;
+		}
+
 		for (final T object : array)
 		{
 			if (object.equals(searchFor))

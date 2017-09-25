@@ -42,8 +42,7 @@ public class VersionChangeController implements ViewController
 	private static Optional<SAMPVersion>	currentlyInstalling	= Optional.empty();
 	private final List<Button>				buttons				= new ArrayList<>();
 
-	@FXML
-	private VBox buttonContainer;
+	@FXML private VBox buttonContainer;
 
 	@Override
 	public void initialize()
@@ -158,7 +157,7 @@ public class VersionChangeController implements ViewController
 		}
 	}
 
-	private void finishInstalling()
+	private static void finishInstalling()
 	{
 		currentlyInstalling = Optional.empty();
 		Platform.runLater(() -> Client.getInstance().reloadViewIfLoaded(View.VERSION_CHANGER));
