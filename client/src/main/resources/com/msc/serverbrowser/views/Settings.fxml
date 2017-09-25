@@ -71,14 +71,14 @@
 												</Spinner>
 											</children>
 										</GridPane>
-										<CheckBox fx:id="audioproxyCheckBox" mnemonicParsing="false" text="Don't use System Proxy for Audiostreams" />
+										<CheckBox fx:id="audioproxyCheckBox" mnemonicParsing="false" text="Use System Proxy for Audiostreams" />
 										<CheckBox fx:id="timestampsCheckBox" mnemonicParsing="false" text="Chat Timestamps" />
 										<CheckBox fx:id="multicoreCheckbox" mnemonicParsing="false" text="Multicore usage" />
-										<CheckBox fx:id="audioMsgOffCheckBox" mnemonicParsing="false" text="Turn Audiostream messages off" />
-										<CheckBox fx:id="disableHeadMoveCheckBox" mnemonicParsing="false" text="Turn off head movement" />
+										<CheckBox fx:id="audioMsgCheckBox" mnemonicParsing="false" text="Display audiostream messages" />
+										<CheckBox fx:id="headMoveCheckBox" mnemonicParsing="false" text="Enable head movement" />
 										<CheckBox fx:id="imeCheckBox" mnemonicParsing="false" text="Input method text editing and language switching" />
 										<CheckBox fx:id="directModeCheckBox" mnemonicParsing="false" text="Directmode (Fix chat text drawing problems)" />
-										<CheckBox fx:id="noNameTagStatusCheckBox" mnemonicParsing="false" text="Disable AFK Status Symbol" />
+										<CheckBox fx:id="nameTagStatusCheckBox" mnemonicParsing="false" text="Show AFK Status Symbol" />
 									</children>
 								</VBox>
 							</content>
