@@ -63,9 +63,9 @@ There is a light and a dark theme, here are screenshots including the light them
 
 ## Documentation
 
-Javadoc is available under: https://bios-marcel.github.io/ServerBrowser/overview-summary.html
+Javadoc is available under: (https://bios-marcel.github.io/ServerBrowser-Doc/overview-summary.html)
 
-User Documentation (not complete) is available under: https://github.com/Bios-Marcel/ServerBrowser/wiki
+User Documentation (not complete) is available under: (https://github.com/Bios-Marcel/ServerBrowser/wiki)
 
 ## You want to help?
 You can help by [reporting bugs](https://github.com/Bios-Marcel/ServerBrowser/issues), [recommending new features](https://github.com/Bios-Marcel/ServerBrowser/issues) or [creating pull requests](https://github.com/Bios-Marcel/ServerBrowser/pulls).
