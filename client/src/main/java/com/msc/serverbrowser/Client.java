@@ -30,6 +30,7 @@ import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -63,6 +64,8 @@ public final class Client extends Application
 	private static Client	instance;
 	private Stage			stage;
 	private MainController	mainController;
+
+	private static Task<Void> updateTask;
 
 	/**
 	 * @return the clients singleton instance
@@ -240,24 +243,50 @@ public final class Client extends Application
 	{
 		Logging.log(Level.INFO, "Check for updates.");
 
-		new Thread(() ->
+		if (!isCurrentlyUpdating())
 		{
-			try
-			{
-				if (!UpdateUtility.isUpToDate())
+			updateTask = new Task<Void>() {
+
+				@Override
+				protected Void call() throws Exception
 				{
-					Logging.log(Level.INFO, "Downloading update.");
-					downloadUpdate();
-					Logging.log(Level.INFO, "Download of the updated has been finished.");
-					Platform.runLater(() -> displayUpdateNotification());
+					try
+					{
+						if (!UpdateUtility.isUpToDate())
+						{
+							Logging.log(Level.INFO, "Downloading update.");
+							downloadUpdate();
+							// TODO(MSC) Validate download.
+							Logging.log(Level.INFO, "Download of the updated has been finished.");
+							Platform.runLater(() -> displayUpdateNotification());
+						}
+						else
+						{
+							Logging.log(Level.INFO, "Client is up to date.");
+						}
+					}
+					catch (final IOException exception)
+					{
+						Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
+						Platform.runLater(() -> displayCantRetrieveUpdate());
+					}
+					return null;
 				}
-			}
-			catch (final IOException exception)
-			{
-				Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
-				Platform.runLater(() -> displayCantRetrieveUpdate());
-			}
-		}).start();
+			};
+			updateTask.run();
+		}
+	}
+
+	/**
+	 * @return true if the client is currently updating, otherwise false.
+	 */
+	public static boolean isCurrentlyUpdating()
+	{
+		if (Objects.isNull(updateTask))
+		{
+			return false;
+		}
+		return updateTask.isRunning();
 	}
 
 	private static void displayUpdateNotification()
@@ -270,6 +299,7 @@ public final class Client extends Application
 
 		trayNotification.setOnMouseClicked(__ ->
 		{
+			trayNotification.dismiss();
 			finishUpdate();
 		});
 		trayNotification.showAndWait();

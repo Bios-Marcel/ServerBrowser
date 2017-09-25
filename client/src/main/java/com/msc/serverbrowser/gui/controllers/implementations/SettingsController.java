@@ -15,6 +15,7 @@ import com.msc.serverbrowser.util.basic.StringUtility;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -61,6 +62,7 @@ public class SettingsController implements ViewController
 	// Update Settings
 	@FXML private CheckBox	showChangelogCheckBox;
 	@FXML private CheckBox	enableAutomaticUpdatesCheckBox;
+	@FXML private Button	manualUpdateButton;
 
 	// Downloads
 	@FXML private CheckBox allowCachingDownloadsCheckBox;
@@ -106,6 +108,7 @@ public class SettingsController implements ViewController
 
 		// Update Properties
 		setupCheckBox(allowCachingDownloadsCheckBox, Property.ALLOW_CACHING_DOWNLOADS);
+		manualUpdateButton.setDisable(Client.isCurrentlyUpdating());
 
 		// SA-MP properties
 		final Properties legacyProperties = LegacySettingsController.getLegacyProperties().orElse(new Properties());
@@ -224,7 +227,11 @@ public class SettingsController implements ViewController
 	@FXML
 	private void onClickManualUpdate()
 	{
-		Client.checkForUpdates();
+		if (!Client.isCurrentlyUpdating())
+		{
+			manualUpdateButton.setDisable(true);
+			Client.checkForUpdates();
+		}
 	}
 
 	@FXML

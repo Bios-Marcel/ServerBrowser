@@ -45,6 +45,7 @@ public final class UpdateUtility
 		if (latestTag.isPresent())
 		{
 			final CompareResult result = compareVersions(lastTagName, latestTag.get());
+			System.out.println("Present: " + result);
 			return result != CompareResult.LESS;
 		}
 		return false;
