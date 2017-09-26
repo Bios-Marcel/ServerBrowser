@@ -92,6 +92,14 @@ public class SettingsController implements ViewController
 	{
 		initInformationArea();
 
+		initPropertyComponents();
+
+		// SA-MP properties
+		configureLegacyPropertyComponents();
+	}
+
+	private void initPropertyComponents()
+	{
 		// General Properties
 		sampPathTextField.setText(ClientPropertiesController.getPropertyAsString(Property.SAMP_PATH));
 		sampPathTextField.textProperty().addListener((__, ___, newValue) ->
@@ -128,14 +136,16 @@ public class SettingsController implements ViewController
 
 		// Update Properties
 		setupCheckBox(allowCachingDownloadsCheckBox, Property.ALLOW_CACHING_DOWNLOADS);
-
+		// Adding a listener to disable the update button incase an update is ongoing
 		Client.updatingProperty.addListener((observable, oldVal, newVal) ->
 		{
 			manualUpdateButton.setDisable(newVal);
 		});
 		manualUpdateButton.setDisable(Client.updatingProperty.get());
+	}
 
-		// SA-MP properties
+	private void configureLegacyPropertyComponents()
+	{
 		final Properties legacyProperties = LegacySettingsController.getLegacyProperties().orElse(new Properties());
 		initLegacySettings(legacyProperties);
 
