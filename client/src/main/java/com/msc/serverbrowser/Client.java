@@ -30,7 +30,8 @@ import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -50,22 +51,27 @@ public final class Client extends Application
 	/**
 	 * Application icon that can be used everywhere where necessary.
 	 */
-	public static final Image	APPLICATION_ICON	= new Image(Client.class.getResourceAsStream(PathConstants.APP_ICON_PATH));
+	public static final Image			APPLICATION_ICON			= new Image(
+			Client.class.getResourceAsStream(PathConstants.APP_ICON_PATH));
 	/**
 	 * Name of the application, as displayed to people.
 	 */
-	public static final String	APPLICATION_NAME	= "SA-MP Server Browser";
+	public static final String			APPLICATION_NAME			= "SA-MP Server Browser";
 
 	/**
 	 * Default Dismiss-{@link Duration} that is used for TrayNotifications.
 	 */
-	public static final Duration DEFAULT_TRAY_DISMISS_TIME = Duration.seconds(10);
+	public static final Duration		DEFAULT_TRAY_DISMISS_TIME	= Duration.seconds(10);
 
-	private static Client	instance;
-	private Stage			stage;
-	private MainController	mainController;
+	private static Client				instance;
+	private Stage						stage;
+	private MainController				mainController;
 
-	private static Task<Void> updateTask;
+	/**
+	 * This property that indicates if an update check / download progress is
+	 * ongoing.
+	 */
+	public final static BooleanProperty	updatingProperty			= new SimpleBooleanProperty(false);
 
 	/**
 	 * @return the clients singleton instance
@@ -125,7 +131,8 @@ public final class Client extends Application
 	}
 
 	/**
-	 * Deletes the scenes current stylesheets and reapplies either the dark theme or the default
+	 * Deletes the scenes current stylesheets and reapplies either the dark theme or
+	 * the default
 	 * theme.
 	 */
 	public void applyTheme()
@@ -197,20 +204,23 @@ public final class Client extends Application
 	}
 
 	/**
-	 * Displays a dialog that tells the user that the server connection couldn't be established.
+	 * Displays a dialog that tells the user that the server connection couldn't be
+	 * established.
 	 */
 	public static void displayNoConnectionDialog()
 	{
 		new TrayNotificationBuilder()
 				.type(NotificationTypeImplementations.ERROR)
 				.title("Server connection could not be established")
-				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
+				.message(
+						"The server connection doesn't seeem to be established, try again later, for more information check the log files.")
 				.animation(Animations.SLIDE)
 				.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 
 	/**
-	 * Creates files and folders that are necessary for the application to run properly and migrates
+	 * Creates files and folders that are necessary for the application to run
+	 * properly and migrates
 	 * old xml data.
 	 */
 	private static void initClient()
@@ -224,7 +234,8 @@ public final class Client extends Application
 
 		try
 		{
-			Files.copy(Client.class.getResourceAsStream("/com/msc/serverbrowser/tools/sampcmd.exe"), Paths.get(PathConstants.SAMP_CMD), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(Client.class.getResourceAsStream("/com/msc/serverbrowser/tools/sampcmd.exe"),
+					Paths.get(PathConstants.SAMP_CMD), StandardCopyOption.REPLACE_EXISTING);
 		}
 		catch (final IOException exception)
 		{
@@ -236,57 +247,44 @@ public final class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an update is available
+	 * Compares the local version number to the one lying on the server. If an
+	 * update is available
 	 * the user will be asked if he wants to update.
 	 */
 	public static void checkForUpdates()
 	{
 		Logging.log(Level.INFO, "Check for updates.");
 
-		if (!isCurrentlyUpdating())
+		if (!updatingProperty.get())
 		{
-			updateTask = new Task<Void>() {
+			new Thread(() ->
+			{
 
-				@Override
-				protected Void call() throws Exception
+				updatingProperty.set(true);
+				try
 				{
-					try
+					if (!UpdateUtility.isUpToDate())
 					{
-						if (!UpdateUtility.isUpToDate())
-						{
-							Logging.log(Level.INFO, "Downloading update.");
-							downloadUpdate();
-							// TODO(MSC) Validate download.
-							Logging.log(Level.INFO, "Download of the updated has been finished.");
-							Platform.runLater(() -> displayUpdateNotification());
-						}
-						else
-						{
-							Logging.log(Level.INFO, "Client is up to date.");
-						}
+						Logging.log(Level.INFO, "Downloading update.");
+						downloadUpdate();
+						// TODO(MSC) Validate download.
+						Logging.log(Level.INFO, "Download of the updated has been finished.");
+						Platform.runLater(() -> displayUpdateNotification());
 					}
-					catch (final IOException exception)
+					else
 					{
-						Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
-						Platform.runLater(() -> displayCantRetrieveUpdate());
+						Logging.log(Level.INFO, "Client is up to date.");
 					}
-					return null;
 				}
-			};
-			updateTask.run();
-		}
-	}
+				catch (final IOException exception)
+				{
+					Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
+					Platform.runLater(() -> displayCantRetrieveUpdate());
+				}
 
-	/**
-	 * @return true if the client is currently updating, otherwise false.
-	 */
-	public static boolean isCurrentlyUpdating()
-	{
-		if (Objects.isNull(updateTask))
-		{
-			return false;
+				updatingProperty.set(false);
+			}).start();
 		}
-		return updateTask.isRunning();
 	}
 
 	private static void displayUpdateNotification()
@@ -422,7 +420,8 @@ public final class Client extends Application
 	{
 		readApplicationArguments(args);
 
-		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));
+		Thread.setDefaultUncaughtExceptionHandler(
+				(t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));
 
 		Application.launch(args);
 	}
