@@ -85,21 +85,23 @@ public final class FileUtility
 	 * @param outputPath
 	 *            the path where to save the downloaded file
 	 * @param progressProperty
-	 *            a property that will contain the current download process from 0.0 to 1.0
+	 *            a property that will contain the current download process from 0.0
+	 *            to 1.0
 	 * @return the downloaded file
 	 * @throws IOException
 	 *             if an errors occurs while writing the file or opening the stream
 	 */
-	public static File downloadFile(final String url, final String outputPath, final DoubleProperty progressProperty)
+	public static File downloadFile(final String url, final String outputPath, final DoubleProperty progressProperty,
+			final int steps)
 			throws IOException
 	{
 		final int fileLength = getOnlineFileSize(new URL(url));
-		final int stepSize = fileLength / 10 + 1;
+		final int stepSize = fileLength / steps + 1;
 
 		try (final InputStream input = new URL(url).openStream();
 				final FileOutputStream fileOutputStream = new FileOutputStream(outputPath);)
 		{
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < steps; i++)
 			{
 				final byte[] bytes = new byte[stepSize];
 				Platform.runLater(() -> progressProperty.set(0.1 + progressProperty.get()));
@@ -145,7 +147,8 @@ public final class FileUtility
 	 * @param outputLocation
 	 *            zip file output folder
 	 * @throws IOException
-	 *             if there was an error reading the zip file or writing the unzipped data
+	 *             if there was an error reading the zip file or writing the
+	 *             unzipped data
 	 */
 	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException
 	{
@@ -161,7 +164,8 @@ public final class FileUtility
 				final long size = zipEntry.getSize();
 				final long compressedSize = zipEntry.getCompressedSize();
 
-				Logging.info(String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
+				Logging.info(
+						String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
 
 				// Do we need to create a directory ?
 				final File file = new File(outputLocation + separator + name);
@@ -220,7 +224,8 @@ public final class FileUtility
 	}
 
 	/**
-	 * Deletes a folder recursively. In case it deletes files on partially, files that had been
+	 * Deletes a folder recursively. In case it deletes files on partially, files
+	 * that had been
 	 * deleted already will stay gone.
 	 *
 	 * @param folder

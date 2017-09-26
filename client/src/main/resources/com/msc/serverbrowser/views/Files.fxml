@@ -11,10 +11,10 @@
 	<tabs>
 		<Tab text="Chatlogs">
 			<content>
-				<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+				<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
 					<children>
 						<TextArea fx:id="contentTextArea" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
-						<ButtonBar prefHeight="40.0" prefWidth="200.0">
+						<ButtonBar>
 							<buttons>
 								<Button mnemonicParsing="false" onAction="#loadChatLog" text="Reload" />
 								<Button mnemonicParsing="false" onAction="#clearChatLog" text="Clear" />

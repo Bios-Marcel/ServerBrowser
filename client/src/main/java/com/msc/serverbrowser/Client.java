@@ -51,27 +51,27 @@ public final class Client extends Application
 	/**
 	 * Application icon that can be used everywhere where necessary.
 	 */
-	public static final Image			APPLICATION_ICON			= new Image(
+	public static final Image		APPLICATION_ICON			= new Image(
 			Client.class.getResourceAsStream(PathConstants.APP_ICON_PATH));
 	/**
 	 * Name of the application, as displayed to people.
 	 */
-	public static final String			APPLICATION_NAME			= "SA-MP Server Browser";
+	public static final String		APPLICATION_NAME			= "SA-MP Server Browser";
 
 	/**
 	 * Default Dismiss-{@link Duration} that is used for TrayNotifications.
 	 */
-	public static final Duration		DEFAULT_TRAY_DISMISS_TIME	= Duration.seconds(10);
+	public static final Duration	DEFAULT_TRAY_DISMISS_TIME	= Duration.seconds(10);
 
-	private static Client				instance;
-	private Stage						stage;
-	private MainController				mainController;
+	private static Client			instance;
+	private Stage					stage;
+	private MainController			mainController;
 
 	/**
 	 * This property that indicates if an update check / download progress is
 	 * ongoing.
 	 */
-	public final static BooleanProperty	updatingProperty			= new SimpleBooleanProperty(false);
+	public final BooleanProperty	updatingProperty			= new SimpleBooleanProperty(false);
 
 	/**
 	 * @return the clients singleton instance
@@ -97,7 +97,7 @@ public final class Client extends Application
 			}
 			else if (ClientPropertiesController.getPropertyAsBoolean(Property.AUTOMTAIC_UPDATES))
 			{
-				new Thread(() -> checkForUpdates()).start();
+				checkForUpdates();
 			}
 		}
 	}
@@ -192,6 +192,7 @@ public final class Client extends Application
 
 		if (showChanelog && changelogEnabled)
 		{
+			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, false);
 			final TrayNotification trayNotification = new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.INFORMATION)
 					.title("Your client has been updated")
@@ -201,7 +202,6 @@ public final class Client extends Application
 
 			trayNotification.setOnMouseClicked(__ ->
 			{
-				ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, false);
 				OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
 				trayNotification.dismiss();
 			});
@@ -257,37 +257,49 @@ public final class Client extends Application
 	 * update is available
 	 * the user will be asked if he wants to update.
 	 */
-	public static void checkForUpdates()
+	public void checkForUpdates()
 	{
 		Logging.log(Level.INFO, "Check for updates.");
 
 		if (!updatingProperty.get())
 		{
+			mainController.progressProperty().set(0.0);
+			mainController.setGlobalProgressText("Checking for updates");
+
 			new Thread(() ->
 			{
-
 				updatingProperty.set(true);
 				try
 				{
-					if (!UpdateUtility.isUpToDate())
+					if (UpdateUtility.isUpToDate())
 					{
-						Logging.log(Level.INFO, "Downloading update.");
-						downloadUpdate();
-						// TODO(MSC) Validate download.
-						Logging.log(Level.INFO, "Download of the updated has been finished.");
-						Platform.runLater(() -> displayUpdateNotification());
+						Logging.log(Level.INFO, "Client is up to date.");
 					}
 					else
 					{
-						Logging.log(Level.INFO, "Client is up to date.");
+						Platform.runLater(() ->
+						{
+							mainController.progressProperty().set(0.1);
+							mainController.setGlobalProgressText("Downloading update");
+						});
+						Logging.log(Level.INFO, "Downloading update.");
+						downloadUpdate();
+						Logging.log(Level.INFO, "Download of the updated has been finished.");
+						Platform.runLater(() -> displayUpdateNotification());
 					}
 				}
 				catch (final IOException exception)
 				{
+
 					Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
 					Platform.runLater(() -> displayCantRetrieveUpdate());
 				}
 
+				Platform.runLater(() ->
+				{
+					mainController.setGlobalProgressText("");
+					mainController.progressProperty().set(0);
+				});
 				updatingProperty.set(false);
 			}).start();
 		}
@@ -329,13 +341,16 @@ public final class Client extends Application
 	/**
 	 * Downloads the latest version and restarts the client.
 	 */
-	private static void downloadUpdate()
+	private void downloadUpdate()
 	{
 		try
 		{
 			final String updateUrl = UpdateUtility.getLatestVersionURL();
 			final URI url = new URI(updateUrl);
-			FileUtility.downloadFile(url.toString(), PathConstants.SAMPEX_TEMP_JAR);
+			FileUtility.downloadFile(url.toString(),
+					PathConstants.SAMPEX_TEMP_JAR,
+					mainController.progressProperty(),
+					9);
 			// TODO(MSC) Update validation
 		}
 		catch (final IOException | URISyntaxException exception)

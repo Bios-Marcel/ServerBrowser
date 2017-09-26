@@ -27,6 +27,23 @@
     -fx-background-color: -component-background-color-selected !important;
 }
 
+.bottom-bar
+{
+	-fx-border-width: 1.0 0.0 0.0 0.0;
+	-fx-border-color: -border-color;
+}
+
+.progress-bar
+{
+	-fx-border-color: -border-color;	
+	-fx-border-width: 1;
+}
+
+.bar
+{
+	-fx-background-color: lightgreen;
+}
+
 /**
  * Focus styles
  */

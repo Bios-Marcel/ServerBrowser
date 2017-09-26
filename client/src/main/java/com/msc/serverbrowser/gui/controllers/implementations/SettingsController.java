@@ -12,6 +12,7 @@ import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.basic.StringUtility;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -136,12 +137,14 @@ public class SettingsController implements ViewController
 
 		// Update Properties
 		setupCheckBox(allowCachingDownloadsCheckBox, Property.ALLOW_CACHING_DOWNLOADS);
+
 		// Adding a listener to disable the update button incase an update is ongoing
-		Client.updatingProperty.addListener((observable, oldVal, newVal) ->
+		final BooleanProperty updatingProperty = Client.getInstance().updatingProperty;
+		updatingProperty.addListener((observable, oldVal, newVal) ->
 		{
 			manualUpdateButton.setDisable(newVal);
 		});
-		manualUpdateButton.setDisable(Client.updatingProperty.get());
+		manualUpdateButton.setDisable(updatingProperty.get());
 	}
 
 	private void configureLegacyPropertyComponents()
@@ -278,7 +281,7 @@ public class SettingsController implements ViewController
 	@FXML
 	private void onClickManualUpdate()
 	{
-		Client.checkForUpdates();
+		Client.getInstance().checkForUpdates();
 	}
 
 	@FXML

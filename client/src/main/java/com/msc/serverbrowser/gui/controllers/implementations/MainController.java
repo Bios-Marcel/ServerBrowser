@@ -11,9 +11,12 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
 
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 
@@ -43,6 +46,11 @@ public class MainController implements ViewController
 	private ScrollPane	activeViewContainer;
 	private View		activeView;
 
+	@FXML
+	private Label		globalProgressLabel;
+	@FXML
+	private ProgressBar	globalProgressBar;
+
 	@Override
 	public void initialize()
 	{
@@ -55,6 +63,16 @@ public class MainController implements ViewController
 			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)));
 		}
 
+	}
+
+	public DoubleProperty progressProperty()
+	{
+		return globalProgressBar.progressProperty();
+	}
+
+	public void setGlobalProgressText(final String text)
+	{
+		globalProgressLabel.setText(text);
 	}
 
 	@FXML
