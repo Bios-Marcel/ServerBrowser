@@ -3,7 +3,6 @@ package com.msc.serverbrowser.util;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.stream.IntStream;
 
 import org.kohsuke.github.GHRelease;
@@ -14,7 +13,6 @@ import org.kohsuke.github.RateLimitHandler;
 
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
-import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.basic.ArrayUtility;
 
 /**
@@ -39,59 +37,11 @@ public final class UpdateUtility
 	 */
 	public static Boolean isUpToDate() throws IOException
 	{
-		final String lastTagName = ClientPropertiesController.getPropertyAsString(Property.LAST_TAG_NAME);
-		final Optional<String> latestTag = getLatestTag();
+		final String currentTagName = ClientPropertiesController.getPropertyAsString(Property.LAST_TAG_NAME);
+		final String latestTag = getRelease().get().getTagName();
 
-		if (latestTag.isPresent())
-		{
-			final CompareResult result = compareVersions(lastTagName, latestTag.get());
-			System.out.println("Present: " + result);
-			return result != CompareResult.LESS;
-		}
-		return false;
-	}
-
-	/**
-	 * @return the tag of the latest github release
-	 * @throws IOException
-	 *             if there was an errors while retrieving data
-	 */
-	public static Optional<String> getLatestTag() throws IOException
-	{
-		try
-		{
-			final Optional<GHRelease> release = getRelease();
-
-			if (release.isPresent())
-			{
-				return Optional.ofNullable(release.get().getTagName());
-			}
-		}
-		catch (final IOException exception)
-		{
-			Logging.log(Level.SEVERE, "Couldn't retrieve latest version information.", exception);
-			throw exception;
-		}
-
-		return Optional.empty();
-	}
-
-	/**
-	 * Retrieves the URL to download the latest version.
-	 *
-	 * @return An {@link Optional} of the latest version or {@link Optional#empty()}
-	 * @throws IOException
-	 *             if there was an error querying github
-	 */
-	public static String getLatestVersionURL() throws IOException
-	{
-		final Optional<GHRelease> release = getRelease();
-
-		if (release.isPresent())
-		{
-			return release.get().getAssets().get(0).getBrowserDownloadUrl();
-		}
-		return null;
+		final CompareResult result = compareVersions(currentTagName, latestTag);
+		return result != CompareResult.LESS;
 	}
 
 	/**

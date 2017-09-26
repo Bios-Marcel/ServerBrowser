@@ -85,29 +85,38 @@ public final class FileUtility
 	 * @param outputPath
 	 *            the path where to save the downloaded file
 	 * @param progressProperty
-	 *            a property that will contain the current download process from 0.0
-	 *            to 1.0
+	 *            a property that will contain the current download process from 0.0 to 1.0
 	 * @return the downloaded file
 	 * @throws IOException
 	 *             if an errors occurs while writing the file or opening the stream
 	 */
-	public static File downloadFile(final String url, final String outputPath, final DoubleProperty progressProperty,
-			final int steps)
+	public static File downloadFile(final URL url, final String outputPath, final DoubleProperty progressProperty,
+			final double fileLength)
 			throws IOException
 	{
-		final int fileLength = getOnlineFileSize(new URL(url));
-		final int stepSize = fileLength / steps + 1;
-
-		try (final InputStream input = new URL(url).openStream();
+		try (final InputStream input = url.openStream();
 				final FileOutputStream fileOutputStream = new FileOutputStream(outputPath);)
 		{
-			for (int i = 0; i < steps; i++)
+			final double current = (int) progressProperty.get();
+			final byte[] bytes = new byte[10000];
+			while (true)
 			{
-				final byte[] bytes = new byte[stepSize];
-				Platform.runLater(() -> progressProperty.set(0.1 + progressProperty.get()));
-				final int length = input.read(bytes);
-				fileOutputStream.write(bytes, 0, length);
+				final double length = input.read(bytes);
+
+				if (length <= 0)
+				{
+					break;
+				}
+
+				Platform.runLater(() ->
+				{
+					final double additional = length / fileLength * (1.0 - current);
+					progressProperty.set(progressProperty.get() + additional);
+				});
+				fileOutputStream.write(bytes, 0, (int) length);
 			}
+
+			System.out.println(progressProperty.get());
 
 			return new File(outputPath);
 		}
@@ -122,19 +131,19 @@ public final class FileUtility
 	 */
 	public static int getOnlineFileSize(final URL url) throws IOException
 	{
-		HttpURLConnection conn = null;
+		HttpURLConnection connection = null;
 		try
 		{
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("HEAD");
-			conn.getInputStream();
-			return conn.getContentLength();
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("HEAD");
+			connection.getInputStream();
+			return connection.getContentLength();
 		}
 		finally
 		{
-			if (conn != null)
+			if (connection != null)
 			{
-				conn.disconnect();
+				connection.disconnect();
 			}
 		}
 	}
@@ -147,8 +156,7 @@ public final class FileUtility
 	 * @param outputLocation
 	 *            zip file output folder
 	 * @throws IOException
-	 *             if there was an error reading the zip file or writing the
-	 *             unzipped data
+	 *             if there was an error reading the zip file or writing the unzipped data
 	 */
 	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException
 	{
@@ -164,8 +172,7 @@ public final class FileUtility
 				final long size = zipEntry.getSize();
 				final long compressedSize = zipEntry.getCompressedSize();
 
-				Logging.info(
-						String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
+				Logging.info(String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
 
 				// Do we need to create a directory ?
 				final File file = new File(outputLocation + separator + name);
@@ -224,8 +231,7 @@ public final class FileUtility
 	}
 
 	/**
-	 * Deletes a folder recursively. In case it deletes files on partially, files
-	 * that had been
+	 * Deletes a folder recursively. In case it deletes files on partially, files that had been
 	 * deleted already will stay gone.
 	 *
 	 * @param folder

@@ -11,7 +11,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Level;
+
+import org.kohsuke.github.GHRelease;
 
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
@@ -51,27 +54,25 @@ public final class Client extends Application
 	/**
 	 * Application icon that can be used everywhere where necessary.
 	 */
-	public static final Image		APPLICATION_ICON			= new Image(
-			Client.class.getResourceAsStream(PathConstants.APP_ICON_PATH));
+	public static final Image	APPLICATION_ICON	= new Image(Client.class.getResourceAsStream(PathConstants.APP_ICON_PATH));
 	/**
 	 * Name of the application, as displayed to people.
 	 */
-	public static final String		APPLICATION_NAME			= "SA-MP Server Browser";
+	public static final String	APPLICATION_NAME	= "SA-MP Server Browser";
 
 	/**
 	 * Default Dismiss-{@link Duration} that is used for TrayNotifications.
 	 */
-	public static final Duration	DEFAULT_TRAY_DISMISS_TIME	= Duration.seconds(10);
+	public static final Duration DEFAULT_TRAY_DISMISS_TIME = Duration.seconds(10);
 
-	private static Client			instance;
-	private Stage					stage;
-	private MainController			mainController;
+	private static Client	instance;
+	private Stage			stage;
+	private MainController	mainController;
 
 	/**
-	 * This property that indicates if an update check / download progress is
-	 * ongoing.
+	 * This property that indicates if an update check / download progress is ongoing.
 	 */
-	public final BooleanProperty	updatingProperty			= new SimpleBooleanProperty(false);
+	public final BooleanProperty updatingProperty = new SimpleBooleanProperty(false);
 
 	/**
 	 * @return the clients singleton instance
@@ -137,8 +138,7 @@ public final class Client extends Application
 	}
 
 	/**
-	 * Deletes the scenes current stylesheets and reapplies either the dark theme or
-	 * the default
+	 * Deletes the scenes current stylesheets and reapplies either the dark theme or the default
 	 * theme.
 	 */
 	public void applyTheme()
@@ -210,23 +210,20 @@ public final class Client extends Application
 	}
 
 	/**
-	 * Displays a dialog that tells the user that the server connection couldn't be
-	 * established.
+	 * Displays a dialog that tells the user that the server connection couldn't be established.
 	 */
 	public static void displayNoConnectionDialog()
 	{
 		new TrayNotificationBuilder()
 				.type(NotificationTypeImplementations.ERROR)
 				.title("Server connection could not be established")
-				.message(
-						"The server connection doesn't seeem to be established, try again later, for more information check the log files.")
+				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
 				.animation(Animations.SLIDE)
 				.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 
 	/**
-	 * Creates files and folders that are necessary for the application to run
-	 * properly and migrates
+	 * Creates files and folders that are necessary for the application to run properly and migrates
 	 * old xml data.
 	 */
 	private static void initClient()
@@ -240,8 +237,7 @@ public final class Client extends Application
 
 		try
 		{
-			Files.copy(Client.class.getResourceAsStream("/com/msc/serverbrowser/tools/sampcmd.exe"),
-					Paths.get(PathConstants.SAMP_CMD), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(Client.class.getResourceAsStream("/com/msc/serverbrowser/tools/sampcmd.exe"), Paths.get(PathConstants.SAMP_CMD), StandardCopyOption.REPLACE_EXISTING);
 		}
 		catch (final IOException exception)
 		{
@@ -253,8 +249,7 @@ public final class Client extends Application
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an
-	 * update is available
+	 * Compares the local version number to the one lying on the server. If an update is available
 	 * the user will be asked if he wants to update.
 	 */
 	public void checkForUpdates()
@@ -345,13 +340,15 @@ public final class Client extends Application
 	{
 		try
 		{
-			final String updateUrl = UpdateUtility.getLatestVersionURL();
-			final URI url = new URI(updateUrl);
-			FileUtility.downloadFile(url.toString(),
-					PathConstants.SAMPEX_TEMP_JAR,
-					mainController.progressProperty(),
-					9);
-			// TODO(MSC) Update validation
+			final Optional<GHRelease> releaseOptional = UpdateUtility.getRelease();
+
+			if (releaseOptional.isPresent())
+			{
+				final GHRelease release = releaseOptional.get();
+				final String updateUrl = release.getAssets().get(0).getBrowserDownloadUrl();
+				final URI url = new URI(updateUrl);
+				FileUtility.downloadFile(url.toURL(), PathConstants.SAMPEX_TEMP_JAR, mainController.progressProperty(), (int) release.getAssets().get(0).getSize());
+			}
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
@@ -364,9 +361,7 @@ public final class Client extends Application
 		try
 		{
 			FileUtility.copyOverwrite(PathConstants.SAMPEX_TEMP_JAR, getOwnJarFile().getPath());
-			final String latestTag = UpdateUtility.getLatestTag().get();
 			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, true);
-			ClientPropertiesController.setProperty(Property.LAST_TAG_NAME, latestTag);
 			Files.delete(Paths.get(PathConstants.SAMPEX_TEMP_JAR));
 			selfRestart();
 		}
@@ -443,8 +438,7 @@ public final class Client extends Application
 	{
 		readApplicationArguments(args);
 
-		Thread.setDefaultUncaughtExceptionHandler(
-				(t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));
+		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));
 
 		Application.launch(args);
 	}
