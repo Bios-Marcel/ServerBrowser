@@ -24,11 +24,11 @@ public enum Property
 	ALLOW_CACHING_DOWNLOADS(15, true, Boolean.class),
 	AUTOMTAIC_UPDATES(16, true, Boolean.class);
 
-	private int id;
+	private int			id;
 
-	private String defaultValue;
+	private String		defaultValue;
 
-	private Class<?> datatype;
+	private Class<?>	datatype;
 
 	private <T extends Object> Property(final int value, final T defaultValue, final Class<T> datatype)
 	{

@@ -88,11 +88,17 @@ public final class Client extends Application
 		initClient();
 		loadUI(primaryStage);
 
-		// Only check for updates if not in development mode
-		if (!ClientPropertiesController.getPropertyAsBoolean(Property.DEVELOPMENT)
-				&& ClientPropertiesController.getPropertyAsBoolean(Property.AUTOMTAIC_UPDATES))
+		// Only update if not in development mode
+		if (!ClientPropertiesController.getPropertyAsBoolean(Property.DEVELOPMENT))
 		{
-			new Thread(() -> checkForUpdates()).start();
+			if (new File(PathConstants.SAMPEX_TEMP_JAR).exists())
+			{
+				finishUpdate();
+			}
+			else if (ClientPropertiesController.getPropertyAsBoolean(Property.AUTOMTAIC_UPDATES))
+			{
+				new Thread(() -> checkForUpdates()).start();
+			}
 		}
 	}
 
@@ -291,7 +297,7 @@ public final class Client extends Application
 	{
 		final TrayNotification trayNotification = new TrayNotificationBuilder()
 				.title("Update Client")
-				.message("An update has been downloaded, click here to restart your client.")
+				.message("Update installed, click to restart or apply update on next startup.")
 				.animation(Animations.SLIDE)
 				.build();
 
@@ -330,6 +336,7 @@ public final class Client extends Application
 			final String updateUrl = UpdateUtility.getLatestVersionURL();
 			final URI url = new URI(updateUrl);
 			FileUtility.downloadFile(url.toString(), PathConstants.SAMPEX_TEMP_JAR);
+			// TODO(MSC) Update validation
 		}
 		catch (final IOException | URISyntaxException exception)
 		{
@@ -345,6 +352,7 @@ public final class Client extends Application
 			final String latestTag = UpdateUtility.getLatestTag().get();
 			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, true);
 			ClientPropertiesController.setProperty(Property.LAST_TAG_NAME, latestTag);
+			Files.delete(Paths.get(PathConstants.SAMPEX_TEMP_JAR));
 			selfRestart();
 		}
 		catch (final IOException exception)
