@@ -116,8 +116,6 @@ public final class FileUtility
 				fileOutputStream.write(bytes, 0, (int) length);
 			}
 
-			System.out.println(progressProperty.get());
-
 			return new File(outputPath);
 		}
 	}

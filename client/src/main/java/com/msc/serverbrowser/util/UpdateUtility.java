@@ -11,8 +11,6 @@ import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.kohsuke.github.RateLimitHandler;
 
-import com.msc.serverbrowser.data.properties.ClientPropertiesController;
-import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.util.basic.ArrayUtility;
 
 /**
@@ -23,6 +21,8 @@ import com.msc.serverbrowser.util.basic.ArrayUtility;
  */
 public final class UpdateUtility
 {
+	public static final String VERSION = "1.3.6";
+
 	private UpdateUtility()
 	{
 		// Constructor to prevent instantiation
@@ -37,10 +37,9 @@ public final class UpdateUtility
 	 */
 	public static Boolean isUpToDate() throws IOException
 	{
-		final String currentTagName = ClientPropertiesController.getPropertyAsString(Property.LAST_TAG_NAME);
-		final String latestTag = getRelease().get().getTagName();
+		final String latestVersion = getRelease().get().getTagName();
 
-		final CompareResult result = compareVersions(currentTagName, latestTag);
+		final CompareResult result = compareVersions(VERSION, latestVersion);
 		return result != CompareResult.LESS;
 	}
 
