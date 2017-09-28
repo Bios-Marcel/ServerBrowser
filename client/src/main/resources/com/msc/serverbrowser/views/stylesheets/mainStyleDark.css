@@ -346,42 +346,14 @@
 	-fx-background-color: -menu-color;
 }
 
-.tabScrollPane
-{
-	-fx-border-width: 0.0px;
-	-fx-padding: 0.0 -1.0 0.0 0.0;
-	-fx-min-width: 80.0px;
-}
-
 .tabScrollPane .scroll-bar
 {
 	-fx-border-width: 0.0px;
 }
 
-.MenuItem
-{
-	-fx-background-color: -menu-color;
-	-fx-min-height: 80.0px;
-	-fx-min-width: 60.0px;
-	-fx-max-height: 0.0px; /* HACK(MSC) keeps StackPane from overgrowing */
-	-fx-border-width: 0.0;
-}
-
 .MenuItem:hover
 {
 	-fx-background-color: -component-background-color-selected;
-}
-
-
-.menuItemIcon
-{
-	-fx-fill: white; /* Sets the SVGs colours */
-}
-
-.clickedItem
-{
-	/* The important keeps the color from being override by the MenuItem:hover color */
-	-fx-background-color: -special-button-color;
 }
 
 /**
@@ -411,15 +383,6 @@
 .info-label-bottom
 {
 	-fx-padding: 0.0 0.0 0.0 20.0;
-}
-
-.beta-sign
-{
-	-fx-background-color: -special-button-color;
-	-fx-padding: 0.0 10.0 0.0 10.0;
-	-fx-background-insets: 0.0 5.0 0.0 5.0;
-	-fx-font-weight: bold;
-	-fx-background-radius: 3.0;
 }
 
 .copyableLabel

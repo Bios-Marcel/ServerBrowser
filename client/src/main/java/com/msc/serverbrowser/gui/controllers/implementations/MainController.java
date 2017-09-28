@@ -9,16 +9,23 @@ import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 /**
  * Controller for the Main view, e.g. the view that contains the menu bar, the
@@ -30,30 +37,62 @@ import javafx.scene.layout.StackPane;
 public class MainController implements ViewController
 {
 	@FXML
-	private StackPane	menuItemFav;
+	private ToggleButton	menuItemFav;
 	@FXML
-	private StackPane	menuItemAll;
+	private ToggleButton	menuItemAll;
 	@FXML
-	private StackPane	menuItemUser;
+	private ToggleButton	menuItemUser;
 	@FXML
-	private StackPane	menuItemVersion;
+	private ToggleButton	menuItemVersion;
 	@FXML
-	private StackPane	menuItemFiles;
+	private ToggleButton	menuItemFiles;
 	@FXML
-	private StackPane	menuItemSettings;
+	private ToggleButton	menuItemSettings;
 
 	@FXML
-	private ScrollPane	activeViewContainer;
-	private View		activeView;
+	private ScrollPane		activeViewContainer;
+	private View			activeView;
 
 	@FXML
-	private Label		globalProgressLabel;
+	private Hyperlink		hyperlinkGitHub;
 	@FXML
-	private ProgressBar	globalProgressBar;
+	private Hyperlink		hyperlinkHelp;
+
+	@FXML
+	private HBox			bottomBarCustom;
+
+	@FXML
+	private Label			globalProgressLabel;
+	@FXML
+	private ProgressBar		globalProgressBar;
 
 	@Override
 	public void initialize()
 	{
+		Font.loadFont(MainController.class.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(),
+				12);
+
+		final ToggleGroup menuToggleGroup = new ToggleGroup();
+		menuItemFav.setToggleGroup(menuToggleGroup);
+		menuItemAll.setToggleGroup(menuToggleGroup);
+		menuItemUser.setToggleGroup(menuToggleGroup);
+		menuItemVersion.setToggleGroup(menuToggleGroup);
+		menuItemFiles.setToggleGroup(menuToggleGroup);
+		menuItemSettings.setToggleGroup(menuToggleGroup);
+
+		menuItemFav.setText("\uf005");
+		menuItemAll.setText("\uf0c9");
+		menuItemUser.setText("\uf007");
+		menuItemVersion.setText("\uf0ed");
+		menuItemFiles.setText("\uf07b");
+		menuItemSettings.setText("\uf013");
+
+		hyperlinkGitHub.setText("\uf09b");
+		hyperlinkHelp.setText("\uf059");
+
+		hyperlinkGitHub.setTooltip(new Tooltip("Opens the GitHub project page."));
+		hyperlinkHelp.setTooltip(new Tooltip("Opens the GitHub projects wiki page."));
+
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW))
 		{
 			loadView(View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)));
@@ -65,11 +104,43 @@ public class MainController implements ViewController
 
 	}
 
+	@FXML
+	private void openGitHub()
+	{
+		OSUtility.browse("https://github.com/Bios-Marcel/SererBrowser");
+	}
+
+	@FXML
+	private void openHelp()
+	{
+		OSUtility.browse("https://github.com/Bios-Marcel/SererBrowser/wiki");
+	}
+
+	/**
+	 * Adds nodes to the Clients bottom bar.
+	 *
+	 * @param nodes
+	 *            the node that will be added
+	 */
+	public void addItemsToBottomBar(final Node... nodes)
+	{
+		bottomBarCustom.getChildren().addAll(nodes);
+	}
+
+	/**
+	 * @return the progress {@link DoubleProperty} of the {@link #globalProgressBar}
+	 */
 	public DoubleProperty progressProperty()
 	{
 		return globalProgressBar.progressProperty();
 	}
 
+	/**
+	 * Sets the text infront of the global {@link ProgressBar} bar.
+	 *
+	 * @param text
+	 *            the text tht appears infront of the global {@link ProgressBar}
+	 */
 	public void setGlobalProgressText(final String text)
 	{
 		globalProgressLabel.setText(text);
@@ -113,34 +184,27 @@ public class MainController implements ViewController
 
 	private void loadView(final View view)
 	{
-		final String CLICKED_STYLE_CLASS = "clickedItem";
-
-		menuItemFav.getStyleClass().remove(CLICKED_STYLE_CLASS);
-		menuItemSettings.getStyleClass().remove(CLICKED_STYLE_CLASS);
-		menuItemUser.getStyleClass().remove(CLICKED_STYLE_CLASS);
-		menuItemAll.getStyleClass().remove(CLICKED_STYLE_CLASS);
-		menuItemVersion.getStyleClass().remove(CLICKED_STYLE_CLASS);
-		menuItemFiles.getStyleClass().remove(CLICKED_STYLE_CLASS);
+		bottomBarCustom.getChildren().clear();
 
 		switch (view)
 		{
 			case SERVERS_FAV:
-				menuItemFav.getStyleClass().add(CLICKED_STYLE_CLASS);
+				menuItemFav.setSelected(true);
 				break;
 			case SERVERS_ALL:
-				menuItemAll.getStyleClass().add(CLICKED_STYLE_CLASS);
+				menuItemAll.setSelected(true);
 				break;
 			case USERNAME_CHANGER:
-				menuItemUser.getStyleClass().add(CLICKED_STYLE_CLASS);
+				menuItemUser.setSelected(true);
 				break;
 			case VERSION_CHANGER:
-				menuItemVersion.getStyleClass().add(CLICKED_STYLE_CLASS);
+				menuItemVersion.setSelected(true);
 				break;
 			case FILES:
-				menuItemFiles.getStyleClass().add(CLICKED_STYLE_CLASS);
+				menuItemFiles.setSelected(true);
 				break;
 			case SETTINGS:
-				menuItemSettings.getStyleClass().add(CLICKED_STYLE_CLASS);
+				menuItemSettings.setSelected(true);
 				break;
 			default:
 				throw new IllegalArgumentException("This View hasn't been implemented or is invalid: " + view);
@@ -156,6 +220,9 @@ public class MainController implements ViewController
 		{
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
+
+			// Creating a new instance of the specified controller, controllers never have
+			// constructor arguments, therefore this is supposedly fine.
 			loader.setController(view.getControllerType().newInstance());
 			final Parent toLoad = loader.load();
 			toLoad.getStylesheets().setAll(view.getStylesheetPath());

@@ -45,48 +45,65 @@ import javafx.scene.control.TextField;
  */
 public class BasicServerListController implements ViewController
 {
-	private static final String RETRIEVING = "Retrieving...";
+	private static final String									RETRIEVING				= "Retrieving...";
 
-	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
+	private final ObjectProperty<Predicate<? super SampServer>>	filterProperty			= new SimpleObjectProperty<>();
 
-	@FXML private TextField addressTextField;
+	@FXML
+	private TextField											addressTextField;
 
-	private final static StringProperty SERVER_ADDRESS_PROPERTY = new SimpleStringProperty();
+	private final static StringProperty							SERVER_ADDRESS_PROPERTY	= new SimpleStringProperty();
 
 	/**
-	 * This Table contains all available servers / favourite servers, depending on the active view.
+	 * This Table contains all available servers / favourite servers, depending on
+	 * the active view.
 	 */
-	@FXML protected SampServerTable serverTable;
+	@FXML
+	protected SampServerTable									serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
 	 */
-	@FXML private Label		playerCount;
+	private Label												playerCount;
 	/**
 	 * Displays the amount of all slots on all Servers in {@link #serverTable}.
 	 */
-	@FXML private Label		slotCount;
+	private Label												slotCount;
 	/**
 	 * Number of servers in {@link #serverTable}.
 	 */
-	@FXML private Label		serverCount;
-	@FXML private TextField	serverAddress;
-	@FXML private Label		serverLagcomp;
-	@FXML private Label		serverPing;
-	@FXML private Label		serverPassword;
-	@FXML private Label		mapLabel;
-	@FXML private Hyperlink	websiteLink;
+	private Label												serverCount;
 
-	@FXML private TableView<Player>					playerTable;
-	@FXML private TableColumn<SampServer, String>	columnPlayers;
+	@FXML
+	private TextField											serverAddress;
+	@FXML
+	private Label												serverLagcomp;
+	@FXML
+	private Label												serverPing;
+	@FXML
+	private Label												serverPassword;
+	@FXML
+	private Label												mapLabel;
+	@FXML
+	private Hyperlink											websiteLink;
 
-	@FXML private CheckBox			regexCheckBox;
-	@FXML private TextField			nameFilter;
-	@FXML private TextField			modeFilter;
-	@FXML private TextField			languageFilter;
-	@FXML private ComboBox<String>	versionFilter;
+	@FXML
+	private TableView<Player>									playerTable;
+	@FXML
+	private TableColumn<SampServer, String>						columnPlayers;
 
-	private static Thread serverInfoUpdateThread;
+	@FXML
+	private CheckBox											regexCheckBox;
+	@FXML
+	private TextField											nameFilter;
+	@FXML
+	private TextField											modeFilter;
+	@FXML
+	private TextField											languageFilter;
+	@FXML
+	private ComboBox<String>									versionFilter;
+
+	private static Thread										serverInfoUpdateThread;
 
 	/**
 	 * Empty Constructor.
@@ -99,12 +116,33 @@ public class BasicServerListController implements ViewController
 	@Override
 	public void initialize()
 	{
+		playerCount = new Label("Active players: 0");
+		serverCount = new Label("Servers: 0");
+		slotCount = new Label("Free Slots: 0");
+
+		Client.getInstance().addItemsToBottomBar(slotCount, playerCount, serverCount);
+
 		serverTable.predicateProperty().bind(filterProperty);
 		serverTable.sortedListComparatorProperty().bind(serverTable.comparatorProperty());
 		addressTextField.textProperty().bindBidirectional(SERVER_ADDRESS_PROPERTY);
 
 		setPlayerComparator();
 		addServerUpdateListener();
+	}
+
+	protected void setPlayerCount(final int activePlayers)
+	{
+		playerCount.setText("Active players: " + activePlayers);
+	}
+
+	protected void setServerCount(final int activeServers)
+	{
+		serverCount.setText("Severs: " + activeServers);
+	}
+
+	protected void setFreeSlotCount(final int freeSlots)
+	{
+		slotCount.setText("Free slots: " + freeSlots);
 	}
 
 	private void setPlayerComparator()
@@ -284,7 +322,8 @@ public class BasicServerListController implements ViewController
 
 	// TODO(MSC) Burn it before it lays eggs. Hans, get the Flammenwerfer.
 	/**
-	 * Updates the data that the {@link SampServer} holds and displays the correct values on the UI.
+	 * Updates the data that the {@link SampServer} holds and displays the correct
+	 * values on the UI.
 	 *
 	 * @param server
 	 *            the {@link SampServer} object to update locally
@@ -423,9 +462,9 @@ public class BasicServerListController implements ViewController
 			maxSlots += server.getMaxPlayers();
 		}
 
-		serverCount.setText(String.valueOf(serverTable.getItems().size()));
-		playerCount.setText(String.valueOf(playersPlaying));
-		slotCount.setText(String.valueOf(maxSlots - playersPlaying));
+		setServerCount(serverTable.getItems().size());
+		setPlayerCount(playersPlaying);
+		setFreeSlotCount(maxSlots - playersPlaying);
 	}
 
 	@Override

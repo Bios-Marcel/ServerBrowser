@@ -1,0 +1,48 @@
+/**
+ * View change area
+ */
+
+.tabScrollPane
+{
+	-fx-border-width: 0.0px;
+	-fx-padding: 0.0 -1.0 0.0 0.0;
+	-fx-min-width: 80.0px;
+}
+
+.MenuItem
+{
+    -fx-font-family: FontAwesome;
+    -fx-font-size: 4em;
+
+	-fx-pref-width: 80px;
+	-fx-pref-height: 80px;
+
+	-fx-min-width: 80px;
+	-fx-min-height: 80px;
+	
+	-fx-text-fill: white;
+}
+
+/**
+ * Bottom area
+ */
+
+.info-icon
+{
+    -fx-font-family: FontAwesome;
+    -fx-font-size: 1.7em;
+}
+
+/**
+ * anything and nothing
+ */
+
+.beta-sign
+{
+	-fx-background-color: -special-button-color;
+	-fx-padding: 0.0 10.0 0.0 10.0;
+	-fx-background-insets: 0.0 5.0 0.0 5.0;
+	-fx-font-weight: bold;
+	-fx-background-radius: 3.0;
+	
+}

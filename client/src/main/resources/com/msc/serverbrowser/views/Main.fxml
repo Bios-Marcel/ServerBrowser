@@ -1,50 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.SVGPath?>
 
 <HBox fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480" prefWidth="785" spacing="1.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" styleClass="tabScrollPane" HBox.hgrow="SOMETIMES">
 			<content>
-				<VBox maxHeight="1.7976931348623157E308" prefWidth="80.0" styleClass="tabPane">
+				<VBox fillWidth="true" maxHeight="1.7976931348623157E308" prefWidth="80.0" styleClass="tabPane">
 					<children>
-						<StackPane fx:id="menuItemFav" onMouseReleased="#onServersFavMenuItemClicked" styleClass="MenuItem">
-							<children>
-								<SVGPath content="M33,10.822l5.797,11.746l1.163,2.357l2.602,0.378l12.963,1.884l-9.38,9.143l-1.882,1.835l0.444,2.591  l2.214,12.91L35.327,47.57L33,46.348l-2.327,1.223l-11.594,6.096l2.214-12.91l0.444-2.591l-1.882-1.835l-9.38-9.143l12.962-1.884  l2.602-0.378l1.163-2.357L33,10.822 M33-0.475L22.719,20.355L-0.27,23.696L16.365,39.91l-3.927,22.896L33,51.996l20.562,10.811  L49.635,39.91L66.27,23.696L43.28,20.355L33-0.475L33-0.475z" scaleX="0.95" scaleY="0.95" styleClass="menuItemIcon" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="menuItemAll" onMouseReleased="#onServersAllMenuItemClicked" styleClass="MenuItem">
-							<children>
-								<SVGPath content="M30,10V2H2v8h2v2H2v8h2v2H2v8h28v-8h-2v-2h2v-8h-2v-2H30z M4,6h4v2H4V6z M4,16h4v2H4V16z M8,28H4v-2h4V28z M26,22H6v-2h20 V22z M26,12H6v-2h20V12z" scaleX="2" scaleY="2" styleClass="menuItemIcon" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="menuItemUser" onMouseReleased="#onUsernameMenuItemClicked" styleClass="MenuItem">
-							<children>
-								<SVGPath content="M256,256c52.805,0,96-43.201,96-96s-43.195-96-96-96s-96,43.201-96,96S203.195,256,256,256z M256,304 c-63.598,0-192,32.402-192,96v48h384v-48C448,336.402,319.598,304,256,304z" scaleX="0.15" scaleY="0.15" styleClass="menuItemIcon" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="menuItemVersion" onMouseReleased="#onVersionMenuItemClicked" styleClass="MenuItem">
-							<children>
-								<SVGPath content="M25.9725356,15 C25.7238035,12.7500155 23.8162709,11 21.5,11 C20.4427534,11 19.4706636,11.3645993 18.7026063,11.974922 C17.8340685,9.0963276 15.1618462,7 12,7 C8.13400656,7 5,10.1340066 5,14 C5,14.3757911 5.0296122,14.7446659 5.08663046,15.1044183 C3.31778819,15.5175755 2,17.1080834 2,19 C2,21.209139 3.79412025,23 5.99683887,23 L8.83333333,23 L10.5,25 L6.00017566,25 C2.68697795,25 0,22.3137085 0,19 C0,16.7828376 1.20753986,14.8416411 3.00211353,13.8029948 C3.10690617,8.92340284 7.0952729,5 12,5 C15.2334975,5 18.0687212,6.7052115 19.6554697,9.26543304 C20.2402063,9.09270499 20.8592769,9 21.5,9 C24.2845531,9 26.6601501,10.7509485 27.5858427,13.2118973 C30.129704,13.9074543 32,16.2353674 32,19 C32,22.3069658 29.3136299,25 25.9998243,25 L21.5,25 L23.1666667,23 L26.0031611,23 C28.2105543,23 30,21.2046438 30,19 C30,16.790861 28.2058797,15 26.0031611,15 Z M16,28 L11,22 L14,22 L14,14 L18,14 L18,22 L21,22 Z M16,28" scaleX="1.9" scaleY="1.9" styleClass="menuItemIcon" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="menuItemFiles" onMouseReleased="#onFileMenuItemClicked" styleClass="MenuItem">
-							<children>
-								<SVGPath content="m 86,611.375 a 20.002,20.002 0 0 0 -17.15625,9.6875 l -30,50 A 20.002,20.002 0 0 0 36,681.375 l 0,280 a 20.002,20.002 0 0 0 20,20 l 400,0 a 20.002,20.002 0 0 0 20,-20 l 0,-280 a 20.002,20.002 0 0 0 -20,-20 l -188.65625,0 -24.1875,-40.3125 A 20.002,20.002 0 0 0 226,611.375 l -140,0 z m 11.3125,40 117.375,0 24.15625,40.28125 A 20.002,20.002 0 0 0 256,701.375 l 180,0 0,240 -360,0 0,-254.46875 21.3125,-35.53125 z" scaleX="0.14" scaleY="0.14" styleClass="menuItemIcon" />
-							</children>
-						</StackPane>
-						<StackPane fx:id="menuItemSettings" onMouseReleased="#onSettingsMenuItemClicked" styleClass="MenuItem">
-							<children>
-								<SVGPath content="M776,108 C778.209139,108 780,106.209139 780,104 C780,101.790861 778.209139,100 776,100 C773.790861,100 772,101.790861 772,104 C772,106.209139 773.790861,108 776,108 Z M780.890749,100.523464 C781.405567,101.246403 781.764097,102.088347 781.917042,103 L784,103 L784,105 L781.917042,105 C781.706284,106.256253 781.105149,107.380135 780.940826,107.526613 L782.363961,108.949748 L780.949748,110.363961 L779.476536,108.89075 C778.753613,109.405561 777.911662,109.764096 777,109.917042 L777,112 L775,112 L775,109.917042 C774.088338,109.764096 773.246387,109.405561 772.523464,108.89075 L771.050253,110.363961 L769.636039,108.949748 L771.109251,107.476536 C770.594433,106.753597 770.235903,105.911653 770.082958,105 L768,105 L768,103 L770.082958,103 C770.293716,101.743747 770.894851,100.619865 771.059174,100.473387 L769.636039,99.0502526 L771.050253,97.636039 L772.523464,99.1092504 C773.246387,98.5944389 774.088338,98.2359041 775,98.0829584 L775,96 L777,96 L777,98.0829584 C777.911662,98.2359041 778.753613,98.5944389 779.476536,99.1092505 L780.949748,97.636039 L782.363961,99.0502526 L781.009978,100.404236 Z M780.890749,100.523464" scaleX="3.8" scaleY="3.8" styleClass="menuItemIcon" />
-							</children>
-						</StackPane>
+						<ToggleButton fx:id="menuItemFav" onAction="#onServersFavMenuItemClicked" styleClass="MenuItem" />
+						<ToggleButton fx:id="menuItemAll" onAction="#onServersAllMenuItemClicked" styleClass="MenuItem" />
+						<ToggleButton fx:id="menuItemUser" onAction="#onUsernameMenuItemClicked" styleClass="MenuItem" />
+						<ToggleButton fx:id="menuItemVersion" onAction="#onVersionMenuItemClicked" styleClass="MenuItem" />
+						<ToggleButton fx:id="menuItemFiles" onAction="#onFileMenuItemClicked" styleClass="MenuItem" />
+						<ToggleButton fx:id="menuItemSettings" onAction="#onSettingsMenuItemClicked" styleClass="MenuItem" />
 					</children>
 				</VBox>
 			</content>
@@ -52,12 +28,15 @@
 		<VBox HBox.hgrow="ALWAYS">
 			<children>
 				<ScrollPane fx:id="activeViewContainer" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="viewContent" VBox.vgrow="ALWAYS" />
-				<HBox maxHeight="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" spacing="5.0" styleClass="bottom-bar">
+				<HBox maxHeight="1.7976931348623157E308" spacing="5.0" styleClass="bottom-bar">
 					<children>
-						<HBox nodeOrientation="LEFT_TO_RIGHT" spacing="5.0">
+						<Hyperlink fx:id="hyperlinkGitHub" onAction="#openGitHub" styleClass="info-icon" />
+						<Hyperlink fx:id="hyperlinkHelp" onAction="#openHelp" styleClass="info-icon" />
+						<HBox fx:id="bottomBarCustom" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" HBox.hgrow="ALWAYS" />
+						<HBox minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" spacing="5.0">
 							<children>
-								<Label fx:id="globalProgressLabel" maxHeight="1.7976931348623157E308" />
-								<ProgressBar fx:id="globalProgressBar" maxHeight="1.7976931348623157E308" progress="0.35" />
+								<Label fx:id="globalProgressLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+								<ProgressBar fx:id="globalProgressBar" maxHeight="1.7976931348623157E308" progress="0" />
 							</children>
 						</HBox>
 					</children>
