@@ -14,6 +14,7 @@ import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
+import com.github.plushaze.traynotification.notification.TrayNotification;
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
@@ -24,6 +25,7 @@ import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.SAMPVersion;
+import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.basic.StringUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
@@ -50,8 +52,7 @@ public final class GTAController
 	}
 
 	/**
-	 * Writes the actual username (from registry) into the past usernames list and
-	 * sets the new name
+	 * Writes the actual username (from registry) into the past usernames list and sets the new name
 	 */
 	public static void applyUsername()
 	{
@@ -64,8 +65,7 @@ public final class GTAController
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try
 		{
-			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName",
-					usernameProperty.get());
+			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get());
 		}
 		catch (final RegistryException e)
 		{
@@ -101,8 +101,7 @@ public final class GTAController
 	/**
 	 * Returns the GTA path.
 	 *
-	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA
-	 *         couldn't be found
+	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA couldn't be found
 	 */
 	public static Optional<String> getGtaPath()
 	{
@@ -147,11 +146,9 @@ public final class GTAController
 	}
 
 	/**
-	 * Returns the {@link SAMPVersion} value that represents the currently installed
-	 * samp version.
+	 * Returns the {@link SAMPVersion} value that represents the currently installed samp version.
 	 *
-	 * @return {@link Optional} of installed versions version number or an
-	 *         {@link Optional#empty()}
+	 * @return {@link Optional} of installed versions version number or an {@link Optional#empty()}
 	 */
 	public static Optional<SAMPVersion> getInstalledVersion()
 	{
@@ -168,15 +165,13 @@ public final class GTAController
 		}
 
 		/*
-		 * Bad Practice, will cause an error if Kalcor decides to do a huge update
-		 * someday :P
+		 * Bad Practice, will cause an error if Kalcor decides to do a huge update someday :P
 		 */
 		return SAMPVersion.findVersionByDLLSize((int) file.length());
 	}
 
 	/**
-	 * Connects to a server, depending on if it is passworded, the user will be
-	 * asked to enter a
+	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a
 	 * password. If the server is not reachable the user can not connect.
 	 *
 	 * @param address
@@ -252,8 +247,7 @@ public final class GTAController
 	}
 
 	/**
-	 * Shows a TrayNotification that states, that connecting to the server wasn't
-	 * possible.
+	 * Shows a TrayNotification that states, that connecting to the server wasn't possible.
 	 */
 	public static void showCantConnectToServerError()
 	{
@@ -266,12 +260,10 @@ public final class GTAController
 	}
 
 	/**
-	 * Connects to the given server (IP and Port) using an empty (no) password.
-	 * Other than
+	 * Connects to the given server (IP and Port) using an empty (no) password. Other than
 	 * {@link GTAController#connectToServer(String)} and
 	 * {@link GTAController#connectToServer(String, String)}, this method uses the
-	 * <code>samp://</code> protocol to connect to make the samp launcher connect to
-	 * the server.
+	 * <code>samp://</code> protocol to connect to make the samp launcher connect to the server.
 	 *
 	 * @param ipAndPort
 	 *            the server to connect to
@@ -343,8 +335,7 @@ public final class GTAController
 	}
 
 	/**
-	 * Connects to the given server (IP and Port) using the given password. Uses the
-	 * commandline to
+	 * Connects to the given server (IP and Port) using the given password. Uses the commandline to
 	 * open samp and connect to the server.
 	 *
 	 * @param address
@@ -370,8 +361,7 @@ public final class GTAController
 				try
 				{
 					Logging.log(Level.INFO, "Connecting using executeable.");
-					final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ",
-							ipAndPort, password);
+					final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
 					builder.directory(new File(gtaPath.get()));
 					builder.start();
 				}
@@ -390,14 +380,18 @@ public final class GTAController
 		}
 		else
 		{
-			new TrayNotificationBuilder()
+			final TrayNotification trayNotification = new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
 					.title("GTA couldn't be located")
 					.message("Click here to locate your GTA path manually.")
 					.animation(Animations.POPUP)
-					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+					.build();
 
-			// TODO(MSC) Redirect user to settings and focus textfield
+			// TODO(MSC) Improve and try to focus component
+			trayNotification.setOnMouseClicked(__ -> Client.getInstance().loadView(View.SETTINGS));
+
+			trayNotification.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+
 		}
 	}
 }

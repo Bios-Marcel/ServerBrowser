@@ -28,49 +28,35 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
 /**
- * Controller for the Main view, e.g. the view that contains the menu bar, the
- * header and the loaded
+ * Controller for the Main view, e.g. the view that contains the menu bar, the header and the loaded
  * view (Settings, Servers ...).
  *
  * @author Marcel
  */
 public class MainController implements ViewController
 {
-	@FXML
-	private ToggleButton	menuItemFav;
-	@FXML
-	private ToggleButton	menuItemAll;
-	@FXML
-	private ToggleButton	menuItemUser;
-	@FXML
-	private ToggleButton	menuItemVersion;
-	@FXML
-	private ToggleButton	menuItemFiles;
-	@FXML
-	private ToggleButton	menuItemSettings;
+	@FXML private ToggleButton	menuItemFav;
+	@FXML private ToggleButton	menuItemAll;
+	@FXML private ToggleButton	menuItemUser;
+	@FXML private ToggleButton	menuItemVersion;
+	@FXML private ToggleButton	menuItemFiles;
+	@FXML private ToggleButton	menuItemSettings;
 
-	@FXML
-	private ScrollPane		activeViewContainer;
-	private View			activeView;
+	@FXML private ScrollPane	activeViewContainer;
+	private View				activeView;
 
-	@FXML
-	private Hyperlink		hyperlinkGitHub;
-	@FXML
-	private Hyperlink		hyperlinkHelp;
+	@FXML private Hyperlink	hyperlinkGitHub;
+	@FXML private Hyperlink	hyperlinkHelp;
 
-	@FXML
-	private HBox			bottomBarCustom;
+	@FXML private HBox bottomBarCustom;
 
-	@FXML
-	private Label			globalProgressLabel;
-	@FXML
-	private ProgressBar		globalProgressBar;
+	@FXML private Label			globalProgressLabel;
+	@FXML private ProgressBar	globalProgressBar;
 
 	@Override
 	public void initialize()
 	{
-		Font.loadFont(MainController.class.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(),
-				12);
+		Font.loadFont(MainController.class.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(), 12);
 
 		final ToggleGroup menuToggleGroup = new ToggleGroup();
 		menuItemFav.setToggleGroup(menuToggleGroup);
@@ -107,13 +93,13 @@ public class MainController implements ViewController
 	@FXML
 	private void openGitHub()
 	{
-		OSUtility.browse("https://github.com/Bios-Marcel/SererBrowser");
+		OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser");
 	}
 
 	@FXML
 	private void openHelp()
 	{
-		OSUtility.browse("https://github.com/Bios-Marcel/SererBrowser/wiki");
+		OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/wiki");
 	}
 
 	/**
@@ -182,7 +168,13 @@ public class MainController implements ViewController
 		loadView(View.SETTINGS);
 	}
 
-	private void loadView(final View view)
+	/**
+	 * Loads a specific view.
+	 *
+	 * @param view
+	 *            the view to be loaded
+	 */
+	public void loadView(final View view)
 	{
 		bottomBarCustom.getChildren().clear();
 

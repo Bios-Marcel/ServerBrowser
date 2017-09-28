@@ -9,12 +9,6 @@
  * Container that contains the elements of the specific view
  */
 
-.bottom-bar
-{
-	-fx-border-width: 1.0 0.0 0.0 0.0;
-	-fx-border-color: lightgray;
-}
-
 .viewContent
 {
 	-fx-padding: 5.0;	
@@ -84,27 +78,9 @@
  	-fx-background-color: transparent;
  }
 
-/**
- * MenuBar
- */
-
 .tabPane
 {
 	-fx-background-color: -menu-color;
-}
-
-/**
- * Special
- */
-
-.info-label-bottom
-{
-	-fx-padding: 0.0 0.0 0.0 20.0;
-}
-
-.beta-sign
-{
-	-fx-text-fill: white;
 }
 
 .MenuItem
@@ -117,9 +93,22 @@
 	-fx-background-color: #1F5FAE;
 }
 
-.copyableLabel, .copyableLabel:focused 
+
+/**
+ * Bottom bar
+ */
+
+.bottom-bar
 {
-	-fx-padding: 0.0;
-    -fx-background-color: transparent ;
-    -fx-background-insets: 0.0px ;
+	-fx-border-width: 1.0 0.0 0.0 0.0;
+	-fx-border-color: lightgray;
+}
+
+/**
+ * Special
+ */
+
+.beta-sign
+{
+	-fx-text-fill: white;
 }

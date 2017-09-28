@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480" prefWidth="785" spacing="1.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+	prefHeight="480" prefWidth="785" spacing="1.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" styleClass="tabScrollPane" HBox.hgrow="SOMETIMES">
 			<content>
@@ -27,15 +28,21 @@
 		</ScrollPane>
 		<VBox HBox.hgrow="ALWAYS">
 			<children>
-				<ScrollPane fx:id="activeViewContainer" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="viewContent" VBox.vgrow="ALWAYS" />
+				<ScrollPane fx:id="activeViewContainer" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+					styleClass="viewContent" VBox.vgrow="ALWAYS" />
 				<HBox maxHeight="1.7976931348623157E308" spacing="5.0" styleClass="bottom-bar">
 					<children>
 						<Hyperlink fx:id="hyperlinkGitHub" onAction="#openGitHub" styleClass="info-icon" />
 						<Hyperlink fx:id="hyperlinkHelp" onAction="#openHelp" styleClass="info-icon" />
-						<HBox fx:id="bottomBarCustom" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" HBox.hgrow="ALWAYS" />
+						<HBox fx:id="bottomBarCustom" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" HBox.hgrow="ALWAYS">
+							<padding>
+								<Insets left="10" right="10"></Insets>
+							</padding>
+						</HBox>
 						<HBox minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" spacing="5.0">
 							<children>
-								<Label fx:id="globalProgressLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+								<Label fx:id="globalProgressLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308"
+									HBox.hgrow="ALWAYS" />
 								<ProgressBar fx:id="globalProgressBar" maxHeight="1.7976931348623157E308" progress="0" />
 							</children>
 						</HBox>

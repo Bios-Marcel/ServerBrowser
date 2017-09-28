@@ -375,24 +375,3 @@
 {
     -fx-border-width: 0.0;
 }
-
-/**
- * Special
- */
-
-.info-label-bottom
-{
-	-fx-padding: 0.0 0.0 0.0 20.0;
-}
-
-.copyableLabel
-{
-	-fx-border-width: 0.0;
-}
-
-.copyableLabel, .copyableLabel:focused 
-{
-	-fx-padding: 0.0;
-    -fx-background-color: transparent ;
-    -fx-background-insets: 0.0px ;
-}

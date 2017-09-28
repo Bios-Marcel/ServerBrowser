@@ -39,71 +39,54 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.TextAlignment;
 
 /**
  * @since 02.07.2017
  */
 public class BasicServerListController implements ViewController
 {
-	private static final String									RETRIEVING				= "Retrieving...";
+	private static final String RETRIEVING = "Retrieving...";
 
-	private final ObjectProperty<Predicate<? super SampServer>>	filterProperty			= new SimpleObjectProperty<>();
+	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
 
-	@FXML
-	private TextField											addressTextField;
+	@FXML private TextField addressTextField;
 
-	private final static StringProperty							SERVER_ADDRESS_PROPERTY	= new SimpleStringProperty();
+	private final static StringProperty SERVER_ADDRESS_PROPERTY = new SimpleStringProperty();
 
 	/**
-	 * This Table contains all available servers / favourite servers, depending on
-	 * the active view.
+	 * This Table contains all available servers / favourite servers, depending on the active view.
 	 */
-	@FXML
-	protected SampServerTable									serverTable;
+	@FXML protected SampServerTable serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
 	 */
-	private Label												playerCount;
-	/**
-	 * Displays the amount of all slots on all Servers in {@link #serverTable}.
-	 */
-	private Label												slotCount;
+	private Label	playerCount;
 	/**
 	 * Number of servers in {@link #serverTable}.
 	 */
-	private Label												serverCount;
+	private Label	serverCount;
 
-	@FXML
-	private TextField											serverAddress;
-	@FXML
-	private Label												serverLagcomp;
-	@FXML
-	private Label												serverPing;
-	@FXML
-	private Label												serverPassword;
-	@FXML
-	private Label												mapLabel;
-	@FXML
-	private Hyperlink											websiteLink;
+	@FXML private TextField	serverAddress;
+	@FXML private Label		serverLagcomp;
+	@FXML private Label		serverPing;
+	@FXML private Label		serverPassword;
+	@FXML private Label		mapLabel;
+	@FXML private Hyperlink	websiteLink;
 
-	@FXML
-	private TableView<Player>									playerTable;
-	@FXML
-	private TableColumn<SampServer, String>						columnPlayers;
+	@FXML private TableView<Player>					playerTable;
+	@FXML private TableColumn<SampServer, String>	columnPlayers;
 
-	@FXML
-	private CheckBox											regexCheckBox;
-	@FXML
-	private TextField											nameFilter;
-	@FXML
-	private TextField											modeFilter;
-	@FXML
-	private TextField											languageFilter;
-	@FXML
-	private ComboBox<String>									versionFilter;
+	@FXML private CheckBox			regexCheckBox;
+	@FXML private TextField			nameFilter;
+	@FXML private TextField			modeFilter;
+	@FXML private TextField			languageFilter;
+	@FXML private ComboBox<String>	versionFilter;
 
-	private static Thread										serverInfoUpdateThread;
+	private static Thread serverInfoUpdateThread;
 
 	/**
 	 * Empty Constructor.
@@ -118,9 +101,11 @@ public class BasicServerListController implements ViewController
 	{
 		playerCount = new Label("Active players: 0");
 		serverCount = new Label("Servers: 0");
-		slotCount = new Label("Free Slots: 0");
 
-		Client.getInstance().addItemsToBottomBar(slotCount, playerCount, serverCount);
+		Client.getInstance().addItemsToBottomBar(playerCount, serverCount);
+
+		setupInfoLabel(playerCount);
+		setupInfoLabel(serverCount);
 
 		serverTable.predicateProperty().bind(filterProperty);
 		serverTable.sortedListComparatorProperty().bind(serverTable.comparatorProperty());
@@ -130,19 +115,35 @@ public class BasicServerListController implements ViewController
 		addServerUpdateListener();
 	}
 
+	private void setupInfoLabel(final Label label)
+	{
+		label.setMaxHeight(Double.MAX_VALUE);
+		label.setMaxWidth(Double.MAX_VALUE);
+		label.setTextAlignment(TextAlignment.CENTER);
+
+		HBox.setHgrow(label, Priority.ALWAYS);
+	}
+
+	/**
+	 * Sets the text for the label that states how many active players there are.
+	 *
+	 * @param activePlayers
+	 *            the number of active players
+	 */
 	protected void setPlayerCount(final int activePlayers)
 	{
 		playerCount.setText("Active players: " + activePlayers);
 	}
 
+	/**
+	 * Sets the text for the label that states how many active servers there are.
+	 *
+	 * @param activeServers
+	 *            the number of active servers
+	 */
 	protected void setServerCount(final int activeServers)
 	{
-		serverCount.setText("Severs: " + activeServers);
-	}
-
-	protected void setFreeSlotCount(final int freeSlots)
-	{
-		slotCount.setText("Free slots: " + freeSlots);
+		serverCount.setText("Servers: " + activeServers);
 	}
 
 	private void setPlayerComparator()
@@ -320,10 +321,8 @@ public class BasicServerListController implements ViewController
 		}
 	}
 
-	// TODO(MSC) Burn it before it lays eggs. Hans, get the Flammenwerfer.
 	/**
-	 * Updates the data that the {@link SampServer} holds and displays the correct
-	 * values on the UI.
+	 * Updates the data that the {@link SampServer} holds and displays the correct values on the UI.
 	 *
 	 * @param server
 	 *            the {@link SampServer} object to update locally
@@ -454,17 +453,14 @@ public class BasicServerListController implements ViewController
 	protected void updateGlobalInfo()
 	{
 		int playersPlaying = 0;
-		int maxSlots = 0;
 
 		for (final SampServer server : serverTable.getItems())
 		{
 			playersPlaying += server.getPlayers();
-			maxSlots += server.getMaxPlayers();
 		}
 
 		setServerCount(serverTable.getItems().size());
 		setPlayerCount(playersPlaying);
-		setFreeSlotCount(maxSlots - playersPlaying);
 	}
 
 	@Override

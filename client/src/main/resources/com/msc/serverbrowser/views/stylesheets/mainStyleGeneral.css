@@ -11,6 +11,7 @@
 
 .MenuItem
 {
+	-fx-font-smoothing-type: gray !important;
     -fx-font-family: FontAwesome;
     -fx-font-size: 4em;
 
@@ -30,12 +31,26 @@
 .info-icon
 {
     -fx-font-family: FontAwesome;
-    -fx-font-size: 1.7em;
+    -fx-font-size: 1.8em;
+	-fx-text-fill: -menu-color;
+}
+
+
+.info-icon:visited
+{
+    -fx-text-fill: -menu-color;
 }
 
 /**
- * anything and nothing
+ * Special
  */
+
+.copyableLabel, .copyableLabel:focused 
+{
+	-fx-padding: 0.0;
+    -fx-background-color: transparent ;
+    -fx-background-insets: 0.0px ;
+}
 
 .beta-sign
 {

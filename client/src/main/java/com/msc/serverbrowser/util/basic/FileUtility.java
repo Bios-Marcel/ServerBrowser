@@ -86,6 +86,8 @@ public final class FileUtility
 	 *            the path where to save the downloaded file
 	 * @param progressProperty
 	 *            a property that will contain the current download process from 0.0 to 1.0
+	 * @param fileLength
+	 *            length of the file
 	 * @return the downloaded file
 	 * @throws IOException
 	 *             if an errors occurs while writing the file or opening the stream
