@@ -17,7 +17,6 @@ import com.msc.serverbrowser.data.entites.Player;
 import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.gui.components.SampServerTable;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
-import com.msc.serverbrowser.util.GeneralStrings;
 import com.msc.serverbrowser.util.ServerUtility;
 import com.msc.serverbrowser.util.basic.StringUtility;
 import com.msc.serverbrowser.util.samp.GTAController;
@@ -52,9 +51,9 @@ public class BasicServerListController implements ViewController
 {
 	private static final String RETRIEVING = "Retrieving...";
 
-	protected static final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
-	protected static final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
-	protected static final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
+	protected final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
+	protected final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
+	protected final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
 
 	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
 
@@ -408,7 +407,7 @@ public class BasicServerListController implements ViewController
 		{
 			Platform.runLater(() ->
 			{
-				serverPassword.setText(server.isPassworded() ? GeneralStrings.YES : GeneralStrings.NO);
+				serverPassword.setText(server.isPassworded() ? Client.lang.getString("yes") : Client.lang.getString("no"));
 				serverPing.setText(String.valueOf(ping));
 				mapLabel.setText(server.getMap());
 				websiteLink.setText(server.getWebsite());

@@ -53,6 +53,7 @@ serverOffline=Serwer jest wyłączony
 serverEmpty=Serwer jest pusty
 activePlayers=Aktywni gracze: {0}
 servers=Serwery: {0}
+fetchingServers=Fetching servers, please wait a moment.
  
 # Past Usernames
 enterUsername=Wpisz nazwę użytkownika

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 
+import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.gui.components.SampServerTableMode;
 import com.msc.serverbrowser.logging.Logging;
@@ -26,7 +27,7 @@ public class ServerListAllController extends BasicServerListController
 	{
 		super.initialize();
 
-		serverTable.setPlaceholder(new Label("Fetching servers, please wait a moment."));
+		serverTable.setPlaceholder(new Label(Client.lang.getString("fetchingServers")));
 		serverTable.setServerTableMode(SampServerTableMode.ALL);
 
 		serverLookup = new Thread(() ->

@@ -51,6 +51,7 @@ serverOffline=Servidor fuera de línea
 serverEmpty=Servidor vacío
 activePlayers=Jugadores activos: {0}
 servers=Servidores: {0}
+fetchingServers=Buscando servidores, espere un momento
 
 # Past Usernames
 enterUsername=Ingresar nombre de usuario

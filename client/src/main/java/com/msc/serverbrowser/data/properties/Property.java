@@ -22,7 +22,8 @@ public enum Property
 	DEVELOPMENT(13, false, Boolean.class),
 	ALLOW_CACHING_DOWNLOADS(15, true, Boolean.class),
 	AUTOMTAIC_UPDATES(16, true, Boolean.class),
-	LANGUAGE(17, "en", String.class);
+	LANGUAGE(17, "en", String.class),
+	CONNECT_ON_DOUBLECLICK(18, true, Boolean.class);
 
 	private int id;
 

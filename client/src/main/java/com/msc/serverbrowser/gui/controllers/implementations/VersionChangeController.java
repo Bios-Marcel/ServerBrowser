@@ -38,10 +38,10 @@ import javafx.scene.layout.VBox;
  */
 public class VersionChangeController implements ViewController
 {
-	private static final String	INSTALL_TEXT	= Client.lang.getString("install");
-	private static final String	INSTALLED_TEXT	= Client.lang.getString("installed");
-	private static final String	INSTALLING_TEXT	= Client.lang.getString("installing");
-	private final String		SAMP_VERSION	= Client.lang.getString("sampVersion");
+	private final String	INSTALL_TEXT	= Client.lang.getString("install");
+	private final String	INSTALLED_TEXT	= Client.lang.getString("installed");
+	private final String	INSTALLING_TEXT	= Client.lang.getString("installing");
+	private final String	SAMP_VERSION	= Client.lang.getString("sampVersion");
 
 	private static Optional<SAMPVersion>	currentlyInstalling	= Optional.empty();
 	private final List<Button>				buttons				= new ArrayList<>();

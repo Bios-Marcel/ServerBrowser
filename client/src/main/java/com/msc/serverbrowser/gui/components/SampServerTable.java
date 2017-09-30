@@ -14,6 +14,8 @@ import java.util.function.Predicate;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.FavouritesController;
 import com.msc.serverbrowser.data.entites.SampServer;
+import com.msc.serverbrowser.data.properties.ClientPropertiesController;
+import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.util.samp.GTAController;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
@@ -154,6 +156,25 @@ public class SampServerTable extends TableView<SampServer>
 
 			row.setOnMouseClicked(clicked ->
 			{
+				if (clicked.getButton() == MouseButton.PRIMARY)
+				{
+					final Long lastLeftClickTime = (Long) row.getUserData();
+					final boolean wasDoubleClick = Objects.nonNull(lastLeftClickTime) && System.currentTimeMillis() - lastLeftClickTime < 300;
+					final boolean onlyOneSelectedItem = getSelectionModel().getSelectedItems().size() == 1;
+
+					if (wasDoubleClick && onlyOneSelectedItem)
+					{
+						if (ClientPropertiesController.getPropertyAsBoolean(Property.CONNECT_ON_DOUBLECLICK))
+						{
+							getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
+						}
+					}
+					else
+					{
+						row.setUserData(Long.valueOf(System.currentTimeMillis()));
+					}
+				}
+
 				contextMenu.hide();
 				final List<SampServer> serverList = getSelectionModel().getSelectedItems();
 				final SampServer rowItem = row.getItem();

@@ -52,6 +52,7 @@ serverOffline=сервер не в сети.
 serverEmpty=сервер пустой
 activePlayers=Активные игроки: {0}
 servers=Серверы: {0}
+fetchingServers=Fetching servers, please wait a moment.
 
 # Past Usernames
 enterUsername=Введите имя пользователя
