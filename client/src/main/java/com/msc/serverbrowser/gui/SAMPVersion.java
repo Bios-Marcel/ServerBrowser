@@ -3,9 +3,8 @@ package com.msc.serverbrowser.gui;
 import java.util.Optional;
 
 /**
- * Enum that contains all available SA-MP versions for version changing.
- *
- * TODO(MSC) Take hashes of all 
+ * Enum that contains all available SA-MP versions for version changing. TODO(MSC) Take hashes of
+ * all
  *
  * @author Marcel
  * @since 18.09.2017
@@ -60,8 +59,6 @@ public enum SAMPVersion
 				return Optional.of(version);
 			}
 		}
-
-		System.out.println(sizeOfDLLToFind);
 
 		return Optional.empty();
 	}
