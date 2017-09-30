@@ -75,8 +75,6 @@ public class SettingsController implements ViewController
 	// Downloads
 	@FXML private CheckBox allowCachingDownloadsCheckBox;
 
-	private final static String VERSION_INFO = Client.lang.getString("versionInfo");
-
 	@Override
 	public void initialize()
 	{
@@ -182,7 +180,7 @@ public class SettingsController implements ViewController
 		builder.append("SA-MP Server Browser")
 				.append(System.lineSeparator())
 				.append(System.lineSeparator())
-				.append(MessageFormat.format(VERSION_INFO, UpdateUtility.VERSION));
+				.append(MessageFormat.format(Client.lang.getString("versionInfo"), UpdateUtility.VERSION));
 
 		informationLabel.setText(builder.toString());
 	}

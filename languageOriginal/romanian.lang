@@ -1,0 +1,121 @@
+# All keys in this file are seperated by view.
+# 
+# If you see things like {0} those are placeholders, you may only move their
+# position when translating, but not remove them.
+
+# Languages
+en=Engleză
+de=Germană
+ge=Georgiană
+gr=Greacă
+nl=Olandeză
+ru=Rusă
+pl=Poloneză
+ro=Română
+
+# General
+reload=Reîncarcă
+clear=Șterge
+apply=Aplică
+username=Utilizator
+yes=Da
+no=Nu
+
+# Mainview
+openGithubTooltip=Deschide pagina proiectului de pe GitHub.
+openGithubWikiTooltip=Deschide pagina de wiki a proiectului de pe GitHub.
+
+# Server List
+promptEnterValidAddress=Introdu te rog o adresă validă de server (Exemplu: 13.69.13.69:7777)
+addToFavourites=Adaugă la favorite
+connect=Conectează-te
+hostnameTableHeader=Nume
+playersTableHeader=Jucători
+gamemodeTableHeader=Mod de joc
+languageTableHeader=Limbă
+versionTableHeader=Versiune
+playerTableHeader=Jucător
+scoreTableHeader=Scor
+filterSettings=Setări de Filtrare
+useRegex=Folosește Regex
+serverInfo=Informații Server
+address=Adresă:
+lagcomp=lagcomp:
+ping=Ping:
+password=Parolă:
+map=Hartă:
+website=Site Web:
+tooMuchPlayers=Nu se pot prelua jucătorii, sunt mai mulți de 100.
+serverOffline=Serverul este închis.
+serverEmpty=Serverul este gol.
+activePlayers=Jucători activi: {0}
+servers=Servere: {0}
+
+# Past Usernames
+enterUsername=Introdu numele de utilizator
+pastUsernames=Nume vechi de utilizator
+
+# Versions
+sampVersion=SA-MP Versiunea {0}
+install=Instalează
+installing=Se instalează ...
+installed=S-a instalat
+
+# Files / Chatlogs
+chatlogs=Log chat
+
+# Settings View
+informationSettingsTitle=Informații
+versionInfo=Versiune: {0}
+generalSettingsTitle=General
+gtaNotFoundPrompt=Va fi detectat automat dacă este lăsat gol
+customSampPath=Locație SA-MP
+rememberLastView=Salvează ultima căsuță din browser
+language=Limba
+sampSettingsTitle=SA-MP (E nevoie de restartul SA-MP pentru a avea efect)
+fpsLimit=Limită FPS
+pageSize=Mărime pagină
+audioProxyUse=Folosește Proxy-ul sistemului pentru fluxurile audio
+chatTimestamps=Marcajele de Timp ale Chatului
+multicoreUsage=Utilizarea mai multor nuclee
+displayAudioStreamMsg=Afișeaza mesajele fluxurilor audio
+enableHeadMovement=Activează mișcarea capului
+inputMethodText=Metoda de editare a textului la introducere și schimbarea limbii
+directmode=Directmode (Fixează probleme de afișare ale chatului)
+showAfkSymbols=Afișează simbolul pentru statusul AFK
+appearanceSettingTitle=Aspect
+useDarkTheme=Folosește tema neagră
+permissionSettingTitle=Permisiuni
+allowShutdownSamp=Permite acestei aplicații să închidă clientul San Andreas Multiplayer
+allowShutdownGta=Permite acestei aplicații să închidă Grand Theft Auto: San Andreas
+updatesSettingTitle=Actualizări
+showChangelogAfterUpdate=Afișează jurnalul de schimbări după ce s-a actualizat aplicația
+automaticUpdates=Actualizări automate
+checkForUpdates=Verifică actualizări
+downloadSettingTitle=Descărcări
+allowCachingSampVersions=Permite stocarea versiunilor SA-MP descărcate
+clearCache=Șterge versiunile stocate
+restoreDefaults=Restabiliți la implicit
+
+# Dialogs / Alerts
+deleteFavourites=Șterge favoritele
+sureYouWantToDeleteFavourites=Ești sigur că vrei sa ștergi serverele selectate din lista de favorite?
+sureYouWantToRestoreSettings=Ești sigur că vrei să-ți resetezi toate setările?
+restoreSettingsToDefault=Restabiliți setările la implicit
+
+# Tray Notifications
+clickToRestart=Apasă aici pentru a reseta clientul
+updating=Se actualizează
+applyingUpdate=Se aplică actualizarea
+updateInstalled=S-a intalat actualizarea
+couldntApplyUpdate=Nu s-a putut aplica actualizarea, click aici pentru mai multe informații.
+couldntRetrieveUpdate=Nu s-a putut prelua ultima actualizare, apasă aici pentru a verifica manual.
+clickForChangelog=Apasă aici pentru a vedea ultimul jurnal de actualizări.
+updates=Clientul tău a fost actualizat.
+addressNotValid=Adresa nu pare să fie validă.
+cantConnect=Nu se poate conecta la server.
+cantAddToFavouritesAddressInvalid=Nu se poate adăuga la favorite, adresa este invalidă.
+checkLogsForMoreInformation=Pentru mai multe informații verifică jurnalele.
+couldntClearChatLog=Nu s-a putut șterge logul chatului.
+installingSampFromCache=Se instalează versiunea SA-MP din memorie
+errorInstallingSampFromCache=S-a produs o eroare în timp ce se încerca instalarea versiunii SA-MP din memorie, verifică jurnalele pentru mai multe informații.
