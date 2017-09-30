@@ -24,7 +24,7 @@ public final class UpdateUtility
 	/**
 	 * The current version of this application
 	 */
-	public static final String VERSION = "1.4.1";
+	public static final String VERSION = "1.4.2";
 
 	private UpdateUtility()
 	{

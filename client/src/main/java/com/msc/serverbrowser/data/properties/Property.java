@@ -1,7 +1,7 @@
 package com.msc.serverbrowser.data.properties;
 
 /**
- * Holds all existent properties.
+ * Holds all existent properties. Do not adjust any of the ids.
  *
  * @author Marcel
  */
