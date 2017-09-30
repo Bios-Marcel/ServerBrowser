@@ -92,7 +92,6 @@ public final class Client extends Application
 	public void start(final Stage primaryStage)
 	{
 		instance = this;
-		initClient();
 		loadUI(primaryStage);
 
 		// Only update if not in development mode
@@ -221,14 +220,10 @@ public final class Client extends Application
 	 * Creates files and folders that are necessary for the application to run properly and migrates
 	 * old xml data.
 	 */
-	private static void initClient()
+	private static void createFolderStructure()
 	{
 		final File sampexFolder = new File(PathConstants.SAMPEX_PATH);
-
-		if (!sampexFolder.exists())
-		{
-			sampexFolder.mkdir();
-		}
+		sampexFolder.mkdirs();
 
 		try
 		{
@@ -450,6 +445,8 @@ public final class Client extends Application
 		// TODO(MSC) Consider letting the user allow to turn these on
 		// System.setProperty("prism.lcdtext", "false");
 		// System.setProperty("prism.text", "t2k");
+
+		createFolderStructure();
 
 		final Locale locale = new Locale(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE));
 		lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
