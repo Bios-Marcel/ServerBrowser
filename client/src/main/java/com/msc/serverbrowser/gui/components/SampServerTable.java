@@ -130,9 +130,9 @@ public class SampServerTable extends TableView<SampServer>
 
 	private void deleteSelectedFavourites()
 	{
-		final Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure, that you want to delete the selected servers from your favourites.", ButtonType.YES, ButtonType.NO);
+		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("sureYouWantToDeleteFavourites"), ButtonType.YES, ButtonType.NO);
 		Client.insertAlertOwner(alert);
-		alert.setTitle("Delete favourites");
+		alert.setTitle(Client.lang.getString("deleteFavourites"));
 		final Optional<ButtonType> result = alert.showAndWait();
 
 		result.ifPresent(buttonType ->

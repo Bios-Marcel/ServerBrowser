@@ -253,8 +253,8 @@ public final class GTAController
 	{
 		new TrayNotificationBuilder()
 				.type(NotificationTypeImplementations.ERROR)
-				.title("Can't connect to Server")
-				.message("The address that you have entered, doesn't seem to be valid.")
+				.title(Client.lang.getString("cantConnect"))
+				.message(Client.lang.getString("addressNotValid"))
 				.animation(Animations.POPUP)
 				.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
@@ -380,18 +380,25 @@ public final class GTAController
 		}
 		else
 		{
-			final TrayNotification trayNotification = new TrayNotificationBuilder()
-					.type(NotificationTypeImplementations.ERROR)
-					.title("GTA couldn't be located")
-					.message("Click here to locate your GTA path manually.")
-					.animation(Animations.POPUP)
-					.build();
-
-			// TODO(MSC) Improve and try to focus component
-			trayNotification.setOnMouseClicked(__ -> Client.getInstance().loadView(View.SETTINGS));
-
-			trayNotification.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
-
+			displayCantLocateGTANotification();
 		}
+	}
+
+	/**
+	 * Displays a notifcation that states, that GTA couldn't be located and links the Settings page.
+	 */
+	public static void displayCantLocateGTANotification()
+	{
+		final TrayNotification trayNotification = new TrayNotificationBuilder()
+				.type(NotificationTypeImplementations.ERROR)
+				.title("GTA couldn't be located")
+				.message("Click here to locate your GTA path manually.")
+				.animation(Animations.POPUP)
+				.build();
+
+		// TODO(MSC) Improve and try to focus component
+		trayNotification.setOnMouseClicked(__ -> Client.getInstance().loadView(View.SETTINGS));
+
+		trayNotification.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 }

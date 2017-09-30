@@ -1,6 +1,7 @@
 package com.msc.serverbrowser.gui.controllers.implementations.serverlist;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import com.msc.serverbrowser.data.entites.Player;
 import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.gui.components.SampServerTable;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
+import com.msc.serverbrowser.util.GeneralStrings;
 import com.msc.serverbrowser.util.ServerUtility;
 import com.msc.serverbrowser.util.basic.StringUtility;
 import com.msc.serverbrowser.util.samp.GTAController;
@@ -49,6 +51,10 @@ import javafx.scene.text.TextAlignment;
 public class BasicServerListController implements ViewController
 {
 	private static final String RETRIEVING = "Retrieving...";
+
+	protected static final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
+	protected static final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
+	protected static final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
 
 	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
 
@@ -99,8 +105,11 @@ public class BasicServerListController implements ViewController
 	@Override
 	public void initialize()
 	{
-		playerCount = new Label("Active players: 0");
-		serverCount = new Label("Servers: 0");
+		playerCount = new Label();
+		serverCount = new Label();
+
+		setPlayerCount(0);
+		setServerCount(0);
 
 		Client.getInstance().addItemsToBottomBar(playerCount, serverCount);
 
@@ -132,7 +141,7 @@ public class BasicServerListController implements ViewController
 	 */
 	protected void setPlayerCount(final int activePlayers)
 	{
-		playerCount.setText("Active players: " + activePlayers);
+		playerCount.setText(MessageFormat.format(Client.lang.getString("activePlayers"), activePlayers));
 	}
 
 	/**
@@ -143,7 +152,7 @@ public class BasicServerListController implements ViewController
 	 */
 	protected void setServerCount(final int activeServers)
 	{
-		serverCount.setText("Servers: " + activeServers);
+		serverCount.setText(MessageFormat.format(Client.lang.getString("servers"), activeServers));
 	}
 
 	private void setPlayerComparator()
@@ -221,8 +230,8 @@ public class BasicServerListController implements ViewController
 			{
 				new TrayNotificationBuilder()
 						.type(NotificationTypeImplementations.ERROR)
-						.title("Add to favourites")
-						.message("Can't add to favourites, server address is invalid.")
+						.title(Client.lang.getString("addToFavourites"))
+						.message("cantAddToFavouritesAddressInvalid")
 						.animation(Animations.POPUP)
 						.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 			}
@@ -399,7 +408,7 @@ public class BasicServerListController implements ViewController
 		{
 			Platform.runLater(() ->
 			{
-				serverPassword.setText(server.isPassworded() ? "Yes" : "No");
+				serverPassword.setText(server.isPassworded() ? GeneralStrings.YES : GeneralStrings.NO);
 				serverPing.setText(String.valueOf(ping));
 				mapLabel.setText(server.getMap());
 				websiteLink.setText(server.getWebsite());
@@ -417,11 +426,10 @@ public class BasicServerListController implements ViewController
 				final boolean noPlayers = playerList.isEmpty();
 				if (noPlayers)
 				{
-					playerTable.setPlaceholder(new Label("Server is empty"));
+					playerTable.setPlaceholder(new Label(SERVER_EMPTY));
 
 					if (server.getPlayers() >= 100)
 					{
-						final String TOO_MUCH_PLAYERS = "Can't retrieve players, if there are more than 100.";
 						final Label label = new Label(TOO_MUCH_PLAYERS);
 						label.setWrapText(true);
 						label.setAlignment(Pos.CENTER);
@@ -437,14 +445,14 @@ public class BasicServerListController implements ViewController
 
 	private void displayOfflineInformation()
 	{
-		serverPing.setText("Server Offline");
+		serverPing.setText(SERVER_OFFLINE);
 		serverPassword.setText("");
 		mapLabel.setText("");
 		serverLagcomp.setText("");
 		websiteLink.setText("");
 		// Not using setVisible because i dont want the items to resize or anything
 		websiteLink.setOnAction(null);
-		playerTable.setPlaceholder(new Label("Server is offline."));
+		playerTable.setPlaceholder(new Label(SERVER_OFFLINE));
 	}
 
 	/**

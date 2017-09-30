@@ -212,6 +212,7 @@ public class MainController implements ViewController
 		{
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
+			loader.setResources(Client.lang);
 
 			// Creating a new instance of the specified controller, controllers never have
 			// constructor arguments, therefore this is supposedly fine.

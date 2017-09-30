@@ -2,6 +2,7 @@ package com.msc.serverbrowser;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,8 +11,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import org.kohsuke.github.GHRelease;
@@ -69,6 +72,8 @@ public final class Client extends Application
 	private static Client	instance;
 	private Stage			stage;
 	private MainController	mainController;
+
+	public static ResourceBundle lang;
 
 	/**
 	 * This property that indicates if an update check / download progress is ongoing.
@@ -198,8 +203,8 @@ public final class Client extends Application
 			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, false);
 			final TrayNotification trayNotification = new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.INFORMATION)
-					.title("Your client has been updated")
-					.message("Click here to see the latest changelog.")
+					.title(Client.lang.getString("updated"))
+					.message(Client.lang.getString("clickForChangelog"))
 					.animation(Animations.SLIDE)
 					.build();
 
@@ -210,19 +215,6 @@ public final class Client extends Application
 			});
 			trayNotification.showAndWait();
 		}
-	}
-
-	/**
-	 * Displays a dialog that tells the user that the server connection couldn't be established.
-	 */
-	public static void displayNoConnectionDialog()
-	{
-		new TrayNotificationBuilder()
-				.type(NotificationTypeImplementations.ERROR)
-				.title("Server connection could not be established")
-				.message("The server connection doesn't seeem to be established, try again later, for more information check the log files.")
-				.animation(Animations.SLIDE)
-				.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 
 	/**
@@ -306,8 +298,8 @@ public final class Client extends Application
 	private static void displayUpdateNotification()
 	{
 		final TrayNotification trayNotification = new TrayNotificationBuilder()
-				.title("Update Client")
-				.message("Update installed, click to restart or apply update on next startup.")
+				.title(Client.lang.getString("updateInstalled"))
+				.message(Client.lang.getString("clickToRestart"))
 				.animation(Animations.SLIDE)
 				.build();
 
@@ -322,10 +314,10 @@ public final class Client extends Application
 	private static void displayCantRetrieveUpdate()
 	{
 		final TrayNotification trayNotification = new TrayNotificationBuilder()
-				.message("Couldn't retrieve the latest update, click to check manually.")
+				.message(Client.lang.getString("couldntRetrieveUpdate"))
 				.animation(Animations.POPUP)
 				.type(NotificationTypeImplementations.ERROR)
-				.title("Updating")
+				.title(Client.lang.getString("updating"))
 				.build();
 
 		trayNotification.setOnMouseClicked(clicked ->
@@ -384,8 +376,8 @@ public final class Client extends Application
 		{
 			Logging.log(Level.SEVERE, "Failed to update.", exception);
 			final TrayNotification notification = new TrayNotificationBuilder()
-					.title("Applying Update")
-					.message("Couldn't apply update, click for more information")
+					.title(Client.lang.getString("applyingUpdate"))
+					.message(Client.lang.getString("couldntApplyUpdate"))
 					.type(NotificationTypeImplementations.ERROR)
 					.build();
 
@@ -448,9 +440,20 @@ public final class Client extends Application
 	 *
 	 * @param args
 	 *            evaluated by {@link #readApplicationArguments}
+	 * @throws IOException
+	 *             if there was an error while loading language files
+	 * @throws FileNotFoundException
+	 *             if language files don't exist
 	 */
-	public static void main(final String[] args)
+	public static void main(final String[] args) throws FileNotFoundException, IOException
 	{
+		// TODO(MSC) Consider letting the user allow to turn these on
+		// System.setProperty("prism.lcdtext", "false");
+		// System.setProperty("prism.text", "t2k");
+
+		final Locale locale = new Locale(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE));
+		lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
+
 		readApplicationArguments(args);
 
 		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));

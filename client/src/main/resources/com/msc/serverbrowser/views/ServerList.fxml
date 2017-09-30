@@ -20,50 +20,40 @@
 <?import javafx.scene.layout.VBox?>
 <?import com.msc.serverbrowser.gui.components.SampServerTable?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	spacing="5" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
+	xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<HBox spacing="5.0">
 			<children>
-				<TextField fx:id="addressTextField" onAction="#onClickConnect"
-					promptText="Please enter a valid server address (Example: 195.43.123.234:63284)"
-					HBox.hgrow="ALWAYS" />
-				<Button mnemonicParsing="false" onAction="#onClickConnect"
-					text="Connect" />
-				<Button mnemonicParsing="false" onAction="#onClickAddToFavourites"
-					text="Add to Favourites" />
+				<TextField fx:id="addressTextField" onAction="#onClickConnect" promptText="%promptEnterValidAddress" HBox.hgrow="ALWAYS" />
+				<Button mnemonicParsing="false" onAction="#onClickConnect" text="%connect" />
+				<Button mnemonicParsing="false" onAction="#onClickAddToFavourites" text="%addToFavourites" />
 			</children>
 		</HBox>
-		<SampServerTable fx:id="serverTable" maxHeight="1.7976931348623157E308"
-			maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-			prefHeight="100.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+		<SampServerTable fx:id="serverTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+			minWidth="-Infinity" prefHeight="100.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
 			<columns>
-				<TableColumn fx:id="columnHostname" sortable="true"
-					text="Hostname">
+				<TableColumn fx:id="columnHostname" sortable="true" text="%hostnameTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="hostname" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnPlayers" maxWidth="66.0"
-					minWidth="66.0" sortable="true" text="Players">
+				<TableColumn fx:id="columnPlayers" maxWidth="66.0" minWidth="66.0" sortable="true" text="%playersTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="playersAndMaxPlayers" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnMode" minWidth="80.0"
-					sortable="true" text="Mode">
+				<TableColumn fx:id="columnMode" minWidth="80.0" sortable="true" text="%gamemodeTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="mode" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnLanguage" minWidth="80.0"
-					sortable="true" text="Language">
+				<TableColumn fx:id="columnLanguage" minWidth="80.0" sortable="true" text="%languageTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="language" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn maxWidth="65.0" minWidth="65.0" sortable="true"
-					text="Version">
+				<TableColumn maxWidth="65.0" minWidth="65.0" sortable="true" text="%versionTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="version" />
 					</cellValueFactory>
@@ -75,18 +65,15 @@
 		</SampServerTable>
 		<HBox spacing="5.0">
 			<children>
-				<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308"
-					maxWidth="1.7976931348623157E308" prefHeight="200.0"
+				<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0"
 					tableMenuButtonVisible="true">
 					<columns>
-						<TableColumn fx:id="playerName" maxWidth="1.7976931348623157E308"
-							minWidth="-1.0" prefWidth="-1.0" text="Player">
+						<TableColumn fx:id="playerName" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="-1.0" text="playerTableHeader">
 							<cellValueFactory>
 								<PropertyValueFactory property="playerName" />
 							</cellValueFactory>
 						</TableColumn>
-						<TableColumn fx:id="playerScore" maxWidth="85.0"
-							minWidth="85.0" prefWidth="85.0" text="Score">
+						<TableColumn fx:id="playerScore" maxWidth="85.0" minWidth="85.0" prefWidth="85.0" text="scoreTableHeader">
 							<cellValueFactory>
 								<PropertyValueFactory property="playerScore" />
 							</cellValueFactory>
@@ -96,16 +83,13 @@
 						<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 					</columnResizePolicy>
 				</TableView>
-				<TitledPane animated="false" focusTraversable="false"
-					collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-					text="Filter Settings" HBox.hgrow="ALWAYS">
+				<TitledPane animated="false" focusTraversable="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+					text="%filterSettings" HBox.hgrow="ALWAYS">
 					<content>
-						<GridPane hgap="10.0" maxHeight="1.7976931348623157E308"
-							vgap="5.0">
+						<GridPane hgap="10.0" maxHeight="1.7976931348623157E308" vgap="5.0">
 							<columnConstraints>
 								<ColumnConstraints hgrow="NEVER" />
-								<ColumnConstraints hgrow="ALWAYS"
-									maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="73.0" />
+								<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="73.0" />
 							</columnConstraints>
 							<rowConstraints>
 								<RowConstraints />
@@ -116,23 +100,17 @@
 								<RowConstraints vgrow="ALWAYS" />
 							</rowConstraints>
 							<children>
-								<Label text="Use Regex" />
-								<CheckBox fx:id="regexCheckBox" mnemonicParsing="false"
-									onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
+								<Label text="%useRegex" />
+								<CheckBox fx:id="regexCheckBox" mnemonicParsing="false" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
 									GridPane.halignment="LEFT" />
-								<Separator prefWidth="200.0" GridPane.columnSpan="2"
-									GridPane.rowIndex="1" />
-								<TextField fx:id="nameFilter" maxWidth="1.7976931348623157E308"
-									onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1"
-									GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-								<TextField fx:id="modeFilter" maxWidth="1.7976931348623157E308"
-									onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1"
-									GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-								<TextField fx:id="languageFilter" maxWidth="1.7976931348623157E308"
-									onKeyReleased="#onFilterSettingsChange" GridPane.columnIndex="1"
-									GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-								<ComboBox fx:id="versionFilter" maxWidth="1.7976931348623157E308"
-									onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
+								<Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+								<TextField fx:id="nameFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+								<TextField fx:id="modeFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
+								<TextField fx:id="languageFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
+								<ComboBox fx:id="versionFilter" maxWidth="1.7976931348623157E308" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
 									GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
 									<items>
 										<FXCollections fx:factory="observableArrayList">
@@ -147,23 +125,20 @@
 										</FXCollections>
 									</items>
 								</ComboBox>
-								<Label text="Version" GridPane.rowIndex="5" />
-								<Label text="Name" GridPane.rowIndex="2" />
-								<Label text="Mode" GridPane.rowIndex="3" />
-								<Label text="Language" GridPane.rowIndex="4" />
+								<Label text="%versionTableHeader" GridPane.rowIndex="5" />
+								<Label text="%hostnameTableHeader" GridPane.rowIndex="2" />
+								<Label text="%gamemodeTableHeader" GridPane.rowIndex="3" />
+								<Label text="%languageTableHeader" GridPane.rowIndex="4" />
 							</children>
 						</GridPane>
 					</content>
 				</TitledPane>
-				<TitledPane animated="false" collapsible="false"
-					maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-					text="Server Info" focusTraversable="false">
+				<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%serverInfo"
+					focusTraversable="false">
 					<content>
-						<GridPane hgap="5.0" maxHeight="1.7976931348623157E308"
-							maxWidth="1.7976931348623157E308" vgap="5.0">
+						<GridPane hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="5.0">
 							<columnConstraints>
-								<ColumnConstraints fillWidth="false" hgrow="NEVER"
-									minWidth="-Infinity" />
+								<ColumnConstraints fillWidth="false" hgrow="NEVER" minWidth="-Infinity" />
 								<ColumnConstraints fillWidth="false" hgrow="NEVER" />
 							</columnConstraints>
 							<rowConstraints>
@@ -175,24 +150,18 @@
 								<RowConstraints vgrow="ALWAYS" />
 							</rowConstraints>
 							<children>
-								<Label text="Address:" />
-								<Label text="lagcomp:" GridPane.rowIndex="2" />
-								<TextField fx:id="serverAddress" editable="false"
-									styleClass="copyableLabel" text="" GridPane.columnIndex="1" />
-								<Label fx:id="serverLagcomp" text="" GridPane.columnIndex="1"
-									GridPane.rowIndex="2" />
-								<Label text="Ping:" GridPane.rowIndex="1" />
-								<Label fx:id="serverPing" GridPane.columnIndex="1"
-									GridPane.rowIndex="1" />
-								<Label text="Password:" GridPane.rowIndex="3" />
-								<Label fx:id="serverPassword" GridPane.columnIndex="1"
-									GridPane.rowIndex="3" />
-								<Label text="Map:" GridPane.rowIndex="4" />
-								<Label fx:id="mapLabel" GridPane.columnIndex="1"
-									GridPane.rowIndex="4" />
-								<Label text="Website" GridPane.rowIndex="5" />
-								<Hyperlink fx:id="websiteLink" maxWidth="130.0"
-									underline="true" GridPane.columnIndex="1" GridPane.hgrow="NEVER"
+								<Label text="%address" />
+								<TextField fx:id="serverAddress" editable="false" styleClass="copyableLabel" text="" GridPane.columnIndex="1" />
+								<Label text="%lagcomp" GridPane.rowIndex="2" />
+								<Label fx:id="serverLagcomp" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+								<Label text="%ping" GridPane.rowIndex="1" />
+								<Label fx:id="serverPing" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+								<Label text="%password" GridPane.rowIndex="3" />
+								<Label fx:id="serverPassword" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+								<Label text="%map" GridPane.rowIndex="4" />
+								<Label fx:id="mapLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+								<Label text="%website" GridPane.rowIndex="5" />
+								<Hyperlink fx:id="websiteLink" maxWidth="130.0" underline="true" GridPane.columnIndex="1" GridPane.hgrow="NEVER"
 									GridPane.rowIndex="5" />
 							</children>
 						</GridPane>

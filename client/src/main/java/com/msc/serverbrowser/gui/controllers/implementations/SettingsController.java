@@ -1,5 +1,6 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
+import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -10,6 +11,7 @@ import com.msc.serverbrowser.data.properties.LegacySettingsController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
+import com.msc.serverbrowser.util.Language;
 import com.msc.serverbrowser.util.UpdateUtility;
 import com.msc.serverbrowser.util.basic.StringUtility;
 
@@ -20,6 +22,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
@@ -35,8 +38,9 @@ public class SettingsController implements ViewController
 	@FXML private Label informationLabel;
 
 	// General Settings
-	@FXML private TextField	sampPathTextField;
-	@FXML private CheckBox	saveLastViewCheckBox;
+	@FXML private TextField				sampPathTextField;
+	@FXML private CheckBox				saveLastViewCheckBox;
+	@FXML private ComboBox<Language>	languageComboBox;
 
 	// Appearance Settings
 	@FXML private CheckBox darkThemeCheckBox;
@@ -69,6 +73,8 @@ public class SettingsController implements ViewController
 	// Downloads
 	@FXML private CheckBox allowCachingDownloadsCheckBox;
 
+	private final static String VERSION_INFO = Client.lang.getString("versionInfo");
+
 	@Override
 	public void initialize()
 	{
@@ -90,6 +96,14 @@ public class SettingsController implements ViewController
 		});
 
 		setupCheckBox(saveLastViewCheckBox, Property.SAVE_LAST_VIEW);
+
+		languageComboBox.getItems().addAll(Language.values());
+		final Language toSelectLanguage = Language.getByShortcut(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE)).get();
+		languageComboBox.getSelectionModel().select(toSelectLanguage);
+		languageComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, newVal) ->
+		{
+			ClientPropertiesController.setProperty(Property.LANGUAGE, newVal.getShortcut());
+		});
 
 		// Connection Properties
 		// setupCheckBox(askForUsernameOnConnectCheckBox,
@@ -163,8 +177,7 @@ public class SettingsController implements ViewController
 		builder.append("SA-MP Server Browser")
 				.append(System.lineSeparator())
 				.append(System.lineSeparator())
-				.append("Version: ")
-				.append(UpdateUtility.VERSION);
+				.append(MessageFormat.format(VERSION_INFO, UpdateUtility.VERSION));
 
 		informationLabel.setText(builder.toString());
 	}
@@ -262,8 +275,8 @@ public class SettingsController implements ViewController
 	@FXML
 	private void onClickRestore()
 	{
-		final Alert alert = new Alert(AlertType.CONFIRMATION, "Are you sure, that you want to reset all you settings?", ButtonType.YES, ButtonType.NO);
-		alert.setTitle("Reset settings");
+		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("sureYouWantToRestoreSettings"), ButtonType.YES, ButtonType.NO);
+		alert.setTitle(Client.lang.getString("restoreSettingsToDefault"));
 		Client.insertAlertOwner(alert);
 
 		final Optional<ButtonType> result = alert.showAndWait();

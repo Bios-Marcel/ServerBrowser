@@ -18,8 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
 /**
- * Controls the Files view which allows you to look at your taken screenshots,
- * your chatlogs and
+ * Controls the Files view which allows you to look at your taken screenshots, your chatlogs and
  * your saved positions.
  *
  * @author Marcel
@@ -28,8 +27,7 @@ import javafx.scene.control.TextArea;
 public class FilesController implements ViewController
 {
 	// Chatlogs
-	@FXML
-	private TextArea contentTextArea;
+	@FXML private TextArea contentTextArea;
 
 	@Override
 	public void initialize()
@@ -73,8 +71,8 @@ public class FilesController implements ViewController
 			new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
 					.animation(Animations.POPUP)
-					.title("Chatlog couldn't be cleared")
-					.message("For more information, please check the logfiles.")
+					.title(Client.lang.getString("couldntClearChatLog"))
+					.message(Client.lang.getString("checkLogsForMoreInformation"))
 					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 
 			Logging.log(Level.WARNING, "Couldn't clear chatlog", exception);

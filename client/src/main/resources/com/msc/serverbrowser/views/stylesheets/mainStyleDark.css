@@ -7,7 +7,7 @@
 	-component-background-color: #121212;
 	-component-background-color-selected: #404040;
 	-menu-color: derive( -component-background-color, -10.0%);
-	-mark-color: -component-background-color-selected;
+	-mark-color: white;
 	-border-color: -component-background-color-selected;
 	
 	-special-button-color: #9239ad;
@@ -245,7 +245,7 @@
 
 .scroll-bar .thumb
 {
-	-fx-background-color: -mark-color;
+	-fx-background-color: -component-background-color-selected;
 }
 
 .scroll-bar
@@ -326,7 +326,7 @@
 
 .check-box:selected > .box > .mark
 {
-	-fx-background-color: -border-color;
+	-fx-background-color: -mark-color;
 }
 
 
@@ -367,7 +367,7 @@
 }
 .spinner .increment-arrow-button, .spinner .decrement-arrow-button
 {
-    -fx-background-color: -mark-color;
+    -fx-background-color: -component-background-color-selected;
     -fx-padding: 3.0 5.0 3.0 5.0;
 }
 

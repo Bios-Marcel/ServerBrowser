@@ -2,6 +2,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,10 @@ import javafx.scene.layout.VBox;
  */
 public class VersionChangeController implements ViewController
 {
-	private static final String INSTALL_TEXT = "Install";
+	private static final String	INSTALL_TEXT	= Client.lang.getString("install");
+	private static final String	INSTALLED_TEXT	= Client.lang.getString("installed");
+	private static final String	INSTALLING_TEXT	= Client.lang.getString("installing");
+	private final String		SAMP_VERSION	= Client.lang.getString("sampVersion");
 
 	private static Optional<SAMPVersion>	currentlyInstalling	= Optional.empty();
 	private final List<Button>				buttons				= new ArrayList<>();
@@ -65,7 +69,7 @@ public class VersionChangeController implements ViewController
 			final HBox versionContainer = new HBox();
 			versionContainer.getStyleClass().add("installEntry");
 
-			final Label title = new Label("SA-MP Version " + version.getVersionIdentifier());
+			final Label title = new Label(MessageFormat.format(SAMP_VERSION, version.getVersionIdentifier()));
 			title.getStyleClass().add("installLabel");
 			title.setMaxWidth(Double.MAX_VALUE);
 
@@ -105,7 +109,7 @@ public class VersionChangeController implements ViewController
 		if (installedVersion.isPresent())
 		{
 			setAllButtonsDisabled(true);
-			button.setText("Installing ...");
+			button.setText(INSTALLING_TEXT);
 
 			GTAController.killSAMP();
 			GTAController.killGTA();
@@ -148,12 +152,7 @@ public class VersionChangeController implements ViewController
 		}
 		else
 		{
-			new TrayNotificationBuilder()
-					.type(NotificationTypeImplementations.ERROR)
-					.title("GTA couldn't be located")
-					.message("If this isn't correct, please head to the settings view and manually enter your GTA path.")
-					.animation(Animations.POPUP)
-					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+			GTAController.displayCantLocateGTANotification();
 		}
 	}
 
@@ -177,8 +176,8 @@ public class VersionChangeController implements ViewController
 
 			new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
-					.title("Installing SA-MP from Cache")
-					.message("Error while trying to install SA-MP from cache, check logs for further information.")
+					.title(Client.lang.getString("installingSampFromCache"))
+					.message(Client.lang.getString("errorInstallingSampFromCache"))
 					.animation(Animations.POPUP)
 					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 		}
@@ -203,12 +202,12 @@ public class VersionChangeController implements ViewController
 
 				if (buttonVersion == version)
 				{
-					button.setText("Installed");
+					button.setText(INSTALLED_TEXT);
 					button.setDisable(true);
 				}
 				else if (ongoingInstallation && buttonVersion == currentlyInstalling.get())
 				{
-					button.setText("Installing...");
+					button.setText(INSTALLING_TEXT);
 					button.setDisable(true);
 				}
 				else
