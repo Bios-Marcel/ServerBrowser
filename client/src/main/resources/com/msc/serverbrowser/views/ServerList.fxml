@@ -68,12 +68,12 @@
 				<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0"
 					tableMenuButtonVisible="true">
 					<columns>
-						<TableColumn fx:id="playerName" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="-1.0" text="playerTableHeader">
+						<TableColumn fx:id="playerName" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="-1.0" text="%playerTableHeader">
 							<cellValueFactory>
 								<PropertyValueFactory property="playerName" />
 							</cellValueFactory>
 						</TableColumn>
-						<TableColumn fx:id="playerScore" maxWidth="85.0" minWidth="85.0" prefWidth="85.0" text="scoreTableHeader">
+						<TableColumn fx:id="playerScore" maxWidth="85.0" minWidth="85.0" prefWidth="85.0" text="%scoreTableHeader">
 							<cellValueFactory>
 								<PropertyValueFactory property="playerScore" />
 							</cellValueFactory>
