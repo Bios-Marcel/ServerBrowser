@@ -52,7 +52,7 @@ serverOffline=сервер не в сети.
 serverEmpty=сервер пустой
 activePlayers=Активные игроки: {0}
 servers=Серверы: {0}
-fetchingServers=Fetching servers, please wait a moment.
+fetchingServers=Привлекательные серверы, пожалуйста, подождите.
 
 # Past Usernames
 enterUsername=Введите имя пользователя
@@ -69,7 +69,7 @@ chatlogs=чат логи
 
 # Settings View
 informationSettingsTitle=Информация
-versionInfo=Version: {0}
+versionInfo=Версия: {0}
 generalSettingsTitle=общий
 gtaNotFoundPrompt=Будет автоматически обнаружен если оставить пустым
 customSampPath=SA-MP путь
