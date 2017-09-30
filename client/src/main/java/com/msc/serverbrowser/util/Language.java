@@ -13,6 +13,7 @@ public enum Language
 	GE("ge", "Georgian", 2),
 	GR("gr", "Greek", 3),
 	NL("nl", "Dutch", 4);
+	RU("ru", "Русский", 5);
 
 	private String	shortcut;
 	private String	defaultName;
