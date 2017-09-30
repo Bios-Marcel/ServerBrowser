@@ -70,6 +70,8 @@ User Documentation (not complete) is available under: (https://github.com/Bios-M
 ## You want to help?
 You can help by [reporting bugs](https://github.com/Bios-Marcel/ServerBrowser/issues), [recommending new features](https://github.com/Bios-Marcel/ServerBrowser/issues) or [creating pull requests](https://github.com/Bios-Marcel/ServerBrowser/pulls).
 
+Another way for you to contribute, is to help localizing the application, simply look at the language files and translate it into your native language.
+
 ## Build
 
 This project is managed using [gradle](https://gradle.org).
