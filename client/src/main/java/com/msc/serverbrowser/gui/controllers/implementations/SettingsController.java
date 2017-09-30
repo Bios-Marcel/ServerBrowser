@@ -1,8 +1,10 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.CacheController;
@@ -102,7 +104,10 @@ public class SettingsController implements ViewController
 		languageComboBox.getSelectionModel().select(toSelectLanguage);
 		languageComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, newVal) ->
 		{
+			final Locale locale = new Locale(newVal.getShortcut());
+			Client.lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
 			ClientPropertiesController.setProperty(Property.LANGUAGE, newVal.getShortcut());
+			Client.getInstance().reloadViewIfLoaded(View.SETTINGS);
 		});
 
 		// Connection Properties

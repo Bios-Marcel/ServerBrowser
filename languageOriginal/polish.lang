@@ -1,0 +1,119 @@
+﻿# All keys in this file are seperated by view.
+# 
+# If you see things like {0} those are placeholders, you may only move their
+# position when translating, but not remove them.
+
+#Polish by Abyss Morgan
+#Specialne wydanie dla cebuli :D
+
+# Languages
+en=Angielski
+de=Niemiecki
+ge=Gruziński
+gr=Grecki
+nl=Holenderski
+ru=Rosyjski
+pl=Polskie
+
+# General
+reload=Przeładuj
+clear=Wyczyść
+apply=Zastosuj
+username=Nazwa użytkownika
+yes=Tak
+no=Nie
+
+# Server List
+promptEnterValidAddress=Wprowadź prawidłowy adres serwera (Przykład: 195.43.123.234:63284)
+addToFavourites=Dodaj do ulubionych
+connect=Połącz
+hostnameTableHeader=Adres serwera
+playersTableHeader=Gracze
+gamemodeTableHeader=Tryb gry
+languageTableHeader=Język
+versionTableHeader=Wersja
+playerTableHeader=Gracz
+scoreTableHeader=Respekt
+filterSettings=Ustawienia filtra
+useRegex=Użyj Regex
+serverInfo=Informacje o serwerze
+address=Adres:
+lagcomp=lagcomp:
+ping=Ping:
+password=Hasło:
+map=Mapa:
+website=Strona WWW:
+tooMuchPlayers=Nie można pobrać listy graczy, jeśli jest ich więcej niż 100.
+serverOffline=Serwer jest wyłączony
+serverEmpty=Serwer jest pusty
+activePlayers=Aktywni gracze: {0}
+servers=Serwery: {0}
+
+# Past Usernames
+enterUsername=Wpisz nazwę użytkownika
+pastUsernames=Ostatnie nazwy użytkownika
+
+# Versions
+sampVersion=Wersja SA-MP {0}
+install=Instaluj
+installing=Instalacja ...
+installed=Zainstalowano
+
+# Files / Chatlogs
+chatlogs=Dzienniki czatu
+
+# Settings View
+informationSettingsTitle=Informacje
+versionInfo=Wersja: {0}
+generalSettingsTitle=Ogólne
+gtaNotFoundPrompt=Zostanie automatycznie wykryty, jeśli pozostanie pusty
+customSampPath=Niestandardowa ścieżka SA-MP
+rememberLastView=Pamiętaj ostatni widok
+language=Język
+sampSettingsTitle=SA-MP (Wymaga ponownego uruchomienia SA-MP)
+fpsLimit=Limit FPS
+pageSize=Rozmiar czatu
+audioProxyUse=Użyj proxy dla audiostream
+chatTimestamps=Pokaż czas na czacie
+multicoreUsage=Używaj wielu wątków
+displayAudioStreamMsg=Wyświetla wiadomości audiostream
+enableHeadMovement=Włącz ruch głowy
+inputMethodText=Edycja tekstu wejściowego i przełączanie języka
+directmode=Tryb Direct (napraw problemy z rysowaniem czatu)
+showAfkSymbols=Pokaż symbol AFK
+appearanceSettingTitle=Wygląd
+useDarkTheme=Użyj ciemnego wyglądu
+permissionSettingTitle=Uprawnienia
+allowShutdownSamp=Zezwól tej aplikacji na wyłączenie klienta San Andreas Multiplayer
+allowShutdownGta=Pozwól tej aplikacji zamknąć program Grand Theft Auto: San Andreas
+updatesSettingTitle=Aktualizacje
+showChangelogAfterUpdate=Pokaż listę zmian po zaktualizowaniu aplikacji
+automaticUpdates=Automatyczne aktualizację
+checkForUpdates=Sprawdź aktualizacje
+downloadSettingTitle=Pobieranie
+allowCachingSampVersions=Zezwalaj na buforowanie pobranych wersji SA-MP
+clearCache=Wyczyść pamięć podręczną
+restoreDefaults=Przywróć domyślne
+
+# Dialogs / Alerts
+deleteFavourites=Usuwanie ulubionych
+sureYouWantToDeleteFavourites=Czy na pewno chcesz usunąć wybrane serwery z ulubionych.
+sureYouWantToRestoreSettings=Czy na pewno chcesz przywrócić wszystkie ustawienia?
+restoreSettingsToDefault=Przywróć ustawienia domyślne
+
+# Tray Notifications
+clickToRestart=Kliknij, aby zrestartować klienta.
+updating=Aktualizacja
+applyingUpdate=Zastosowanie aktualizacji
+updateInstalled=Aktualizacja została zainstalowana
+couldntApplyUpdate=Nie można zastosować aktualizacji, kliknij, aby uzyskać więcej informacji
+couldntRetrieveUpdate=Nie można pobrać najnowszej aktualizacji, kliknij, aby sprawdzić ręcznie.
+clickForChangelog=Kliknij tutaj, aby zobaczyć ostatnie zmiany
+updates=Twój klient został zaktualizowany
+addressNotValid=Adres nie jest prawidłowy.
+cantConnect=Nie można połączyć się z serwerem
+cantAddToFavouritesAddressInvalid=Nie można dodać do ulubionych, adres serwera jest nieprawidłowy.
+checkLogsForMoreInformation=Aby uzyskać więcej informacji, sprawdź pliki dziennika.
+couldntClearChatLog=Dziennik czatu nie mógł zostać usunięty
+installingSampFromCache=Instalowanie SA-MP z pamięci podręcznej
+errorInstallingSampFromCache=Wystąpił błąd podczas próby zainstalowania SA-MP z pamięci podręcznej, sprawdź dzienniki w celu uzyskania dalszych informacji.
