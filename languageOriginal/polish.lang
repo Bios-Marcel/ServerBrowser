@@ -22,9 +22,9 @@ apply=Zastosuj
 username=Nazwa użytkownika
 yes=Tak
 no=Nie
-
+ 
 # Server List
-promptEnterValidAddress=Wprowadź prawidłowy adres serwera (Przykład: 195.43.123.234:63284)
+promptEnterValidAddress=Wprowadź adres serwera (Przykład: 195.43.123.234:63284)
 addToFavourites=Dodaj do ulubionych
 connect=Połącz
 hostnameTableHeader=Adres serwera
@@ -48,25 +48,25 @@ serverOffline=Serwer jest wyłączony
 serverEmpty=Serwer jest pusty
 activePlayers=Aktywni gracze: {0}
 servers=Serwery: {0}
-
+ 
 # Past Usernames
 enterUsername=Wpisz nazwę użytkownika
 pastUsernames=Ostatnie nazwy użytkownika
-
+ 
 # Versions
 sampVersion=Wersja SA-MP {0}
 install=Instaluj
 installing=Instalacja ...
 installed=Zainstalowano
-
+ 
 # Files / Chatlogs
 chatlogs=Dzienniki czatu
-
+ 
 # Settings View
 informationSettingsTitle=Informacje
 versionInfo=Wersja: {0}
 generalSettingsTitle=Ogólne
-gtaNotFoundPrompt=Zostanie automatycznie wykryty, jeśli pozostanie pusty
+gtaNotFoundPrompt=Zostanie automatycznie wykryta, jeśli pozostanie pusty
 customSampPath=Niestandardowa ścieżka SA-MP
 rememberLastView=Pamiętaj ostatni widok
 language=Język
@@ -94,13 +94,13 @@ downloadSettingTitle=Pobieranie
 allowCachingSampVersions=Zezwalaj na buforowanie pobranych wersji SA-MP
 clearCache=Wyczyść pamięć podręczną
 restoreDefaults=Przywróć domyślne
-
+ 
 # Dialogs / Alerts
 deleteFavourites=Usuwanie ulubionych
 sureYouWantToDeleteFavourites=Czy na pewno chcesz usunąć wybrane serwery z ulubionych.
 sureYouWantToRestoreSettings=Czy na pewno chcesz przywrócić wszystkie ustawienia?
 restoreSettingsToDefault=Przywróć ustawienia domyślne
-
+ 
 # Tray Notifications
 clickToRestart=Kliknij, aby zrestartować klienta.
 updating=Aktualizacja
