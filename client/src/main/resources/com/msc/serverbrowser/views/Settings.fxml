@@ -51,7 +51,7 @@
 				</TitledPane>
 				<!-- TODO(MSC) Invisible since this isn't implemented yet> <TitledPane text="Connection"> <content> <VBox> <children> <CheckBox fx:id="askForUsernameOnConnectCheckBox" 
 					mnemonicParsing="false" text="Always ask for Username when connecting to a server" /> </children> </VBox> </content> </TitledPane -->
-				<TitledPane text="sampSettingsTitle">
+				<TitledPane text="%sampSettingsTitle">
 					<content>
 						<VBox spacing="5.0">
 							<children>
