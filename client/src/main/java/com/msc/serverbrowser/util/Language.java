@@ -3,19 +3,23 @@ package com.msc.serverbrowser.util;
 import java.util.Optional;
 
 import com.msc.serverbrowser.Client;
+import com.msc.serverbrowser.data.properties.ClientPropertiesController;
+import com.msc.serverbrowser.data.properties.Property;
 
 public enum Language
 {
-	EN("en", 0),
-	DE("de", 1),
-	GE("ge", 2);
+	EN("en", "English", 0),
+	DE("de", "German", 1),
+	GE("ge", "Georgian", 2);
 
 	private String	shortcut;
+	private String	defaultName;
 	private int		index;
 
-	Language(final String shortcut, final int index)
+	Language(final String shortcut, final String defaultName, final int index)
 	{
 		this.shortcut = shortcut;
+		this.defaultName = defaultName;
 		this.index = index;
 	}
 
@@ -32,7 +36,13 @@ public enum Language
 	@Override
 	public String toString()
 	{
-		return Client.lang.getString(shortcut);
+		final String languageName = Client.lang.getString(shortcut);
+
+		if (ClientPropertiesController.getPropertyAsString(Property.LANGUAGE).equalsIgnoreCase(EN.shortcut))
+		{
+			return languageName;
+		}
+		return languageName + " (" + defaultName + ")";
 	}
 
 	public static Optional<Language> getByIndex(final int index)
