@@ -53,6 +53,7 @@ serverEmpty=сервер пустой
 activePlayers=Активные игроки: {0}
 servers=Серверы: {0}
 fetchingServers=Привлекательные серверы, пожалуйста, подождите.
+retrieving=Retrieving ...
 
 # Past Usernames
 enterUsername=Введите имя пользователя

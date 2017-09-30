@@ -49,7 +49,7 @@ import javafx.scene.text.TextAlignment;
  */
 public class BasicServerListController implements ViewController
 {
-	private static final String RETRIEVING = "Retrieving...";
+	private final String RETRIEVING = Client.lang.getString("retrieving");
 
 	protected final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
 	protected final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
