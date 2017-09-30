@@ -76,8 +76,8 @@ public class MainController implements ViewController
 		hyperlinkGitHub.setText("\uf09b");
 		hyperlinkHelp.setText("\uf059");
 
-		hyperlinkGitHub.setTooltip(new Tooltip("Opens the GitHub project page."));
-		hyperlinkHelp.setTooltip(new Tooltip("Opens the GitHub projects wiki page."));
+		hyperlinkGitHub.setTooltip(new Tooltip(Client.lang.getString("openGithubTooltip")));
+		hyperlinkHelp.setTooltip(new Tooltip(Client.lang.getString("openGithubWikiTooltip")));
 
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW))
 		{

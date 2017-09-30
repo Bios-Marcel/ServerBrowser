@@ -19,6 +19,10 @@ username=имя пользователя
 yes=да
 no=нет
 
+# Mainview
+openGithubTooltip=Открывает страницу проекта GitHub.
+openGithubWikiTooltip=Открывает страницу вики GitHub.
+
 # Server List
 promptEnterValidAddress=Введите действительный адрес сервера (пример: 195.43.123.234:63284)
 addToFavourites=Добавить в избранное

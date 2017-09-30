@@ -22,6 +22,10 @@ apply=Zastosuj
 username=Nazwa użytkownika
 yes=Tak
 no=Nie
+
+# Mainview
+openGithubTooltip=Otwiera stronę projektu GitHub.
+openGithubWikiTooltip=Otwiera stronę GitHub z projektami wiki.
  
 # Server List
 promptEnterValidAddress=Wprowadź adres serwera (Przykład: 195.43.123.234:63284)
