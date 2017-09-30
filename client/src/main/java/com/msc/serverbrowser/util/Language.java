@@ -11,7 +11,8 @@ public enum Language
 	EN("en", "English", 0),
 	DE("de", "German", 1),
 	GE("ge", "Georgian", 2),
-	GR("gr", "Greek", 3);
+	GR("gr", "Greek", 3),
+	NL("nl", "Dutch", 4);
 
 	private String	shortcut;
 	private String	defaultName;
