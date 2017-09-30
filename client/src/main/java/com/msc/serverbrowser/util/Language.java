@@ -7,7 +7,8 @@ import com.msc.serverbrowser.Client;
 public enum Language
 {
 	EN("en", 0),
-	DE("de", 1);
+	DE("de", 1),
+	GE("ge", 2);
 
 	private String	shortcut;
 	private int		index;
