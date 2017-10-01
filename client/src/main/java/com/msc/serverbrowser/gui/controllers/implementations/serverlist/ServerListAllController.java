@@ -44,7 +44,7 @@ public class ServerListAllController extends BasicServerListController
 			catch (final IOException exception)
 			{
 				Logging.log(Level.SEVERE, "Couldn't retrieve data from announce api.", exception);
-				Platform.runLater(() -> serverTable.setPlaceholder(new Label("Couldn't fetch servers")));
+				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.lang.getString("errorFetchingServers"))));
 			}
 
 			Platform.runLater(() -> updateGlobalInfo());
