@@ -151,7 +151,7 @@
 							</rowConstraints>
 							<children>
 								<Label text="%address" />
-								<TextField fx:id="serverAddress" editable="false" styleClass="copyableLabel" text="" GridPane.columnIndex="1" />
+								<TextField fx:id="serverAddress" editable="false" styleClass="copyableLabel" GridPane.columnIndex="1" />
 								<Label text="%lagcomp" GridPane.rowIndex="2" />
 								<Label fx:id="serverLagcomp" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 								<Label text="%ping" GridPane.rowIndex="1" />
@@ -161,8 +161,7 @@
 								<Label text="%map" GridPane.rowIndex="4" />
 								<Label fx:id="mapLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 								<Label text="%website" GridPane.rowIndex="5" />
-								<Hyperlink fx:id="websiteLink" maxWidth="130.0" underline="true" GridPane.columnIndex="1" GridPane.hgrow="NEVER"
-									GridPane.rowIndex="5" />
+								<Hyperlink fx:id="websiteLink" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 							</children>
 						</GridPane>
 					</content>
