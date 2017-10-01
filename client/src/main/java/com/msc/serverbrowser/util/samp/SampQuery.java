@@ -302,9 +302,14 @@ public class SampQuery implements AutoCloseable
 			final StringBuffer packetData = new StringBuffer("SAMP");
 
 			while (tok.hasMoreTokens())
-			{
+			{// The splitted parts of the ip will be parsed into ints and casted into characters
 				packetData.append((char) Integer.parseInt(tok.nextToken()));
 			}
+
+			/*
+			 * At this point the buffer contains something like 'SAMPx!2.' where each character
+			 * after 'SAMP' is a part of the ip address
+			 */
 
 			packetData
 					.append((char) (serverPort & 0xFF))
