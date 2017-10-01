@@ -24,19 +24,18 @@
 
 *:selected
 {
-    -fx-background-color: -component-background-color-selected !important;
+    -fx-background-color: -component-background-color-selected;
 }
 
 .bottom-bar
 {
-	-fx-border-width: 1.0 0.0 0.0 0.0;
 	-fx-border-color: -border-color;
 }
 
 .progress-bar
 {
 	-fx-border-color: -border-color;	
-	-fx-border-width: 1;
+	-fx-border-width: 1.0;
 }
 
 .bar
@@ -98,7 +97,7 @@
  */
 
 .combo-box > .cell:selected {
-    -fx-background-color: inherit !important;
+    -fx-background-color: inherit;
 }
 
 /**
@@ -107,7 +106,7 @@
 
 .list-view .list-cell:hover
 {
-	-fx-background-color: -component-background-color-selected !important;
+	-fx-background-color: -component-background-color-selected;
 }
 
 .list-view .list-cell:empty
@@ -233,12 +232,6 @@
 	-fx-background-color: -mark-color;
 }
 
-.hyperlink
-{
-	-fx-border-width: 0.0;
-	-fx-padding: -2.0 0.0 -2.0 0.0;
-}
-
 /**
  * ScrollBar
  */
@@ -250,26 +243,7 @@
 
 .scroll-bar
 {
-	-fx-border-width: 0.0;
-}
-
-.scroll-bar:vertical .increment-button, .scroll-bar .decrement-button
-{
-	-fx-max-height: 0.0;
-	-fx-min-height: 0.0;
-	-fx-pref-height: 0.0;
-}
-
-.scroll-bar:horizontal .increment-button, .scroll-bar .decrement-button
-{
-	-fx-max-width: 0.0;
-	-fx-min-width: 0.0;
-	-fx-pref-width: 0.0;
-}
-
-.scroll-bar .decrement-button .decrement-arrow, .scroll-bar .increment-button .increment-arrow
-{
-	-fx-background-color: transparent;
+	-fx-border-width: 0.0 0.0 0.0 0.0;
 }
 
 /**
@@ -283,7 +257,7 @@
 
 .tab
 {
-	-fx-background-color: -component-inner-color !important;
+	-fx-background-color: -component-inner-color;
 	-fx-border-width: 1.0;
 	-fx-border-color: -border-color;
 }
@@ -333,13 +307,6 @@
 /**
  * Tab Pane (Menu)
  */
-
-.viewTitle
-{
-	-fx-background-color: -component-background-color;
-	-fx-padding: 20.0 0.0 20.0 15.0;
-	-fx-font-size: 20.0;
-}
 
 .tabPane
 {

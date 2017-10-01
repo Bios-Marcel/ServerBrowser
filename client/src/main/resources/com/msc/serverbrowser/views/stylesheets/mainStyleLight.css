@@ -25,25 +25,6 @@
 	-fx-background-radius: 0.0;
 }
 
-.scroll-bar:vertical .increment-button, .scroll-bar .decrement-button
-{
-	-fx-max-height: 0.0;
-	-fx-min-height: 0.0;
-	-fx-pref-height: 0.0;
-}
-
-.scroll-bar:horizontal .increment-button, .scroll-bar .decrement-button
-{
-	-fx-max-width: 0.0;
-	-fx-min-width: 0.0;
-	-fx-pref-width: 0.0;
-}
-
-.scroll-bar .decrement-button .decrement-arrow, .scroll-bar .increment-button .increment-arrow
-{
-	-fx-background-color: transparent;
-}
-
 .scroll-bar, .scroll-bar .track-background, .scroll-bar .track
 {
 	-fx-background-color: transparent;
@@ -58,15 +39,6 @@
 {
 	-fx-background-radius: 0.0;
 	-fx-border-radius: 0.0;
-}
-
-/**
- * Hyperlink
- */
- 
-.hyperlink
-{
-	-fx-padding: -2.0 0.0 -2.0 0.0;
 }
 
 /**
@@ -100,7 +72,6 @@
 
 .bottom-bar
 {
-	-fx-border-width: 1.0 0.0 0.0 0.0;
 	-fx-border-color: lightgray;
 }
 
