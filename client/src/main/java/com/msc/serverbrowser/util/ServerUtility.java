@@ -95,7 +95,7 @@ public final class ServerUtility
 	 */
 	public static List<SampServer> fetchServersFromSouthclaws() throws IOException
 	{
-		return fetchFromAPI("http://api.samp.southcla.ws/v1/servers");
+		return fetchFromAPI("http://api.samp.southcla.ws/v2/servers");
 	}
 
 	private static List<SampServer> fetchFromAPI(final String apiAddress) throws MalformedURLException, IOException

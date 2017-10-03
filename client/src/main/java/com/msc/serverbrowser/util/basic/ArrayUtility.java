@@ -62,8 +62,25 @@ public final class ArrayUtility
 				return true;
 			}
 		}
-
 		return false;
 	}
 
+	public static byte[] merge(final byte[] arrayOne, final byte[] arrayTwo)
+	{
+		final int lengthNew = arrayOne.length + arrayTwo.length;
+
+		final byte[] toReturn = new byte[lengthNew];
+
+		for (int i = 0; i < arrayOne.length; i++)
+		{
+			toReturn[i] = arrayOne[i];
+		}
+
+		for (int i = arrayOne.length; i < lengthNew; i++)
+		{
+			toReturn[i] = arrayTwo[i - arrayOne.length];
+		}
+
+		return toReturn;
+	}
 }

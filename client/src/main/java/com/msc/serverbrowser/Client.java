@@ -445,7 +445,6 @@ public final class Client extends Application
 		// TODO(MSC) Consider letting the user allow to turn these on
 		// System.setProperty("prism.lcdtext", "false");
 		// System.setProperty("prism.text", "t2k");
-
 		createFolderStructure();
 
 		final Locale locale = new Locale(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE));
