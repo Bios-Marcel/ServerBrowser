@@ -8,15 +8,13 @@ import com.msc.serverbrowser.gui.components.SampServerTableMode;
  *
  * @author Marcel
  */
-public class ServerListFavController extends BasicServerListController
-{
+public class ServerListFavController extends BasicServerListController {
 	@Override
-	public void initialize()
-	{
+	public void initialize() {
 		super.initialize();
-
+		
 		serverTable.setServerTableMode(SampServerTableMode.FAVOURITES);
-
+		
 		serverTable.addAll(FavouritesController.getFavourites());
 	}
 }

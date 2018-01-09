@@ -18,44 +18,36 @@ import javafx.scene.control.Label;
  *
  * @author Marcel
  */
-public class ServerListAllController extends BasicServerListController
-{
+public class ServerListAllController extends BasicServerListController {
 	private Thread serverLookup;
-
+	
 	@Override
-	public void initialize()
-	{
+	public void initialize() {
 		super.initialize();
-
+		
 		serverTable.setPlaceholder(new Label(Client.lang.getString("fetchingServers")));
 		serverTable.setServerTableMode(SampServerTableMode.ALL);
-
-		serverLookup = new Thread(() ->
-		{
-			try
-			{
+		
+		serverLookup = new Thread(() -> {
+			try {
 				final List<SampServer> serversToAdd = ServerUtility.fetchServersFromSouthclaws();
-				Platform.runLater(() ->
-				{
+				Platform.runLater(() -> {
 					serverTable.addAll(serversToAdd);
 					serverTable.refresh();
 				});
-			}
-			catch (final IOException exception)
-			{
+			} catch (final IOException exception) {
 				Logging.log(Level.SEVERE, "Couldn't retrieve data from announce api.", exception);
 				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.lang.getString("errorFetchingServers"))));
 			}
-
+			
 			Platform.runLater(() -> updateGlobalInfo());
 		});
-
+		
 		serverLookup.start();
 	}
-
+	
 	@Override
-	public void onClose()
-	{
+	public void onClose() {
 		super.onClose();
 		serverLookup.interrupt();
 	}

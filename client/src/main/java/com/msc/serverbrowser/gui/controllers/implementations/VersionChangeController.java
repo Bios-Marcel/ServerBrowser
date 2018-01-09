@@ -14,9 +14,10 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.CacheController;
+import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate;
+import com.msc.serverbrowser.data.insallationcandidates.SourceType;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
-import com.msc.serverbrowser.gui.SAMPVersion;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.logging.Logging;
@@ -24,6 +25,8 @@ import com.msc.serverbrowser.util.basic.FileUtility;
 import com.msc.serverbrowser.util.samp.GTAController;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
@@ -36,45 +39,71 @@ import javafx.scene.layout.VBox;
 /**
  * @since 02.07.2017
  */
-public class VersionChangeController implements ViewController
-{
+public class VersionChangeController implements ViewController {
 	private final String	INSTALL_TEXT	= Client.lang.getString("install");
 	private final String	INSTALLED_TEXT	= Client.lang.getString("installed");
 	private final String	INSTALLING_TEXT	= Client.lang.getString("installing");
 	private final String	SAMP_VERSION	= Client.lang.getString("sampVersion");
 
-	private static Optional<SAMPVersion>	currentlyInstalling	= Optional.empty();
-	private final List<Button>				buttons				= new ArrayList<>();
+	private static Optional<InstallationCandidate>	currentlyInstalling	= Optional.empty();
+	private final List<Button>						buttons				= new ArrayList<>();
 
-	@FXML private VBox buttonContainer;
+	/**
+	 * Contains all avaiable Installation candidates
+	 */
+	public static final ObservableList<InstallationCandidate> installationCandidates = FXCollections.observableArrayList();
+
+	@FXML
+	private VBox buttonContainer;
+
+	static {
+		final String site = PathConstants.SAMP_DOWNLOAD_LOCATION;
+
+		installationCandidates.add(new InstallationCandidate("0.3a", "0.3a", site + "0.3a.zip", false, SourceType.INTERNET,
+						"C860D1032BBD9DCC9DF9E0E4E89611D5F12C967E29BE138CCBCC3ECB3303C2BF"));
+		installationCandidates.add(new InstallationCandidate("0.3c", "0.3c", site + "0.3c.zip", false, SourceType.INTERNET,
+						"F5C1A0EDF562F188365038D97A28F950AFF8CA56C7362F9DC813FDC2BDE3B8F6"));
+		installationCandidates.add(new InstallationCandidate("0.3d", "0.3d", site + "0.3d.zip", false, SourceType.INTERNET,
+						"356E78D14221D74793349A9C306720CDF9D1B2EC94172A27D85163818CBDE63C"));
+		installationCandidates.add(new InstallationCandidate("0.3e", "0.3e", site + "0.3e.zip", false, SourceType.INTERNET,
+						"13E2F31718C24ADE07E3E8E79D644957589C1584022FA2F87895A1B7298F1C25"));
+		installationCandidates.add(new InstallationCandidate("0.3x", "0.3x", site + "0.3x.zip", false, SourceType.INTERNET,
+						"B0D3FE71D9F7FF39D18468F6FCD506B8D1B28267EC81D7616E886B9A238400EC"));
+		installationCandidates.add(new InstallationCandidate("0.3z", "0.3z", site + "0.3z.zip", false, SourceType.INTERNET,
+						"9ECD672DC16C24EF445AA1B411CB737832362B2632ACDA60BCC66358D4D85AD3"));
+		installationCandidates.add(new InstallationCandidate("0.37", "0.37", site + "0.37.zip", false, SourceType.INTERNET,
+						"4CBFD7E3FB3CD4934A94A8F9B387DDD75581A4E97CBCA10AA568341DE5273630"));
+	}
 
 	@Override
-	public void initialize()
-	{
+	public void initialize() {
 		createAndSetupButtons();
 		updateButtonStates();
 	}
 
 	/**
-	 * Will create an {@link HBox} for every {@link SAMPVersion}, said {@link HBox} will contain a
+	 * Will create an {@link HBox} for every {@link SAMPVersion}, said {@link HBox}
+	 * will contain a
 	 * {@link Label} and a {@link Button}.
 	 */
-	private void createAndSetupButtons()
-	{
-		final SAMPVersion[] versions = SAMPVersion.values();
-		for (int i = 0; i < versions.length; i++)
-		{
-			final SAMPVersion version = versions[i];
-
+	private void createAndSetupButtons() {
+		for (final InstallationCandidate candidate : installationCandidates) {
 			final HBox versionContainer = new HBox();
+
+			if (!versionContainer.getChildren().isEmpty()) {
+				final Separator separator = new Separator(Orientation.HORIZONTAL);
+				separator.getStyleClass().add("separator");
+				buttonContainer.getChildren().add(separator);
+			}
+
 			versionContainer.getStyleClass().add("installEntry");
 
-			final Label title = new Label(MessageFormat.format(SAMP_VERSION, version.getVersionIdentifier()));
+			final Label title = new Label(MessageFormat.format(SAMP_VERSION, candidate.getName()));
 			title.getStyleClass().add("installLabel");
 			title.setMaxWidth(Double.MAX_VALUE);
 
 			final Button installButton = new Button(INSTALL_TEXT);
-			installButton.setUserData(version);
+			installButton.setUserData(candidate);
 			installButton.setOnAction(__ -> installAction(installButton));
 			installButton.getStyleClass().add("installButton");
 			buttons.add(installButton);
@@ -85,13 +114,6 @@ public class VersionChangeController implements ViewController
 			buttonContainer.getChildren().add(versionContainer);
 
 			HBox.setHgrow(title, Priority.ALWAYS);
-
-			if (i != versions.length - 1)
-			{
-				final Separator separator = new Separator(Orientation.HORIZONTAL);
-				separator.getStyleClass().add("separator");
-				buttonContainer.getChildren().add(separator);
-			}
 		}
 	}
 
@@ -101,47 +123,50 @@ public class VersionChangeController implements ViewController
 	 * @param button
 	 *            the {@link Button} which was clicked.
 	 */
-	private void installAction(final Button button)
-	{
-		final SAMPVersion toInstall = (SAMPVersion) button.getUserData();
-		final Optional<SAMPVersion> installedVersion = GTAController.getInstalledVersion();
+	private void installAction(final Button button) {
+		final InstallationCandidate toInstall = (InstallationCandidate) button.getUserData();
+		final Optional<InstallationCandidate> installedVersion = GTAController.getInstalledVersion();
 
-		if (installedVersion.isPresent())
-		{
+		if (installedVersion.isPresent()) {
 			setAllButtonsDisabled(true);
 			button.setText(INSTALLING_TEXT);
 
 			GTAController.killSAMP();
 			GTAController.killGTA();
 
-			if (CacheController.isVersionCached(toInstall))
-			{
+			/*
+			 * TODO Marcel 09.01.2018 I will keep the caching in here for a while, even though that'd mean
+			 * duplicated all local installation candidates.
+			 */
+
+			if (CacheController.isVersionCached(toInstall)) {
 				installCachedVersion(toInstall);
 				finishInstalling();
-			}
-			else
-			{
+			} else {
 				// TODO(MSC) Check JavaFX Threading API (Task / Service)
 				// Using a thread here, incase someone wants to keep using the app meanwhile
-				new Thread(() ->
-				{
+				new Thread(() -> {
 					Optional<File> downloadedFile = Optional.empty();
-					try
-					{
+					try {
 						currentlyInstalling = Optional.of(toInstall);
 						final Optional<String> gtaPath = GTAController.getGtaPath();
-						final String willBeDownloaded = PathConstants.SAMP__DOWNLOAD_LOCATION
-								+ toInstall.getVersionIdentifier() + ".zip";
 
-						downloadedFile = Optional.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
-						if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CACHING_DOWNLOADS))
-						{
-							CacheController.addVersionToCache(toInstall, PathConstants.OUTPUT_ZIP);
+						switch (toInstall.getSourceType()) {
+							case FILE_SYSTEM:
+								FileUtility.unzip(new File(toInstall.getUrl()).toString(), gtaPath.get());
+								break;
+							case INTERNET:
+								final String willBeDownloaded = PathConstants.SAMP_DOWNLOAD_LOCATION + toInstall.getSampDLLChecksum() + ".zip";
+								downloadedFile = Optional.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
+								if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CACHING_DOWNLOADS)) {
+									CacheController.addVersionToCache(toInstall, PathConstants.OUTPUT_ZIP);
+								}
+								FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
+								break;
+							case RESSOURCE:
+								break;
 						}
-						FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
-					}
-					catch (final IOException | IllegalArgumentException exception)
-					{
+					} catch (final IOException | IllegalArgumentException exception) {
 						Logging.log(Level.SEVERE, "Error Updating client.", exception);
 					}
 
@@ -149,69 +174,52 @@ public class VersionChangeController implements ViewController
 					finishInstalling();
 				}).start();
 			}
-		}
-		else
-		{
+		} else {
 			GTAController.displayCantLocateGTANotification();
 		}
 	}
 
-	private static void finishInstalling()
-	{
+	private static void finishInstalling() {
 		currentlyInstalling = Optional.empty();
 		Platform.runLater(() -> Client.getInstance().reloadViewIfLoaded(View.VERSION_CHANGER));
 	}
 
-	private static void installCachedVersion(final SAMPVersion cachedVersion)
-	{
-		try
-		{
-			final File cachedVersionFile = new File(PathConstants.CLIENT_CACHE + File.separator + cachedVersion.getVersionIdentifier() + ".zip");
+	private static void installCachedVersion(final InstallationCandidate cachedVersion) {
+		try {
+			final File cachedVersionFile = new File(
+							PathConstants.CLIENT_CACHE + File.separator + cachedVersion.getName() + cachedVersion.getName() + "_" + cachedVersion.getSampDLLChecksum() + ".zip");
 
 			FileUtility.unzip(cachedVersionFile.getAbsolutePath(), GTAController.getGtaPath().get());
-		}
-		catch (final IOException exception)
-		{
+		} catch (final IOException exception) {
 			Logging.log(Level.SEVERE, "Error while trying to install SA-MP from cache.", exception);
 
-			new TrayNotificationBuilder()
-					.type(NotificationTypeImplementations.ERROR)
-					.title(Client.lang.getString("installingSampFromCache"))
-					.message(Client.lang.getString("errorInstallingSampFromCache"))
-					.animation(Animations.POPUP)
-					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+			new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("installingSampFromCache"))
+							.message(Client.lang.getString("errorInstallingSampFromCache")).animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 		}
 	}
 
 	/**
-	 * Decides which buttons will be enabled and what text every button will have, depending on if
+	 * Decides which buttons will be enabled and what text every button will have,
+	 * depending on if
 	 * an installation is going on and what is currently installed.
 	 */
-	private void updateButtonStates()
-	{
-		final Optional<SAMPVersion> installedVersion = GTAController.getInstalledVersion();
+	private void updateButtonStates() {
+		final Optional<InstallationCandidate> installedVersion = GTAController.getInstalledVersion();
 		final boolean ongoingInstallation = currentlyInstalling.isPresent();
 
-		installedVersion.ifPresent(version ->
-		{
-			for (final Button button : buttons)
-			{
+		installedVersion.ifPresent(version -> {
+			for (final Button button : buttons) {
 				// Safe cast, because i only use this method to indicate what version this
 				// button reflects, noone has access on the outside.
-				final SAMPVersion buttonVersion = (SAMPVersion) button.getUserData();
+				final InstallationCandidate buttonVersion = (InstallationCandidate) button.getUserData();
 
-				if (buttonVersion == version)
-				{
+				if (buttonVersion == version) {
 					button.setText(INSTALLED_TEXT);
 					button.setDisable(true);
-				}
-				else if (ongoingInstallation && buttonVersion == currentlyInstalling.get())
-				{
+				} else if (ongoingInstallation && buttonVersion == currentlyInstalling.get()) {
 					button.setText(INSTALLING_TEXT);
 					button.setDisable(true);
-				}
-				else
-				{
+				} else {
 					button.setText(INSTALL_TEXT);
 					button.setDisable(ongoingInstallation);
 				}
@@ -219,14 +227,12 @@ public class VersionChangeController implements ViewController
 		});
 	}
 
-	private void setAllButtonsDisabled(final boolean disabled)
-	{
+	private void setAllButtonsDisabled(final boolean disabled) {
 		buttons.forEach(button -> button.setDisable(disabled));
 	}
 
 	@Override
-	public void onClose()
-	{
+	public void onClose() {
 		// Do nothing
 	}
 }

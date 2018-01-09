@@ -33,31 +33,41 @@ import javafx.scene.text.Font;
  *
  * @author Marcel
  */
-public class MainController implements ViewController
-{
-	@FXML private ToggleButton	menuItemFav;
-	@FXML private ToggleButton	menuItemAll;
-	@FXML private ToggleButton	menuItemUser;
-	@FXML private ToggleButton	menuItemVersion;
-	@FXML private ToggleButton	menuItemFiles;
-	@FXML private ToggleButton	menuItemSettings;
-
-	@FXML private ScrollPane	activeViewContainer;
-	private View				activeView;
-
-	@FXML private Hyperlink	hyperlinkGitHub;
-	@FXML private Hyperlink	hyperlinkHelp;
-
-	@FXML private HBox bottomBarCustom;
-
-	@FXML private Label			globalProgressLabel;
-	@FXML private ProgressBar	globalProgressBar;
-
+public class MainController implements ViewController {
+	@FXML
+	private ToggleButton	menuItemFav;
+	@FXML
+	private ToggleButton	menuItemAll;
+	@FXML
+	private ToggleButton	menuItemUser;
+	@FXML
+	private ToggleButton	menuItemVersion;
+	@FXML
+	private ToggleButton	menuItemFiles;
+	@FXML
+	private ToggleButton	menuItemSettings;
+	
+	@FXML
+	private ScrollPane	activeViewContainer;
+	private View		activeView;
+	
+	@FXML
+	private Hyperlink	hyperlinkGitHub;
+	@FXML
+	private Hyperlink	hyperlinkHelp;
+	
+	@FXML
+	private HBox bottomBarCustom;
+	
+	@FXML
+	private Label		globalProgressLabel;
+	@FXML
+	private ProgressBar	globalProgressBar;
+	
 	@Override
-	public void initialize()
-	{
+	public void initialize() {
 		Font.loadFont(MainController.class.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(), 12);
-
+		
 		final ToggleGroup menuToggleGroup = new ToggleGroup();
 		menuItemFav.setToggleGroup(menuToggleGroup);
 		menuItemAll.setToggleGroup(menuToggleGroup);
@@ -65,121 +75,105 @@ public class MainController implements ViewController
 		menuItemVersion.setToggleGroup(menuToggleGroup);
 		menuItemFiles.setToggleGroup(menuToggleGroup);
 		menuItemSettings.setToggleGroup(menuToggleGroup);
-
+		
 		menuItemFav.setText("\uf005");
 		menuItemAll.setText("\uf0c9");
 		menuItemUser.setText("\uf007");
 		menuItemVersion.setText("\uf0ed");
 		menuItemFiles.setText("\uf07b");
 		menuItemSettings.setText("\uf013");
-
+		
 		hyperlinkGitHub.setText("\uf09b");
 		hyperlinkHelp.setText("\uf059");
-
+		
 		hyperlinkGitHub.setTooltip(new Tooltip(Client.lang.getString("openGithubTooltip")));
 		hyperlinkHelp.setTooltip(new Tooltip(Client.lang.getString("openGithubWikiTooltip")));
-
-		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW))
-		{
+		
+		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW)) {
 			loadView(View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)));
-		}
-		else
-		{
+		} else {
 			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)));
 		}
-
+		
 	}
-
+	
 	@FXML
-	private void openGitHub()
-	{
+	private void openGitHub() {
 		OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser");
 	}
-
+	
 	@FXML
-	private void openHelp()
-	{
+	private void openHelp() {
 		OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/wiki");
 	}
-
+	
 	/**
 	 * Adds nodes to the Clients bottom bar.
 	 *
 	 * @param nodes
 	 *            the node that will be added
 	 */
-	public void addItemsToBottomBar(final Node... nodes)
-	{
+	public void addItemsToBottomBar(final Node... nodes) {
 		bottomBarCustom.getChildren().addAll(nodes);
 	}
-
+	
 	/**
 	 * @return the progress {@link DoubleProperty} of the {@link #globalProgressBar}
 	 */
-	public DoubleProperty progressProperty()
-	{
+	public DoubleProperty progressProperty() {
 		return globalProgressBar.progressProperty();
 	}
-
+	
 	/**
 	 * Sets the text infront of the global {@link ProgressBar} bar.
 	 *
 	 * @param text
 	 *            the text tht appears infront of the global {@link ProgressBar}
 	 */
-	public void setGlobalProgressText(final String text)
-	{
+	public void setGlobalProgressText(final String text) {
 		globalProgressLabel.setText(text);
 	}
-
+	
 	@FXML
-	private void onServersFavMenuItemClicked()
-	{
+	private void onServersFavMenuItemClicked() {
 		loadView(View.SERVERS_FAV);
 	}
-
+	
 	@FXML
-	private void onServersAllMenuItemClicked()
-	{
+	private void onServersAllMenuItemClicked() {
 		loadView(View.SERVERS_ALL);
 	}
-
+	
 	@FXML
-	private void onUsernameMenuItemClicked()
-	{
+	private void onUsernameMenuItemClicked() {
 		loadView(View.USERNAME_CHANGER);
 	}
-
+	
 	@FXML
-	private void onVersionMenuItemClicked()
-	{
+	private void onVersionMenuItemClicked() {
 		loadView(View.VERSION_CHANGER);
 	}
-
+	
 	@FXML
-	private void onFileMenuItemClicked()
-	{
+	private void onFileMenuItemClicked() {
 		loadView(View.FILES);
 	}
-
+	
 	@FXML
-	private void onSettingsMenuItemClicked()
-	{
+	private void onSettingsMenuItemClicked() {
 		loadView(View.SETTINGS);
 	}
-
+	
 	/**
 	 * Loads a specific view.
 	 *
 	 * @param view
 	 *            the view to be loaded
 	 */
-	public void loadView(final View view)
-	{
+	public void loadView(final View view) {
 		bottomBarCustom.getChildren().clear();
-
-		switch (view)
-		{
+		
+		switch (view) {
 			case SERVERS_FAV:
 				menuItemFav.setSelected(true);
 				break;
@@ -201,19 +195,17 @@ public class MainController implements ViewController
 			default:
 				throw new IllegalArgumentException("This View hasn't been implemented or is invalid: " + view);
 		}
-
+		
 		loadFXML(view);
 		activeView = view;
 	}
-
-	private void loadFXML(final View view)
-	{
-		try
-		{
+	
+	private void loadFXML(final View view) {
+		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
 			loader.setResources(Client.lang);
-
+			
 			// Creating a new instance of the specified controller, controllers never have
 			// constructor arguments, therefore this is supposedly fine.
 			loader.setController(view.getControllerType().newInstance());
@@ -221,32 +213,27 @@ public class MainController implements ViewController
 			toLoad.getStylesheets().setAll(view.getStylesheetPath());
 			activeViewContainer.setContent(toLoad);
 			Client.getInstance().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
-		}
-		catch (final IOException | InstantiationException | IllegalAccessException exception)
-		{
+		} catch (final IOException | InstantiationException | IllegalAccessException exception) {
 			Logging.log(Level.SEVERE, "Couldn't load view.", exception);
 		}
 	}
-
+	
 	/**
 	 * @return the current view
 	 */
-	public View getActiveView()
-	{
+	public View getActiveView() {
 		return activeView;
 	}
-
+	
 	/**
 	 * Reloads the current view.
 	 */
-	public void reloadView()
-	{
+	public void reloadView() {
 		loadView(activeView);
 	}
-
+	
 	@Override
-	public void onClose()
-	{
+	public void onClose() {
 		ClientPropertiesController.setProperty(Property.LAST_VIEW, activeView.getId());
 		Platform.exit(); // Make sure that the application doesnt stay open for some reason
 	}

@@ -14,40 +14,33 @@ import com.msc.serverbrowser.constants.PathConstants;
  * @author Marcel
  * @since 06.07.2017
  */
-public final class Logging
-{
+public final class Logging {
 	/**
 	 * The Loggers Singleton instance.
 	 */
 	private static Logger instance;
-
-	private Logging()
-	{
+	
+	private Logging() {
 		// Constructor to prevent instantiation
 	}
-
-	static
-	{
+	
+	static {
 		init();
 	}
-
-	private static void init()
-	{
+	
+	private static void init() {
 		instance = Logger.getAnonymousLogger();
 		instance.setLevel(Level.INFO);
-		try
-		{
+		try {
 			final FileHandler filehandler = new FileHandler(PathConstants.SAMPEX_LOG);
 			final SimpleFormatter formatter = new SimpleFormatter();
 			filehandler.setFormatter(formatter);
 			instance.addHandler(filehandler);
-		}
-		catch (SecurityException | IOException exception)
-		{
+		} catch (SecurityException | IOException exception) {
 			instance.log(Level.SEVERE, "Couldn't configure logger properly", exception);
 		}
 	}
-
+	
 	/**
 	 * Log a message, with associated Throwable information.
 	 * <p>
@@ -66,11 +59,10 @@ public final class Logging
 	 * @param throwable
 	 *            Throwable associated with log message.
 	 */
-	public static void log(final Level logLevel, final String message, final Throwable throwable)
-	{
+	public static void log(final Level logLevel, final String message, final Throwable throwable) {
 		instance.log(logLevel, message, throwable);
 	}
-
+	
 	/**
 	 * Log a message, with no arguments.
 	 * <p>
@@ -83,11 +75,10 @@ public final class Logging
 	 * @param message
 	 *            The string message (or a key in the message catalog)
 	 */
-	public static void log(final Level logLevel, final String message)
-	{
+	public static void log(final Level logLevel, final String message) {
 		instance.log(logLevel, message);
 	}
-
+	
 	/**
 	 * Log an INFO message.
 	 * <p>
@@ -98,8 +89,7 @@ public final class Logging
 	 * @param message
 	 *            The string message (or a key in the message catalog)
 	 */
-	public static void info(final String message)
-	{
+	public static void info(final String message) {
 		instance.info(message);
 	}
 }

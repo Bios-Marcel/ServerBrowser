@@ -14,26 +14,23 @@ import com.msc.serverbrowser.util.basic.StringUtility;
  * @author Marcel
  * @since 19.09.2017
  */
-public final class OSUtility
-{
+public final class OSUtility {
 	/**
 	 * Preserved os name, since it won't change anyways and reading from a variable is faster.
 	 */
 	private final static String OS = System.getProperty("os.name").toLowerCase();
-
-	private OSUtility()
-	{
+	
+	private OSUtility() {
 		// Constructor to prevent instantiation
 	}
-
+	
 	/**
 	 * @return true if the system is windows (most likely), otherwise false
 	 */
-	public static boolean isWindows()
-	{
+	public static boolean isWindows() {
 		return OS.startsWith("windows");
 	}
-
+	
 	/**
 	 * Opens a website using the default browser. It will automatically apply http:// infront of the
 	 * url if not existant already.
@@ -41,18 +38,14 @@ public final class OSUtility
 	 * @param urlAsString
 	 *            website to visit
 	 */
-	public static void browse(final String urlAsString)
-	{
+	public static void browse(final String urlAsString) {
 		final Desktop desktop = Desktop.getDesktop();
-
-		try
-		{
+		
+		try {
 			final String fixedUrl = StringUtility.fixUrlIfNecessary(urlAsString);
 			final URL url = new URL(fixedUrl);
 			desktop.browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
-		}
-		catch (final IOException | URISyntaxException exception)
-		{
+		} catch (final IOException | URISyntaxException exception) {
 			Logging.log(Level.WARNING, "Couldn't visit website '" + urlAsString + "'", exception);
 		}
 	}

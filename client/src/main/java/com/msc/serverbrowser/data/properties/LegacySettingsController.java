@@ -20,21 +20,20 @@ import com.msc.serverbrowser.util.basic.StringUtility;
  * @author Marcel
  */
 @SuppressWarnings("javadoc")
-public final class LegacySettingsController
-{
-	private static final String	FALSE_AS_INT				= "0";
-
-	public static final String	FPS_LIMIT					= "fpslimit";
-	public static final String	PAGE_SIZE					= "pagesize";
-	public static final String	MULTICORE					= "multicore";
-	public static final String	TIMESTAMP					= "timestamp";
-	public static final String	AUDIO_PROXY_OFF				= "audioproxyoff";
-	public static final String	AUDIO_MESSAGE_OFF			= "audiomsgoff";
-	public static final String	HEAD_MOVE					= "disableheadmove";
-	public static final String	IME							= "ime";
-	public static final String	DIRECT_MODE					= "directmode";
-	public static final String	NO_NAME_TAG_STATUS			= "nonametagstatus";
-
+public final class LegacySettingsController {
+	private static final String FALSE_AS_INT = "0";
+	
+	public static final String	FPS_LIMIT			= "fpslimit";
+	public static final String	PAGE_SIZE			= "pagesize";
+	public static final String	MULTICORE			= "multicore";
+	public static final String	TIMESTAMP			= "timestamp";
+	public static final String	AUDIO_PROXY_OFF		= "audioproxyoff";
+	public static final String	AUDIO_MESSAGE_OFF	= "audiomsgoff";
+	public static final String	HEAD_MOVE			= "disableheadmove";
+	public static final String	IME					= "ime";
+	public static final String	DIRECT_MODE			= "directmode";
+	public static final String	NO_NAME_TAG_STATUS	= "nonametagstatus";
+	
 	public static final String	FPS_LIMIT_DEFAULT			= "50";
 	public static final String	PAGE_SIZE_DEFAULT			= "10";
 	public static final String	MULTICORE_DEFAULT			= "1";
@@ -45,32 +44,27 @@ public final class LegacySettingsController
 	public static final String	IME_DEFAULT					= FALSE_AS_INT;
 	public static final String	DIRECT_MODE_DEFAULT			= FALSE_AS_INT;
 	public static final String	NO_NAME_TAG_STATUS_DEFAULT	= FALSE_AS_INT;
-
-	private LegacySettingsController()
-	{
+	
+	private LegacySettingsController() {
 		// Constructor to prevent instantiation
 	}
-
+	
 	/**
 	 * @return {@link Properties} object containing the present legacy SA-MP
 	 *         Settings or an empty
 	 *         {@link Optional}
 	 */
-	public static Optional<Properties> getLegacyProperties()
-	{
+	public static Optional<Properties> getLegacyProperties() {
 		final Properties properties = new Properties();
-		try (FileInputStream input = new FileInputStream(PathConstants.SAMP_CFG))
-		{
+		try (FileInputStream input = new FileInputStream(PathConstants.SAMP_CFG)) {
 			properties.load(input);
 			return Optional.of(properties);
-		}
-		catch (final IOException exception)
-		{
+		} catch (final IOException exception) {
 			Logging.log(Level.SEVERE, "Error while loading SA_MP legacy properties.", exception);
 			return Optional.empty();
 		}
 	}
-
+	
 	/**
 	 * Override the SA-MP legacy settings using the passed {@link Properties}
 	 * object.
@@ -79,39 +73,25 @@ public final class LegacySettingsController
 	 *            the {@link Properties} object to overwrite the legacy properties
 	 *            with
 	 */
-	public static void save(final Properties properties)
-	{
-		try (FileOutputStream output = new FileOutputStream(PathConstants.SAMP_CFG))
-		{
+	public static void save(final Properties properties) {
+		try (FileOutputStream output = new FileOutputStream(PathConstants.SAMP_CFG)) {
 			properties.store(output, null);
-		}
-		catch (final IOException exception)
-		{
+		} catch (final IOException exception) {
 			Logging.log(Level.SEVERE, "Error while saving SA_MP legacy properties.", exception);
 		}
 	}
-
-	public static void restoreLegacySettings()
-	{
+	
+	public static void restoreLegacySettings() {
 		final Properties properties = getLegacyProperties().orElse(new Properties());
-
-		properties.put(LegacySettingsController.AUDIO_MESSAGE_OFF,
-				StringUtility.stringToBoolean(LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT));
-		properties.put(LegacySettingsController.AUDIO_PROXY_OFF,
-				StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
-		properties.put(LegacySettingsController.DIRECT_MODE,
-				StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
-		properties.put(LegacySettingsController.HEAD_MOVE,
-				StringUtility.stringToBoolean(LegacySettingsController.DISABLE_HEAD_MOVE_DEFAULT));
-		properties.put(LegacySettingsController.FPS_LIMIT,
-				Integer.parseInt(LegacySettingsController.FPS_LIMIT_DEFAULT));
-		properties.put(LegacySettingsController.PAGE_SIZE,
-				Integer.parseInt(LegacySettingsController.PAGE_SIZE_DEFAULT));
-		properties.put(LegacySettingsController.IME,
-				StringUtility.stringToBoolean(LegacySettingsController.IME_DEFAULT));
-		properties.put(LegacySettingsController.MULTICORE,
-				StringUtility.stringToBoolean(LegacySettingsController.MULTICORE_DEFAULT));
-		properties.put(LegacySettingsController.TIMESTAMP,
-				StringUtility.stringToBoolean(LegacySettingsController.TIMESTAMP_DEFAULT));
+		
+		properties.put(LegacySettingsController.AUDIO_MESSAGE_OFF, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT));
+		properties.put(LegacySettingsController.AUDIO_PROXY_OFF, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
+		properties.put(LegacySettingsController.DIRECT_MODE, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
+		properties.put(LegacySettingsController.HEAD_MOVE, StringUtility.stringToBoolean(LegacySettingsController.DISABLE_HEAD_MOVE_DEFAULT));
+		properties.put(LegacySettingsController.FPS_LIMIT, Integer.parseInt(LegacySettingsController.FPS_LIMIT_DEFAULT));
+		properties.put(LegacySettingsController.PAGE_SIZE, Integer.parseInt(LegacySettingsController.PAGE_SIZE_DEFAULT));
+		properties.put(LegacySettingsController.IME, StringUtility.stringToBoolean(LegacySettingsController.IME_DEFAULT));
+		properties.put(LegacySettingsController.MULTICORE, StringUtility.stringToBoolean(LegacySettingsController.MULTICORE_DEFAULT));
+		properties.put(LegacySettingsController.TIMESTAMP, StringUtility.stringToBoolean(LegacySettingsController.TIMESTAMP_DEFAULT));
 	}
 }
