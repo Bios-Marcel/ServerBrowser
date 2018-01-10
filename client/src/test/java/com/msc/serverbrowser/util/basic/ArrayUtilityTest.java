@@ -17,13 +17,13 @@ import org.junit.jupiter.api.Test;
 public class ArrayUtilityTest {
 	@Test
 	@DisplayName("Test merging three arrays of different length")
-	public static void testMerge() {
+	public void testMerge() {
 		final byte[] arr = { 1, 2, 3 };
 		final byte[] arr2 = { 4, 5, 6, 7 };
 		final byte[] arr3 = { 8, 9 };
-		
-		final byte[] arrMerged = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
+		final byte[] arrMerged = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		
 		assertTrue(Arrays.equals(arrMerged, ArrayUtility.merge(arr, arr2, arr3)));
 	}
 }
