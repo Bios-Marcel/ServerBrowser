@@ -40,7 +40,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -121,8 +120,7 @@ public final class Client extends Application {
 		mainController = new MainController();
 		loader.setController(mainController);
 		try {
-			final Parent root = loader.load();
-			final Scene scene = new Scene(root);
+			final Scene scene = new Scene(loader.load());
 			stage.setScene(scene);
 			
 			applyTheme();
@@ -181,13 +179,17 @@ public final class Client extends Application {
 		
 		primaryStage.show();
 		
-		final boolean showChanelog = ClientPropertiesController.getPropertyAsBoolean(Property.SHOW_CHANGELOG);
-		final boolean changelogEnabled = ClientPropertiesController.getPropertyAsBoolean(Property.CHANGELOG_ENABLED);
-		
-		if (showChanelog && changelogEnabled) {
+		if (ClientPropertiesController.getPropertyAsBoolean(Property.SHOW_CHANGELOG)
+			&& ClientPropertiesController.getPropertyAsBoolean(Property.CHANGELOG_ENABLED)) {
+
+			// Since the changelog has been shown after this update, it shall not be shown again, unless there is another update
 			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, false);
-			final TrayNotification trayNotification = new TrayNotificationBuilder().type(NotificationTypeImplementations.INFORMATION).title(Client.lang.getString("updated"))
-							.message(Client.lang.getString("clickForChangelog")).animation(Animations.SLIDE).build();
+			
+			final TrayNotification trayNotification = new TrayNotificationBuilder()
+							.type(NotificationTypeImplementations.INFORMATION)
+							.title(Client.lang.getString("updated"))
+							.message(Client.lang.getString("clickForChangelog"))
+							.animation(Animations.SLIDE).build();
 			
 			trayNotification.setOnMouseClicked(__ -> {
 				OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
@@ -199,8 +201,7 @@ public final class Client extends Application {
 	
 	/**
 	 * Creates files and folders that are necessary for the application to run
-	 * properly and migrates
-	 * old xml data.
+	 * properly and migrates old xml data.
 	 */
 	private static void createFolderStructure() {
 		final File sampexFolder = new File(PathConstants.SAMPEX_PATH);
@@ -311,7 +312,7 @@ public final class Client extends Application {
 	
 	private static void finishUpdate() {
 		try {
-			FileUtility.copyOverwrite(PathConstants.SAMPEX_TEMP_JAR, getOwnJarFile().getPath());
+			FileUtility.copyOverwrite(PathConstants.SAMPEX_TEMP_JAR, PathConstants.OWN_JAR.getPath());
 			ClientPropertiesController.setProperty(Property.SHOW_CHANGELOG, true);
 			Files.delete(Paths.get(PathConstants.SAMPEX_TEMP_JAR));
 			selfRestart();
@@ -332,19 +333,10 @@ public final class Client extends Application {
 	}
 	
 	/**
-	 * @return a File pointing to the applications own jar file
-	 */
-	private static File getOwnJarFile() {
-		return new File(System.getProperty("java.class.path")).getAbsoluteFile();
-	}
-	
-	/**
 	 * Restarts the application.
 	 */
 	private static void selfRestart() {
-		final File currentJar = getOwnJarFile();
-		
-		if (!currentJar.getName().endsWith(".jar")) {// The application wasn't run with a jar file, but in an ide
+		if (!PathConstants.OWN_JAR.getName().endsWith(".jar")) {// The application wasn't run with a jar file, but in an ide
 			return;
 		}
 		
@@ -353,7 +345,7 @@ public final class Client extends Application {
 		
 		command.add(javaBin);
 		command.add("-jar");
-		command.add(currentJar.getPath());
+		command.add(PathConstants.OWN_JAR.getPath());
 		
 		try {
 			final ProcessBuilder builder = new ProcessBuilder(command);
@@ -365,7 +357,7 @@ public final class Client extends Application {
 	}
 	
 	/**
-	 * Programs entry point, it also intitializes specific when passed as args.
+	 * Programs entry point, it also does specific things when passed specific arguments.
 	 *
 	 * @param args
 	 *            evaluated by {@link #readApplicationArguments}
@@ -378,15 +370,14 @@ public final class Client extends Application {
 		// TODO(MSC) Consider letting the user allow to turn these on
 		// System.setProperty("prism.lcdtext", "false");
 		// System.setProperty("prism.text", "t2k");
+		
 		createFolderStructure();
 		
 		final Locale locale = new Locale(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE));
 		lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
 		
 		readApplicationArguments(args);
-		
 		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));
-		
 		Application.launch(args);
 	}
 	
@@ -416,7 +407,7 @@ public final class Client extends Application {
 	}
 	
 	/**
-	 * Reloads the active view, incase it is the given one.
+	 * Reloads the active view, if it is the given one.
 	 *
 	 * @param view
 	 *            the view to reload

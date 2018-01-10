@@ -18,7 +18,7 @@ public final class ClientPropertiesController {
 	private ClientPropertiesController() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Returns a properties default as an integer if the datatype is correct.
 	 *
@@ -28,10 +28,10 @@ public final class ClientPropertiesController {
 	 */
 	public static Integer getDefaultAsInt(final Property property) {
 		checkDataType(property, Integer.class);
-		
+
 		return Integer.parseInt(property.defaultValue());
 	}
-	
+
 	/**
 	 * Retrieves a value for a specific key from {@link Property}.
 	 *
@@ -40,25 +40,24 @@ public final class ClientPropertiesController {
 	 * @return the value for the given {@link Property}
 	 */
 	public static String getPropertyAsString(final Property property) {
-		String value = property.defaultValue();
-		
-		String statement = "SELECT value FROM setting WHERE id = {0};";
-		statement = MessageFormat.format(statement, property.id());
+		final String statement = "SELECT value FROM setting WHERE id = " + property.id() + ";";
 		final Optional<ResultSet> resultSetOptional = SQLDatabase.getInstance().executeGetResult(statement);
 		if (resultSetOptional.isPresent()) {
-			try (final ResultSet resultSet = resultSetOptional.get();) {
-				while (resultSet.next()) {
-					value = resultSet.getString("value");
+			try (final ResultSet resultSet = resultSetOptional.get()) {
+				if (resultSet.next()) {
+					return Optional
+									.ofNullable(resultSet.getString("value"))
+									.orElse(property.defaultValue());
 				}
 			} catch (final SQLException exception) {
 				Logging.log(Level.SEVERE, "Could not set the property as a String.", exception);
 			}
 		}
-		
-		return Objects.isNull(value) ? property.defaultValue() : value;
-		
+
+		return property.defaultValue();
+
 	}
-	
+
 	/**
 	 * Retrieves a value for a specific key from {@link Property}.
 	 *
@@ -68,12 +67,12 @@ public final class ClientPropertiesController {
 	 */
 	public static Integer getPropertyAsInt(final Property property) {
 		checkDataType(property, Integer.class);
-		
+
 		final String originalValue = getPropertyAsString(property);
-		
+
 		return Integer.parseInt(originalValue);
 	}
-	
+
 	/**
 	 * Retrieves a value for a specific key from {@link Property}.
 	 *
@@ -83,12 +82,12 @@ public final class ClientPropertiesController {
 	 */
 	public static Float getPropertyAsFloat(final Property property) {
 		checkDataType(property, Float.class);
-		
+
 		final String originalValue = getPropertyAsString(property);
-		
+
 		return Float.parseFloat(originalValue);
 	}
-	
+
 	/**
 	 * Retrieves a value for a specific key from {@link Property}.
 	 *
@@ -98,16 +97,16 @@ public final class ClientPropertiesController {
 	 */
 	public static Boolean getPropertyAsBoolean(final Property property) {
 		checkDataType(property, Boolean.class);
-		
+
 		return Boolean.parseBoolean(getPropertyAsString(property));
 	}
-	
+
 	private static void checkDataType(final Property property, final Class<?> datatype) {
 		if (!property.datatype().equals(datatype)) {
 			throw new IllegalArgumentException("Datatype is " + datatype.getName() + " ; Expected: " + property.datatype().getName());
 		}
 	}
-	
+
 	/**
 	 * Sets a value for a specific key from {@link Property}.
 	 *
@@ -119,7 +118,7 @@ public final class ClientPropertiesController {
 	public static void setProperty(final Property property, final Object value) {
 		setProperty(property, value, false);
 	}
-	
+
 	private static void setProperty(final Property property, final Object value, final boolean omitCheck) {
 		if (Objects.nonNull(value) && !omitCheck) {// Check will only be performed if its non null
 			checkDataType(property, value.getClass());
@@ -134,7 +133,7 @@ public final class ClientPropertiesController {
 		}
 		SQLDatabase.getInstance().execute(statement);
 	}
-	
+
 	/**
 	 * Sets a value as an {@link Float} for a specific key from {@link Property}.
 	 *
@@ -147,7 +146,7 @@ public final class ClientPropertiesController {
 		nullCheck(value);
 		setProperty(property, (Object) value);
 	}
-	
+
 	/**
 	 * Sets a value as an {@link Integer} for a specific key from {@link Property}.
 	 *
@@ -160,7 +159,7 @@ public final class ClientPropertiesController {
 		nullCheck(value);
 		setProperty(property, (Object) value);
 	}
-	
+
 	/**
 	 * Sets a value as a {@link Boolean} for a specific key from {@link Property}.
 	 *
@@ -173,7 +172,7 @@ public final class ClientPropertiesController {
 		nullCheck(value);
 		setProperty(property, (Object) value);
 	}
-	
+
 	/**
 	 * Sets a value as a {@link String} for a specific key from {@link Property}.
 	 *
@@ -185,13 +184,13 @@ public final class ClientPropertiesController {
 	public static void setProperty(final Property property, final String value) {
 		setProperty(property, (Object) value);
 	}
-	
+
 	private static void nullCheck(final Object value) {
 		if (Objects.isNull(value)) {
 			throw new IllegalArgumentException("Value can't be null.");
 		}
 	}
-	
+
 	/**
 	 * Restores a property to its hardcoded default value.
 	 *
