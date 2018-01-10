@@ -62,7 +62,7 @@ public class VersionChangeController implements ViewController {
 	static {
 		final String site = PathConstants.SAMP_DOWNLOAD_LOCATION;
 
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3.7", "0.3.7", site + "0.37.zip", false, SourceType.INTERNET,
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3.7", "0.3.7", site + "0.3.7.zip", false, SourceType.INTERNET,
 						"4CBFD7E3FB3CD4934A94A8F9B387DDD75581A4E97CBCA10AA568341DE5273630"));
 		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3z", "0.3z", site + "0.3z.zip", false, SourceType.INTERNET,
 						"9ECD672DC16C24EF445AA1B411CB737832362B2632ACDA60BCC66358D4D85AD3"));
