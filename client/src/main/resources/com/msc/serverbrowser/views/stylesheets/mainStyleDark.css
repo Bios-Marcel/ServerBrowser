@@ -322,6 +322,10 @@
 {
 	-fx-background-color: -component-background-color-selected;
 }
+.MenuItem:selected
+{
+	-fx-background-color: -component-background-color-selected;
+}
 
 /**
  * Spinner
