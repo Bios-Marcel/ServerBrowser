@@ -38,7 +38,7 @@
 					<children>
 						<Hyperlink fx:id="hyperlinkGitHub" onAction="#openGitHub" styleClass="info-icon" />
 						<Hyperlink fx:id="hyperlinkHelp" onAction="#openHelp" styleClass="info-icon" />
-						<Hyperlink fx:id="hyperlinkDonate" onAction="#openDonationPage" styleClass="info-icon" />
+						<Hyperlink fx:id="hyperlinkDonate" maxHeight="1.7976931348623157E308" onAction="#openDonationPage" styleClass="donate-button" />
 						<HBox fx:id="bottomBarCustom" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" HBox.hgrow="ALWAYS">
 							<padding>
 								<Insets left="10" right="10"></Insets>

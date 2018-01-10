@@ -39,6 +39,18 @@
     -fx-text-fill: -menu-color;
 }
 
+.donate-button
+{
+    -fx-font-family: FontAwesome;
+    -fx-font-size: 1.4em;
+	-fx-text-fill: -menu-color;
+}
+
+.donate-button:visited
+{
+    -fx-text-fill: -menu-color;
+}
+
 .bottom-bar
 {
 	-fx-border-width: 1.0 0.0 0.0 0.0;

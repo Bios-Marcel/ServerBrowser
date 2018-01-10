@@ -56,23 +56,26 @@ public class VersionChangeController implements ViewController {
 	@FXML
 	private VBox buttonContainer;
 
+	/**
+	 * Adding all useable InstallationCandidates, but this could probably be made in a more desireable way.
+	 */
 	static {
 		final String site = PathConstants.SAMP_DOWNLOAD_LOCATION;
 
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3a", "0.3a", site + "0.3a.zip", false, SourceType.INTERNET,
-						"C860D1032BBD9DCC9DF9E0E4E89611D5F12C967E29BE138CCBCC3ECB3303C2BF"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3c", "0.3c", site + "0.3c.zip", false, SourceType.INTERNET,
-						"F5C1A0EDF562F188365038D97A28F950AFF8CA56C7362F9DC813FDC2BDE3B8F6"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3d", "0.3d", site + "0.3d.zip", false, SourceType.INTERNET,
-						"356E78D14221D74793349A9C306720CDF9D1B2EC94172A27D85163818CBDE63C"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3e", "0.3e", site + "0.3e.zip", false, SourceType.INTERNET,
-						"13E2F31718C24ADE07E3E8E79D644957589C1584022FA2F87895A1B7298F1C25"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3x", "0.3x", site + "0.3x.zip", false, SourceType.INTERNET,
-						"B0D3FE71D9F7FF39D18468F6FCD506B8D1B28267EC81D7616E886B9A238400EC"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3.7", "0.3.7", site + "0.37.zip", false, SourceType.INTERNET,
+						"4CBFD7E3FB3CD4934A94A8F9B387DDD75581A4E97CBCA10AA568341DE5273630"));
 		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3z", "0.3z", site + "0.3z.zip", false, SourceType.INTERNET,
 						"9ECD672DC16C24EF445AA1B411CB737832362B2632ACDA60BCC66358D4D85AD3"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.37", "0.37", site + "0.37.zip", false, SourceType.INTERNET,
-						"4CBFD7E3FB3CD4934A94A8F9B387DDD75581A4E97CBCA10AA568341DE5273630"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3x", "0.3x", site + "0.3x.zip", false, SourceType.INTERNET,
+						"B0D3FE71D9F7FF39D18468F6FCD506B8D1B28267EC81D7616E886B9A238400EC"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3e", "0.3e", site + "0.3e.zip", false, SourceType.INTERNET,
+						"13E2F31718C24ADE07E3E8E79D644957589C1584022FA2F87895A1B7298F1C25"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3d", "0.3d", site + "0.3d.zip", false, SourceType.INTERNET,
+						"356E78D14221D74793349A9C306720CDF9D1B2EC94172A27D85163818CBDE63C"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3c", "0.3c", site + "0.3c.zip", false, SourceType.INTERNET,
+						"F5C1A0EDF562F188365038D97A28F950AFF8CA56C7362F9DC813FDC2BDE3B8F6"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3a", "0.3a", site + "0.3a.zip", false, SourceType.INTERNET,
+						"C860D1032BBD9DCC9DF9E0E4E89611D5F12C967E29BE138CCBCC3ECB3303C2BF"));
 	}
 
 	@Override
