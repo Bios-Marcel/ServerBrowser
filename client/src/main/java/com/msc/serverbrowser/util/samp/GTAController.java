@@ -153,7 +153,7 @@ public final class GTAController {
 			Logging.log(Level.SEVERE, "Error hashing installed samp.dll", exception);
 		}
 		final String hashsumSafe = hashsum == null ? "" : hashsum;
-		return VersionChangeController.installationCandidates.stream().filter(candidate -> candidate.getSampDLLChecksum().equals(hashsumSafe)).findFirst();
+		return VersionChangeController.INSTALLATION_CANDIDATES.stream().filter(candidate -> candidate.getSampDLLChecksum().equals(hashsumSafe)).findFirst();
 	}
 
 	/**
