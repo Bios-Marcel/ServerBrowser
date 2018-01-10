@@ -11,7 +11,7 @@ public final class ArrayUtility {
 	private ArrayUtility() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Returns the longer of two arrays.
 	 *
@@ -29,10 +29,10 @@ public final class ArrayUtility {
 		} else if (arrayTwo.length > arrayOne.length) {
 			return Optional.of(arrayTwo);
 		}
-		
+
 		return Optional.empty();
 	}
-	
+
 	/**
 	 * Checks if the array contains the given item.
 	 *
@@ -46,7 +46,7 @@ public final class ArrayUtility {
 		if (Objects.isNull(array) || array.length == 0) {
 			return false;
 		}
-		
+
 		for (final T object : array) {
 			if (object.equals(searchFor)) {
 				return true;
@@ -54,20 +54,32 @@ public final class ArrayUtility {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Concats two byte arrays the follwing way:
+	 * <p>
+	 * <code>arrayOne + arrayTwo</code>
+	 * </p>
+	 *
+	 * @param arrayOne
+	 *            Array one
+	 * @param arrayTwo
+	 *            Array two
+	 * @return the combined bytw array
+	 */
 	public static byte[] merge(final byte[] arrayOne, final byte[] arrayTwo) {
 		final int lengthNew = arrayOne.length + arrayTwo.length;
-		
+
 		final byte[] toReturn = new byte[lengthNew];
-		
+
 		for (int i = 0; i < arrayOne.length; i++) {
 			toReturn[i] = arrayOne[i];
 		}
-		
+
 		for (int i = arrayOne.length; i < lengthNew; i++) {
 			toReturn[i] = arrayTwo[i - arrayOne.length];
 		}
-		
+
 		return toReturn;
 	}
 }
