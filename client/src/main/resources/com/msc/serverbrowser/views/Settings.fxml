@@ -67,12 +67,12 @@
 									<children>
 										<Label maxHeight="1.7976931348623157E308" text="%fpsLimit" />
 										<Label maxHeight="1.7976931348623157E308" text="%pageSize" GridPane.rowIndex="1" />
-										<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1">
+										<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1" editable="true">
 											<valueFactory>
 												<SpinnerValueFactory.IntegerSpinnerValueFactory max="90" min="20" />
 											</valueFactory>
 										</Spinner>
-										<Spinner fx:id="pageSizeSpinner" maxWidth="70.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+										<Spinner fx:id="pageSizeSpinner" maxWidth="70.0" GridPane.columnIndex="1" GridPane.rowIndex="1" editable="true">
 											<valueFactory>
 												<SpinnerValueFactory.IntegerSpinnerValueFactory max="20" min="10" />
 											</valueFactory>
