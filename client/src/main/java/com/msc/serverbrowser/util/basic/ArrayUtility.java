@@ -1,5 +1,6 @@
 package com.msc.serverbrowser.util.basic;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -65,19 +66,18 @@ public final class ArrayUtility {
 	 *            Array one
 	 * @param arrayTwo
 	 *            Array two
-	 * @return the combined bytw array
+	 * @return the combined byte array
 	 */
-	public static byte[] merge(final byte[] arrayOne, final byte[] arrayTwo) {
-		final int lengthNew = arrayOne.length + arrayTwo.length;
-
+	public static byte[] merge(final byte[] arrayOne, final byte[]... arrays) {
+		final int lengthNew = arrayOne.length + Arrays.asList(arrays).stream().mapToInt(arr -> arr.length).sum();
 		final byte[] toReturn = new byte[lengthNew];
 
-		for (int i = 0; i < arrayOne.length; i++) {
-			toReturn[i] = arrayOne[i];
-		}
+		System.arraycopy(arrayOne, 0, toReturn, 0, arrayOne.length);
 
-		for (int i = arrayOne.length; i < lengthNew; i++) {
-			toReturn[i] = arrayTwo[i - arrayOne.length];
+		int startPos = arrayOne.length;
+		for (final byte[] arr : arrays) {
+			System.arraycopy(arr, 0, toReturn, startPos, arr.length);
+			startPos += arr.length;
 		}
 
 		return toReturn;
