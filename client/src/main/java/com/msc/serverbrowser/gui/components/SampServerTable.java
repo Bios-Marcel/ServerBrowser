@@ -1,8 +1,5 @@
 package com.msc.serverbrowser.gui.components;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -32,6 +29,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
@@ -44,86 +43,85 @@ import javafx.scene.input.MouseButton;
  */
 public class SampServerTable extends TableView<SampServer> {
 	private SampServerTableMode tableMode = SampServerTableMode.ALL;
-	
+
 	private final MenuItem	addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
 	private final MenuItem	removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
 	private final MenuItem	visitWebsiteMenuItem			= new MenuItem("Visit Website");
 	private final MenuItem	connectMenuItem					= new MenuItem("Connect to Server");
 	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
-	
+
 	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem,
 					copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
-	
+
 	private final ObservableList<SampServer> servers = getItems();
-	
+
 	private final FilteredList<SampServer>	filteredServers	= new FilteredList<>(servers);
 	private final SortedList<SampServer>	sortedServers	= new SortedList<>(filteredServers);
-	
+
 	/**
 	 * Contructor; sets the TableRowFactory, the ContextMenu Actions and table settings.
 	 */
 	public SampServerTable() {
 		setItems(sortedServers);
-		
+
 		getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		setKeyActions();
 		setTableRowFactory();
 		setMenuItemDefaultActions();
 	}
-	
+
 	private Optional<SampServer> getFirstIfAnythingSelected() {
 		final List<SampServer> selectedServers = getSelectionModel().getSelectedItems();
-		
+
 		if (selectedServers.isEmpty()) {
 			return Optional.empty();
 		}
-		
+
 		return Optional.ofNullable(selectedServers.get(0));
 	}
-	
+
 	private void setKeyActions() {
 		setOnKeyReleased(released -> {
 			if (tableMode == SampServerTableMode.FAVOURITES && released.getCode() == KeyCode.DELETE) {
 				deleteSelectedFavourites();
 			}
 		});
-		
+
 	}
-	
+
 	private void setMenuItemDefaultActions() {
 		connectMenuItem.setOnAction(__ -> {
 			getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
 		});
-		
+
 		visitWebsiteMenuItem.setOnAction(__ -> {
 			getFirstIfAnythingSelected().ifPresent(server -> OSUtility.browse(server.getWebsite()));
 		});
-		
+
 		addToFavouritesMenuItem.setOnAction(__ -> {
 			final List<SampServer> serverList = getSelectionModel().getSelectedItems();
 			serverList.forEach(FavouritesController::addServerToFavourites);
 		});
-		
+
 		removeFromFavouritesMenuItem.setOnAction(__ -> deleteSelectedFavourites());
-		
+
 		copyIpAddressAndPortMenuItem.setOnAction(__ -> {
 			final Optional<SampServer> serverOptional = getFirstIfAnythingSelected();
-			
+
 			serverOptional.ifPresent(server -> {
-				final String addressAndPort = server.getAddress() + ":" + server.getPort();
-				final StringSelection stringSelection = new StringSelection(addressAndPort);
-				final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-				clipboard.setContents(stringSelection, null);
+				final ClipboardContent content = new ClipboardContent();
+				content.putString(server.getAddress() + ":" + server.getPort());
+				Clipboard.getSystemClipboard().setContent(content);
 			});
 		});
 	}
-	
+
 	private void deleteSelectedFavourites() {
 		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("sureYouWantToDeleteFavourites"), ButtonType.YES, ButtonType.NO);
 		Client.insertAlertOwner(alert);
 		alert.setTitle(Client.lang.getString("deleteFavourites"));
 		final Optional<ButtonType> result = alert.showAndWait();
-		
+
 		result.ifPresent(buttonType -> {
 			if (buttonType == ButtonType.YES) {
 				final List<SampServer> serverList = getSelectionModel().getSelectedItems();
@@ -132,17 +130,17 @@ public class SampServerTable extends TableView<SampServer> {
 			}
 		});
 	}
-	
+
 	private void setTableRowFactory() {
 		setRowFactory(facotry -> {
 			final TableRow<SampServer> row = new TableRow<>();
-			
+
 			row.setOnMouseClicked(clicked -> {
 				if (clicked.getButton() == MouseButton.PRIMARY) {
 					final Long lastLeftClickTime = (Long) row.getUserData();
 					final boolean wasDoubleClick = Objects.nonNull(lastLeftClickTime) && System.currentTimeMillis() - lastLeftClickTime < 300;
 					final boolean onlyOneSelectedItem = getSelectionModel().getSelectedItems().size() == 1;
-					
+
 					if (wasDoubleClick && onlyOneSelectedItem) {
 						if (ClientPropertiesController.getPropertyAsBoolean(Property.CONNECT_ON_DOUBLECLICK)) {
 							getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
@@ -151,11 +149,11 @@ public class SampServerTable extends TableView<SampServer> {
 						row.setUserData(Long.valueOf(System.currentTimeMillis()));
 					}
 				}
-				
+
 				contextMenu.hide();
 				final List<SampServer> serverList = getSelectionModel().getSelectedItems();
 				final SampServer rowItem = row.getItem();
-				
+
 				if (getSelectionModel().getSelectedIndices().contains(row.getIndex())) {
 					if (!serverList.isEmpty() && clicked.getButton().equals(MouseButton.SECONDARY)) {
 						displayMenu(serverList, clicked.getScreenX(), clicked.getScreenY());
@@ -170,13 +168,13 @@ public class SampServerTable extends TableView<SampServer> {
 						getSelectionModel().clearSelection();
 					}
 				}
-				
+
 			});
-			
+
 			return row;
 		});
 	}
-	
+
 	/**
 	 * Displays the context menu for server entries.
 	 *
@@ -189,20 +187,20 @@ public class SampServerTable extends TableView<SampServer> {
 	 */
 	private void displayMenu(final List<SampServer> serverList, final double posX, final double posY) {
 		final boolean sizeEqualsOne = serverList.size() == 1;
-		
+
 		connectMenuItem.setVisible(sizeEqualsOne);
 		contextMenu.getItems().get(1).setVisible(sizeEqualsOne); // Separator
 		copyIpAddressAndPortMenuItem.setVisible(sizeEqualsOne);
 		visitWebsiteMenuItem.setVisible(sizeEqualsOne);
-		
+
 		final boolean favouriteMode = tableMode == SampServerTableMode.FAVOURITES;
-		
+
 		addToFavouritesMenuItem.setVisible(!favouriteMode);
 		removeFromFavouritesMenuItem.setVisible(favouriteMode);
-		
+
 		contextMenu.show(this, posX, posY);
 	}
-	
+
 	/**
 	 * Sets the mode, which decides how the table will behave.
 	 *
@@ -212,28 +210,28 @@ public class SampServerTable extends TableView<SampServer> {
 	public void setServerTableMode(final SampServerTableMode mode) {
 		tableMode = mode;
 	}
-	
+
 	/**
 	 * @return the comparator property that is used to sort the items
 	 */
 	public ObjectProperty<Comparator<? super SampServer>> sortedListComparatorProperty() {
 		return sortedServers.comparatorProperty();
 	}
-	
+
 	/**
 	 * @return the predicate property that is used to filter the data
 	 */
 	public ObjectProperty<Predicate<? super SampServer>> predicateProperty() {
 		return filteredServers.predicateProperty();
 	}
-	
+
 	/**
 	 * @return the {@link ObservableList} list that contains all data and is mutable
 	 */
 	public ObservableList<SampServer> getDataList() {
 		return servers;
 	}
-	
+
 	/**
 	 * Returns true if this list contains the specified element
 	 *
@@ -244,7 +242,7 @@ public class SampServerTable extends TableView<SampServer> {
 	public boolean contains(final SampServer server) {
 		return servers.contains(server);
 	}
-	
+
 	/**
 	 * Adds a new {@link SampServer} to the data.
 	 *
@@ -254,7 +252,7 @@ public class SampServerTable extends TableView<SampServer> {
 	public void add(final SampServer newServer) {
 		servers.add(newServer);
 	}
-	
+
 	/**
 	 * Adds a collection of new {@link SampServer} to the data.
 	 *

@@ -12,9 +12,10 @@ import javax.swing.filechooser.FileSystemView;
 @SuppressWarnings("javadoc")
 public final class PathConstants {
 	// Internal Paths
-	public static final String	VIEW_PATH		= "/com/msc/serverbrowser/views/";
+	private static final String	MAIN_PACKAGE	= "/com/msc/serverbrowser/";
+	public static final String	VIEW_PATH		= MAIN_PACKAGE + "views/";
 	public static final String	STYLESHEET_PATH	= VIEW_PATH + "stylesheets/";
-	public static final String	APP_ICON_PATH	= "/com/msc/serverbrowser/icons/icon.png";
+	public static final String	APP_ICON_PATH	= MAIN_PACKAGE + "icons/icon.png";
 	
 	// Application specific Paths
 	public static final String	USER_PATH		= System.getProperty("user.home") + File.separator;
