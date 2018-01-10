@@ -246,11 +246,13 @@ public class SettingsController implements ViewController {
 		});
 	}
 	
+	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickManualUpdate() {
 		Client.getInstance().checkForUpdates();
 	}
 	
+	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickClearDownloadCache() {
 		CacheController.clearVersionCache();
@@ -260,6 +262,7 @@ public class SettingsController implements ViewController {
 	 * Restores all settings to default. Some settings like {@link Property#DEVELOPMENT} and
 	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change those anyways.
 	 */
+	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickRestore() {
 		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("sureYouWantToRestoreSettings"), ButtonType.YES, ButtonType.NO);
@@ -281,7 +284,7 @@ public class SettingsController implements ViewController {
 		});
 	}
 	
-	private void restoreApplicationSettings() {
+	private static void restoreApplicationSettings() {
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_GTA);
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_SAMP);
 		ClientPropertiesController.restorePropertyToDefault(Property.ASK_FOR_NAME_ON_CONNECT);

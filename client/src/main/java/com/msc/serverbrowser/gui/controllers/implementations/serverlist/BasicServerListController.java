@@ -50,9 +50,9 @@ import javafx.scene.text.TextAlignment;
 public class BasicServerListController implements ViewController {
 	private final String RETRIEVING = Client.lang.getString("retrieving");
 	
-	protected final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
-	protected final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
-	protected final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
+	private final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
+	private final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
+	private final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
 	
 	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
 	
@@ -135,7 +135,7 @@ public class BasicServerListController implements ViewController {
 		addServerUpdateListener();
 	}
 	
-	private void setupInfoLabel(final Label label) {
+	private static void setupInfoLabel(final Label label) {
 		label.setMaxHeight(Double.MAX_VALUE);
 		label.setMaxWidth(Double.MAX_VALUE);
 		label.setTextAlignment(TextAlignment.CENTER);

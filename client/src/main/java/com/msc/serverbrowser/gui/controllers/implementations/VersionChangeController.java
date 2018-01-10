@@ -164,6 +164,7 @@ public class VersionChangeController implements ViewController {
 								FileUtility.unzip(PathConstants.OUTPUT_ZIP, gtaPath.get());
 								break;
 							case RESSOURCE:
+								// TODO (Marcel 10.01.2018): I am not quite sure, if i ever wanna ship with a samp version already installed.
 								break;
 						}
 					} catch (final IOException | IllegalArgumentException exception) {

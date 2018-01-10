@@ -47,11 +47,11 @@ public final class GTAController {
 	 * Holds the users username.
 	 */
 	public static StringProperty usernameProperty = new SimpleStringProperty(retrieveUsernameFromRegistry());
-	
+
 	private GTAController() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Writes the actual username (from registry) into the past usernames list and
 	 * sets the new name
@@ -60,7 +60,7 @@ public final class GTAController {
 		if (!OSUtility.isWindows()) {
 			return;
 		}
-		
+
 		killSAMP();
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try {
@@ -68,9 +68,9 @@ public final class GTAController {
 		} catch (final RegistryException e) {
 			Logging.log(Level.WARNING, "Couldn't set username.", e);
 		}
-		
+
 	}
-	
+
 	// TODO Think of a better solution
 	/**
 	 * Returns the Username that samp has set in the registry.
@@ -81,7 +81,7 @@ public final class GTAController {
 		if (!OSUtility.isWindows()) {
 			return "You are on Linux ;D";
 		}
-		
+
 		try {
 			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName");
 		} catch (final RegistryException exception) {
@@ -89,7 +89,7 @@ public final class GTAController {
 			return "404 Name not found";
 		}
 	}
-	
+
 	/**
 	 * Returns the GTA path.
 	 *
@@ -100,20 +100,20 @@ public final class GTAController {
 		if (!OSUtility.isWindows()) {
 			return Optional.empty();
 		}
-		
+
 		final Optional<String> path = getGtaPathFromRegistry();
 		if (path.isPresent()) {
 			return path;
 		}
-		
+
 		final String property = ClientPropertiesController.getPropertyAsString(Property.SAMP_PATH);
 		if (Objects.isNull(property) || property.isEmpty()) {
 			return Optional.empty();
 		}
-		
+
 		return Optional.of(property.endsWith(File.separator) ? property : property + File.separator);
 	}
-	
+
 	/**
 	 * Should only be used if necessary.
 	 *
@@ -127,7 +127,7 @@ public final class GTAController {
 			return Optional.empty();
 		}
 	}
-	
+
 	/**
 	 * Returns the {@link SAMPVersion} value that represents the currently installed
 	 * samp version.
@@ -140,12 +140,12 @@ public final class GTAController {
 		if (!path.isPresent()) {// GTA couldn't be found
 			return Optional.empty();
 		}
-		
+
 		final File file = new File(path.get() + "samp.dll");
 		if (!file.exists()) {// samp.dll doesn't exist, even though GTA is installed at this point.
 			return Optional.empty();
 		}
-		
+
 		String hashsum = null;
 		try {
 			hashsum = HashingUtility.verifyChecksum(file.toString());
@@ -155,7 +155,7 @@ public final class GTAController {
 		final String hashsumSafe = hashsum == null ? "" : hashsum;
 		return VersionChangeController.installationCandidates.stream().filter(candidate -> candidate.getSampDLLChecksum().equals(hashsumSafe)).findFirst();
 	}
-	
+
 	/**
 	 * Connects to a server, depending on if it is passworded, the user will be
 	 * asked to enter a
@@ -169,12 +169,12 @@ public final class GTAController {
 	public static void tryToConnect(final String address, final Integer port) {
 		try (final SampQuery query = new SampQuery(address, port)) {
 			final Optional<String[]> serverInfo = query.getBasicServerInfo();
-			
+
 			if (serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {
 				final TextInputDialog dialog = new TextInputDialog();
 				dialog.setTitle("Connect to Server");
 				dialog.setHeaderText("Enter the servers password (Leave empty if u think there is none).");
-				
+
 				final Optional<String> result = dialog.showAndWait();
 				result.ifPresent(password -> GTAController.connectToServer(address, port, password));
 			} else {
@@ -185,15 +185,15 @@ public final class GTAController {
 			showCantConnectToServerError();
 		}
 	}
-	
+
 	private static boolean connectWithDLLInjection(final String address, final Integer port, final String password) {
 		final ProcessBuilder builder = new ProcessBuilder();
-		
+
 		final Optional<String> path = getGtaPath();
-		
+
 		if (path.isPresent()) {
 			builder.directory(new File(path.get()));
-			
+
 			final List<String> arguments = new ArrayList<>();
 			arguments.add(PathConstants.SAMP_CMD);
 			arguments.add("-c");
@@ -208,7 +208,7 @@ public final class GTAController {
 				arguments.add(password);
 			}
 			builder.command(arguments);
-			
+
 			try {
 				builder.start();
 				return true;
@@ -216,10 +216,10 @@ public final class GTAController {
 				Logging.log(Level.WARNING, "Error using sampcmd.exe", e);
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Shows a TrayNotification that states, that connecting to the server wasn't
 	 * possible.
@@ -228,7 +228,7 @@ public final class GTAController {
 		new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("cantConnect")).message(Client.lang.getString("addressNotValid"))
 						.animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
-	
+
 	/**
 	 * Connects to the given server (IP and Port) using an empty (no) password.
 	 * Other than
@@ -245,11 +245,11 @@ public final class GTAController {
 		if (!OSUtility.isWindows()) {
 			return false;
 		}
-		
+
 		try {
 			Logging.log(Level.INFO, "Connecting using protocol.");
 			final Desktop desktop = Desktop.getDesktop();
-			
+
 			if (desktop.isSupported(Action.BROWSE)) {
 				desktop.browse(new URI("samp://" + ipAndPort));
 				return true;
@@ -257,24 +257,24 @@ public final class GTAController {
 		} catch (final IOException | URISyntaxException exception) {
 			Logging.log(Level.WARNING, "Error connecting to server.", exception);
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Kills SA-MP using the command line.
 	 */
 	public static void killSAMP() {
 		kill("samp.exe");
 	}
-	
+
 	/**
 	 * Kills GTA using the command line.
 	 */
 	public static void killGTA() {
 		kill("gta_sa.exe");
 	}
-	
+
 	/**
 	 * Kills a process with a given name.
 	 *
@@ -285,14 +285,14 @@ public final class GTAController {
 		if (!OSUtility.isWindows()) {
 			return;
 		}
-		
+
 		try {
 			Runtime.getRuntime().exec("taskkill /F /IM " + processName);
 		} catch (final IOException exception) {
 			Logging.log(Level.SEVERE, "Couldn't kill " + processName, exception);
 		}
 	}
-	
+
 	/**
 	 * Connects to the given server (IP and Port) using the given password. Uses the
 	 * commandline to
@@ -309,7 +309,7 @@ public final class GTAController {
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CLOSE_GTA)) {
 			killGTA();
 		}
-		
+
 		final Optional<String> gtaPath = getGtaPath();
 		if (gtaPath.isPresent()) {
 			if (!connectWithDLLInjection(address, port, password)) {
@@ -331,7 +331,7 @@ public final class GTAController {
 			displayCantLocateGTANotification();
 		}
 	}
-	
+
 	/**
 	 * Displays a notifcation that states, that GTA couldn't be located and links
 	 * the Settings page.
@@ -339,10 +339,10 @@ public final class GTAController {
 	public static void displayCantLocateGTANotification() {
 		final TrayNotification trayNotification = new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title("GTA couldn't be located")
 						.message("Click here to locate your GTA path manually.").animation(Animations.POPUP).build();
-		
+
 		// TODO(MSC) Improve and try to focus component
 		trayNotification.setOnMouseClicked(__ -> Client.getInstance().loadView(View.SETTINGS));
-		
+
 		trayNotification.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 }

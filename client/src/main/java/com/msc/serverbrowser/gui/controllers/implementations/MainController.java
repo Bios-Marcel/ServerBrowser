@@ -46,28 +46,28 @@ public class MainController implements ViewController {
 	private ToggleButton	menuItemFiles;
 	@FXML
 	private ToggleButton	menuItemSettings;
-	
+
 	@FXML
 	private ScrollPane	activeViewContainer;
 	private View		activeView;
-	
+
 	@FXML
 	private Hyperlink	hyperlinkGitHub;
 	@FXML
 	private Hyperlink	hyperlinkHelp;
-	
+
 	@FXML
 	private HBox bottomBarCustom;
-	
+
 	@FXML
 	private Label		globalProgressLabel;
 	@FXML
 	private ProgressBar	globalProgressBar;
-	
+
 	@Override
 	public void initialize() {
 		Font.loadFont(MainController.class.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(), 12);
-		
+
 		final ToggleGroup menuToggleGroup = new ToggleGroup();
 		menuItemFav.setToggleGroup(menuToggleGroup);
 		menuItemAll.setToggleGroup(menuToggleGroup);
@@ -75,38 +75,40 @@ public class MainController implements ViewController {
 		menuItemVersion.setToggleGroup(menuToggleGroup);
 		menuItemFiles.setToggleGroup(menuToggleGroup);
 		menuItemSettings.setToggleGroup(menuToggleGroup);
-		
+
 		menuItemFav.setText("\uf005");
 		menuItemAll.setText("\uf0c9");
 		menuItemUser.setText("\uf007");
 		menuItemVersion.setText("\uf0ed");
 		menuItemFiles.setText("\uf07b");
 		menuItemSettings.setText("\uf013");
-		
+
 		hyperlinkGitHub.setText("\uf09b");
 		hyperlinkHelp.setText("\uf059");
-		
+
 		hyperlinkGitHub.setTooltip(new Tooltip(Client.lang.getString("openGithubTooltip")));
 		hyperlinkHelp.setTooltip(new Tooltip(Client.lang.getString("openGithubWikiTooltip")));
-		
+
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW)) {
 			loadView(View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)));
 		} else {
 			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)));
 		}
-		
+
 	}
-	
+
+	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void openGitHub() {
 		OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser");
 	}
-	
+
+	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void openHelp() {
 		OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/wiki");
 	}
-	
+
 	/**
 	 * Adds nodes to the Clients bottom bar.
 	 *
@@ -116,14 +118,14 @@ public class MainController implements ViewController {
 	public void addItemsToBottomBar(final Node... nodes) {
 		bottomBarCustom.getChildren().addAll(nodes);
 	}
-	
+
 	/**
 	 * @return the progress {@link DoubleProperty} of the {@link #globalProgressBar}
 	 */
 	public DoubleProperty progressProperty() {
 		return globalProgressBar.progressProperty();
 	}
-	
+
 	/**
 	 * Sets the text infront of the global {@link ProgressBar} bar.
 	 *
@@ -133,37 +135,37 @@ public class MainController implements ViewController {
 	public void setGlobalProgressText(final String text) {
 		globalProgressLabel.setText(text);
 	}
-	
+
 	@FXML
 	private void onServersFavMenuItemClicked() {
 		loadView(View.SERVERS_FAV);
 	}
-	
+
 	@FXML
 	private void onServersAllMenuItemClicked() {
 		loadView(View.SERVERS_ALL);
 	}
-	
+
 	@FXML
 	private void onUsernameMenuItemClicked() {
 		loadView(View.USERNAME_CHANGER);
 	}
-	
+
 	@FXML
 	private void onVersionMenuItemClicked() {
 		loadView(View.VERSION_CHANGER);
 	}
-	
+
 	@FXML
 	private void onFileMenuItemClicked() {
 		loadView(View.FILES);
 	}
-	
+
 	@FXML
 	private void onSettingsMenuItemClicked() {
 		loadView(View.SETTINGS);
 	}
-	
+
 	/**
 	 * Loads a specific view.
 	 *
@@ -172,7 +174,7 @@ public class MainController implements ViewController {
 	 */
 	public void loadView(final View view) {
 		bottomBarCustom.getChildren().clear();
-		
+
 		switch (view) {
 			case SERVERS_FAV:
 				menuItemFav.setSelected(true);
@@ -195,17 +197,17 @@ public class MainController implements ViewController {
 			default:
 				throw new IllegalArgumentException("This View hasn't been implemented or is invalid: " + view);
 		}
-		
+
 		loadFXML(view);
 		activeView = view;
 	}
-	
+
 	private void loadFXML(final View view) {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
 			loader.setResources(Client.lang);
-			
+
 			// Creating a new instance of the specified controller, controllers never have
 			// constructor arguments, therefore this is supposedly fine.
 			loader.setController(view.getControllerType().newInstance());
@@ -217,21 +219,21 @@ public class MainController implements ViewController {
 			Logging.log(Level.SEVERE, "Couldn't load view.", exception);
 		}
 	}
-	
+
 	/**
 	 * @return the current view
 	 */
 	public View getActiveView() {
 		return activeView;
 	}
-	
+
 	/**
 	 * Reloads the current view.
 	 */
 	public void reloadView() {
 		loadView(activeView);
 	}
-	
+
 	@Override
 	public void onClose() {
 		ClientPropertiesController.setProperty(Property.LAST_VIEW, activeView.getId());
