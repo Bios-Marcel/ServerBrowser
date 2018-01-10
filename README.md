@@ -9,6 +9,10 @@ This application allows you to view a vast amount of SA-MP servers, filter them,
 You won't loose your original favourites, since those will be taken over.
 Also it includes a SA-MP version changer, access to SA-MP legacy settings, screenshots and chatlogs.
 
+## Donate
+
+If you want to make me feel better, since i am dedicating my free time to do this, feel free to donate something on https://ko-fi.com/marcelschr .
+
 ### Languages
 
 This software is currently available in the following languages (some might not be perfectly and completly translated):

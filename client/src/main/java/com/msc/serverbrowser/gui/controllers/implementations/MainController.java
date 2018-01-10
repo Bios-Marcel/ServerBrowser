@@ -55,6 +55,8 @@ public class MainController implements ViewController {
 	private Hyperlink	hyperlinkGitHub;
 	@FXML
 	private Hyperlink	hyperlinkHelp;
+	@FXML
+	private Hyperlink	hyperlinkDonate;
 
 	@FXML
 	private HBox bottomBarCustom;
@@ -64,30 +66,22 @@ public class MainController implements ViewController {
 	@FXML
 	private ProgressBar	globalProgressBar;
 
+	@FXML
+	private ToggleGroup menuItemToggleGroup;
+	
 	@Override
 	public void initialize() {
 		Font.loadFont(MainController.class.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(), 12);
-
-		final ToggleGroup menuToggleGroup = new ToggleGroup();
-		menuItemFav.setToggleGroup(menuToggleGroup);
-		menuItemAll.setToggleGroup(menuToggleGroup);
-		menuItemUser.setToggleGroup(menuToggleGroup);
-		menuItemVersion.setToggleGroup(menuToggleGroup);
-		menuItemFiles.setToggleGroup(menuToggleGroup);
-		menuItemSettings.setToggleGroup(menuToggleGroup);
-
-		menuItemFav.setText("\uf005");
-		menuItemAll.setText("\uf0c9");
-		menuItemUser.setText("\uf007");
-		menuItemVersion.setText("\uf0ed");
-		menuItemFiles.setText("\uf07b");
-		menuItemSettings.setText("\uf013");
+		
+		setMenuItemIcons();
 
 		hyperlinkGitHub.setText("\uf09b");
 		hyperlinkHelp.setText("\uf059");
+		hyperlinkDonate.setText("\uf0d6");
 
 		hyperlinkGitHub.setTooltip(new Tooltip(Client.lang.getString("openGithubTooltip")));
 		hyperlinkHelp.setTooltip(new Tooltip(Client.lang.getString("openGithubWikiTooltip")));
+		hyperlinkDonate.setTooltip(new Tooltip(Client.lang.getString("openDonationPageTooltip")));
 
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW)) {
 			loadView(View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)));
@@ -95,6 +89,15 @@ public class MainController implements ViewController {
 			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)));
 		}
 
+	}
+
+	private void setMenuItemIcons() {
+		menuItemFav.setText("\uf005");
+		menuItemAll.setText("\uf0c9");
+		menuItemUser.setText("\uf007");
+		menuItemVersion.setText("\uf0ed");
+		menuItemFiles.setText("\uf07b");
+		menuItemSettings.setText("\uf013");
 	}
 
 	@SuppressWarnings("static-method") // Can't be static because of FXML injection
@@ -107,6 +110,12 @@ public class MainController implements ViewController {
 	@FXML
 	private void openHelp() {
 		OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/wiki");
+	}
+	
+	@SuppressWarnings("static-method") // Can't be static because of FXML injection
+	@FXML
+	private void openDonationPage() {
+		OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser#donate");
 	}
 
 	/**
