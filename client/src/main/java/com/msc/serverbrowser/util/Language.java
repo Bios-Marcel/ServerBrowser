@@ -6,55 +6,66 @@ import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 
+/**
+ * An Enum containing all useable languages.
+ *
+ * @author marcel
+ * @since Jan 10, 2018
+ */
+@SuppressWarnings("javadoc") // Supressing because i don't want to document the enum values itself
 public enum Language {
-	EN("en", "English", 0), DE("de", "German", 1), GE("ge", "Georgian", 2), GR("gr", "Greek", 3), NL("nl", "Dutch", 4), RU("ru", "Russian", 5), PL("pl", "Polish", 6),
-	RO("ro", "Romanian", 7), ES("es", "Spanish", 8);
-	
+
+	EN("en", "English"),
+	DE("de", "German"),
+	GE("ge", "Georgian"),
+	GR("gr", "Greek"),
+	NL("nl", "Dutch"),
+	RU("ru", "Russian"),
+	PL("pl", "Polish"),
+	RO("ro", "Romanian"),
+	ES("es", "Spanish");
+
 	private String	shortcut;
 	private String	defaultName;
-	private int		index;
-	
-	Language(final String shortcut, final String defaultName, final int index) {
+
+	Language(final String shortcut, final String defaultName) {
 		this.shortcut = shortcut;
 		this.defaultName = defaultName;
-		this.index = index;
 	}
-	
+
+	/**
+	 * The shortcut used to identify the language, for example <code>de<code> would stand for <code>german</code>.
+	 *
+	 * @return the shortcut of this {@link Language}
+	 */
 	public String getShortcut() {
 		return shortcut;
 	}
-	
-	public int getIndex() {
-		return index;
-	}
-	
+
 	@Override
 	public String toString() {
 		final String languageName = Client.lang.getString(shortcut);
-		
+
 		if (ClientPropertiesController.getPropertyAsString(Property.LANGUAGE).equalsIgnoreCase(EN.shortcut)) {
 			return languageName;
 		}
 		return languageName + " (" + defaultName + ")";
 	}
-	
-	public static Optional<Language> getByIndex(final int index) {
-		for (final Language lang : Language.values()) {
-			if (lang.getIndex() == index) {
-				return Optional.of(lang);
-			}
-		}
-		
-		return Optional.empty();
-	}
-	
+
+	/**
+	 * Returns a language by matching its shortcut, for example an input of <code>de</code> would output the value {@link Language#DE}.
+	 *
+	 * @param shortcut
+	 *            the shortcut to searh for
+	 * @return An {@link Optional} containg the enum value or {@link Optional#empty()}
+	 */
 	public static Optional<Language> getByShortcut(final String shortcut) {
 		for (final Language lang : Language.values()) {
 			if (lang.getShortcut().equalsIgnoreCase(shortcut)) {
 				return Optional.of(lang);
 			}
 		}
-		
+
 		return Optional.empty();
 	}
 }
