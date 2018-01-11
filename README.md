@@ -19,7 +19,7 @@ This software is currently available in the following languages (some might not 
 
 * English
 * German 
-* Georgian (Thanks to Amagida)
+* Georgian (Thanks to Medzvel)
 * Greek (Thanks to vassilis)
 * Dutch (Thanks to Jsytlez)
 * Russian (Thanks to Codeah)
