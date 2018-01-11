@@ -357,8 +357,11 @@ public final class GTAController {
 	 * the Settings page.
 	 */
 	public static void displayCantLocateGTANotification() {
-		final TrayNotification trayNotification = new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title("GTA couldn't be located")
-				.message("Click here to locate your GTA path manually.").animation(Animations.POPUP).build();
+		final TrayNotification trayNotification = new TrayNotificationBuilder()
+				.type(NotificationTypeImplementations.ERROR)
+				.title(Client.lang.getString("cantFindGTA"))
+				.message(Client.lang.getString("locateGTAManually"))
+				.animation(Animations.POPUP).build();
 
 		// TODO(MSC) Improve and try to focus component
 		trayNotification.setOnMouseClicked(__ -> Client.getInstance().loadView(View.SETTINGS));
