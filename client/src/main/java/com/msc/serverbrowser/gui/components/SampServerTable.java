@@ -33,6 +33,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 /**
  * {@link TableView} that was made for the ServerList View, contains a special TableRowFactory and
@@ -66,7 +67,7 @@ public class SampServerTable extends TableView<SampServer> {
 
 		getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		setKeyActions();
-		setTableRowFactory();
+		initTableRowFactory();
 		setMenuItemDefaultActions();
 	}
 
@@ -131,48 +132,61 @@ public class SampServerTable extends TableView<SampServer> {
 		});
 	}
 
-	private void setTableRowFactory() {
+	private void initTableRowFactory() {
 		setRowFactory(facotry -> {
 			final TableRow<SampServer> row = new TableRow<>();
 
 			row.setOnMouseClicked(clicked -> {
-				if (clicked.getButton() == MouseButton.PRIMARY) {
-					final Long lastLeftClickTime = (Long) row.getUserData();
-					final boolean wasDoubleClick = Objects.nonNull(lastLeftClickTime) && System.currentTimeMillis() - lastLeftClickTime < 300;
-					final boolean onlyOneSelectedItem = getSelectionModel().getSelectedItems().size() == 1;
-
-					if (wasDoubleClick && onlyOneSelectedItem) {
-						if (ClientPropertiesController.getPropertyAsBoolean(Property.CONNECT_ON_DOUBLECLICK)) {
-							getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
-						}
-					} else {
-						row.setUserData(Long.valueOf(System.currentTimeMillis()));
-					}
-				}
-
+				// A row has been clicked, so we want to hide the previous context menu
 				contextMenu.hide();
-				final List<SampServer> serverList = getSelectionModel().getSelectedItems();
-				final SampServer rowItem = row.getItem();
 
-				if (getSelectionModel().getSelectedIndices().contains(row.getIndex())) {
-					if (!serverList.isEmpty() && clicked.getButton().equals(MouseButton.SECONDARY)) {
-						displayMenu(serverList, clicked.getScreenX(), clicked.getScreenY());
-					}
+				if (Objects.nonNull(row.getItem())) {
+					// If there is an item in this row, we want to proceed further
+					handleClick(row, clicked);
 				} else {
-					if (Objects.nonNull(rowItem)) {
-						getSelectionModel().select(rowItem);
-						if (clicked.getButton().equals(MouseButton.SECONDARY)) {
-							displayMenu(Arrays.asList(rowItem), clicked.getScreenX(), clicked.getScreenY());
-						}
-					} else {
-						getSelectionModel().clearSelection();
-					}
+					// Otherwise we clear the selection.
+					getSelectionModel().clearSelection();
 				}
-
 			});
 
 			return row;
 		});
+	}
+	
+	private void handleClick(final TableRow<SampServer> row, final MouseEvent clicked) {
+		if (clicked.getButton() == MouseButton.PRIMARY) {
+			handleLeftClick(row);
+		} else if (clicked.getButton() == MouseButton.SECONDARY) {
+			handleRightClick(row, clicked);
+		}
+	}
+	
+	private void handleRightClick(final TableRow<SampServer> row, final MouseEvent clicked) {
+		final List<SampServer> selectedServers = getSelectionModel().getSelectedItems();
+
+		if (getSelectionModel().getSelectedIndices().contains(row.getIndex())) {
+			// In case the current selection model contains the clicked row, we want to open the context menu on the current selection mode
+			displayMenu(selectedServers, clicked.getScreenX(), clicked.getScreenY());
+		} else {
+			// Otherwise we will select the clicked item and open the context menu on it
+			final SampServer rowItem = row.getItem();
+			getSelectionModel().select(rowItem);
+			displayMenu(Arrays.asList(rowItem), clicked.getScreenX(), clicked.getScreenY());
+		}
+	}
+
+	private void handleLeftClick(final TableRow<SampServer> row) {
+		final Long lastLeftClickTime = (Long) row.getUserData();
+		final boolean wasDoubleClick = Objects.nonNull(lastLeftClickTime) && System.currentTimeMillis() - lastLeftClickTime < 300;
+		final boolean onlyOneSelectedItem = getSelectionModel().getSelectedItems().size() == 1;
+
+		if (wasDoubleClick && onlyOneSelectedItem) {
+			if (ClientPropertiesController.getPropertyAsBoolean(Property.CONNECT_ON_DOUBLECLICK)) {
+				getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
+			}
+		} else {
+			row.setUserData(Long.valueOf(System.currentTimeMillis()));
+		}
 	}
 
 	/**
