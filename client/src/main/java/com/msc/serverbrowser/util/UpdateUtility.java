@@ -46,7 +46,7 @@ public final class UpdateUtility {
 	/**
 	 * @return a {@link GHRelease} for the latest ServerBrowser release
 	 * @throws IOException
-	 *             if there was an error querying github
+	 *             if there was an error querying GitHub
 	 */
 	public static Optional<GHRelease> getRelease() throws IOException {
 		final GitHub gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build();
@@ -97,7 +97,7 @@ public final class UpdateUtility {
 		final int length = Integer.min(versionOneParts.length, versionTwoParts.length);
 		final Optional<CompareResult> result = compareVersionsUpToIndex(versionOneParts, versionTwoParts, length);
 		
-		// Incase we don't have any result as of now, we check furhter
+		// In case we don't have any result as of now, we check further
 		final boolean arrayNotEquallyLong = longest > length;
 		final boolean noBiggerOneFoundYet = !result.isPresent();
 		if (noBiggerOneFoundYet && arrayNotEquallyLong) {// If one of the strings had more version parts, we will check those too.

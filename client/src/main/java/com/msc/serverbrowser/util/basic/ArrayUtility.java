@@ -12,15 +12,15 @@ public final class ArrayUtility {
 	private ArrayUtility() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Returns the longer of two arrays.
 	 *
 	 * @param arrayOne
 	 *            first array
 	 * @param arrayTwo
-	 *            second error
-	 * @return the error that is longer
+	 *            second array
+	 * @return the array that is longer, or none if they are of the same size
 	 * @throws NullPointerException
 	 *             if any of the arrays is null
 	 */
@@ -30,10 +30,10 @@ public final class ArrayUtility {
 		} else if (arrayTwo.length > arrayOne.length) {
 			return Optional.of(arrayTwo);
 		}
-		
+
 		return Optional.empty();
 	}
-	
+
 	/**
 	 * Checks if the array contains the given item.
 	 *
@@ -47,7 +47,7 @@ public final class ArrayUtility {
 		if (Objects.isNull(array) || array.length == 0) {
 			return false;
 		}
-		
+
 		for (final T object : array) {
 			if (object.equals(searchFor)) {
 				return true;
@@ -55,7 +55,7 @@ public final class ArrayUtility {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Concats two or more byte arrays the follwing way:
 	 * <p>
@@ -71,15 +71,15 @@ public final class ArrayUtility {
 	public static byte[] merge(final byte[] arrayOne, final byte[]... arrays) {
 		final int lengthNew = arrayOne.length + Arrays.asList(arrays).stream().mapToInt(arr -> arr.length).sum();
 		final byte[] toReturn = new byte[lengthNew];
-		
+
 		System.arraycopy(arrayOne, 0, toReturn, 0, arrayOne.length);
-		
+
 		int startPos = arrayOne.length;
 		for (final byte[] arr : arrays) {
 			System.arraycopy(arr, 0, toReturn, startPos, arr.length);
 			startPos += arr.length;
 		}
-		
+
 		return toReturn;
 	}
 }
