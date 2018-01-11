@@ -65,7 +65,8 @@ public final class GTAController {
 		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
 		try {
 			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get());
-		} catch (final RegistryException e) {
+		}
+		catch (final RegistryException e) {
 			Logging.log(Level.WARNING, "Couldn't set username.", e);
 		}
 
@@ -84,7 +85,8 @@ public final class GTAController {
 
 		try {
 			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName");
-		} catch (final RegistryException exception) {
+		}
+		catch (final RegistryException exception) {
 			Logging.log(Level.WARNING, "Couldn't retrieve Username from registry.", exception);
 			return "404 Name not found";
 		}
@@ -122,7 +124,8 @@ public final class GTAController {
 	private static Optional<String> getGtaPathFromRegistry() {
 		try {
 			return Optional.ofNullable(WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", ""));
-		} catch (final RegistryException exception) {
+		}
+		catch (final RegistryException exception) {
 			Logging.log(Level.WARNING, "Couldn't retrieve GTA path.", exception);
 			return Optional.empty();
 		}
@@ -137,23 +140,28 @@ public final class GTAController {
 	 */
 	public static Optional<InstallationCandidate> getInstalledVersion() {
 		final Optional<String> path = getGtaPath();
-		if (!path.isPresent()) {// GTA couldn't be found
+		if (!path.isPresent()) {
+			// GTA couldn't be found
 			return Optional.empty();
 		}
 
 		final File file = new File(path.get() + "samp.dll");
-		if (!file.exists()) {// samp.dll doesn't exist, even though GTA is installed at this point.
+		if (!file.exists()) {
+			// samp.dll doesn't exist, even though GTA is installed at this point.
 			return Optional.empty();
 		}
 
-		String hashsum = null;
 		try {
-			hashsum = HashingUtility.generateChecksum(file.toString());
-		} catch (NoSuchAlgorithmException | IOException exception) {
+			final String hashsum = HashingUtility.generateChecksum(file.toString());
+			return VersionChangeController.INSTALLATION_CANDIDATES.stream()
+					.filter(candidate -> candidate.getSampDLLChecksum().equals(hashsum))
+					.findFirst();
+		}
+		catch (NoSuchAlgorithmException | IOException exception) {
 			Logging.log(Level.SEVERE, "Error hashing installed samp.dll", exception);
 		}
-		final String hashsumSafe = hashsum == null ? "" : hashsum;
-		return VersionChangeController.INSTALLATION_CANDIDATES.stream().filter(candidate -> candidate.getSampDLLChecksum().equals(hashsumSafe)).findFirst();
+
+		return Optional.empty();
 	}
 
 	/**
@@ -177,10 +185,12 @@ public final class GTAController {
 
 				final Optional<String> result = dialog.showAndWait();
 				result.ifPresent(password -> GTAController.connectToServer(address, port, password));
-			} else {
+			}
+			else {
 				GTAController.connectToServer(address, port, "");
 			}
-		} catch (final IOException exception) {
+		}
+		catch (final IOException exception) {
 			Logging.log(Level.WARNING, "Couldn't connect to server.", exception);
 			showCantConnectToServerError();
 		}
@@ -212,7 +222,8 @@ public final class GTAController {
 			try {
 				builder.start();
 				return true;
-			} catch (final IOException e) {
+			}
+			catch (final IOException e) {
 				Logging.log(Level.WARNING, "Error using sampcmd.exe", e);
 			}
 		}
@@ -225,8 +236,9 @@ public final class GTAController {
 	 * possible.
 	 */
 	public static void showCantConnectToServerError() {
-		new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("cantConnect")).message(Client.lang.getString("addressNotValid"))
-						.animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+		new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("cantConnect"))
+				.message(Client.lang.getString("addressNotValid"))
+				.animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 
 	/**
@@ -254,7 +266,8 @@ public final class GTAController {
 				desktop.browse(new URI("samp://" + ipAndPort));
 				return true;
 			}
-		} catch (final IOException | URISyntaxException exception) {
+		}
+		catch (final IOException | URISyntaxException exception) {
 			Logging.log(Level.WARNING, "Error connecting to server.", exception);
 		}
 
@@ -288,7 +301,8 @@ public final class GTAController {
 
 		try {
 			Runtime.getRuntime().exec("taskkill /F /IM " + processName);
-		} catch (final IOException exception) {
+		}
+		catch (final IOException exception) {
 			Logging.log(Level.SEVERE, "Couldn't kill " + processName, exception);
 		}
 	}
@@ -319,15 +333,18 @@ public final class GTAController {
 					final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
 					builder.directory(new File(gtaPath.get()));
 					builder.start();
-				} catch (final IOException exception) {
+				}
+				catch (final IOException exception) {
 					if (Objects.isNull(password) || password.isEmpty()) {
 						connectToServerUsingProtocol(ipAndPort);
-					} else {
+					}
+					else {
 						Logging.log(Level.WARNING, "Couldn't connect to server", exception);
 					}
 				}
 			}
-		} else {
+		}
+		else {
 			displayCantLocateGTANotification();
 		}
 	}
@@ -338,7 +355,7 @@ public final class GTAController {
 	 */
 	public static void displayCantLocateGTANotification() {
 		final TrayNotification trayNotification = new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title("GTA couldn't be located")
-						.message("Click here to locate your GTA path manually.").animation(Animations.POPUP).build();
+				.message("Click here to locate your GTA path manually.").animation(Animations.POPUP).build();
 
 		// TODO(MSC) Improve and try to focus component
 		trayNotification.setOnMouseClicked(__ -> Client.getInstance().loadView(View.SETTINGS));
