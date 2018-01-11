@@ -33,7 +33,7 @@ public final class FileUtility {
 	private FileUtility() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Downloads a file and saves it to the given location.
 	 *
@@ -47,12 +47,12 @@ public final class FileUtility {
 	 */
 	public static File downloadFile(final String url, final String outputPath) throws IOException {
 		try (final ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(url).openStream());
-						final FileOutputStream fileOutputStream = new FileOutputStream(outputPath);) {
+				final FileOutputStream fileOutputStream = new FileOutputStream(outputPath);) {
 			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 			return new File(outputPath);
 		}
 	}
-	
+
 	/**
 	 * Copies a file overwriting the target if existent
 	 *
@@ -65,12 +65,12 @@ public final class FileUtility {
 	 */
 	public static void copyOverwrite(final String source, final String target) throws IOException {
 		try (FileInputStream fileInputStream = new FileInputStream(source);
-						final ReadableByteChannel readableByteChannel = Channels.newChannel(fileInputStream);
-						final FileOutputStream fileOutputStream = new FileOutputStream(target);) {
+				final ReadableByteChannel readableByteChannel = Channels.newChannel(fileInputStream);
+				final FileOutputStream fileOutputStream = new FileOutputStream(target);) {
 			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 		}
 	}
-	
+
 	/**
 	 * Downloads a file and saves it at the given location.
 	 *
@@ -92,22 +92,22 @@ public final class FileUtility {
 			final byte[] bytes = new byte[10000];
 			while (true) {
 				final double length = input.read(bytes);
-				
+
 				if (length <= 0) {
 					break;
 				}
-				
+
 				Platform.runLater(() -> {
 					final double additional = length / fileLength * (1.0 - current);
 					progressProperty.set(progressProperty.get() + additional);
 				});
 				fileOutputStream.write(bytes, 0, (int) length);
 			}
-			
+
 			return new File(outputPath);
 		}
 	}
-	
+
 	/**
 	 * Retrieving the size of a file that lies somewhere on the web.
 	 * The file size is retrieved via the http header. It shall be noted, that this method won't
@@ -126,13 +126,14 @@ public final class FileUtility {
 			connection.setRequestMethod("HEAD");
 			connection.getInputStream();
 			return connection.getContentLength();
-		} finally {
+		}
+		finally {
 			if (connection != null) {
 				connection.disconnect();
 			}
 		}
 	}
-	
+
 	/**
 	 * Unzips a file, placing its contents in the given output location.
 	 *
@@ -149,28 +150,23 @@ public final class FileUtility {
 			final Enumeration<? extends ZipEntry> enu = zipFile.entries();
 			while (enu.hasMoreElements()) {
 				final ZipEntry zipEntry = enu.nextElement();
-				
+
 				final String name = zipEntry.getName();
-				final long size = zipEntry.getSize();
-				final long compressedSize = zipEntry.getCompressedSize();
-				
-				Logging.info(String.format("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize));
-				
-				// Do we need to create a directory ?
+
 				final File file = new File(outputLocation + separator + name);
 				if (name.endsWith("/")) {
 					file.mkdirs();
 					continue;
 				}
-				
+
 				final File parent = file.getParentFile();
 				if (parent != null) {
 					parent.mkdirs();
 				}
-				
+
 				// Extract the file
 				try (final InputStream inputStream = zipFile.getInputStream(zipEntry);
-								final FileOutputStream outputStream = new FileOutputStream(file)) {
+						final FileOutputStream outputStream = new FileOutputStream(file)) {
 					/*
 					 * The buffer is the max amount of bytes kept in RAM during any given time while
 					 * unzipping. Since most windows disks are aligned to 4096 or 8192, we use a
@@ -185,7 +181,7 @@ public final class FileUtility {
 			}
 		}
 	}
-	
+
 	/**
 	 * Validates a {@link File} against a SHA-256 checksum.
 	 *
@@ -198,15 +194,18 @@ public final class FileUtility {
 	public static boolean validateFile(final File file, final String sha256Checksum) {
 		try {
 			return HashingUtility.generateChecksum(file.getAbsolutePath()).equalsIgnoreCase(sha256Checksum);
-		} catch (NoSuchAlgorithmException | IOException exception) {
+		}
+		catch (NoSuchAlgorithmException | IOException exception) {
 			Logging.log(Level.WARNING, "File invalid: " + file.getAbsolutePath(), exception);
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Deletes a given {@link File}. In case the file is a directory, it will recursively delete all its containments.
-	 * If at any step during the deletion of files an exception is throwing, there won't be any rollback, therefore
+	 * Deletes a given {@link File}. In case the file is a directory, it will recursively delete all
+	 * its containments.
+	 * If at any step during the deletion of files an exception is throwing, there won't be any
+	 * rollback, therefore
 	 * all deleted files will be gone.
 	 *
 	 * @param file
@@ -221,7 +220,7 @@ public final class FileUtility {
 				}
 			}
 		}
-		
+
 		return file.delete();
 	}
 }
