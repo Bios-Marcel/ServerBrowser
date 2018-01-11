@@ -51,9 +51,9 @@ serverOffline=Serverul este închis.
 serverEmpty=Serverul este gol.
 activePlayers=Jucători activi: {0}
 servers=Servere: {0}
-fetchingServers=Fetching servers, please wait a moment.
-errorFetchingServers=Couldn't fetch servers
-retrieving=Retrieving ...
+fetchingServers=Se preiau serverele, te rugăm să aștepți un moment.
+errorFetchingServers=Nu s-au putut prelua serverele
+retrieving=Se preia ...
 
 # Past Usernames
 enterUsername=Introdu numele de utilizator

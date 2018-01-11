@@ -24,7 +24,7 @@ This software is currently available in the following languages (some might not 
 * Dutch (Thanks to Jsytlez)
 * Russian (Thanks to Codeah)
 * Polish (Thanks to AbyssMorgan)
-* Romanian (Thanks to !stuntman!)
+* Romanian (Thanks to IstuntmanI)
 * Spanish (Thanks to Unrea1)
 
 ## Installation
