@@ -10,7 +10,7 @@ public final class StringUtility {
 	private StringUtility() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Puts <code>http://</code> infront of the url if not it already has
 	 * <code>http://</code> or
@@ -26,13 +26,13 @@ public final class StringUtility {
 		}
 		return url;
 	}
-	
+
 	/**
 	 * Stolen and edited from:
 	 * https://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java
 	 * Parses a String into an Integer or returns {@link Optional#empty()} incase it
 	 * doesn't represent a valid Integer.
-	 * 
+	 *
 	 * @param string
 	 *            the {@link String} that shall be parsed
 	 * @return {@link Optional} containing the {@link Integer} or
@@ -59,10 +59,10 @@ public final class StringUtility {
 				return Optional.empty();
 			}
 		}
-		
-		return Optional.of(Integer.parseInt(string));
+
+		return Optionals.attempt(() -> Integer.parseInt(string));
 	}
-	
+
 	/**
 	 * Converts a String to a boolean.
 	 *
@@ -74,42 +74,36 @@ public final class StringUtility {
 	public static boolean stringToBoolean(final String toBeConverted) {
 		return "true".equalsIgnoreCase(toBeConverted) || "1".equals(toBeConverted);
 	}
-	
+
 	/**
-	 * @param string
-	 *            the string to print all hexadecimal values of
-	 * @return hexadecimal values of all characters
-	 */
-	public static String getHexChars(final String string) {
-		final char[] chars = string.toCharArray();
-		
-		final StringBuilder charsAsHex = new StringBuilder(21);
-		
-		charsAsHex.append("Number of chars: (" + chars.length + ") ");
-		
-		for (final char character : chars) {
-			charsAsHex.append(Integer.toHexString(character));
-			charsAsHex.append(' ');
-		}
-		
-		return charsAsHex.toString();
-	}
-	
-	/**
+	 * <p>
+	 * Converts bytes into a human readable format the follwing way:
+	 * </p>
+	 *
+	 * <pre>
+	 * 1024 byte = 1 KibiByte
+	 * 1024 KibiByte = 1 MebiByte
+	 * 1024 MebiByte = 1 GibiByte
+	 * 1024 GibiByte = 1 TebiByte
+	 * 1024 TebiByte = 1 PebiByte
+	 * 1024 PebiByte = 1 ExbiByte
+	 * </pre>
+	 *
 	 * @param bytes
 	 *            that will be converted
-	 * @return a human readable string (2000byte -> 2KB)
+	 * @return a human readable string following the example given in the method description
 	 */
 	public static String humanReadableByteCount(final long bytes) {
 		final int unit = 1024;
-		if (bytes < unit) {// Keine Umformatierung nötig, da es so klein ist ;D
+		if (bytes < unit) {
+			// Needn't do any conversion at all, since it is still below 1 KiB
 			return bytes + " B";
 		}
 		final int exp = (int) (Math.log(bytes) / Math.log(unit));
 		final String pre = "KMGTPE".charAt(exp - 1) + "i";
 		return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
 	}
-	
+
 	/**
 	 * Checks if a {@link String} conforms to the uri format.
 	 *
@@ -121,7 +115,7 @@ public final class StringUtility {
 		if (possibleUrl == null) {
 			return false;
 		}
-		
+
 		return possibleUrl.matches(
 						"^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3})(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:/[^\\s]*)?$");
 	}

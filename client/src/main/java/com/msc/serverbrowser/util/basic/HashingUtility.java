@@ -15,7 +15,7 @@ public final class HashingUtility {
 	private HashingUtility() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Gets a files SHA-256 Checksum.
 	 *
@@ -29,17 +29,17 @@ public final class HashingUtility {
 	 * @throws NoSuchAlgorithmException
 	 *             if the used Hashing Algorithm couldn't be found
 	 */
-	public static String verifyChecksum(final String file) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
+	public static String generateChecksum(final String file) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
 		try (final FileInputStream fis = new FileInputStream(file)) {
 			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 			final byte[] data = new byte[1024];
-			
+
 			for (int read = 0; read != -1; read = fis.read(data)) {
 				sha256.update(data, 0, read);
 			}
-			
+
 			final byte[] hashBytes = sha256.digest();
-			
+
 			final StringBuffer sb = new StringBuffer();
 			for (final byte hashByte : hashBytes) {
 				sb.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));

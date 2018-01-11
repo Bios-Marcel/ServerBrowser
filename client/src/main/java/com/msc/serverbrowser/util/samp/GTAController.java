@@ -148,7 +148,7 @@ public final class GTAController {
 
 		String hashsum = null;
 		try {
-			hashsum = HashingUtility.verifyChecksum(file.toString());
+			hashsum = HashingUtility.generateChecksum(file.toString());
 		} catch (NoSuchAlgorithmException | IOException exception) {
 			Logging.log(Level.SEVERE, "Error hashing installed samp.dll", exception);
 		}

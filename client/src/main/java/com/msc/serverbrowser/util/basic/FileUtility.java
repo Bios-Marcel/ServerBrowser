@@ -54,7 +54,7 @@ public final class FileUtility {
 	}
 	
 	/**
-	 * Copies a file overwriting the target if existant
+	 * Copies a file overwriting the target if existent
 	 *
 	 * @param source
 	 *            source file
@@ -72,7 +72,7 @@ public final class FileUtility {
 	}
 	
 	/**
-	 * Downloads a file and saves it to the given location.
+	 * Downloads a file and saves it at the given location.
 	 *
 	 * @param url
 	 *            the url to download from
@@ -109,9 +109,13 @@ public final class FileUtility {
 	}
 	
 	/**
+	 * Retrieving the size of a file that lies somewhere on the web.
+	 * The file size is retrieved via the http header. It shall be noted, that this method won't
+	 * work in all cases.
+	 *
 	 * @param url
-	 *            the file url
-	 * @return the filesize
+	 *            the files {@link URL}
+	 * @return the retrieved filesize
 	 * @throws IOException
 	 *             if there was an error during the web request
 	 */
@@ -130,7 +134,7 @@ public final class FileUtility {
 	}
 	
 	/**
-	 * Unzips a file.
+	 * Unzips a file, placing its contents in the given output location.
 	 *
 	 * @param zipFilePath
 	 *            input zip file
@@ -165,7 +169,8 @@ public final class FileUtility {
 				}
 				
 				// Extract the file
-				try (final InputStream inputStream = zipFile.getInputStream(zipEntry); final FileOutputStream outputStream = new FileOutputStream(file)) {
+				try (final InputStream inputStream = zipFile.getInputStream(zipEntry);
+								final FileOutputStream outputStream = new FileOutputStream(file)) {
 					/*
 					 * The buffer is the max amount of bytes kept in RAM during any given time while
 					 * unzipping. Since most windows disks are aligned to 4096 or 8192, we use a
@@ -182,17 +187,17 @@ public final class FileUtility {
 	}
 	
 	/**
-	 * Validates a {@link File} against a SHA-512 checksum.
+	 * Validates a {@link File} against a SHA-256 checksum.
 	 *
 	 * @param file
 	 *            the file that has to be validated
-	 * @param sha512Checksum
+	 * @param sha256Checksum
 	 *            the checksum to validate against
 	 * @return true if the file was valid, otherwise false
 	 */
-	public static boolean validateFile(final File file, final String sha512Checksum) {
+	public static boolean validateFile(final File file, final String sha256Checksum) {
 		try {
-			return HashingUtility.verifyChecksum(file.getAbsolutePath()).equalsIgnoreCase(sha512Checksum);
+			return HashingUtility.generateChecksum(file.getAbsolutePath()).equalsIgnoreCase(sha256Checksum);
 		} catch (NoSuchAlgorithmException | IOException exception) {
 			Logging.log(Level.WARNING, "File invalid: " + file.getAbsolutePath(), exception);
 			return false;
@@ -200,22 +205,23 @@ public final class FileUtility {
 	}
 	
 	/**
-	 * Deletes a folder recursively. In case it deletes files on partially, files that had been
-	 * deleted already will stay gone.
+	 * Deletes a given {@link File}. In case the file is a directory, it will recursively delete all its containments.
+	 * If at any step during the deletion of files an exception is throwing, there won't be any rollback, therefore
+	 * all deleted files will be gone.
 	 *
-	 * @param folder
-	 *            will be deleted recursively
+	 * @param file
+	 *            the file that is to be deleted
 	 * @return true if successful, otherwise false
 	 */
-	public static boolean deleteRecursively(final File folder) {
-		if (folder.isDirectory()) {
-			for (final File fileOrFolder : folder.listFiles()) {
+	public static boolean deleteRecursively(final File file) {
+		if (file.isDirectory()) {
+			for (final File fileOrFolder : file.listFiles()) {
 				if (!deleteRecursively(fileOrFolder)) {
 					return false;
 				}
 			}
 		}
 		
-		return folder.delete();
+		return file.delete();
 	}
 }
