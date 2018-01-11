@@ -31,25 +31,25 @@ import javafx.scene.layout.VBox;
  */
 public class MainView {
 	private final HBox rootPane;
-
+	
 	private final ToggleButton	menuItemFav;
 	private final ToggleButton	menuItemAll;
 	private final ToggleButton	menuItemUser;
 	private final ToggleButton	menuItemVersion;
 	private final ToggleButton	menuItemFiles;
 	private final ToggleButton	menuItemSettings;
-
+	
 	private final ScrollPane contentScrollPane;
-
+	
 	private final Hyperlink	githubLink;
 	private final Hyperlink	helpLink;
 	private final Hyperlink	donateLink;
-
+	
 	private final HBox bottomBarCustom;
-
+	
 	private final Label			globalProgressLabel;
 	private final ProgressBar	globalProgressBar;
-
+	
 	/**
 	 * Initializes the whole view.
 	 */
@@ -57,33 +57,34 @@ public class MainView {
 		rootPane = new HBox();
 		rootPane.setPrefSize(785, 480);
 		rootPane.getStyleClass().add("root-pane");
-
+		
 		final VBox menuContainer = new VBox();
 		menuContainer.getStyleClass().add("tabPane");
-
+		
 		final ToggleGroup menuItemToggleGroup = new ToggleGroup();
-
+		final String menuItemStyleClass = "MenuItem";
+		
 		menuItemFav = new ToggleButton("\uf005");
-		menuItemFav.getStyleClass().add("MenuItem");
+		menuItemFav.getStyleClass().add(menuItemStyleClass);
 		menuItemAll = new ToggleButton("\uf0c9");
-		menuItemAll.getStyleClass().add("MenuItem");
+		menuItemAll.getStyleClass().add(menuItemStyleClass);
 		menuItemUser = new ToggleButton("\uf007");
-		menuItemUser.getStyleClass().add("MenuItem");
+		menuItemUser.getStyleClass().add(menuItemStyleClass);
 		menuItemVersion = new ToggleButton("\uf0ed");
-		menuItemVersion.getStyleClass().add("MenuItem");
+		menuItemVersion.getStyleClass().add(menuItemStyleClass);
 		menuItemFiles = new ToggleButton("\uf07b");
-		menuItemFiles.getStyleClass().add("MenuItem");
+		menuItemFiles.getStyleClass().add(menuItemStyleClass);
 		menuItemSettings = new ToggleButton("\uf013");
-		menuItemSettings.getStyleClass().add("MenuItem");
-
+		menuItemSettings.getStyleClass().add(menuItemStyleClass);
+		
 		menuItemToggleGroup.getToggles().addAll(menuItemFav, menuItemAll, menuItemUser, menuItemVersion, menuItemFiles, menuItemSettings);
 		menuContainer.getChildren().addAll(menuItemFav, menuItemAll, menuItemUser, menuItemVersion, menuItemFiles, menuItemSettings);
-
+		
 		final ScrollPane menuScrollPane = new ScrollPane(menuContainer);
 		menuScrollPane.setFitToHeight(true);
 		menuScrollPane.setFitToWidth(true);
 		menuScrollPane.getStyleClass().add("tabScrollPane");
-
+		
 		final VBox mainContentPane = new VBox();
 		HBox.setHgrow(mainContentPane, Priority.ALWAYS);
 		contentScrollPane = new ScrollPane();
@@ -91,10 +92,10 @@ public class MainView {
 		contentScrollPane.setFitToWidth(true);
 		contentScrollPane.getStyleClass().add("viewContent");
 		VBox.setVgrow(contentScrollPane, Priority.ALWAYS);
-
+		
 		final HBox bottomBar = new HBox();
 		bottomBar.getStyleClass().add("bottom-bar");
-
+		
 		githubLink = new Hyperlink("\uf09b");
 		githubLink.getStyleClass().add("info-icon");
 		githubLink.setTooltip(new Tooltip(Client.lang.getString("openGithubTooltip")));
@@ -105,26 +106,26 @@ public class MainView {
 		donateLink.getStyleClass().add("donate-button");
 		donateLink.setTooltip(new Tooltip(Client.lang.getString("openDonationPageTooltip")));
 		donateLink.setMaxHeight(Double.MAX_VALUE);
-
+		
 		bottomBarCustom = new HBox();
 		bottomBarCustom.getStyleClass().add("bottom-bar-custom");
 		HBox.setHgrow(bottomBarCustom, Priority.ALWAYS);
-
+		
 		final HBox progressBarContainer = new HBox();
 		progressBarContainer.getStyleClass().add("global-progress-bar-container");
 		globalProgressLabel = new Label();
 		globalProgressBar = new ProgressBar(0.0);
 		progressBarContainer.getChildren().addAll(globalProgressLabel, globalProgressBar);
-
+		
 		bottomBar.getChildren().addAll(githubLink, helpLink, donateLink, bottomBarCustom, progressBarContainer);
-
+		
 		mainContentPane.getChildren().add(contentScrollPane);
 		mainContentPane.getChildren().add(bottomBar);
-
+		
 		rootPane.getChildren().add(menuScrollPane);
 		rootPane.getChildren().add(mainContentPane);
 	}
-
+	
 	/**
 	 * Inserts the {@link Node} into the {@link #contentScrollPane}.
 	 *
@@ -134,7 +135,7 @@ public class MainView {
 	public void setActiveViewNode(final Node node) {
 		contentScrollPane.setContent(node);
 	}
-
+	
 	/**
 	 * Adds {@link Node}s to the custom part of the BottomBar
 	 *
@@ -144,14 +145,14 @@ public class MainView {
 	public void addToBottomBar(final Node... nodes) {
 		bottomBarCustom.getChildren().addAll(nodes);
 	}
-
+	
 	/**
 	 * Removes all {@link Node}s that have been added to the {@link #bottomBarCustom}.
 	 */
 	public void removeNodesFromBottomBar() {
 		bottomBarCustom.getChildren().clear();
 	}
-
+	
 	/**
 	 * Sets the text for the global {@link ProgressBar}.
 	 *
@@ -161,14 +162,14 @@ public class MainView {
 	public void setGlobalProgressBarText(final String text) {
 		globalProgressLabel.setText(text);
 	}
-
+	
 	/**
 	 * @return the {@link DoubleProperty ProgressProperty} for the {@link #globalProgressBar}
 	 */
 	public DoubleProperty globalProgressProperty() {
 		return globalProgressBar.progressProperty();
 	}
-
+	
 	/**
 	 * Selects the proper menu item, depending on which {@link View} was given.
 	 *
@@ -199,7 +200,7 @@ public class MainView {
 				throw new IllegalArgumentException("This View hasn't been implemented or is invalid: " + view);
 		}
 	}
-
+	
 	/**
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemFav}.
@@ -210,7 +211,7 @@ public class MainView {
 	public void setMenuItemFavAction(final EventHandler<ActionEvent> handler) {
 		menuItemFav.setOnAction(handler);
 	}
-
+	
 	/**
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemAll}.
@@ -221,7 +222,7 @@ public class MainView {
 	public void setMenuItemAllAction(final EventHandler<ActionEvent> handler) {
 		menuItemAll.setOnAction(handler);
 	}
-
+	
 	/**
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemUser}.
@@ -232,7 +233,7 @@ public class MainView {
 	public void setMenuItemUsernameAction(final EventHandler<ActionEvent> handler) {
 		menuItemUser.setOnAction(handler);
 	}
-
+	
 	/**
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemVersion}.
@@ -243,7 +244,7 @@ public class MainView {
 	public void setMenuItemVersionAction(final EventHandler<ActionEvent> handler) {
 		menuItemVersion.setOnAction(handler);
 	}
-
+	
 	/**
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemFiles}.
@@ -254,7 +255,7 @@ public class MainView {
 	public void setMenuItemFilesAction(final EventHandler<ActionEvent> handler) {
 		menuItemFiles.setOnAction(handler);
 	}
-
+	
 	/**
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemSettings}.
@@ -265,14 +266,14 @@ public class MainView {
 	public void setMenuItemSettingsAction(final EventHandler<ActionEvent> handler) {
 		menuItemSettings.setOnAction(handler);
 	}
-
+	
 	/**
 	 * @return {@link #rootPane}
 	 */
 	public Parent getRootPane() {
 		return rootPane;
 	}
-
+	
 	/**
 	 * Sets a browse action for the {@link #githubLink} using the given {@link String} as the URL.
 	 *
@@ -282,7 +283,7 @@ public class MainView {
 	public void setGitHubHyperlink(final String string) {
 		githubLink.setOnAction(__ -> OSUtility.browse(string));
 	}
-
+	
 	/**
 	 * Sets a browse action for the {@link #helpLink} using the given {@link String} as the URL.
 	 *
@@ -292,7 +293,7 @@ public class MainView {
 	public void setHelpHyperlink(final String string) {
 		helpLink.setOnAction(__ -> OSUtility.browse(string));
 	}
-
+	
 	/**
 	 * Sets a browse action for the {@link #donateLink} using the given {@link String} as the URL.
 	 *

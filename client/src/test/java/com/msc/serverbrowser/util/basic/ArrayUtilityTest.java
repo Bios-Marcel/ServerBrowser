@@ -1,8 +1,6 @@
 package com.msc.serverbrowser.util.basic;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Arrays;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,9 +19,9 @@ public class ArrayUtilityTest {
 		final byte[] arr = { 1, 2, 3 };
 		final byte[] arr2 = { 4, 5, 6, 7 };
 		final byte[] arr3 = { 8, 9 };
-
-		final byte[] arrMerged = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		
-		assertTrue(Arrays.equals(arrMerged, ArrayUtility.merge(arr, arr2, arr3)));
+		final byte[] arrMerged = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+		assertArrayEquals(arrMerged, ArrayUtility.merge(arr, arr2, arr3));
 	}
 }
