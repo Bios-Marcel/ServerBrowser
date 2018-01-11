@@ -24,7 +24,7 @@ public class Hasher {
 		for (final File f : new File("/home/marcel/Downloads").listFiles()) {
 			if (f.getName().contains("zip")) {
 				FileUtility.unzip(f.getAbsoluteFile().toString(), "trash.zip");
-				System.out.println(f.getName() + ": " + HashingUtility.verifyChecksum("samp.dll"));
+				System.out.println(f.getName() + ": " + HashingUtility.generateChecksum("samp.dll"));
 				f.delete();
 			}
 		}
