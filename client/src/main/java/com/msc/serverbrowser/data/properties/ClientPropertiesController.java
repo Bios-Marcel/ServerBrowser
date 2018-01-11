@@ -40,7 +40,7 @@ public final class ClientPropertiesController {
 	 * @return the value for the given {@link Property}
 	 */
 	public static String getPropertyAsString(final Property property) {
-		final String statement = "SELECT value FROM setting WHERE id = " + property.id() + ";";
+		final String statement = "SELECT value FROM setting WHERE id = " + property.getId() + ";";
 		final Optional<ResultSet> resultSetOptional = SQLDatabase.getInstance().executeGetResult(statement);
 		if (resultSetOptional.isPresent()) {
 			try (final ResultSet resultSet = resultSetOptional.get()) {
@@ -126,10 +126,10 @@ public final class ClientPropertiesController {
 		String statement = null;
 		if (Objects.isNull(value)) {
 			statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, NULL);";
-			statement = MessageFormat.format(statement, property.id());
+			statement = MessageFormat.format(statement, property.getId());
 		} else {
 			statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, ''{1}'');";
-			statement = MessageFormat.format(statement, property.id(), value);
+			statement = MessageFormat.format(statement, property.getId(), value);
 		}
 		SQLDatabase.getInstance().execute(statement);
 	}
