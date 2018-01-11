@@ -101,8 +101,8 @@ public final class UpdateUtility {
 
 		// Check if the Version matches the maximum number of subversions
 		final int longest = Integer.max(versionOneParts.length, versionTwoParts.length);
-		if (longest > 3) {
-			throw new IllegalArgumentException("The semantic version should only have up to 3 parts, eg: '1.23.2312'.");
+		if (longest > 4) {
+			throw new IllegalArgumentException("The semantic version should only have up to 4 parts, eg: '1.23.2312'.");
 		}
 
 		// Do first comparison
