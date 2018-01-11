@@ -142,14 +142,12 @@ public final class GTAController {
 		final Optional<String> path = getGtaPath();
 		if (!path.isPresent()) {
 			// GTA couldn't be found
-			System.out.println("Cant be found 1");
 			return Optional.empty();
 		}
 
 		final File file = new File(path.get() + "samp.dll");
 		if (!file.exists()) {
 			// samp.dll doesn't exist, even though GTA is installed at this point.
-			System.out.println("Cant be found 2");
 			return Optional.empty();
 		}
 
@@ -163,7 +161,6 @@ public final class GTAController {
 			Logging.log(Level.SEVERE, "Error hashing installed samp.dll", exception);
 		}
 
-		System.out.println("Cant be found 4");
 		return Optional.empty();
 	}
 
