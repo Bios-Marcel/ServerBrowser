@@ -14,7 +14,7 @@ public final class ArrayUtility {
 	}
 
 	/**
-	 * Returns the longer of two arrays.
+	 * Returns the longer of two arrays or an empty {@link Optional}.
 	 *
 	 * @param arrayOne
 	 *            first array
@@ -24,7 +24,11 @@ public final class ArrayUtility {
 	 * @throws NullPointerException
 	 *             if any of the arrays is null
 	 */
-	public static <T> Optional<T[]> getLonger(final T[] arrayOne, final T[] arrayTwo) throws NullPointerException {
+	public static <T> Optional<T[]> getLongestArray(final T[] arrayOne, final T[] arrayTwo) throws NullPointerException {
+		if (Objects.isNull(arrayOne) || Objects.isNull(arrayTwo)) {
+			return OptionalUtility.firstNonNullOrEmpty(arrayOne, arrayTwo);
+		}
+
 		if (arrayOne.length > arrayTwo.length) {
 			return Optional.of(arrayOne);
 		} else if (arrayTwo.length > arrayOne.length) {
