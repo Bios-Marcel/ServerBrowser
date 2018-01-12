@@ -53,8 +53,7 @@ public class VersionChangeController implements ViewController {
 	 */
 	public static final ObservableList<InstallationCandidate> INSTALLATION_CANDIDATES = FXCollections.observableArrayList();
 
-	@FXML
-	private VBox buttonContainer;
+	@FXML private VBox buttonContainer;
 
 	/**
 	 * Adding all usable InstallationCandidates, but this could probably be made in a more
@@ -63,20 +62,22 @@ public class VersionChangeController implements ViewController {
 	static {
 		final String site = PathConstants.SAMP_DOWNLOAD_LOCATION;
 
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3.7", "0.3.7", site
-			+ "0.3.7.zip", false, SourceType.INTERNET, "4CBFD7E3FB3CD4934A94A8F9B387DDD75581A4E97CBCA10AA568341DE5273630"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3z", "0.3z", site
-			+ "0.3z.zip", false, SourceType.INTERNET, "9ECD672DC16C24EF445AA1B411CB737832362B2632ACDA60BCC66358D4D85AD3"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3x", "0.3x", site
-			+ "0.3x.zip", false, SourceType.INTERNET, "B0D3FE71D9F7FF39D18468F6FCD506B8D1B28267EC81D7616E886B9A238400EC"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3e", "0.3e", site
-			+ "0.3e.zip", false, SourceType.INTERNET, "13E2F31718C24ADE07E3E8E79D644957589C1584022FA2F87895A1B7298F1C25"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3d", "0.3d", site
-			+ "0.3d.zip", false, SourceType.INTERNET, "356E78D14221D74793349A9C306720CDF9D1B2EC94172A27D85163818CBDE63C"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3c", "0.3c", site
-			+ "0.3c.zip", false, SourceType.INTERNET, "F5C1A0EDF562F188365038D97A28F950AFF8CA56C7362F9DC813FDC2BDE3B8F6"));
-		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0.3a", "0.3a", site
-			+ "0.3a.zip", false, SourceType.INTERNET, "C860D1032BBD9DCC9DF9E0E4E89611D5F12C967E29BE138CCBCC3ECB3303C2BF"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("65ACB8C9CB0D6723BB9D151BA182A02EC6F7766E2225E66EB51FF1CA95454B43", "0.3.8-RC4-4", site
+				+ "0.3.8-RC4-4.zip", false, SourceType.INTERNET, "936D602E66895A5581871C33EFEB28016F8EAA65641321754102B91FB8042253"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("de07a850590a43d83a40f9251741c07d3d0d74a217d5a09cb498a32982e8315b", "0.3.7-R2", site
+				+ "0.3.7.zip", false, SourceType.INTERNET, "4E414B25BA6FCC9E756821809C7189D2FE41C24CDE8B919D4C6F1DC8A4780CA3"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("0382c4468e00bedfe0188ea819bf333a332a4f0d36e6fc07b11b79f4b6d93e6a", "0.3z", site
+				+ "0.3z.zip", false, SourceType.INTERNET, "9ECD672DC16C24EF445AA1B411CB737832362B2632ACDA60BCC66358D4D85AD3"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("23b630cc5c922ee4aa4ef9e93ed5f7f3f9137aca32d5bcad6a0c0728d4a17cc6", "0.3x", site
+				+ "0.3x.zip", false, SourceType.INTERNET, "B0D3FE71D9F7FF39D18468F6FCD506B8D1B28267EC81D7616E886B9A238400EC"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("54e1494661962302c8166b1b747d8ed86c69f26fa3e0c5456c129f998883b410", "0.3e", site
+				+ "0.3e.zip", false, SourceType.INTERNET, "13E2F31718C24ADE07E3E8E79D644957589C1584022FA2F87895A1B7298F1C25"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("d97d6d4750512653b157edebc7d5960a4fd7b1e55e04a9acd86687900a9804bc", "0.3d", site
+				+ "0.3d.zip", false, SourceType.INTERNET, "356E78D14221D74793349A9C306720CDF9D1B2EC94172A27D85163818CBDE63C"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("6a584102e655202871d2158b2659c5b5581ab48ecfb21d330861484ae0cb3043", "0.3c", site
+				+ "0.3c.zip", false, SourceType.INTERNET, "F5C1A0EDF562F188365038D97A28F950AFF8CA56C7362F9DC813FDC2BDE3B8F6"));
+		INSTALLATION_CANDIDATES.add(new InstallationCandidate("23901473fb98f9781b68913f907f3b7a88d9d96bbf686cc65ad1505e400be942", "0.3a", site
+				+ "0.3a.zip", false, SourceType.INTERNET, "C860D1032BBD9DCC9DF9E0E4E89611D5F12C967E29BE138CCBCC3ECB3303C2BF"));
 	}
 
 	@Override
@@ -146,7 +147,8 @@ public class VersionChangeController implements ViewController {
 			if (CacheController.isVersionCached(toInstall)) {
 				installCachedVersion(toInstall);
 				finishInstalling();
-			} else {
+			}
+			else {
 				// TODO(MSC) Check JavaFX Threading API (Task / Service)
 				// Using a thread here, incase someone wants to keep using the app meanwhile
 				new Thread(() -> {
@@ -160,8 +162,7 @@ public class VersionChangeController implements ViewController {
 								FileUtility.unzip(new File(toInstall.getUrl()).toString(), gtaPath.get());
 								break;
 							case INTERNET:
-								final String willBeDownloaded = PathConstants.SAMP_DOWNLOAD_LOCATION + toInstall.getSampDLLChecksum() + ".zip";
-								downloadedFile = Optional.of(FileUtility.downloadFile(willBeDownloaded, PathConstants.OUTPUT_ZIP));
+								downloadedFile = Optional.of(FileUtility.downloadFile(toInstall.getUrl(), PathConstants.OUTPUT_ZIP));
 								if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CACHING_DOWNLOADS)) {
 									CacheController.addVersionToCache(toInstall, PathConstants.OUTPUT_ZIP);
 								}
@@ -172,7 +173,8 @@ public class VersionChangeController implements ViewController {
 								// ship with a samp version already installed.
 								break;
 						}
-					} catch (final IOException | IllegalArgumentException exception) {
+					}
+					catch (final IOException | IllegalArgumentException exception) {
 						Logging.log(Level.SEVERE, "Error Updating client.", exception);
 					}
 
@@ -180,7 +182,8 @@ public class VersionChangeController implements ViewController {
 					finishInstalling();
 				}).start();
 			}
-		} else {
+		}
+		else {
 			GTAController.displayCantLocateGTANotification();
 		}
 	}
@@ -192,16 +195,17 @@ public class VersionChangeController implements ViewController {
 
 	private static void installCachedVersion(final InstallationCandidate cachedVersion) {
 		try {
-			final File cachedVersionFile = new File(PathConstants.CLIENT_CACHE + File.separator + cachedVersion.getName() + cachedVersion.getName() + "_"
-				+ cachedVersion.getSampDLLChecksum() + ".zip");
+			final File cachedVersionFile = new File(PathConstants.CLIENT_CACHE + File.separator + cachedVersion.getName() + "_"
+					+ cachedVersion.getSampDLLChecksum() + ".zip");
 
 			FileUtility.unzip(cachedVersionFile.getAbsolutePath(), GTAController.getGtaPath().get());
-		} catch (final IOException exception) {
+		}
+		catch (final IOException exception) {
 			Logging.log(Level.SEVERE, "Error while trying to install SA-MP from cache.", exception);
 
 			new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("installingSampFromCache"))
-							.message(Client.lang.getString("errorInstallingSampFromCache")).animation(Animations.POPUP).build()
-							.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+					.message(Client.lang.getString("errorInstallingSampFromCache")).animation(Animations.POPUP).build()
+					.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 		}
 	}
 
@@ -223,10 +227,12 @@ public class VersionChangeController implements ViewController {
 				if (buttonVersion == version) {
 					button.setText(INSTALLED_TEXT);
 					button.setDisable(true);
-				} else if (ongoingInstallation && buttonVersion == currentlyInstalling.get()) {
+				}
+				else if (ongoingInstallation && buttonVersion == currentlyInstalling.get()) {
 					button.setText(INSTALLING_TEXT);
 					button.setDisable(true);
-				} else {
+				}
+				else {
 					button.setText(INSTALL_TEXT);
 					button.setDisable(ongoingInstallation);
 				}

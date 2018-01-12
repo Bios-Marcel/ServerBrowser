@@ -19,12 +19,12 @@ This software is currently available in the following languages (some might not 
 
 * English
 * German 
-* Georgian (Thanks to Amagida)
+* Georgian (Thanks to Medzvel)
 * Greek (Thanks to vassilis)
 * Dutch (Thanks to Jsytlez)
 * Russian (Thanks to Codeah)
 * Polish (Thanks to AbyssMorgan)
-* Romanian (Thanks to !stuntman!)
+* Romanian (Thanks to IstuntmanI)
 * Spanish (Thanks to Unrea1)
 
 ## Installation
