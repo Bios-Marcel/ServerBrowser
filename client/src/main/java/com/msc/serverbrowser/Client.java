@@ -72,7 +72,7 @@ public final class Client extends Application {
 	private MainController	mainController;
 	
 	/**
-	 * RessourceBundle which contains all the loclized strings.
+	 * RessourceBundle which contains all the localized strings.
 	 */
 	public static ResourceBundle lang;
 	
@@ -368,12 +368,16 @@ public final class Client extends Application {
 	public static void main(final String[] args) throws FileNotFoundException, IOException {
 		createFolderStructure();
 		
-		final Locale locale = new Locale(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE));
-		lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
+		initLanguageFiles();
 		
 		readApplicationArguments(args);
 		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));
 		Application.launch(args);
+	}
+	
+	public static void initLanguageFiles() {
+		final Locale locale = new Locale(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE));
+		lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
 	}
 	
 	private static void readApplicationArguments(final String[] args) {
