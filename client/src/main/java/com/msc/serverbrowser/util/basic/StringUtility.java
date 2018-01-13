@@ -28,10 +28,13 @@ public final class StringUtility {
 	}
 
 	/**
-	 * Stolen and edited from:
-	 * https://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java
-	 * Parses a String into an Integer or returns {@link Optional#empty()} incase it
-	 * doesn't represent a valid Integer.
+	 * Stolen and edited from <a href=
+	 * 'https://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java'>
+	 * this StackOverflow question</a>
+	 * <p>
+	 * Checks if a {@link String} looks like a Number and tries to parse it ito an {@link Integer},
+	 * if it fails an empty {@link Optional} will be returned instead.
+	 * </p>
 	 *
 	 * @param string
 	 *            the {@link String} that shall be parsed
@@ -46,6 +49,7 @@ public final class StringUtility {
 		if (length == 0) {
 			return Optional.empty();
 		}
+
 		int i = 0;
 		if (string.charAt(0) == '-') {
 			if (length == 1) {
@@ -53,6 +57,7 @@ public final class StringUtility {
 			}
 			i = 1;
 		}
+
 		for (; i < length; i++) {
 			final char c = string.charAt(i);
 			if (c < '0' || c > '9') {
@@ -99,9 +104,9 @@ public final class StringUtility {
 			// Needn't do any conversion at all, since it is still below 1 KiB
 			return bytes + " B";
 		}
-		final int exp = (int) (Math.log(bytes) / Math.log(unit));
-		final String pre = "KMGTPE".charAt(exp - 1) + "i";
-		return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+		final int expression = (int) (Math.log(bytes) / Math.log(unit));
+		final String bytePrefix = "KMGTPE".charAt(expression - 1) + "i";
+		return String.format("%.1f %sB", bytes / Math.pow(unit, expression), bytePrefix);
 	}
 
 	/**

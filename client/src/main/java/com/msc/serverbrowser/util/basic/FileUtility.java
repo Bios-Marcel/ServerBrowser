@@ -88,20 +88,26 @@ public final class FileUtility {
 	 */
 	public static File downloadFile(final URL url, final String outputPath, final DoubleProperty progressProperty, final double fileLength) throws IOException {
 		try (final InputStream input = url.openStream(); final FileOutputStream fileOutputStream = new FileOutputStream(outputPath);) {
-			final double current = (int) progressProperty.get();
-			final byte[] bytes = new byte[10000];
+			final double currentProgress = (int) progressProperty.get();
+			final byte[] buffer = new byte[10000];
 			while (true) {
-				final double length = input.read(bytes);
+				final double length = input.read(buffer);
 
 				if (length <= 0) {
 					break;
 				}
 
+				/*
+				 * Setting the progress property inside of a run later in order to avoid a crash,
+				 * since this function is usually used inside of a different thread than the ui
+				 * thread.
+				 */
 				Platform.runLater(() -> {
-					final double additional = length / fileLength * (1.0 - current);
+					final double additional = length / fileLength * (1.0 - currentProgress);
 					progressProperty.set(progressProperty.get() + additional);
 				});
-				fileOutputStream.write(bytes, 0, (int) length);
+
+				fileOutputStream.write(buffer, 0, (int) length);
 			}
 
 			return new File(outputPath);
@@ -146,27 +152,27 @@ public final class FileUtility {
 	 */
 	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException {
 		// Open the zip file
-		try (final ZipFile zipFile = new ZipFile(zipFilePath);) {
+		try (final ZipFile zipFile = new ZipFile(zipFilePath)) {
 			final Enumeration<? extends ZipEntry> enu = zipFile.entries();
 			while (enu.hasMoreElements()) {
+
 				final ZipEntry zipEntry = enu.nextElement();
-
 				final String name = zipEntry.getName();
+				final File outputFile = new File(outputLocation + separator + name);
 
-				final File file = new File(outputLocation + separator + name);
 				if (name.endsWith("/")) {
-					file.mkdirs();
+					outputFile.mkdirs();
 					continue;
 				}
 
-				final File parent = file.getParentFile();
+				final File parent = outputFile.getParentFile();
 				if (parent != null) {
 					parent.mkdirs();
 				}
 
 				// Extract the file
 				try (final InputStream inputStream = zipFile.getInputStream(zipEntry);
-						final FileOutputStream outputStream = new FileOutputStream(file)) {
+						final FileOutputStream outputStream = new FileOutputStream(outputFile)) {
 					/*
 					 * The buffer is the max amount of bytes kept in RAM during any given time while
 					 * unzipping. Since most windows disks are aligned to 4096 or 8192, we use a
