@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import org.kohsuke.github.GHRelease;
 
@@ -208,7 +207,7 @@ public final class Client extends Application {
 					.get(PathConstants.SAMP_CMD), StandardCopyOption.REPLACE_EXISTING);
 		}
 		catch (final IOException exception) {
-			Logging.log(Level.WARNING, "Error copying SAMP CMD to sampex folder.", exception);
+			Logging.warn("Error copying SAMP CMD to sampex folder.", exception);
 		}
 
 		final File clientCacheFolder = new File(PathConstants.CLIENT_CACHE);
@@ -221,42 +220,45 @@ public final class Client extends Application {
 	 * the user will be asked if he wants to update.
 	 */
 	public void checkForUpdates() {
-		Logging.log(Level.INFO, "Check for updates.");
+		Logging.info("Check for updates.");
 
 		if (!updatingProperty.get()) {
-			mainController.progressProperty().set(0.0);
-			mainController.setGlobalProgressText("Checking for updates");
-
-			new Thread(() -> {
-				updatingProperty.set(true);
-				try {
-					if (UpdateUtility.isUpToDate()) {
-						Logging.log(Level.INFO, "Client is up to date.");
-					}
-					else {
-						Platform.runLater(() -> {
-							mainController.progressProperty().set(0.1);
-							mainController.setGlobalProgressText("Downloading update");
-						});
-						Logging.log(Level.INFO, "Downloading update.");
-						downloadUpdate();
-						Logging.log(Level.INFO, "Download of the updated has been finished.");
-						Platform.runLater(() -> displayUpdateNotification());
-					}
-				}
-				catch (final IOException exception) {
-
-					Logging.log(Level.WARNING, "Couldn't check for newer version.", exception);
-					Platform.runLater(() -> displayCantRetrieveUpdate());
-				}
-
-				Platform.runLater(() -> {
-					mainController.setGlobalProgressText("");
-					mainController.progressProperty().set(0);
-				});
-				updatingProperty.set(false);
-			}).start();
+			// If an update is ongoing already, then we won't start another.
+			return;
 		}
+
+		mainController.progressProperty().set(0.0);
+		mainController.setGlobalProgressText("Checking for updates");
+
+		new Thread(() -> {
+			updatingProperty.set(true);
+			try {
+				if (UpdateUtility.isUpToDate()) {
+					Logging.info("Client is up to date.");
+				}
+				else {
+					Platform.runLater(() -> {
+						mainController.progressProperty().set(0.1);
+						mainController.setGlobalProgressText("Downloading update");
+					});
+					Logging.info("Downloading update.");
+					downloadUpdate();
+					Logging.info("Download of the updated has been finished.");
+					Platform.runLater(() -> displayUpdateNotification());
+				}
+			}
+			catch (final IOException exception) {
+
+				Logging.warn("Couldn't check for newer version.", exception);
+				Platform.runLater(() -> displayCantRetrieveUpdate());
+			}
+
+			Platform.runLater(() -> {
+				mainController.setGlobalProgressText("");
+				mainController.progressProperty().set(0);
+			});
+			updatingProperty.set(false);
+		}).start();
 	}
 
 	private static void displayUpdateNotification() {
@@ -310,7 +312,7 @@ public final class Client extends Application {
 			}
 		}
 		catch (final IOException | URISyntaxException exception) {
-			Logging.log(Level.SEVERE, "Couldn't retrieve update.", exception);
+			Logging.error("Couldn't retrieve update.", exception);
 		}
 	}
 
@@ -322,7 +324,7 @@ public final class Client extends Application {
 			selfRestart();
 		}
 		catch (final IOException exception) {
-			Logging.log(Level.SEVERE, "Failed to update.", exception);
+			Logging.error("Failed to update.", exception);
 			final TrayNotification notification = new TrayNotificationBuilder().title(Client.lang.getString("applyingUpdate"))
 					.message(Client.lang.getString("couldntApplyUpdate"))
 					.type(NotificationTypeImplementations.ERROR).build();
@@ -332,7 +334,7 @@ public final class Client extends Application {
 					Desktop.getDesktop().open(new File(PathConstants.SAMPEX_LOG));
 				}
 				catch (final IOException couldntOpenlogfile) {
-					Logging.log(Level.WARNING, "Error opening logfile.", couldntOpenlogfile);
+					Logging.warn("Error opening logfile.", couldntOpenlogfile);
 				}
 			});
 
@@ -343,8 +345,8 @@ public final class Client extends Application {
 	 * Restarts the application.
 	 */
 	private static void selfRestart() {
-		if (!PathConstants.OWN_JAR.getName().endsWith(".jar")) {// The application wasn't run with a
-																// jar file, but in an ide
+		if (!PathConstants.OWN_JAR.getName().endsWith(".jar")) {
+			// The application wasn't run with a jar file, but in an ide.
 			return;
 		}
 
@@ -361,7 +363,7 @@ public final class Client extends Application {
 			Platform.exit();
 		}
 		catch (final IOException exception) {
-			Logging.log(Level.SEVERE, "Couldn't selfrestart.", exception);
+			Logging.error("Couldn't selfrestart.", exception);
 		}
 	}
 
@@ -377,7 +379,7 @@ public final class Client extends Application {
 	 */
 	public static void main(final String[] args) throws FileNotFoundException, IOException {
 		createFolderStructure();
-		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.log(Level.SEVERE, "Uncaught exception in thread: " + t, e));
+		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.error("Uncaught exception in thread: " + t, e));
 		initLanguageFiles();
 		readApplicationArguments(args);
 		Application.launch(args);

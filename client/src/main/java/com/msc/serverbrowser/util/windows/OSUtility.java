@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.logging.Level;
 
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.basic.StringUtility;
@@ -42,7 +41,8 @@ public final class OSUtility {
 		if (Desktop.isDesktopSupported()) {
 			/**
 			 * HACK
-			 * Workaround for Unix, since the Desktop Class seems to freeze the application unless the call is threaded.
+			 * Workaround for Unix, since the Desktop Class seems to freeze the application unless
+			 * the call is threaded.
 			 */
 			new Thread(() -> {
 				final Desktop desktop = Desktop.getDesktop();
@@ -51,8 +51,9 @@ public final class OSUtility {
 					final String fixedUrl = StringUtility.fixUrlIfNecessary(urlAsString);
 					final URL url = new URL(fixedUrl);
 					desktop.browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
-				} catch (final IOException | URISyntaxException exception) {
-					Logging.log(Level.WARNING, "Couldn't visit website '" + urlAsString + "'", exception);
+				}
+				catch (final IOException | URISyntaxException exception) {
+					Logging.warn("Couldn't visit website '" + urlAsString + "'", exception);
 				}
 			}).start();
 		}

@@ -13,7 +13,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
-import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -202,7 +201,7 @@ public final class FileUtility {
 			return HashingUtility.generateChecksum(file.getAbsolutePath()).equalsIgnoreCase(sha256Checksum);
 		}
 		catch (NoSuchAlgorithmException | IOException exception) {
-			Logging.log(Level.WARNING, "File invalid: " + file.getAbsolutePath(), exception);
+			Logging.warn("File invalid: " + file.getAbsolutePath(), exception);
 			return false;
 		}
 	}

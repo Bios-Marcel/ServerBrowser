@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import com.msc.serverbrowser.logging.Logging;
 
@@ -17,7 +16,7 @@ public final class PastUsernames {
 	private PastUsernames() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Adds a username to the past usernames list.
 	 *
@@ -31,7 +30,7 @@ public final class PastUsernames {
 			SQLDatabase.getInstance().execute(statement);
 		}
 	}
-	
+
 	/**
 	 * Removes a username from the past usernames list.
 	 *
@@ -43,23 +42,24 @@ public final class PastUsernames {
 		statement = MessageFormat.format(statement, username);
 		SQLDatabase.getInstance().execute(statement);
 	}
-	
+
 	/**
 	 * @return a {@link List} containing all past usernames
 	 */
 	public static List<String> getPastUsernames() {
 		final List<String> usernames = new ArrayList<>();
-		
+
 		SQLDatabase.getInstance().executeGetResult("SELECT username FROM username;").ifPresent(resultSet -> {
 			try {
 				while (resultSet.next()) {
 					usernames.add(resultSet.getString("username"));
 				}
-			} catch (final SQLException exception) {
-				Logging.log(Level.SEVERE, "Error while retrieving past usernames", exception);
+			}
+			catch (final SQLException exception) {
+				Logging.error("Error while retrieving past usernames", exception);
 			}
 		});
-		
+
 		return usernames;
 	}
 }

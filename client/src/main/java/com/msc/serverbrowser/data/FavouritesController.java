@@ -13,7 +13,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.entites.SampServer;
@@ -27,11 +26,11 @@ import com.msc.serverbrowser.util.samp.SampQuery;
  */
 public final class FavouritesController {
 	private static final String UNKNOWN = "Unknown";
-	
+
 	private FavouritesController() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Adds a new server to the favourites and downloads its information.
 	 *
@@ -44,7 +43,7 @@ public final class FavouritesController {
 	public static SampServer addServerToFavourites(final String address, final Integer port) {
 		final SampServer server = new SampServer(address, port);
 		try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort()))
-		
+
 		{
 			query.getBasicServerInfo().ifPresent(serverInfo -> {
 				server.setPlayers(Integer.parseInt(serverInfo[1]));
@@ -53,13 +52,14 @@ public final class FavouritesController {
 				server.setMode(serverInfo[4]);
 				server.setLanguage(serverInfo[5]);
 			});
-			
+
 			query.getServersRules().ifPresent(rules -> {
 				server.setWebsite(rules.get("weburl"));
 				server.setVersion(rules.get("version"));
 			});
-		} catch (final SocketException | UnknownHostException exception) {
-			Logging.log(Level.WARNING, "Error updating server information.", exception);
+		}
+		catch (final SocketException | UnknownHostException exception) {
+			Logging.warn("Error updating server information.", exception);
 			server.setHostname(UNKNOWN);
 			server.setLanguage(UNKNOWN);
 			server.setMode(UNKNOWN);
@@ -69,12 +69,12 @@ public final class FavouritesController {
 			server.setPlayers(0);
 			server.setMaxPlayers(0);
 		}
-		
-		Logging.log(Level.INFO, "Adding server to favourites: " + server);
+
+		Logging.info("Adding server to favourites: " + server);
 		addServerToFavourites(server);
 		return server;
 	}
-	
+
 	/**
 	 * Adds a server to the favourites.
 	 *
@@ -84,14 +84,15 @@ public final class FavouritesController {
 	public static void addServerToFavourites(final SampServer server) {
 		if (isFavourite(server)) {
 			Logging.info("Server wasn't added, because it already is a favourite.");
-		} else {
+		}
+		else {
 			String statement = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
-			statement = escapeFormat(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(),
-							server.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
+			statement = escapeFormat(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers()
+					.toString(), server.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
 			SQLDatabase.getInstance().execute(statement);
 		}
 	}
-	
+
 	/**
 	 * Checks whether a server is favourite.
 	 *
@@ -102,7 +103,7 @@ public final class FavouritesController {
 	public static boolean isFavourite(final SampServer server) {
 		return getFavourites().contains(server);
 	}
-	
+
 	/**
 	 * Updates a servers info(data) in the database.
 	 *
@@ -111,11 +112,11 @@ public final class FavouritesController {
 	 */
 	public static void updateServerData(final SampServer server) {
 		String statement = "UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
-		statement = escapeFormat(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server.getMaxPlayers().toString(),
-						server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
+		statement = escapeFormat(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
+				.getMaxPlayers().toString(), server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
 		SQLDatabase.getInstance().execute(statement);
 	}
-	
+
 	private static String escapeFormat(final String string, final String... replacements) {
 		final String[] replacementsNew = new String[replacements.length];
 		for (int i = 0; i < replacements.length; i++) {
@@ -126,7 +127,7 @@ public final class FavouritesController {
 		}
 		return MessageFormat.format(string, (Object[]) replacementsNew);
 	}
-	
+
 	/**
 	 * Removes a server from favourites.
 	 *
@@ -138,7 +139,7 @@ public final class FavouritesController {
 		statement = MessageFormat.format(statement, server.getAddress(), server.getPort().toString());
 		SQLDatabase.getInstance().execute(statement);
 	}
-	
+
 	/**
 	 * Returns a {@link List} of favourite servers.
 	 *
@@ -146,7 +147,7 @@ public final class FavouritesController {
 	 */
 	public static List<SampServer> getFavourites() {
 		final List<SampServer> servers = new ArrayList<>();
-		
+
 		SQLDatabase.getInstance().executeGetResult("SELECT * FROM favourite;").ifPresent(resultSet -> {
 			try {
 				while (resultSet.next()) {
@@ -161,36 +162,37 @@ public final class FavouritesController {
 					server.setVersion(resultSet.getString("version"));
 					servers.add(server);
 				}
-			} catch (final SQLException exception) {
-				Logging.log(Level.SEVERE, "Error while retrieving favourites", exception);
+			}
+			catch (final SQLException exception) {
+				Logging.error("Error while retrieving favourites", exception);
 			}
 		});
-		
+
 		return servers;
 	}
-	
+
 	/**
 	 * @return the List of all SampServers that the legacy favourite file contains.
 	 */
 	public static List<SampServer> retrieveLegacyFavourites() {
 		final List<SampServer> legacyFavourites = new ArrayList<>();
-		
+
 		try {
 			final byte[] data = Files.readAllBytes(Paths.get(PathConstants.SAMP_USERDATA));
 			final ByteBuffer buffer = ByteBuffer.wrap(data);
 			buffer.order(ByteOrder.LITTLE_ENDIAN);
-			
+
 			// Skiping trash at the beginning
 			buffer.position(buffer.position() + 8);
-			
+
 			final int serverCount = buffer.getInt();
 			for (int i = 0; i < serverCount; i++) {
 				final byte[] ipBytes = new byte[buffer.getInt()];
 				buffer.get(ipBytes);
 				final String ip = new String(ipBytes, StandardCharsets.US_ASCII);
-				
+
 				final int port = buffer.getInt();
-				
+
 				/* Skip unimportant stuff */
 				int skip = buffer.getInt(); // Hostname
 				buffer.position(buffer.position() + skip);
@@ -198,13 +200,14 @@ public final class FavouritesController {
 				buffer.position(buffer.position() + skip);
 				skip = buffer.getInt(); // Server pw
 				buffer.position(buffer.position() + skip);
-				
+
 				legacyFavourites.add(new SampServer(ip, port));
 			}
-			
+
 			return legacyFavourites;
-		} catch (final IOException exception) {
-			Logging.log(Level.WARNING, "Error loading legacy favourites.", exception);
+		}
+		catch (final IOException exception) {
+			Logging.warn("Error loading legacy favourites.", exception);
 			return legacyFavourites;
 		}
 	}

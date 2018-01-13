@@ -1,7 +1,9 @@
 package com.msc.serverbrowser.util.basic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,18 +15,18 @@ import org.junit.jupiter.api.Test;
 public class StringUtilityTest {
 	@Test
 	public void testStringToBoolean() {
-		assertEquals(true, StringUtility.stringToBoolean("true"));
-		assertEquals(true, StringUtility.stringToBoolean("1"));
-		assertEquals(true, StringUtility.stringToBoolean("True"));
-		assertEquals(true, StringUtility.stringToBoolean("TRUE"));
+		assertTrue(StringUtility.stringToBoolean("true"));
+		assertTrue(StringUtility.stringToBoolean("1"));
+		assertTrue(StringUtility.stringToBoolean("True"));
+		assertTrue(StringUtility.stringToBoolean("TRUE"));
 
-		assertEquals(false, StringUtility.stringToBoolean(null));
-		assertEquals(false, StringUtility.stringToBoolean("0"));
-		assertEquals(false, StringUtility.stringToBoolean("1 "));
-		assertEquals(false, StringUtility.stringToBoolean(" 1"));
-		assertEquals(false, StringUtility.stringToBoolean("Kauderwelsch"));
-		assertEquals(false, StringUtility.stringToBoolean(""));
-		assertEquals(false, StringUtility.stringToBoolean("false"));
+		assertFalse(StringUtility.stringToBoolean(null));
+		assertFalse(StringUtility.stringToBoolean("0"));
+		assertFalse(StringUtility.stringToBoolean("1 "));
+		assertFalse(StringUtility.stringToBoolean(" 1"));
+		assertFalse(StringUtility.stringToBoolean("Kauderwelsch"));
+		assertFalse(StringUtility.stringToBoolean(""));
+		assertFalse(StringUtility.stringToBoolean("false"));
 	}
 
 	@Test

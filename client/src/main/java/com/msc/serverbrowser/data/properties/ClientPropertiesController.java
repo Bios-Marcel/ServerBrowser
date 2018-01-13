@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Level;
 
 import com.msc.serverbrowser.data.SQLDatabase;
 import com.msc.serverbrowser.logging.Logging;
@@ -46,11 +45,12 @@ public final class ClientPropertiesController {
 			try (final ResultSet resultSet = resultSetOptional.get()) {
 				if (resultSet.next()) {
 					return Optional
-									.ofNullable(resultSet.getString("value"))
-									.orElse(property.defaultValue());
+							.ofNullable(resultSet.getString("value"))
+							.orElse(property.defaultValue());
 				}
-			} catch (final SQLException exception) {
-				Logging.log(Level.SEVERE, "Could not set the property as a String.", exception);
+			}
+			catch (final SQLException exception) {
+				Logging.error("Could not set the property as a String.", exception);
 			}
 		}
 
@@ -127,7 +127,8 @@ public final class ClientPropertiesController {
 		if (Objects.isNull(value)) {
 			statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, NULL);";
 			statement = MessageFormat.format(statement, property.getId());
-		} else {
+		}
+		else {
 			statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, ''{1}'');";
 			statement = MessageFormat.format(statement, property.getId(), value);
 		}

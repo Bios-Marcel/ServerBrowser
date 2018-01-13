@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
@@ -26,45 +25,47 @@ import javafx.scene.control.TextArea;
  */
 public class FilesController implements ViewController {
 	// Chatlogs
-	@FXML
-	private TextArea contentTextArea;
-	
+	@FXML private TextArea contentTextArea;
+
 	@Override
 	public void initialize() {
 		loadChatLog();
 	}
-	
+
 	@FXML
 	private void loadChatLog() {
 		try {
 			final List<String> lines = Files.readAllLines(Paths.get(PathConstants.SAMP_CHATLOG));
-			
+
 			contentTextArea.clear();
-			
+
 			lines.forEach(line -> {
 				final String newLine = (line + System.lineSeparator()).replaceAll("([{].{6}[}])", "");
 				contentTextArea.insertText(contentTextArea.getText().length(), newLine);
 			});
-			
+
 			// Replace Color Codes TODO(MSC) Implement Color feature
-		} catch (final IOException exception) {
-			Logging.log(Level.SEVERE, "Error loading chatlog.", exception);
+		}
+		catch (final IOException exception) {
+			Logging.error("Error loading chatlog.", exception);
 		}
 	}
-	
+
 	@FXML
 	private void clearChatLog() {
 		try {
 			Files.deleteIfExists(Paths.get(PathConstants.SAMP_CHATLOG));
 			contentTextArea.clear();
-		} catch (final IOException exception) {
-			new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).animation(Animations.POPUP).title(Client.lang.getString("couldntClearChatLog"))
-							.message(Client.lang.getString("checkLogsForMoreInformation")).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
-			
-			Logging.log(Level.WARNING, "Couldn't clear chatlog", exception);
+		}
+		catch (final IOException exception) {
+			new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).animation(Animations.POPUP)
+					.title(Client.lang.getString("couldntClearChatLog"))
+					.message(Client.lang.getString("checkLogsForMoreInformation")).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+
+			Logging.warn("Couldn't clear chatlog", exception);
 		}
 	}
-	
+
 	@Override
 	public void onClose() {
 		// Unused
