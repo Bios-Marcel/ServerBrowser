@@ -21,7 +21,7 @@ public final class StringUtility {
 	 * @return the fixed url or the original if there was no need to fix
 	 */
 	public static String fixUrlIfNecessary(final String url) {
-		if (!url.startsWith("http://") && !url.startsWith("https://")) {
+		if (!(url.startsWith("http://") || url.startsWith("https://"))) {
 			return "http://" + url;
 		}
 		return url;
