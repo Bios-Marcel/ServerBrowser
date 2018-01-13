@@ -32,8 +32,7 @@ public final class CacheController {
 		final File cachedVersion = new File(PathConstants.CLIENT_CACHE + File.separator + version.getName() + "_" + version.getSampDLLChecksum() + ".zip");
 
 		if (cachedVersion.exists()) {
-			if (FileUtility.validateFile(cachedVersion, version.getCheckSum())) {// If its valid, we
-																					// return true
+			if (FileUtility.validateFile(cachedVersion, version.getCheckSum())) {
 				return true;
 			}
 

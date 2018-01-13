@@ -27,7 +27,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -94,9 +93,7 @@ public class VersionChangeController implements ViewController {
 			final HBox versionContainer = new HBox();
 
 			if (!buttonContainer.getChildren().isEmpty()) {
-				final Separator separator = new Separator(Orientation.HORIZONTAL);
-				separator.getStyleClass().add("separator");
-				buttonContainer.getChildren().add(separator);
+				buttonContainer.getChildren().add(new Separator());
 			}
 
 			versionContainer.getStyleClass().add("installEntry");

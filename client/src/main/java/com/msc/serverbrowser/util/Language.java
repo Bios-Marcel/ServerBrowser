@@ -25,8 +25,8 @@ public enum Language {
 	RO("ro", "Romanian"),
 	ES("es", "Spanish");
 
-	private String	shortcut;
-	private String	defaultName;
+	private final String	shortcut;
+	private final String	defaultName;
 
 	Language(final String shortcut, final String defaultName) {
 		this.shortcut = shortcut;
@@ -34,7 +34,8 @@ public enum Language {
 	}
 
 	/**
-	 * The shortcut used to identify the language, for example <code>de<code> would stand for <code>german</code>.
+	 * The shortcut used to identify the language, for example
+	 * <code>de<code> would stand for <code>german</code>.
 	 *
 	 * @return the shortcut of this {@link Language}
 	 */
@@ -53,7 +54,8 @@ public enum Language {
 	}
 
 	/**
-	 * Returns a language by matching its shortcut, for example an input of <code>de</code> would output the value {@link Language#DE}.
+	 * Returns a language by matching its shortcut, for example an input of <code>de</code> would
+	 * output the value {@link Language#DE}.
 	 *
 	 * @param shortcut
 	 *            the shortcut to searh for

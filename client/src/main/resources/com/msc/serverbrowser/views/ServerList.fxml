@@ -115,6 +115,7 @@
 									<items>
 										<FXCollections fx:factory="observableArrayList">
 											<String fx:value="" />
+											<String fx:value="0.3.8" />
 											<String fx:value="0.3.7" />
 											<String fx:value="0.3z" />
 											<String fx:value="0.3x" />

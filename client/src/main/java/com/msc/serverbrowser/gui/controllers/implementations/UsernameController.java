@@ -5,7 +5,6 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.samp.GTAController;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
@@ -21,11 +20,9 @@ import javafx.scene.input.MouseEvent;
  * @author Marcel
  */
 public class UsernameController implements ViewController {
-	@FXML
-	private TextField usernameTextField;
+	@FXML private TextField usernameTextField;
 
-	@FXML
-	private ListView<String> nameList;
+	@FXML private ListView<String> nameList;
 
 	private final MenuItem	applyNameMenuItem	= new MenuItem("Apply Username");
 	private final MenuItem	removeNameMenuItem	= new MenuItem("Remove username");
@@ -42,48 +39,65 @@ public class UsernameController implements ViewController {
 	}
 
 	@FXML
-	private void onUsernameClicked(final MouseEvent e) {
-		final ObservableList<String> usernames = nameList.getSelectionModel().getSelectedItems();
+	private void onUsernameClicked(final MouseEvent event) {
 
 		menu.hide();
 
-		if (e.getButton().equals(MouseButton.SECONDARY)) {
-			// If only one item is selected
-			if (usernames.size() == 1) {
-				final String name = usernames.get(0);
+		if (event.getButton().equals(MouseButton.SECONDARY)) {
 
-				applyNameMenuItem.setVisible(true);
-				removeNameMenuItem.setText("Remove Username");
-				menu.setOnAction(click -> {
-					final MenuItem clickedItem = (MenuItem) click.getTarget();
+			final int numberOfSelectedItems = nameList.getSelectionModel().getSelectedItems().size();
 
-					if (clickedItem.equals(applyNameMenuItem)) {
-						usernameTextField.setText(name);
-						applyUsername();
-					} else {
-						PastUsernames.removePastUsername(name);
-						nameList.getItems().remove(name);
-					}
-				});
+			// If the selection is emoty, we don't really care
+			if (numberOfSelectedItems == 0) {
+				return;
+			}
 
-				menu.show(nameList, e.getScreenX(), e.getScreenY());
-			} else if (usernames.size() > 1) {// if more than one item is selected
-				applyNameMenuItem.setVisible(false);
-				removeNameMenuItem.setText("Remove Usernames");
-				menu.setOnAction(click -> {
-					final MenuItem clickedItem = (MenuItem) click.getTarget();
+			/*
+			 * Making an array copy of the list, because iterating over the ObservableList would
+			 * lead to mistakes.
+			 */
+			final String[] usernames = nameList.getSelectionModel().getSelectedItems().toArray(new String[numberOfSelectedItems]);
 
-					if (clickedItem.equals(removeNameMenuItem)) {
-						for (final String name : usernames) {
-							PastUsernames.removePastUsername(name);
-							nameList.getItems().remove(name);
-						}
-					}
-				});
-
-				menu.show(nameList, e.getScreenX(), e.getScreenY());
+			if (numberOfSelectedItems == 1) {
+				showContextMenuForSingleItem(event.getScreenX(), event.getScreenY(), usernames[0]);
+			}
+			else if (numberOfSelectedItems > 1) {
+				showContextMenuForMultipleItems(event.getScreenX(), event.getScreenY(), usernames);
 			}
 		}
+	}
+
+	private void showContextMenuForMultipleItems(final double showAtX, final double showAtY, final String[] usernames) {
+
+		applyNameMenuItem.setVisible(false);
+		removeNameMenuItem.setText("Remove Usernames");
+
+		removeNameMenuItem.setOnAction(__ -> {
+			for (final String name : usernames) {
+				PastUsernames.removePastUsername(name);
+				nameList.getItems().remove(name);
+			}
+		});
+
+		menu.show(nameList, showAtX, showAtY);
+	}
+
+	private void showContextMenuForSingleItem(final double showAtX, final double showAtY, final String name) {
+
+		applyNameMenuItem.setVisible(true);
+		removeNameMenuItem.setText("Remove Username");
+
+		applyNameMenuItem.setOnAction(__ -> {
+			usernameTextField.setText(name);
+			applyUsername();
+		});
+
+		removeNameMenuItem.setOnAction(__ -> {
+			PastUsernames.removePastUsername(name);
+			nameList.getItems().remove(name);
+		});
+
+		menu.show(nameList, showAtX, showAtY);
 	}
 
 	@FXML

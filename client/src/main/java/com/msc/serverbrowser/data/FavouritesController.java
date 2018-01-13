@@ -172,6 +172,8 @@ public final class FavouritesController {
 	}
 
 	/**
+	 * TODO (Marcel 13.01.2018) I am still not using this ... why
+	 *
 	 * @return the List of all SampServers that the legacy favourite file contains.
 	 */
 	public static List<SampServer> retrieveLegacyFavourites() {

@@ -28,7 +28,7 @@ public final class ClientPropertiesController {
 	public static Integer getDefaultAsInt(final Property property) {
 		checkDataType(property, Integer.class);
 
-		return Integer.parseInt(property.defaultValue());
+		return Integer.parseInt(property.getDefaultValue());
 	}
 
 	/**
@@ -46,7 +46,7 @@ public final class ClientPropertiesController {
 				if (resultSet.next()) {
 					return Optional
 							.ofNullable(resultSet.getString("value"))
-							.orElse(property.defaultValue());
+							.orElse(property.getDefaultValue());
 				}
 			}
 			catch (final SQLException exception) {
@@ -54,7 +54,7 @@ public final class ClientPropertiesController {
 			}
 		}
 
-		return property.defaultValue();
+		return property.getDefaultValue();
 
 	}
 
@@ -102,8 +102,8 @@ public final class ClientPropertiesController {
 	}
 
 	private static void checkDataType(final Property property, final Class<?> datatype) {
-		if (!property.datatype().equals(datatype)) {
-			throw new IllegalArgumentException("Datatype is " + datatype.getName() + " ; Expected: " + property.datatype().getName());
+		if (!property.getDatatype().equals(datatype)) {
+			throw new IllegalArgumentException("Datatype is " + datatype.getName() + " ; Expected: " + property.getDatatype().getName());
 		}
 	}
 
@@ -115,7 +115,7 @@ public final class ClientPropertiesController {
 	 * @param value
 	 *            the value that will be set
 	 */
-	public static void setProperty(final Property property, final Object value) {
+	private static void setProperty(final Property property, final Object value) {
 		setProperty(property, value, false);
 	}
 
@@ -199,6 +199,6 @@ public final class ClientPropertiesController {
 	 *            the property restopre its default
 	 */
 	public static void restorePropertyToDefault(final Property property) {
-		setProperty(property, property.defaultValue(), true);
+		setProperty(property, property.getDefaultValue(), true);
 	}
 }

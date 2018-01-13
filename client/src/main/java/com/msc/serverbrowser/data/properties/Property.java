@@ -23,14 +23,12 @@ public enum Property {
 	LANGUAGE(17, "en", String.class),
 	CONNECT_ON_DOUBLECLICK(18, true, Boolean.class);
 
-	private int id;
+	private final int		id;
+	private final String	defaultValue;
+	private final Class<?>	datatype;
 
-	private String defaultValue;
-
-	private Class<?> datatype;
-
-	private <T extends Object> Property(final int value, final T defaultValue, final Class<T> datatype) {
-		id = value;
+	private <T extends Object> Property(final int id, final T defaultValue, final Class<T> datatype) {
+		this.id = id;
 		this.defaultValue = defaultValue == null ? null : defaultValue.toString();
 		this.datatype = datatype;
 	}
@@ -38,7 +36,7 @@ public enum Property {
 	/**
 	 * @return the datatype of this property
 	 */
-	public Class<?> datatype() {
+	public Class<?> getDatatype() {
 		return datatype;
 	}
 
@@ -52,7 +50,7 @@ public enum Property {
 	/**
 	 * @return the default value for this property
 	 */
-	public String defaultValue() {
+	public String getDefaultValue() {
 		return defaultValue;
 	}
 }

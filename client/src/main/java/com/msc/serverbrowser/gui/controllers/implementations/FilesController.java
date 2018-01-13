@@ -58,7 +58,9 @@ public class FilesController implements ViewController {
 			contentTextArea.clear();
 		}
 		catch (final IOException exception) {
-			new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).animation(Animations.POPUP)
+			new TrayNotificationBuilder()
+					.type(NotificationTypeImplementations.ERROR)
+					.animation(Animations.POPUP)
 					.title(Client.lang.getString("couldntClearChatLog"))
 					.message(Client.lang.getString("checkLogsForMoreInformation")).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 
