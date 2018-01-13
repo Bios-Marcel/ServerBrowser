@@ -19,20 +19,20 @@ public final class Logging {
 	 * The Loggers Singleton instance.
 	 */
 	private static Logger instance;
-	
+
 	private Logging() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	static {
 		init();
 	}
-	
+
 	private static void init() {
 		instance = Logger.getAnonymousLogger();
 		instance.setLevel(Level.INFO);
 		try {
-			final FileHandler filehandler = new FileHandler(PathConstants.SAMPEX_LOG);
+			final FileHandler filehandler = new FileHandler(PathConstants.SAMPEX_LOG, true);
 			final SimpleFormatter formatter = new SimpleFormatter();
 			filehandler.setFormatter(formatter);
 			instance.addHandler(filehandler);
@@ -40,7 +40,7 @@ public final class Logging {
 			instance.log(Level.SEVERE, "Couldn't configure logger properly", exception);
 		}
 	}
-	
+
 	/**
 	 * Log a message, with associated Throwable information.
 	 * <p>
@@ -62,7 +62,7 @@ public final class Logging {
 	public static void log(final Level logLevel, final String message, final Throwable throwable) {
 		instance.log(logLevel, message, throwable);
 	}
-	
+
 	/**
 	 * Log a message, with no arguments.
 	 * <p>
@@ -78,7 +78,7 @@ public final class Logging {
 	public static void log(final Level logLevel, final String message) {
 		instance.log(logLevel, message);
 	}
-	
+
 	/**
 	 * Log an INFO message.
 	 * <p>
