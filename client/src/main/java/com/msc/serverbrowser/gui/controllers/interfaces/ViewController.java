@@ -7,12 +7,16 @@ package com.msc.serverbrowser.gui.controllers.interfaces;
  */
 public interface ViewController {
 	/**
-	 * This method is called by the FXMLLoaderafter loading the FXML File.
+	 * This method is called by the FXMLLoader after loading the FXML File.
 	 */
-	void initialize();
-	
+	default void initialize() {
+		// Do nothing by default
+	}
+
 	/**
 	 * This method is called, as soon as the View closes.
 	 */
-	void onClose();
+	default void onClose() {
+		// Do nothing by default
+	}
 }

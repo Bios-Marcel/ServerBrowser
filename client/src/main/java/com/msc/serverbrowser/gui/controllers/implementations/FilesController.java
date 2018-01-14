@@ -1,9 +1,9 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
@@ -11,10 +11,9 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
+import com.msc.serverbrowser.gui.views.FilesView;
 import com.msc.serverbrowser.logging.Logging;
-
-import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
+import com.msc.serverbrowser.util.basic.FileUtility;
 
 /**
  * Controls the Files view which allows you to look at your taken screenshots, your chatlogs and
@@ -24,38 +23,48 @@ import javafx.scene.control.TextArea;
  * @since 08.07.2017
  */
 public class FilesController implements ViewController {
-	// Chatlogs
-	@FXML private TextArea contentTextArea;
 
-	@Override
-	public void initialize() {
+	private final FilesView filesView;
+
+	/**
+	 * @param filesView the view to be used by this controller
+	 */
+	public FilesController(final FilesView filesView) {
+		this.filesView = filesView;
+
+		filesView.setLoadChatLogsButtonAction(__ -> loadChatLog());
+		filesView.setClearChatLogsButtonAction(__ -> clearChatLog());
+
 		loadChatLog();
 	}
 
-	@FXML
 	private void loadChatLog() {
+
+		// Replace Color Codes TODO(MSC) Implement Color feature
+		final StringBuilder newContent = new StringBuilder();
+
 		try {
-			final List<String> lines = Files.readAllLines(Paths.get(PathConstants.SAMP_CHATLOG));
+			FileUtility
+					.readAllLinesTryEncodings(Paths
+							.get(PathConstants.SAMP_CHATLOG), StandardCharsets.ISO_8859_1, StandardCharsets.UTF_8, StandardCharsets.US_ASCII)
+					.forEach(line -> {
+						final String textWithoutColorCodes = line.replaceAll("([{].{6}[}])", "");
+						newContent.append(textWithoutColorCodes + System.lineSeparator());
+					});
 
-			contentTextArea.clear();
-
-			lines.forEach(line -> {
-				final String newLine = (line + System.lineSeparator()).replaceAll("([{].{6}[}])", "");
-				contentTextArea.insertText(contentTextArea.getText().length(), newLine);
-			});
-
-			// Replace Color Codes TODO(MSC) Implement Color feature
 		}
 		catch (final IOException exception) {
 			Logging.error("Error loading chatlog.", exception);
 		}
+
+		filesView.setChatLogTextAreaContent(newContent.toString());
 	}
 
-	@FXML
 	private void clearChatLog() {
+
 		try {
 			Files.deleteIfExists(Paths.get(PathConstants.SAMP_CHATLOG));
-			contentTextArea.clear();
+			filesView.setChatLogTextAreaContent("");
 		}
 		catch (final IOException exception) {
 			new TrayNotificationBuilder()
@@ -66,10 +75,5 @@ public class FilesController implements ViewController {
 
 			Logging.warn("Couldn't clear chatlog", exception);
 		}
-	}
-
-	@Override
-	public void onClose() {
-		// Unused
 	}
 }

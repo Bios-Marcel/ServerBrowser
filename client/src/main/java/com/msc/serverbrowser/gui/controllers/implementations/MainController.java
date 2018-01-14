@@ -1,12 +1,14 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
+import com.msc.serverbrowser.gui.views.FilesView;
 import com.msc.serverbrowser.gui.views.MainView;
 import com.msc.serverbrowser.logging.Logging;
 
@@ -15,6 +17,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Font;
 
@@ -29,8 +32,10 @@ public class MainController implements ViewController {
 
 	private final MainView mainView;
 
+	private ViewController activeSubViewController;
+
 	/**
-	 * @param mainView the main view to be used by this controller
+	 * @param mainView the view to be used by this controller
 	 */
 	public MainController(final MainView mainView) {
 		this.mainView = mainView;
@@ -123,12 +128,34 @@ public class MainController implements ViewController {
 	 *            the view to be loaded
 	 */
 	public void loadView(final View view) {
+
+		if (Objects.nonNull(activeSubViewController)) {
+			activeSubViewController.onClose();
+		}
+
 		mainView.removeNodesFromBottomBar();
-		loadFXML(view);
+
+		final Parent loadedNode;
+		switch (view) {
+			case FILES:
+				loadedNode = loadFilesView();
+				break;
+			// $CASES-OMITTED$
+			default:
+				loadedNode = loadFXML(view);
+		}
+
+		initViewData(view, loadedNode);
 		activeView = view;
 	}
 
-	private void loadFXML(final View view) {
+	private Parent loadFilesView() {
+		final FilesView filesView = new FilesView();
+		activeSubViewController = new FilesController(filesView);
+		return filesView.getRootPane();
+	}
+
+	private Parent loadFXML(final View view) {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
@@ -136,16 +163,22 @@ public class MainController implements ViewController {
 
 			// Creating a new instance of the specified controller, controllers never have
 			// constructor arguments, therefore this is supposedly fine.
-			loader.setController(view.getControllerType().newInstance());
-			final Parent toLoad = loader.load();
-			toLoad.getStylesheets().setAll(view.getStylesheetPath());
-			mainView.selectMenuItemForView(view);
-			mainView.setActiveViewNode(toLoad);
-			Client.getInstance().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
+			activeSubViewController = view.getControllerType().newInstance();
+			loader.setController(activeSubViewController);
+			return loader.load();
 		}
 		catch (final IOException | InstantiationException | IllegalAccessException exception) {
 			Logging.error("Couldn't load view.", exception);
 		}
+
+		return new Label("Error loading view.");
+	}
+
+	private void initViewData(final View view, final Parent loadedNode) {
+		loadedNode.getStylesheets().setAll(view.getStylesheetPath());
+		mainView.selectMenuItemForView(view);
+		mainView.setActiveViewNode(loadedNode);
+		Client.getInstance().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
 	}
 
 	/**

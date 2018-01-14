@@ -11,8 +11,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -227,5 +231,26 @@ public final class FileUtility {
 		}
 
 		return file.delete();
+	}
+
+	/**
+	 * Tries reading a file with all given charsets until it works.
+	 *
+	 * @param path the {@link Path} to read from
+	 * @param charsets the {@link Charset}s to try when reading
+	 * @return A {@link List} of all lines within the file
+	 * @throws IOException if none of the read-attempts was sucessful
+	 */
+	public static List<String> readAllLinesTryEncodings(final Path path, final Charset... charsets) throws IOException {
+		for (final Charset charset : charsets) {
+			try {
+				return Files.readAllLines(path, charset);
+			}
+			catch (@SuppressWarnings("unused") final IOException exception) {
+				Logging.warn("Error loading " + path + " with encoding " + charset);
+			}
+		}
+
+		throw new IOException("Couldn't load file " + path + " using any of the given encodings.");
 	}
 }
