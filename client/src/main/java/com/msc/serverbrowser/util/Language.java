@@ -1,5 +1,6 @@
 package com.msc.serverbrowser.util;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.msc.serverbrowser.Client;
@@ -45,12 +46,16 @@ public enum Language {
 
 	@Override
 	public String toString() {
-		final String languageName = Client.lang.getString(shortcut);
+		if (Objects.nonNull(Client.lang)) {
+			final String languageName = Client.lang.getString(shortcut);
 
-		if (ClientPropertiesController.getPropertyAsString(Property.LANGUAGE).equalsIgnoreCase(EN.shortcut)) {
-			return languageName;
+			if (ClientPropertiesController.getPropertyAsString(Property.LANGUAGE).equalsIgnoreCase(EN.shortcut)) {
+				return languageName;
+			}
+			return languageName + " (" + defaultName + ")";
 		}
-		return languageName + " (" + defaultName + ")";
+
+		return defaultName;
 	}
 
 	/**
