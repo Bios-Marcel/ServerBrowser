@@ -33,7 +33,7 @@
 		<SampServerTable fx:id="serverTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
 			minWidth="-Infinity" prefHeight="100.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
 			<columns>
-				<TableColumn fx:id="columnHostname" sortable="true" text="%hostnameTableHeader">
+				<TableColumn sortable="true" text="%hostnameTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="hostname" />
 					</cellValueFactory>
@@ -43,12 +43,12 @@
 						<PropertyValueFactory property="playersAndMaxPlayers" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnMode" minWidth="80.0" sortable="true" text="%gamemodeTableHeader">
+				<TableColumn minWidth="80.0" sortable="true" text="%gamemodeTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="mode" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnLanguage" minWidth="80.0" sortable="true" text="%languageTableHeader">
+				<TableColumn minWidth="80.0" sortable="true" text="%languageTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="language" />
 					</cellValueFactory>

@@ -56,10 +56,11 @@ public class MainController implements ViewController {
 	@Override
 	public void initialize() {
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW)) {
-			loadView(View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)));
+			final View view = View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)).orElse(View.SERVERS_ALL);
+			loadView(view);
 		}
 		else {
-			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)));
+			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)).get());
 		}
 
 	}
@@ -143,6 +144,7 @@ public class MainController implements ViewController {
 			// $CASES-OMITTED$
 			default:
 				loadedNode = loadFXML(view);
+				break;
 		}
 
 		initViewData(view, loadedNode);
