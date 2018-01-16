@@ -15,10 +15,8 @@ public class WhatsLeftToTranslate {
 				.filter(lang -> lang != Language.EN)
 				.forEach(lang -> {
 
-					// NullPointerException below:
-					System.out.println("Printing the to be translated key-value pairs for language: " + lang);
-					System.out.println();
-
+					System.out.println("##### " + englishLanguage.getString(lang.getShortcut()));
+					System.out.println("```");
 					final ResourceBundle langProperties = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", new Locale(lang.getShortcut()));
 
 					for (final String key : englishLanguage.keySet()) {
@@ -28,8 +26,8 @@ public class WhatsLeftToTranslate {
 							System.out.println(key + "=" + value);
 						}
 					}
-
-					System.out.println("------------------------------------------------------------------------------------------");
+					System.out.println("```");
+					System.out.println();
 				});
 	}
 }
