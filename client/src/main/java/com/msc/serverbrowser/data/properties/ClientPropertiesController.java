@@ -80,12 +80,12 @@ public final class ClientPropertiesController {
 	 *            the key
 	 * @return the value for the given {@link Property}
 	 */
-	public static Float getPropertyAsFloat(final Property property) {
-		checkDataType(property, Float.class);
+	public static Double getPropertyAsDouble(final Property property) {
+		checkDataType(property, Double.class);
 
 		final String originalValue = getPropertyAsString(property);
 
-		return Float.parseFloat(originalValue);
+		return Double.parseDouble(originalValue);
 	}
 
 	/**
@@ -136,14 +136,14 @@ public final class ClientPropertiesController {
 	}
 
 	/**
-	 * Sets a value as an {@link Float} for a specific key from {@link Property}.
+	 * Sets a value as an {@link Double} for a specific key from {@link Property}.
 	 *
 	 * @param property
 	 *            the key
 	 * @param value
 	 *            the value that will be set
 	 */
-	public static void setProperty(final Property property, final Float value) {
+	public static void setProperty(final Property property, final Double value) {
 		nullCheck(value);
 		setProperty(property, (Object) value);
 	}
