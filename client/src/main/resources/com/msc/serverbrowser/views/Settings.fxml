@@ -38,13 +38,13 @@
 										<TextField fx:id="sampPathTextField" maxWidth="Infinity" promptText="%gtaNotFoundPrompt" HBox.hgrow="ALWAYS" />
 									</children>
 								</HBox>
-								<CheckBox fx:id="saveLastViewCheckBox" mnemonicParsing="false" text="%rememberLastView" />
 								<HBox spacing="5.0">
 									<children>
 										<Label maxHeight="Infinity" text="%language" />
 										<ComboBox fx:id="languageComboBox" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
 									</children>
 								</HBox>
+								<CheckBox fx:id="saveLastViewCheckBox" mnemonicParsing="false" text="%rememberLastView" />
 							</children>
 						</VBox>
 					</content>
