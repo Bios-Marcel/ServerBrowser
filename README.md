@@ -173,6 +173,7 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
 #### Polish
+```
 errorFetchingServers=Couldn't fetch servers
 fetchingServers=Fetching servers, please wait a moment.
 lagcomp=lagcomp:
