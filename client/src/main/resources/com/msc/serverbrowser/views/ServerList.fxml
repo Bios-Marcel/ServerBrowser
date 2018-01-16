@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import com.msc.serverbrowser.gui.components.SampServerTable?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
+<VBox maxHeight="Infinity" maxWidth="Infinity" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
 	xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<HBox spacing="5.0">
@@ -30,7 +30,7 @@
 				<Button mnemonicParsing="false" onAction="#onClickAddToFavourites" text="%addToFavourites" />
 			</children>
 		</HBox>
-		<SampServerTable fx:id="serverTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+		<SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity"
 			minWidth="-Infinity" prefHeight="100.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
 			<columns>
 				<TableColumn fx:id="columnHostname" sortable="true" text="%hostnameTableHeader">
@@ -65,15 +65,15 @@
 		</SampServerTable>
 		<HBox spacing="5.0">
 			<children>
-				<TableView fx:id="playerTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0"
-					tableMenuButtonVisible="true">
+				<TableView fx:id="playerTable" maxHeight="Infinity" maxWidth="Infinity" prefHeight="200.0"
+					tableMenuButtonVisible="false">
 					<columns>
-						<TableColumn fx:id="playerName" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="-1.0" text="%playerTableHeader">
+						<TableColumn text="%playerTableHeader">
 							<cellValueFactory>
 								<PropertyValueFactory property="playerName" />
 							</cellValueFactory>
 						</TableColumn>
-						<TableColumn fx:id="playerScore" maxWidth="85.0" minWidth="85.0" prefWidth="85.0" text="%scoreTableHeader">
+						<TableColumn text="%scoreTableHeader" maxWidth="85.0" minWidth="85.0" resizable="false">
 							<cellValueFactory>
 								<PropertyValueFactory property="playerScore" />
 							</cellValueFactory>
@@ -83,13 +83,13 @@
 						<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 					</columnResizePolicy>
 				</TableView>
-				<TitledPane animated="false" focusTraversable="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+				<TitledPane animated="false" focusTraversable="false" collapsible="false" maxHeight="Infinity" maxWidth="Infinity"
 					text="%filterSettings" HBox.hgrow="ALWAYS">
 					<content>
-						<GridPane hgap="10.0" maxHeight="1.7976931348623157E308" vgap="5.0">
+						<GridPane hgap="10.0" maxHeight="Infinity" vgap="5.0">
 							<columnConstraints>
 								<ColumnConstraints hgrow="NEVER" />
-								<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="73.0" />
+								<ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="10.0" prefWidth="73.0" />
 							</columnConstraints>
 							<rowConstraints>
 								<RowConstraints />
@@ -104,13 +104,13 @@
 								<CheckBox fx:id="regexCheckBox" mnemonicParsing="false" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
 									GridPane.halignment="LEFT" />
 								<Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-								<TextField fx:id="nameFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+								<TextField fx:id="nameFilter" maxWidth="Infinity" onKeyReleased="#onFilterSettingsChange"
 									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-								<TextField fx:id="modeFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+								<TextField fx:id="modeFilter" maxWidth="Infinity" onKeyReleased="#onFilterSettingsChange"
 									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-								<TextField fx:id="languageFilter" maxWidth="1.7976931348623157E308" onKeyReleased="#onFilterSettingsChange"
+								<TextField fx:id="languageFilter" maxWidth="Infinity" onKeyReleased="#onFilterSettingsChange"
 									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-								<ComboBox fx:id="versionFilter" maxWidth="1.7976931348623157E308" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
+								<ComboBox fx:id="versionFilter" maxWidth="Infinity" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
 									GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
 									<items>
 										<FXCollections fx:factory="observableArrayList">
@@ -133,10 +133,10 @@
 						</GridPane>
 					</content>
 				</TitledPane>
-				<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%serverInfo"
+				<TitledPane animated="false" collapsible="false" maxHeight="Infinity" maxWidth="Infinity" text="%serverInfo"
 					focusTraversable="false">
 					<content>
-						<GridPane hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="5.0">
+						<GridPane hgap="5.0" maxHeight="Infinity" maxWidth="Infinity" vgap="5.0">
 							<columnConstraints>
 								<ColumnConstraints fillWidth="false" hgrow="NEVER" minWidth="-Infinity" />
 								<ColumnConstraints fillWidth="false" hgrow="NEVER" />

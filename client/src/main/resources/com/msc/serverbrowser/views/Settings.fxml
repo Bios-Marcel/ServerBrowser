@@ -17,15 +17,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.111"
+<ScrollPane fitToWidth="true" maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/8.0.111"
 	xmlns:fx="http://javafx.com/fxml/1">
 	<content>
-		<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
+		<VBox maxHeight="Infinity" maxWidth="Infinity" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
 			xmlns:fx="http://javafx.com/fxml/1">
 			<children>
 				<TitledPane text="%informationSettingsTitle">
 					<content>
-						<Label fx:id="informationLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+						<Label fx:id="informationLabel" maxHeight="Infinity" maxWidth="Infinity" />
 					</content>
 				</TitledPane>
 				<TitledPane text="%generalSettingsTitle">
@@ -34,15 +34,15 @@
 							<children>
 								<HBox spacing="5.0">
 									<children>
-										<Label maxHeight="1.7976931348623157E308" text="%customSampPath" />
-										<TextField fx:id="sampPathTextField" maxWidth="1.7976931348623157E308" promptText="%gtaNotFoundPrompt" HBox.hgrow="ALWAYS" />
+										<Label maxHeight="Infinity" text="%customSampPath" />
+										<TextField fx:id="sampPathTextField" maxWidth="Infinity" promptText="%gtaNotFoundPrompt" HBox.hgrow="ALWAYS" />
 									</children>
 								</HBox>
 								<CheckBox fx:id="saveLastViewCheckBox" mnemonicParsing="false" text="%rememberLastView" />
 								<HBox spacing="5.0">
 									<children>
-										<Label maxHeight="1.7976931348623157E308" text="%language" />
-										<ComboBox fx:id="languageComboBox" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+										<Label maxHeight="Infinity" text="%language" />
+										<ComboBox fx:id="languageComboBox" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
 									</children>
 								</HBox>
 							</children>
@@ -58,15 +58,15 @@
 								<GridPane hgap="5.0" vgap="5.0">
 									<columnConstraints>
 										<ColumnConstraints hgrow="NEVER" />
-										<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
+										<ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" />
 									</columnConstraints>
 									<rowConstraints>
 										<RowConstraints vgrow="SOMETIMES" />
 										<RowConstraints vgrow="SOMETIMES" />
 									</rowConstraints>
 									<children>
-										<Label maxHeight="1.7976931348623157E308" text="%fpsLimit" />
-										<Label maxHeight="1.7976931348623157E308" text="%pageSize" GridPane.rowIndex="1" />
+										<Label maxHeight="Infinity" text="%fpsLimit" />
+										<Label maxHeight="Infinity" text="%pageSize" GridPane.rowIndex="1" />
 										<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1" editable="true">
 											<valueFactory>
 												<SpinnerValueFactory.IntegerSpinnerValueFactory max="90" min="20" />
@@ -117,7 +117,7 @@
 								<CheckBox fx:id="showChangelogCheckBox" mnemonicParsing="false" text="%showChangelogAfterUpdate" />
 								<HBox spacing="5">
 									<children>
-										<CheckBox fx:id="enableAutomaticUpdatesCheckBox" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="%automaticUpdates" />
+										<CheckBox fx:id="enableAutomaticUpdatesCheckBox" maxHeight="Infinity" mnemonicParsing="false" text="%automaticUpdates" />
 										<Button fx:id="manualUpdateButton" onAction="#onClickManualUpdate" text="%checkForUpdates" />
 									</children>
 								</HBox>
@@ -131,7 +131,7 @@
 							<children>
 								<HBox spacing="5.0">
 									<children>
-										<CheckBox fx:id="allowCachingDownloadsCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+										<CheckBox fx:id="allowCachingDownloadsCheckBox" maxHeight="Infinity" maxWidth="Infinity"
 											mnemonicParsing="false" text="%allowCachingSampVersions" HBox.hgrow="ALWAYS" />
 										<Button mnemonicParsing="false" onAction="#onClickClearDownloadCache" text="%clearCache" />
 									</children>
