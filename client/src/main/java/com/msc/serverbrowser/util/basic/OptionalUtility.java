@@ -10,11 +10,11 @@ import java.util.function.Supplier;
  * @author marcel
  * @since Jan 11, 2018
  */
-public class OptionalUtility {
+public final class OptionalUtility {
 	private OptionalUtility() {
 		// Prevent instanziation
 	}
-	
+
 	/**
 	 * Returns an {@link Optional} of the first non-null Object found within the given objects.
 	 *
@@ -29,7 +29,7 @@ public class OptionalUtility {
 				return Optional.of(t);
 			}
 		}
-		
+
 		return Optional.empty();
 	}
 
@@ -46,7 +46,8 @@ public class OptionalUtility {
 	public static <T> Optional<T> attempt(final Supplier<T> supplier) {
 		try {
 			return Optional.ofNullable(supplier.get());
-		} catch (@SuppressWarnings("unused") final Throwable exception) {
+		}
+		catch (@SuppressWarnings("unused") final Throwable exception) {
 			return Optional.empty();
 		}
 	}

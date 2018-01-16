@@ -36,21 +36,14 @@ public final class Logging {
 			final SimpleFormatter formatter = new SimpleFormatter();
 			filehandler.setFormatter(formatter);
 			instance.addHandler(filehandler);
-		} catch (SecurityException | IOException exception) {
+		}
+		catch (SecurityException | IOException exception) {
 			instance.log(Level.SEVERE, "Couldn't configure logger properly", exception);
 		}
 	}
 
 	/**
 	 * Log a message, with associated Throwable information.
-	 * <p>
-	 * If the logger is currently enabled for the given message level then the given arguments are
-	 * stored in a LogRecord which is forwarded to all registered output handlers.
-	 * <p>
-	 * Note that the thrown argument is stored in the LogRecord thrown property, rather than the
-	 * LogRecord parameters property. Thus it is processed specially by output Formatters and is not
-	 * treated as a formatting parameter to the LogRecord message property.
-	 * <p>
 	 *
 	 * @param logLevel
 	 *            One of the message level identifiers, e.g., SEVERE
@@ -59,37 +52,70 @@ public final class Logging {
 	 * @param throwable
 	 *            Throwable associated with log message.
 	 */
-	public static void log(final Level logLevel, final String message, final Throwable throwable) {
+	private static void log(final Level logLevel, final String message, final Throwable throwable) {
 		instance.log(logLevel, message, throwable);
 	}
 
 	/**
 	 * Log a message, with no arguments.
-	 * <p>
-	 * If the logger is currently enabled for the given message level then the given message is
-	 * forwarded to all the registered output Handler objects.
-	 * <p>
 	 *
 	 * @param logLevel
 	 *            One of the message level identifiers, e.g., SEVERE
 	 * @param message
 	 *            The string message (or a key in the message catalog)
 	 */
-	public static void log(final Level logLevel, final String message) {
+	private static void log(final Level logLevel, final String message) {
 		instance.log(logLevel, message);
 	}
 
 	/**
-	 * Log an INFO message.
-	 * <p>
-	 * If the logger is currently enabled for the INFO message level then the given message is
-	 * forwarded to all the registered output Handler objects.
-	 * <p>
-	 *
 	 * @param message
 	 *            The string message (or a key in the message catalog)
 	 */
 	public static void info(final String message) {
-		instance.info(message);
+		log(Level.INFO, message);
+	}
+
+	/**
+	 * @param message
+	 *            The string message (or a key in the message catalog)
+	 * @param throwable the {@link Throwable} which has caused this logging action
+	 */
+	public static void info(final String message, final Throwable throwable) {
+		log(Level.SEVERE, message, throwable);
+	}
+
+	/**
+	 * @param message
+	 *            The string message (or a key in the message catalog)
+	 */
+	public static void warn(final String message) {
+		log(Level.WARNING, message);
+	}
+
+	/**
+	 * @param message
+	 *            The string message (or a key in the message catalog)
+	 * @param throwable the {@link Throwable} which has caused this logging action
+	 */
+	public static void warn(final String message, final Throwable throwable) {
+		log(Level.SEVERE, message, throwable);
+	}
+
+	/**
+	 * @param message
+	 *            The string message (or a key in the message catalog)
+	 */
+	public static void error(final String message) {
+		log(Level.SEVERE, message);
+	}
+
+	/**
+	 * @param message
+	 *            The string message (or a key in the message catalog)
+	 * @param throwable the {@link Throwable} which has caused this logging action
+	 */
+	public static void error(final String message, final Throwable throwable) {
+		log(Level.SEVERE, message, throwable);
 	}
 }

@@ -6,7 +6,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
@@ -28,7 +27,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -95,9 +93,7 @@ public class VersionChangeController implements ViewController {
 			final HBox versionContainer = new HBox();
 
 			if (!buttonContainer.getChildren().isEmpty()) {
-				final Separator separator = new Separator(Orientation.HORIZONTAL);
-				separator.getStyleClass().add("separator");
-				buttonContainer.getChildren().add(separator);
+				buttonContainer.getChildren().add(new Separator());
 			}
 
 			versionContainer.getStyleClass().add("installEntry");
@@ -175,7 +171,7 @@ public class VersionChangeController implements ViewController {
 						}
 					}
 					catch (final IOException | IllegalArgumentException exception) {
-						Logging.log(Level.SEVERE, "Error Updating client.", exception);
+						Logging.error("Error Updating client.", exception);
 					}
 
 					downloadedFile.ifPresent(File::delete);
@@ -201,7 +197,7 @@ public class VersionChangeController implements ViewController {
 			FileUtility.unzip(cachedVersionFile.getAbsolutePath(), GTAController.getGtaPath().get());
 		}
 		catch (final IOException exception) {
-			Logging.log(Level.SEVERE, "Error while trying to install SA-MP from cache.", exception);
+			Logging.error("Error while trying to install SA-MP from cache.", exception);
 
 			new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("installingSampFromCache"))
 					.message(Client.lang.getString("errorInstallingSampFromCache")).animation(Animations.POPUP).build()

@@ -51,8 +51,7 @@ public class SampServerTable extends TableView<SampServer> {
 	private final MenuItem	connectMenuItem					= new MenuItem("Connect to Server");
 	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
 
-	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem,
-					copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
+	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	private final ObservableList<SampServer> servers = getItems();
 
@@ -95,9 +94,7 @@ public class SampServerTable extends TableView<SampServer> {
 			getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
 		});
 
-		visitWebsiteMenuItem.setOnAction(__ -> {
-			getFirstIfAnythingSelected().ifPresent(server -> OSUtility.browse(server.getWebsite()));
-		});
+		visitWebsiteMenuItem.setOnAction(__ -> getFirstIfAnythingSelected().ifPresent(server -> OSUtility.browse(server.getWebsite())));
 
 		addToFavouritesMenuItem.setOnAction(__ -> {
 			final List<SampServer> serverList = getSelectionModel().getSelectedItems();
@@ -143,7 +140,8 @@ public class SampServerTable extends TableView<SampServer> {
 				if (Objects.nonNull(row.getItem())) {
 					// If there is an item in this row, we want to proceed further
 					handleClick(row, clicked);
-				} else {
+				}
+				else {
 					// Otherwise we clear the selection.
 					getSelectionModel().clearSelection();
 				}
@@ -152,26 +150,27 @@ public class SampServerTable extends TableView<SampServer> {
 			return row;
 		});
 	}
-	
+
 	private void handleClick(final TableRow<SampServer> row, final MouseEvent clicked) {
 		if (clicked.getButton() == MouseButton.PRIMARY) {
 			handleLeftClick(row);
-		} else if (clicked.getButton() == MouseButton.SECONDARY) {
+		}
+		else if (clicked.getButton() == MouseButton.SECONDARY) {
 			handleRightClick(row, clicked);
 		}
 	}
-	
+
 	private void handleRightClick(final TableRow<SampServer> row, final MouseEvent clicked) {
 		final List<SampServer> selectedServers = getSelectionModel().getSelectedItems();
 
 		if (getSelectionModel().getSelectedIndices().contains(row.getIndex())) {
-			// In case the current selection model contains the clicked row, we want to open the context menu on the current selection mode
+			// In case the current selection model contains the clicked row, we want to open the
+			// context menu on the current selection mode
 			displayMenu(selectedServers, clicked.getScreenX(), clicked.getScreenY());
-		} else {
+		}
+		else {
 			// Otherwise we will select the clicked item and open the context menu on it
-			final SampServer rowItem = row.getItem();
-			getSelectionModel().select(rowItem);
-			displayMenu(Arrays.asList(rowItem), clicked.getScreenX(), clicked.getScreenY());
+			displayMenu(Arrays.asList(row.getItem()), clicked.getScreenX(), clicked.getScreenY());
 		}
 	}
 
@@ -184,7 +183,8 @@ public class SampServerTable extends TableView<SampServer> {
 			if (ClientPropertiesController.getPropertyAsBoolean(Property.CONNECT_ON_DOUBLECLICK)) {
 				getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
 			}
-		} else {
+		}
+		else {
 			row.setUserData(Long.valueOf(System.currentTimeMillis()));
 		}
 	}

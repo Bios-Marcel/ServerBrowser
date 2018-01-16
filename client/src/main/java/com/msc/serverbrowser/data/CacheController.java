@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate;
@@ -21,7 +20,7 @@ public final class CacheController {
 	private CacheController() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Checks if a version is cached.
 	 *
@@ -31,20 +30,20 @@ public final class CacheController {
 	 */
 	public static boolean isVersionCached(final InstallationCandidate version) {
 		final File cachedVersion = new File(PathConstants.CLIENT_CACHE + File.separator + version.getName() + "_" + version.getSampDLLChecksum() + ".zip");
-		
+
 		if (cachedVersion.exists()) {
-			if (FileUtility.validateFile(cachedVersion, version.getCheckSum())) {// If its valid, we return true
+			if (FileUtility.validateFile(cachedVersion, version.getCheckSum())) {
 				return true;
 			}
-			
+
 			// Otherwise, we delete the invalid one and return false
 			cachedVersion.delete();
 			return false;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Caches a file for the specified {@link SAMPVersion}.
 	 *
@@ -59,12 +58,13 @@ public final class CacheController {
 			final Path cachedVersion = Paths.get(PathConstants.CLIENT_CACHE + File.separator + version.getName() + "_" + version.getSampDLLChecksum() + ".zip");
 			Files.copy(Paths.get(toCache), cachedVersion, StandardCopyOption.REPLACE_EXISTING);
 			return true;
-		} catch (final IOException exception) {
-			Logging.log(Level.WARNING, "Error caching version.", exception);
+		}
+		catch (final IOException exception) {
+			Logging.warn("Error caching version.", exception);
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Clears the cache for downloaded SA-MP versions.
 	 */

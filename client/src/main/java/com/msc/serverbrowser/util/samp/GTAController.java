@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Level;
 
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
@@ -66,8 +65,8 @@ public final class GTAController {
 		try {
 			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get());
 		}
-		catch (final RegistryException e) {
-			Logging.log(Level.WARNING, "Couldn't set username.", e);
+		catch (final RegistryException exception) {
+			Logging.warn("Couldn't set username.", exception);
 		}
 
 	}
@@ -87,7 +86,7 @@ public final class GTAController {
 			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName");
 		}
 		catch (final RegistryException exception) {
-			Logging.log(Level.WARNING, "Couldn't retrieve Username from registry.", exception);
+			Logging.warn("Couldn't retrieve Username from registry.", exception);
 			return "404 Name not found";
 		}
 	}
@@ -126,7 +125,7 @@ public final class GTAController {
 			return Optional.ofNullable(WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", ""));
 		}
 		catch (final RegistryException exception) {
-			Logging.log(Level.WARNING, "Couldn't retrieve GTA path.", exception);
+			Logging.warn("Couldn't retrieve GTA path.", exception);
 			return Optional.empty();
 		}
 	}
@@ -158,7 +157,7 @@ public final class GTAController {
 					.findFirst();
 		}
 		catch (NoSuchAlgorithmException | IOException exception) {
-			Logging.log(Level.SEVERE, "Error hashing installed samp.dll", exception);
+			Logging.error("Error hashing installed samp.dll", exception);
 		}
 
 		return Optional.empty();
@@ -191,7 +190,7 @@ public final class GTAController {
 			}
 		}
 		catch (final IOException exception) {
-			Logging.log(Level.WARNING, "Couldn't connect to server.", exception);
+			Logging.warn("Couldn't connect to server.", exception);
 			showCantConnectToServerError();
 		}
 	}
@@ -223,8 +222,8 @@ public final class GTAController {
 				builder.start();
 				return true;
 			}
-			catch (final IOException e) {
-				Logging.log(Level.WARNING, "Error using sampcmd.exe", e);
+			catch (final IOException exception) {
+				Logging.warn("Error using sampcmd.exe", exception);
 			}
 		}
 
@@ -259,7 +258,7 @@ public final class GTAController {
 		}
 
 		try {
-			Logging.log(Level.INFO, "Connecting using protocol.");
+			Logging.info("Connecting using protocol.");
 			final Desktop desktop = Desktop.getDesktop();
 
 			if (desktop.isSupported(Action.BROWSE)) {
@@ -268,7 +267,7 @@ public final class GTAController {
 			}
 		}
 		catch (final IOException | URISyntaxException exception) {
-			Logging.log(Level.WARNING, "Error connecting to server.", exception);
+			Logging.warn("Error connecting to server.", exception);
 		}
 
 		return false;
@@ -303,14 +302,13 @@ public final class GTAController {
 			Runtime.getRuntime().exec("taskkill /F /IM " + processName);
 		}
 		catch (final IOException exception) {
-			Logging.log(Level.SEVERE, "Couldn't kill " + processName, exception);
+			Logging.error("Couldn't kill " + processName, exception);
 		}
 	}
 
 	/**
 	 * Connects to the given server (IP and Port) using the given password. Uses the
-	 * commandline to
-	 * open samp and connect to the server.
+	 * commandline to open samp and connect to the server.
 	 *
 	 * @param address
 	 *            server address
@@ -329,7 +327,7 @@ public final class GTAController {
 			if (!connectWithDLLInjection(address, port, password)) {
 				final String ipAndPort = address + ":" + port;
 				try {
-					Logging.log(Level.INFO, "Connecting using executeable.");
+					Logging.info("Connecting using executeable.");
 					final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
 					builder.directory(new File(gtaPath.get()));
 					builder.start();
@@ -339,7 +337,7 @@ public final class GTAController {
 						connectToServerUsingProtocol(ipAndPort);
 					}
 					else {
-						Logging.log(Level.WARNING, "Couldn't connect to server", exception);
+						Logging.warn("Couldn't connect to server", exception);
 					}
 				}
 			}

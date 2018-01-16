@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.logging.Level;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.logging.Logging;
@@ -22,7 +21,7 @@ import com.msc.serverbrowser.util.basic.StringUtility;
 @SuppressWarnings("javadoc")
 public final class LegacySettingsController {
 	private static final String FALSE_AS_INT = "0";
-	
+
 	public static final String	FPS_LIMIT			= "fpslimit";
 	public static final String	PAGE_SIZE			= "pagesize";
 	public static final String	MULTICORE			= "multicore";
@@ -33,7 +32,7 @@ public final class LegacySettingsController {
 	public static final String	IME					= "ime";
 	public static final String	DIRECT_MODE			= "directmode";
 	public static final String	NO_NAME_TAG_STATUS	= "nonametagstatus";
-	
+
 	public static final String	FPS_LIMIT_DEFAULT			= "50";
 	public static final String	PAGE_SIZE_DEFAULT			= "10";
 	public static final String	MULTICORE_DEFAULT			= "1";
@@ -44,11 +43,11 @@ public final class LegacySettingsController {
 	public static final String	IME_DEFAULT					= FALSE_AS_INT;
 	public static final String	DIRECT_MODE_DEFAULT			= FALSE_AS_INT;
 	public static final String	NO_NAME_TAG_STATUS_DEFAULT	= FALSE_AS_INT;
-	
+
 	private LegacySettingsController() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * @return {@link Properties} object containing the present legacy SA-MP
 	 *         Settings or an empty
@@ -59,12 +58,13 @@ public final class LegacySettingsController {
 		try (FileInputStream input = new FileInputStream(PathConstants.SAMP_CFG)) {
 			properties.load(input);
 			return Optional.of(properties);
-		} catch (final IOException exception) {
-			Logging.log(Level.SEVERE, "Error while loading SA_MP legacy properties.", exception);
+		}
+		catch (final IOException exception) {
+			Logging.error("Error while loading SA_MP legacy properties.", exception);
 			return Optional.empty();
 		}
 	}
-	
+
 	/**
 	 * Override the SA-MP legacy settings using the passed {@link Properties}
 	 * object.
@@ -76,14 +76,15 @@ public final class LegacySettingsController {
 	public static void save(final Properties properties) {
 		try (FileOutputStream output = new FileOutputStream(PathConstants.SAMP_CFG)) {
 			properties.store(output, null);
-		} catch (final IOException exception) {
-			Logging.log(Level.SEVERE, "Error while saving SA_MP legacy properties.", exception);
+		}
+		catch (final IOException exception) {
+			Logging.error("Error while saving SA_MP legacy properties.", exception);
 		}
 	}
-	
+
 	public static void restoreLegacySettings() {
 		final Properties properties = getLegacyProperties().orElse(new Properties());
-		
+
 		properties.put(LegacySettingsController.AUDIO_MESSAGE_OFF, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT));
 		properties.put(LegacySettingsController.AUDIO_PROXY_OFF, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
 		properties.put(LegacySettingsController.DIRECT_MODE, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
