@@ -90,6 +90,128 @@ You can help by [reporting bugs](https://github.com/Bios-Marcel/ServerBrowser/is
 
 Another way for you to contribute, is to help localizing the application, simply look at the language files and translate it into your native language.
 
+### To be localized
+
+Note: Some of the follwing key-value pairs might already be correct, in that case i don't know it though.
+
+#### German
+```
+inputMethodText=Input method text editing and language switching
+downloadSettingTitle=Downloads
+updating=Updating
+updatesSettingTitle=Updates
+```
+
+#### Georgian
+```
+errorFetchingServers=Couldn't fetch servers
+pageSize=PageSize
+fetchingServers=Fetching servers, please wait a moment.
+lagcomp=lagcomp:
+locateGTAManually=Click here to enter your GTA path manually.
+gtaNotFoundPrompt=Will be automatically detected if left empty
+rememberLastView=Remember last view
+inputMethodText=Input method text editing and language switching
+cantFindGTA=Can't find GTA installation
+customSampPath=Custom SA-MP Path
+directmode=Directmode (Fix chat text drawing problems)
+activePlayers=Active players: {0}
+allowCachingSampVersions=Allow caching downloaded SA-MP versions
+retrieving=Retrieving ...
+multicoreUsage=Multicore usage
+openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
+```
+
+#### Greek
+```
+errorFetchingServers=Couldn't fetch servers
+fetchingServers=Fetching servers, please wait a moment.
+chatTimestamps=Chat Timestamps
+lagcomp=lagcomp:
+locateGTAManually=Click here to enter your GTA path manually.
+gtaNotFoundPrompt=Will be automatically detected if left empty
+generalSettingsTitle=General
+sampVersion=SA-MP Version {0}
+cantFindGTA=Can't find GTA installation
+ping=Ping:
+informationSettingsTitle=Information
+versionInfo=Version: {0}
+chatlogs=Chatlogs
+retrieving=Retrieving ...
+servers=Servers: {0}
+openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
+```
+
+#### Dutch
+```
+errorFetchingServers=Couldn't fetch servers
+fetchingServers=Fetching servers, please wait a moment.
+lagcomp=lagcomp:
+locateGTAManually=Click here to enter your GTA path manually.
+gamemodeTableHeader=Gamemode
+cantFindGTA=Can't find GTA installation
+ping=Ping:
+downloadSettingTitle=Downloads
+map=Map:
+website=Website:
+updatesSettingTitle=Updates
+retrieving=Retrieving ...
+servers=Servers: {0}
+serverOffline=Server is offline.
+openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
+```
+
+#### Russian
+```
+errorFetchingServers=Couldn't fetch servers
+lagcomp=lagcomp:
+locateGTAManually=Click here to enter your GTA path manually.
+cantFindGTA=Can't find GTA installation
+ping=Ping:
+retrieving=Retrieving ...
+openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
+```
+
+#### Polish
+```
+errorFetchingServers=Couldn't fetch servers
+fetchingServers=Fetching servers, please wait a moment.
+lagcomp=lagcomp:
+locateGTAManually=Click here to enter your GTA path manually.
+cantFindGTA=Can't find GTA installation
+ping=Ping:
+retrieving=Retrieving ...
+openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
+```
+
+#### Romanian
+```
+lagcomp=lagcomp:
+generalSettingsTitle=General
+ping=Ping:
+```
+
+#### Spanish
+```
+errorFetchingServers=Couldn't fetch servers
+locateGTAManually=Click here to enter your GTA path manually.
+ro=Romanian
+generalSettingsTitle=General
+sampVersion=SA-MP Version {0}
+ru=Russian
+cantFindGTA=Can't find GTA installation
+de=German
+en=English
+versionInfo=Version: {0}
+nl=Dutch
+no=No
+retrieving=Retrieving ...
+ge=Georgian
+gr=Greek
+openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
+pl=Polish
+```
+
 ## Build
 
 This project is managed using [gradle](https://gradle.org).

@@ -1,6 +1,7 @@
 package com.msc.serverbrowser.gui;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.msc.serverbrowser.constants.PathConstants;
@@ -94,7 +95,7 @@ public enum View {
 	 *            id to check against
 	 * @return the found Enum Value
 	 */
-	public static View valueOf(final int idToGet) {
-		return View.ID_MAPPING.getOrDefault(idToGet, View.SERVERS);
+	public static Optional<View> valueOf(final int idToGet) {
+		return Optional.ofNullable(View.ID_MAPPING.get(idToGet));
 	}
 }
