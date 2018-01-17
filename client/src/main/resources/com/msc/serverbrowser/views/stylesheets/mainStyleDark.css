@@ -7,6 +7,7 @@
 	-component-background-color: #121212;
 	-component-background-color-selected: #404040;
 	-menu-color: derive( -component-background-color, -10.0%);
+	-menu-color-selected: -component-background-color-selected;
 	-mark-color: white;
 	-border-color: -component-background-color-selected;
 	

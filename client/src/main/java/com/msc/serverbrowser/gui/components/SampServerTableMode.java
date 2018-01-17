@@ -6,5 +6,7 @@ package com.msc.serverbrowser.gui.components;
  */
 @SuppressWarnings("javadoc")
 public enum SampServerTableMode {
-	FAVOURITES, ALL;
+	FAVOURITES,
+	ALL,
+	HISTORY;
 }

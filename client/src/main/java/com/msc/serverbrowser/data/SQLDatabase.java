@@ -53,6 +53,12 @@ public final class SQLDatabase {
 				final String createTableFavourites = "CREATE TABLE IF NOT EXISTS favourite (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
 				statement.execute(createTableFavourites);
 
+				final String createTableServerhistory = "CREATE TABLE IF NOT EXISTS serverhistory (hostname text, ip text NOT NULL, lagcomp text, language text, players integer, maxplayers integer, mode text, port integer, version text, website text);";
+				statement.execute(createTableServerhistory);
+
+				final String createTableServerConfig = "CREATE TABLE IF NOT EXISTS serverconfig (ip text NOT NULL, port integer, username text);";
+				statement.execute(createTableServerConfig);
+				
 				final String createTableUsernames = "CREATE TABLE IF NOT EXISTS username (id integer PRIMARY KEY, username text NOT NULL);";
 				statement.execute(createTableUsernames);
 
@@ -65,8 +71,7 @@ public final class SQLDatabase {
 				// maxplayers integer, mode text, port integer, version text, website text);";
 				// statement.execute(createTableServerHistory);
 			}
-		}
-		catch (final SQLException exception) {
+		} catch (final SQLException exception) {
 			Logging.error("Error while initializing local Database connection.", exception);
 		}
 	}
@@ -81,8 +86,7 @@ public final class SQLDatabase {
 	public boolean execute(final String statement) {
 		try {
 			return sqlConnection.createStatement().execute(statement);
-		}
-		catch (final SQLException exception) {
+		} catch (final SQLException exception) {
 			Logging.error("Couldn't execute query.", exception);
 			return false;
 		}
@@ -98,8 +102,7 @@ public final class SQLDatabase {
 	public Optional<ResultSet> executeGetResult(final String statement) {
 		try {
 			return Optional.of(sqlConnection.prepareStatement(statement).executeQuery());
-		}
-		catch (final SQLException exception) {
+		} catch (final SQLException exception) {
 			Logging.error("Failed to execute SQL query!", exception);
 			return Optional.empty();
 		}

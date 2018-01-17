@@ -5,11 +5,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.gui.controllers.implementations.FilesController;
+import com.msc.serverbrowser.gui.controllers.implementations.ServerListController;
 import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
 import com.msc.serverbrowser.gui.controllers.implementations.UsernameController;
 import com.msc.serverbrowser.gui.controllers.implementations.VersionChangeController;
-import com.msc.serverbrowser.gui.controllers.implementations.serverlist.ServerListAllController;
-import com.msc.serverbrowser.gui.controllers.implementations.serverlist.ServerListFavController;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 
 /**
@@ -19,16 +18,14 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
  */
 @SuppressWarnings("javadoc")
 public enum View {
-	SERVERS_FAV(1, "Servers | Favourites", ServerListFavController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH
-			+ "serverListStyle.css"),
-	SERVERS_ALL(2, "Servers | All", ServerListAllController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH
-			+ "serverListStyle.css"),
-	USERNAME_CHANGER(3, "Username Changer", UsernameController.class, PathConstants.VIEW_PATH + "Username.fxml", PathConstants.STYLESHEET_PATH
-			+ "usernameStyle.css"),
-	VERSION_CHANGER(4, "Version Changer", VersionChangeController.class, PathConstants.VIEW_PATH + "Version.fxml", PathConstants.STYLESHEET_PATH
-			+ "versionStyle.css"),
-	SETTINGS(5, "Settings", SettingsController.class, PathConstants.VIEW_PATH + "Settings.fxml", PathConstants.STYLESHEET_PATH + "settingsStyle.css"),
-	FILES(6, "Files", FilesController.class, PathConstants.VIEW_PATH + "Files.fxml", PathConstants.STYLESHEET_PATH + "filesStyle.css");
+	SERVERS(1, "Servers", ServerListController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH
+		+ "serverListStyle.css"),
+	USERNAME_CHANGER(2, "Username Changer", UsernameController.class, PathConstants.VIEW_PATH + "Username.fxml", PathConstants.STYLESHEET_PATH
+		+ "usernameStyle.css"),
+	VERSION_CHANGER(3, "Version Changer", VersionChangeController.class, PathConstants.VIEW_PATH + "Version.fxml", PathConstants.STYLESHEET_PATH
+		+ "versionStyle.css"),
+	SETTINGS(4, "Settings", SettingsController.class, PathConstants.VIEW_PATH + "Settings.fxml", PathConstants.STYLESHEET_PATH + "settingsStyle.css"),
+	FILES(5, "Files", FilesController.class, PathConstants.VIEW_PATH + "Files.fxml", PathConstants.STYLESHEET_PATH + "filesStyle.css");
 
 	private final int								id;
 	private final String							title;
@@ -47,7 +44,7 @@ public enum View {
 	}
 
 	private View(final int id, final String title, final Class<? extends ViewController> controllerType, final String fxmlPath,
-			final String stylesheetPathCss) {
+					final String stylesheetPathCss) {
 		this.id = id;
 		this.title = title;
 		this.controllerType = controllerType;
@@ -98,6 +95,6 @@ public enum View {
 	 * @return the found Enum Value
 	 */
 	public static View valueOf(final int idToGet) {
-		return View.ID_MAPPING.get(idToGet);
+		return View.ID_MAPPING.getOrDefault(idToGet, View.SERVERS);
 	}
 }

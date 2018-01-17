@@ -1,7 +1,8 @@
-package com.msc.serverbrowser.gui.controllers.implementations.serverlist;
+package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,7 +17,9 @@ import com.msc.serverbrowser.data.FavouritesController;
 import com.msc.serverbrowser.data.entites.Player;
 import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.gui.components.SampServerTable;
+import com.msc.serverbrowser.gui.components.SampServerTableMode;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
+import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.ServerUtility;
 import com.msc.serverbrowser.util.basic.StringUtility;
 import com.msc.serverbrowser.util.samp.GTAController;
@@ -33,6 +36,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
@@ -40,33 +44,41 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
 /**
- * Superclass for ServerList Controllers
+ * Controller for the Server view.
  *
  * @author Marcel
  * @since 02.07.2017
  */
-class BasicServerListController implements ViewController {
+public class ServerListController implements ViewController {
+	private static Thread serverLookup;
+
 	private final String RETRIEVING = Client.lang.getString("retrieving");
 
 	private final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
 	private final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
 	private final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
 
+	@FXML
+	private ToggleGroup tableTypeToggleGroup;
+
 	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
 
-	@FXML private TextField addressTextField;
+	@FXML
+	private TextField addressTextField;
 
 	private final static StringProperty SERVER_ADDRESS_PROPERTY = new SimpleStringProperty();
 
 	/**
 	 * This Table contains all available servers / favourite servers, depending on the active view.
 	 */
-	@FXML protected SampServerTable serverTable;
+	@FXML
+	protected SampServerTable serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
@@ -77,30 +89,36 @@ class BasicServerListController implements ViewController {
 	 */
 	private Label	serverCount;
 
-	@FXML private TextField	serverAddress;
-	@FXML private Label		serverLagcomp;
-	@FXML private Label		serverPing;
-	@FXML private Label		serverPassword;
-	@FXML private Label		mapLabel;
-	@FXML private Hyperlink	websiteLink;
+	@FXML
+	private TextField	serverAddress;
+	@FXML
+	private Label		serverLagcomp;
+	@FXML
+	private Label		serverPing;
+	@FXML
+	private Label		serverPassword;
+	@FXML
+	private Label		mapLabel;
+	@FXML
+	private Hyperlink	websiteLink;
 
-	@FXML private TableView<Player>					playerTable;
-	@FXML private TableColumn<SampServer, String>	columnPlayers;
+	@FXML
+	private TableView<Player>				playerTable;
+	@FXML
+	private TableColumn<SampServer, String>	columnPlayers;
 
-	@FXML private CheckBox			regexCheckBox;
-	@FXML private TextField			nameFilter;
-	@FXML private TextField			modeFilter;
-	@FXML private TextField			languageFilter;
-	@FXML private ComboBox<String>	versionFilter;
+	@FXML
+	private CheckBox			regexCheckBox;
+	@FXML
+	private TextField			nameFilter;
+	@FXML
+	private TextField			modeFilter;
+	@FXML
+	private TextField			languageFilter;
+	@FXML
+	private ComboBox<String>	versionFilter;
 
 	private static Thread serverInfoUpdateThread;
-
-	/**
-	 * Empty Constructor.
-	 */
-	protected BasicServerListController() {
-		// Prevent instantiation from outside.
-	}
 
 	@Override
 	public void initialize() {
@@ -121,6 +139,55 @@ class BasicServerListController implements ViewController {
 
 		setPlayerComparator();
 		addServerUpdateListener();
+		
+		toggleFavouritesMode();
+
+		/**
+		 * Hack in order to remove the dot of the radiobuttons.
+		 */
+		tableTypeToggleGroup.getToggles().forEach(toggle -> {
+			((Node) toggle).getStyleClass().remove("radio-button");
+			((Node) toggle).getStyleClass().remove("toggle-button");
+		});
+	}
+
+	@FXML
+	private void toggleFavouritesMode() {
+		serverTable.setPlaceholder(new Label(""));
+		serverTable.setServerTableMode(SampServerTableMode.FAVOURITES);
+		serverTable.clear();
+		serverTable.addAll(FavouritesController.getFavourites());
+	}
+
+	@FXML
+	private void toggleAllMode() {
+		serverTable.setPlaceholder(new Label(Client.lang.getString("fetchingServers")));
+		serverTable.setServerTableMode(SampServerTableMode.ALL);
+		serverTable.clear();
+
+		serverLookup = new Thread(() -> {
+			try {
+				final List<SampServer> serversToAdd = ServerUtility.fetchServersFromSouthclaws();
+				Platform.runLater(() -> {
+					serverTable.addAll(serversToAdd);
+					serverTable.refresh();
+				});
+			} catch (final IOException exception) {
+				Logging.error("Couldn't retrieve data from announce api.", exception);
+				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.lang.getString("errorFetchingServers"))));
+			}
+
+			Platform.runLater(() -> updateGlobalInfo());
+		});
+
+		serverLookup.start();
+	}
+
+	@FXML
+	private void toggleHistoryMode() {
+		serverTable.clear();
+		serverTable.setServerTableMode(SampServerTableMode.HISTORY);
+		serverTable.setPlaceholder(new Label(""));
 	}
 
 	private static void setupInfoLabel(final Label label) {
@@ -168,8 +235,7 @@ class BasicServerListController implements ViewController {
 				if (Objects.nonNull(selectedServer)) {
 					updateServerInfo(selectedServer);
 				}
-			}
-			else {
+			} else {
 				playerTable.getItems().clear();
 				playerTable.setPlaceholder(new Label());
 				serverAddress.setText("");
@@ -177,14 +243,17 @@ class BasicServerListController implements ViewController {
 				serverPing.setText("");
 				serverPassword.setText("");
 
-				killServerLookupThread();
+				killServerLookupThreads();
 			}
 		});
 	}
 
-	private static void killServerLookupThread() {
+	private static void killServerLookupThreads() {
 		if (Objects.nonNull(serverInfoUpdateThread)) {
 			serverInfoUpdateThread.interrupt();
+		}
+		if (Objects.nonNull(serverLookup)) {
+			serverLookup.interrupt();
 		}
 	}
 
@@ -195,13 +264,11 @@ class BasicServerListController implements ViewController {
 			final String[] ipAndPort = addressTextField.getText().split("[:]");
 			if (ipAndPort.length == 1) {
 				addServerToFavourites(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT);
-			}
-			else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1])) {
+			} else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1])) {
 				addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
-			}
-			else {
+			} else {
 				new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("addToFavourites"))
-						.message("cantAddToFavouritesAddressInvalid").animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+								.message("cantAddToFavouritesAddressInvalid").animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 			}
 		}
 	}
@@ -218,11 +285,9 @@ class BasicServerListController implements ViewController {
 		final String[] ipAndPort = Optional.ofNullable(addressTextField.getText()).orElse("").split("[:]");
 		if (ipAndPort.length == 1) {
 			GTAController.tryToConnect(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT);
-		}
-		else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1])) {
+		} else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1])) {
 			GTAController.tryToConnect(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
-		}
-		else {
+		} else {
 			GTAController.showCantConnectToServerError();
 		}
 	}
@@ -256,8 +321,7 @@ class BasicServerListController implements ViewController {
 				nameFilterApplies = regexFilter(hostname, nameFilterSetting);
 				modeFilterApplies = regexFilter(mode, modeFilterSetting);
 				languageFilterApplies = regexFilter(language, languageFilterSetting);
-			}
-			else {
+			} else {
 				nameFilterApplies = hostname.contains(nameFilterSetting);
 				modeFilterApplies = mode.contains(modeFilterSetting);
 				languageFilterApplies = language.contains(languageFilterSetting);
@@ -276,8 +340,7 @@ class BasicServerListController implements ViewController {
 
 		try {
 			return toFilter.matches(filterSetting);
-		}
-		catch (@SuppressWarnings("unused") final PatternSyntaxException exception) {
+		} catch (@SuppressWarnings("unused") final PatternSyntaxException exception) {
 			return false;
 		}
 	}
@@ -290,7 +353,7 @@ class BasicServerListController implements ViewController {
 	 */
 	private void updateServerInfo(final SampServer server) {
 		setVisibleDetailsToRetrieving(server);
-		killServerLookupThread();
+		killServerLookupThreads();
 
 		serverInfoUpdateThread = new Thread(() -> {
 			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort())) {
@@ -322,8 +385,7 @@ class BasicServerListController implements ViewController {
 					applyData(server, playerList, ping);
 					FavouritesController.updateServerData(server);
 				}
-			}
-			catch (@SuppressWarnings("unused") final IOException exception) {
+			} catch (@SuppressWarnings("unused") final IOException exception) {
 				if (!serverInfoUpdateThread.isInterrupted()) {
 					Platform.runLater(() -> displayOfflineInformation());
 				}
@@ -408,6 +470,6 @@ class BasicServerListController implements ViewController {
 
 	@Override
 	public void onClose() {
-		killServerLookupThread();
+		killServerLookupThreads();
 	}
 }

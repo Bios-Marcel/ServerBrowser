@@ -35,7 +35,8 @@ public class MainController implements ViewController {
 	private ViewController activeSubViewController;
 
 	/**
-	 * @param mainView the view to be used by this controller
+	 * @param mainView
+	 *            the view to be used by this controller
 	 */
 	public MainController(final MainView mainView) {
 		this.mainView = mainView;
@@ -45,8 +46,7 @@ public class MainController implements ViewController {
 	}
 
 	private void configureMenuItems() {
-		mainView.setMenuItemFavAction(__ -> onServersFavMenuItemClicked());
-		mainView.setMenuItemAllAction(__ -> onServersAllMenuItemClicked());
+		mainView.setMenuItemAllAction(__ -> onServersMenuItemClicked());
 		mainView.setMenuItemUsernameAction(__ -> onUsernameMenuItemClicked());
 		mainView.setMenuItemVersionAction(__ -> onVersionMenuItemClicked());
 		mainView.setMenuItemFilesAction(__ -> onFilesMenuItemClicked());
@@ -57,8 +57,7 @@ public class MainController implements ViewController {
 	public void initialize() {
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW)) {
 			loadView(View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)));
-		}
-		else {
+		} else {
 			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)));
 		}
 
@@ -97,12 +96,8 @@ public class MainController implements ViewController {
 		mainView.setGlobalProgressBarText(text);
 	}
 
-	private void onServersFavMenuItemClicked() {
-		loadView(View.SERVERS_FAV);
-	}
-
-	private void onServersAllMenuItemClicked() {
-		loadView(View.SERVERS_ALL);
+	private void onServersMenuItemClicked() {
+		loadView(View.SERVERS);
 	}
 
 	private void onUsernameMenuItemClicked() {
@@ -166,8 +161,7 @@ public class MainController implements ViewController {
 			activeSubViewController = view.getControllerType().newInstance();
 			loader.setController(activeSubViewController);
 			return loader.load();
-		}
-		catch (final IOException | InstantiationException | IllegalAccessException exception) {
+		} catch (final IOException | InstantiationException | IllegalAccessException exception) {
 			Logging.error("Couldn't load view.", exception);
 		}
 
