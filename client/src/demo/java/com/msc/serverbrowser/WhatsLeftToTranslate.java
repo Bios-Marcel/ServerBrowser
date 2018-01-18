@@ -15,7 +15,7 @@ public class WhatsLeftToTranslate {
 				.filter(lang -> lang != Language.EN)
 				.forEach(lang -> {
 
-					System.out.println("##### " + englishLanguage.getString(lang.getShortcut()));
+					System.out.println("#### " + englishLanguage.getString(lang.getShortcut()));
 					System.out.println("```");
 					final ResourceBundle langProperties = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", new Locale(lang.getShortcut()));
 
