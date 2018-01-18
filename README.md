@@ -25,7 +25,7 @@ This software is currently available in the following languages (some might not 
 * Russian (Thanks to Codeah)
 * Polish (Thanks to AbyssMorgan)
 * Romanian (Thanks to IstuntmanI)
-* Spanish (Thanks to Unrea1)
+* Spanish (Thanks to Unrea1, updated by RIDE2DAY)
 
 ## Installation
 
