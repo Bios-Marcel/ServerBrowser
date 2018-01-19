@@ -25,7 +25,7 @@ This software is currently available in the following languages (some might not 
 * Russian (Thanks to Codeah)
 * Polish (Thanks to AbyssMorgan)
 * Romanian (Thanks to IstuntmanI)
-* Spanish (Thanks to Unrea1)
+* Spanish (Thanks to Unrea1, updated by RIDE2DAY)
 
 ## Installation
 
@@ -97,7 +97,6 @@ Note: Some of the follwing key-value pairs might already be correct, in that cas
 #### German
 ```
 inputMethodText=Input method text editing and language switching
-downloadSettingTitle=Downloads
 updating=Updating
 updatesSettingTitle=Updates
 ```
@@ -193,23 +192,8 @@ ping=Ping:
 
 #### Spanish
 ```
-errorFetchingServers=Couldn't fetch servers
-locateGTAManually=Click here to enter your GTA path manually.
-ro=Romanian
 generalSettingsTitle=General
-sampVersion=SA-MP Version {0}
-ru=Russian
-cantFindGTA=Can't find GTA installation
-de=German
-en=English
-versionInfo=Version: {0}
-nl=Dutch
 no=No
-retrieving=Retrieving ...
-ge=Georgian
-gr=Greek
-openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
-pl=Polish
 ```
 
 ## Build
