@@ -26,16 +26,18 @@ public final class ServerUtility {
 	 * The port, that every SA-MP server uses by default.
 	 */
 	public static final Integer DEFAULT_SAMP_PORT = 7777;
-	
+
 	private static final String UNKNOWN = "Unknown";
-	
+
 	private static final int	MAX_PORT	= 65535;
 	private static final int	MIN_PORT	= 0;
-	
+
+	private static final int MAX_PAGES = 20;
+
 	private ServerUtility() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Retrieves servers from the SA-MP masterlist for the given version.
 	 *
@@ -57,23 +59,24 @@ public final class ServerUtility {
 					}
 				});
 			}
-		} catch (final IOException exception) {
+		}
+		catch (final IOException exception) {
 			Logging.error("Error retrieving servers from masterlist.", exception);
 		}
-		
+
 		return servers;
 	}
-	
+
 	private static String readUrl(final String urlString) throws MalformedURLException, IOException {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(urlString).openStream()))) {
 			final StringBuffer buffer = new StringBuffer();
-			
+
 			reader.lines().forEach(buffer::append);
-			
+
 			return buffer.toString();
 		}
 	}
-	
+
 	/**
 	 * Queries Southclaws Rest API for servers.
 	 *
@@ -84,43 +87,44 @@ public final class ServerUtility {
 	public static List<SampServer> fetchServersFromSouthclaws() throws IOException {
 		return fetchFromAPI("http://api.samp.southcla.ws/v2/servers");
 	}
-	
+
 	private static List<SampServer> fetchFromAPI(final String apiAddress) throws MalformedURLException, IOException {
 		final List<SampServer> servers = new ArrayList<>();
-		
-		// The pages are 1 indexed, so we start at 1 and go up to 100, lets be real, 100 is too much anyways.
-		for (int i = 1; i < 100; i++) {
+
+		// The pages are 1 indexed, so we start at 1 and go up to 100, lets be real, 100 is too much
+		// anyways.
+		for (int i = 1; i < MAX_PAGES; i++) {
 			final String json = readUrl(apiAddress + "?page=" + i);
-			
+
 			// In case the page equals null, we have already received all data.
 			if (Objects.isNull(json) || json.equalsIgnoreCase("null")) {
 				break;
 			}
-			
+
 			final JsonArray jsonArray = Json.parse(json).asArray();
-			
+
 			jsonArray.forEach(object -> {
 				final JsonObject jsonServerData = object.asObject();
-				final String address = jsonServerData.getString("ip", UNKNOWN);
-				
-				final String[] addressData = address.split(":");
-				
-				final int port = address.contains(":") ? Integer.parseInt(addressData[1]) : ServerUtility.DEFAULT_SAMP_PORT;
+				final String[] addressData = jsonServerData.getString("ip", UNKNOWN).split(":");
+				final int port = addressData.length == 2 ? Integer.parseInt(addressData[1]) : ServerUtility.DEFAULT_SAMP_PORT;
 				final SampServer server = new SampServer(addressData[0], port);
-				
+
 				server.setPlayers(jsonServerData.getInt("pc", 0));
 				server.setMaxPlayers(jsonServerData.getInt("pm", 0));
 				server.setMode(jsonServerData.getString("gm", UNKNOWN));
 				server.setHostname(jsonServerData.getString("hn", UNKNOWN));
 				server.setLanguage(jsonServerData.getString("la", UNKNOWN));
-				
-				servers.add(server);
+
+				// If a server doesn't meet the following, it is invalid.
+				if (!server.getHostname().isEmpty() || server.getPlayers() <= server.getMaxPlayers()) {
+					servers.add(server);
+				}
 			});
 		}
-		
+
 		return servers;
 	}
-	
+
 	/**
 	 * Validates the given port.
 	 *
@@ -132,7 +136,7 @@ public final class ServerUtility {
 		final int portNumber = StringUtility.parseInteger(portAsString).orElse(-1);
 		return isPortValid(portNumber);
 	}
-	
+
 	/**
 	 * Validates the given port.
 	 *
