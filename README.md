@@ -5,9 +5,20 @@
 
 ## Description
 
-This application allows you to view a vast amount of SA-MP servers, filter them, save them as your favourites and play on them.
-You won't loose your original favourites, since those will be taken over.
-Also it includes a SA-MP version changer, access to SA-MP legacy settings, screenshots and chatlogs.
+This application offers a row of tools for the `San Andreas-Multiplayer` mod for the `Grand Theft Auto: San Andreas` game.
+
+### Features
+
+* Save your favourite servers
+* Access to a list of currently over 2000 servers
+* Version changer
+* Username history
+* Access to SA-MP Settings via graphical userinterface
+* Access to SA-MP chatlogs
+* MORE TO COME ...
+  * Server history
+  * Serverspecific usernames
+  * Screenshot viewer
 
 ## Donate
 
@@ -61,23 +72,27 @@ If downloading the latest version of the client doens't help, try removing your 
 
 ## Pictures
 
-There is a light and a dark theme, here are screenshots including the light theme only:
+There is a light and a dark theme, here are screenshots including both themes:
 
-![Favourites](https://i.imgur.com/78i7MbM.png)
+![Servers Dark](https://i.imgur.com/aRGXsam.png)
 
-![Servers](https://i.imgur.com/o6hAFAx.png)
+![Servers Light](https://i.imgur.com/qA1YuNw.png)
 
-![Past Usernames](https://i.imgur.com/hkTck4d.png)
+![Past Usernames Dark](https://i.imgur.com/wq0VcJF.png)
 
-![Version Changer](https://i.imgur.com/uijZ3ZG.png)
+![Past Usernames Light](https://i.imgur.com/BCDKzCB.png)
 
-![Screenshots](https://i.imgur.com/rmtqjfJ.png)
+![Version Changer Dark](https://i.imgur.com/Ye8VQSU.png)
 
-![Chatlogs](https://i.imgur.com/TN6UnJ7.png)
+![Version Changer Light](https://i.imgur.com/B8ZnpDv.png)
 
-![Settings](https://i.imgur.com/rum16VT.png)
+![Files Dark](https://i.imgur.com/r8fVdVx.png)
 
-![Settings 2](https://i.imgur.com/vFqytVY.png)
+![Files Light](https://i.imgur.com/VNNX8TK.png)
+
+![Settings Dark](https://i.imgur.com/RiFGrv7.png)
+
+![Settings Light](https://i.imgur.com/CVds2Od.png)
 
 ## Documentation
 
