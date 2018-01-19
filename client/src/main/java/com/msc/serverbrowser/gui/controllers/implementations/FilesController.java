@@ -27,7 +27,8 @@ public class FilesController implements ViewController {
 	private final FilesView filesView;
 
 	/**
-	 * @param filesView the view to be used by this controller
+	 * @param filesView
+	 *            the view to be used by this controller
 	 */
 	public FilesController(final FilesView filesView) {
 		this.filesView = filesView;
@@ -49,11 +50,11 @@ public class FilesController implements ViewController {
 							.get(PathConstants.SAMP_CHATLOG), StandardCharsets.ISO_8859_1, StandardCharsets.UTF_8, StandardCharsets.US_ASCII)
 					.forEach(line -> {
 						final String textWithoutColorCodes = line.replaceAll("([{].{6}[}])", "");
-						newContent.append(textWithoutColorCodes + System.lineSeparator());
+						newContent.append(textWithoutColorCodes);
+						newContent.append(System.lineSeparator());
 					});
 
-		}
-		catch (final IOException exception) {
+		} catch (final IOException exception) {
 			Logging.error("Error loading chatlog.", exception);
 		}
 
@@ -65,8 +66,7 @@ public class FilesController implements ViewController {
 		try {
 			Files.deleteIfExists(Paths.get(PathConstants.SAMP_CHATLOG));
 			filesView.setChatLogTextAreaContent("");
-		}
-		catch (final IOException exception) {
+		} catch (final IOException exception) {
 			new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
 					.animation(Animations.POPUP)
