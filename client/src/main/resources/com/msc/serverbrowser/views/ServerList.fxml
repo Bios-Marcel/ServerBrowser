@@ -42,7 +42,7 @@
 			<children>
 				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" selected="true" onAction="#toggleFavouritesMode" text="Favourites" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
 				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleAllMode" text="All" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleHistoryMode" text="History" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+				<!--RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleHistoryMode" text="History" maxWidth="Infinity" HBox.hgrow="ALWAYS"/-->
 			</children>
 		</HBox>
 		<SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity"

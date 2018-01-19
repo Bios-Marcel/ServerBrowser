@@ -54,7 +54,7 @@ public class MainView {
 	 */
 	public MainView() {
 		rootPane = new HBox();
-		rootPane.setPrefSize(785, 480);
+		rootPane.setPrefSize(800, 500);
 		rootPane.getStyleClass().add("root-pane");
 
 		final VBox menuContainer = new VBox();
@@ -194,7 +194,7 @@ public class MainView {
 				throw new IllegalArgumentException("This View hasn't been implemented or is invalid: " + view);
 		}
 	}
-	
+
 	/**
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemServers}.
