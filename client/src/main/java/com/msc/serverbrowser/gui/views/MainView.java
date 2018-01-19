@@ -54,7 +54,7 @@ public class MainView {
 	 */
 	public MainView() {
 		rootPane = new HBox();
-		rootPane.setPrefSize(785, 480);
+		rootPane.setPrefSize(800, 500);
 		rootPane.getStyleClass().add("root-pane");
 
 		final VBox menuContainer = new VBox();
@@ -96,13 +96,16 @@ public class MainView {
 		githubLink = new Hyperlink("\uf09b");
 		githubLink.getStyleClass().add("info-icon");
 		githubLink.setTooltip(new Tooltip(Client.lang.getString("openGithubTooltip")));
+		githubLink.setFocusTraversable(false);
 		helpLink = new Hyperlink("\uf059");
 		helpLink.getStyleClass().add("info-icon");
 		helpLink.setTooltip(new Tooltip(Client.lang.getString("openGithubWikiTooltip")));
+		helpLink.setFocusTraversable(false);
 		donateLink = new Hyperlink("Donate \uf0d6");
 		donateLink.getStyleClass().add("donate-button");
 		donateLink.setTooltip(new Tooltip(Client.lang.getString("openDonationPageTooltip")));
 		donateLink.setMaxHeight(Double.MAX_VALUE);
+		donateLink.setFocusTraversable(false);
 
 		bottomBarCustom = new HBox();
 		bottomBarCustom.getStyleClass().add("bottom-bar-custom");
@@ -194,7 +197,7 @@ public class MainView {
 				throw new IllegalArgumentException("This View hasn't been implemented or is invalid: " + view);
 		}
 	}
-	
+
 	/**
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemServers}.
