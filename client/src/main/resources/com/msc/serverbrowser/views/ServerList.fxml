@@ -68,7 +68,7 @@
 						<PropertyValueFactory property="language" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn maxWidth="65.0" minWidth="65.0" sortable="true" text="%versionTableHeader">
+				<TableColumn maxWidth="75.0" minWidth="75.0" sortable="true" text="%versionTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="version" />
 					</cellValueFactory>

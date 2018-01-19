@@ -114,6 +114,7 @@ public final class ServerUtility {
 				server.setMode(jsonServerData.getString("gm", UNKNOWN));
 				server.setHostname(jsonServerData.getString("hn", UNKNOWN));
 				server.setLanguage(jsonServerData.getString("la", UNKNOWN));
+				server.setVersion(jsonServerData.getString("vn", UNKNOWN));
 
 				// If a server doesn't meet the following, it is invalid.
 				if (!server.getHostname().isEmpty() || server.getPlayers() <= server.getMaxPlayers()) {
