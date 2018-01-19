@@ -2,6 +2,10 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -41,6 +45,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -56,30 +61,30 @@ import javafx.scene.text.TextAlignment;
  * @since 02.07.2017
  */
 public class ServerListController implements ViewController {
-	private static Thread serverLookup;
-
+	private static Thread	serverLookup;
+	private static Thread	serverInfoUpdateThread;
+	
 	private final String RETRIEVING = Client.lang.getString("retrieving");
-
+	
 	private final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
 	private final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
 	private final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
-
+	
 	@FXML
 	private ToggleGroup tableTypeToggleGroup;
-
-	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
-
+	
 	@FXML
-	private TextField addressTextField;
-
-	private final static StringProperty SERVER_ADDRESS_PROPERTY = new SimpleStringProperty();
-
+	private TextField					addressTextField;
+	private final static StringProperty	SERVER_ADDRESS_PROPERTY	= new SimpleStringProperty();
+	
+	private final ObjectProperty<Predicate<? super SampServer>> filterProperty = new SimpleObjectProperty<>();
+	
 	/**
 	 * This Table contains all available servers / favourite servers, depending on the active view.
 	 */
 	@FXML
 	protected SampServerTable serverTable;
-
+	
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
 	 */
@@ -88,7 +93,7 @@ public class ServerListController implements ViewController {
 	 * Number of servers in {@link #serverTable}.
 	 */
 	private Label	serverCount;
-
+	
 	@FXML
 	private TextField	serverAddress;
 	@FXML
@@ -101,12 +106,15 @@ public class ServerListController implements ViewController {
 	private Label		mapLabel;
 	@FXML
 	private Hyperlink	websiteLink;
-
+	
 	@FXML
-	private TableView<Player>				playerTable;
+	private TableView<Player> playerTable;
+
 	@FXML
 	private TableColumn<SampServer, String>	columnPlayers;
-
+	@FXML
+	private TableColumn<SampServer, Long>	columnLastJoin;
+	
 	@FXML
 	private CheckBox			regexCheckBox;
 	@FXML
@@ -117,87 +125,109 @@ public class ServerListController implements ViewController {
 	private TextField			languageFilter;
 	@FXML
 	private ComboBox<String>	versionFilter;
-
-	private static Thread serverInfoUpdateThread;
-
+	
 	@Override
 	public void initialize() {
 		playerCount = new Label();
 		serverCount = new Label();
-
+		
 		setPlayerCount(0);
 		setServerCount(0);
-
+		
 		Client.getInstance().addItemsToBottomBar(playerCount, serverCount);
-
+		
 		setupInfoLabel(playerCount);
 		setupInfoLabel(serverCount);
-
+		
 		serverTable.predicateProperty().bind(filterProperty);
 		serverTable.sortedListComparatorProperty().bind(serverTable.comparatorProperty());
 		addressTextField.textProperty().bindBidirectional(SERVER_ADDRESS_PROPERTY);
-
+		
 		setPlayerComparator();
 		addServerUpdateListener();
 		
 		toggleFavouritesMode();
-
+		
+		columnLastJoin.setCellFactory(factory -> {
+			final TableCell<SampServer, Long> cell = new TableCell<SampServer, Long>() {
+				@Override
+				protected void updateItem(final Long item, final boolean empty) {
+					if (!empty && Objects.nonNull(item)) {
+						final LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(item), ZoneId.systemDefault());
+						final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
+						setText(dateFormat.format(date));
+					}
+				}
+			};
+			
+			return cell;
+		});
+		
 		/**
 		 * Hack in order to remove the dot of the radiobuttons.
 		 */
 		tableTypeToggleGroup.getToggles().forEach(toggle -> {
 			((Node) toggle).getStyleClass().remove("radio-button");
-			((Node) toggle).getStyleClass().remove("toggle-button");
 		});
 	}
-
+	
 	@FXML
 	private void toggleFavouritesMode() {
+		killServerLookupThreads();
+		columnLastJoin.setVisible(false);
+		
 		serverTable.setPlaceholder(new Label(""));
 		serverTable.setServerTableMode(SampServerTableMode.FAVOURITES);
 		serverTable.clear();
 		serverTable.addAll(FavouritesController.getFavourites());
 	}
-
+	
 	@FXML
 	private void toggleAllMode() {
+		killServerLookupThreads();
+		columnLastJoin.setVisible(false);
+		
 		serverTable.setPlaceholder(new Label(Client.lang.getString("fetchingServers")));
 		serverTable.setServerTableMode(SampServerTableMode.ALL);
 		serverTable.clear();
-
+		
 		serverLookup = new Thread(() -> {
 			try {
 				final List<SampServer> serversToAdd = ServerUtility.fetchServersFromSouthclaws();
 				Platform.runLater(() -> {
-					serverTable.addAll(serversToAdd);
-					serverTable.refresh();
+					if (Objects.nonNull(serverLookup) && !serverLookup.isInterrupted()) {
+						serverTable.addAll(serversToAdd);
+						serverTable.refresh();
+					}
 				});
 			} catch (final IOException exception) {
 				Logging.error("Couldn't retrieve data from announce api.", exception);
 				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.lang.getString("errorFetchingServers"))));
 			}
-
+			
 			Platform.runLater(() -> updateGlobalInfo());
 		});
-
+		
 		serverLookup.start();
 	}
-
+	
 	@FXML
 	private void toggleHistoryMode() {
-		serverTable.clear();
+		killServerLookupThreads();
+		columnLastJoin.setVisible(true);
 		serverTable.setServerTableMode(SampServerTableMode.HISTORY);
 		serverTable.setPlaceholder(new Label(""));
+		serverTable.clear();
 	}
-
+	
 	private static void setupInfoLabel(final Label label) {
 		label.setMaxHeight(Double.MAX_VALUE);
 		label.setMaxWidth(Double.MAX_VALUE);
 		label.setTextAlignment(TextAlignment.CENTER);
-
+		
 		HBox.setHgrow(label, Priority.ALWAYS);
 	}
-
+	
 	/**
 	 * Sets the text for the label that states how many active players there are.
 	 *
@@ -207,7 +237,7 @@ public class ServerListController implements ViewController {
 	protected void setPlayerCount(final int activePlayers) {
 		playerCount.setText(MessageFormat.format(Client.lang.getString("activePlayers"), activePlayers));
 	}
-
+	
 	/**
 	 * Sets the text for the label that states how many active servers there are.
 	 *
@@ -217,17 +247,17 @@ public class ServerListController implements ViewController {
 	private void setServerCount(final int activeServers) {
 		serverCount.setText(MessageFormat.format(Client.lang.getString("servers"), activeServers));
 	}
-
+	
 	private void setPlayerComparator() {
 		columnPlayers.setComparator((stringOne, stringTwo) -> {
 			final String maxPlayersRemovalRegex = "[/](.*)";
 			final int playersOne = Integer.parseInt(stringOne.replaceAll(maxPlayersRemovalRegex, ""));
 			final int playersTwo = Integer.parseInt(stringTwo.replaceAll(maxPlayersRemovalRegex, ""));
-
+			
 			return Integer.compare(playersOne, playersTwo);
 		});
 	}
-
+	
 	private void addServerUpdateListener() {
 		serverTable.getSelectionModel().getSelectedCells().addListener((InvalidationListener) changed -> {
 			if (serverTable.getSelectionModel().getSelectedIndices().size() == 1) {
@@ -242,12 +272,12 @@ public class ServerListController implements ViewController {
 				serverLagcomp.setText("");
 				serverPing.setText("");
 				serverPassword.setText("");
-
+				
 				killServerLookupThreads();
 			}
 		});
 	}
-
+	
 	private static void killServerLookupThreads() {
 		if (Objects.nonNull(serverInfoUpdateThread)) {
 			serverInfoUpdateThread.interrupt();
@@ -256,7 +286,7 @@ public class ServerListController implements ViewController {
 			serverLookup.interrupt();
 		}
 	}
-
+	
 	@FXML
 	private void onClickAddToFavourites() {
 		final String address = addressTextField.getText();
@@ -268,18 +298,18 @@ public class ServerListController implements ViewController {
 				addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 			} else {
 				new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("addToFavourites"))
-								.message("cantAddToFavouritesAddressInvalid").animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+						.message("cantAddToFavouritesAddressInvalid").animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 			}
 		}
 	}
-
+	
 	private void addServerToFavourites(final String ip, final int port) {
 		final SampServer newServer = FavouritesController.addServerToFavourites(ip, port);
 		if (!serverTable.contains(newServer)) {
 			serverTable.add(newServer);
 		}
 	}
-
+	
 	@FXML
 	private void onClickConnect() {
 		final String[] ipAndPort = Optional.ofNullable(addressTextField.getText()).orElse("").split("[:]");
@@ -291,7 +321,7 @@ public class ServerListController implements ViewController {
 			GTAController.showCantConnectToServerError();
 		}
 	}
-
+	
 	@FXML
 	private void onFilterSettingsChange() {
 		filterProperty.set(server -> {
@@ -299,24 +329,24 @@ public class ServerListController implements ViewController {
 			boolean modeFilterApplies = true;
 			boolean languageFilterApplies = true;
 			boolean versionFilterApplies = true;
-
+			
 			if (!versionFilter.getSelectionModel().isEmpty()) {
 				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString().toLowerCase();
-
+				
 				// TODO(MSC) Only necessary because i don't retrieve the version when querying
 				// southclaws api. I should request a change in the api.
 				final String serverVersion = Objects.isNull(server.getVersion()) ? "" : server.getVersion();
 				versionFilterApplies = serverVersion.toLowerCase().contains(versionFilterSetting);
 			}
-
+			
 			final String nameFilterSetting = nameFilter.getText().toLowerCase();
 			final String modeFilterSetting = modeFilter.getText().toLowerCase();
 			final String languageFilterSetting = languageFilter.getText().toLowerCase();
-
+			
 			final String hostname = server.getHostname().toLowerCase();
 			final String mode = server.getMode().toLowerCase();
 			final String language = server.getLanguage().toLowerCase();
-
+			
 			if (regexCheckBox.isSelected()) {
 				nameFilterApplies = regexFilter(hostname, nameFilterSetting);
 				modeFilterApplies = regexFilter(mode, modeFilterSetting);
@@ -326,25 +356,25 @@ public class ServerListController implements ViewController {
 				modeFilterApplies = mode.contains(modeFilterSetting);
 				languageFilterApplies = language.contains(languageFilterSetting);
 			}
-
+			
 			return nameFilterApplies && modeFilterApplies && versionFilterApplies && languageFilterApplies;
 		});
-
+		
 		updateGlobalInfo();
 	}
-
+	
 	private static boolean regexFilter(final String toFilter, final String filterSetting) {
 		if (filterSetting.isEmpty()) {
 			return true;
 		}
-
+		
 		try {
 			return toFilter.matches(filterSetting);
 		} catch (@SuppressWarnings("unused") final PatternSyntaxException exception) {
 			return false;
 		}
 	}
-
+	
 	/**
 	 * Updates the data that the {@link SampServer} holds and displays the correct values on the UI.
 	 *
@@ -354,19 +384,19 @@ public class ServerListController implements ViewController {
 	private void updateServerInfo(final SampServer server) {
 		setVisibleDetailsToRetrieving(server);
 		killServerLookupThreads();
-
+		
 		serverInfoUpdateThread = new Thread(() -> {
 			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort())) {
 				final Optional<String[]> infoOptional = query.getBasicServerInfo();
 				final Optional<Map<String, String>> serverRulesOptional = query.getServersRules();
-
+				
 				if (infoOptional.isPresent() && serverRulesOptional.isPresent()) {
 					final String[] info = infoOptional.get();
 					final Map<String, String> serverRules = serverRulesOptional.get();
-
+					
 					final int activePlayers = Integer.parseInt(info[1]);
 					final int maxPlayers = Integer.parseInt(info[2]);
-
+					
 					server.setPassworded(StringUtility.stringToBoolean(info[0]));
 					server.setPlayers(activePlayers);
 					server.setMaxPlayers(maxPlayers);
@@ -377,11 +407,11 @@ public class ServerListController implements ViewController {
 					server.setVersion(serverRules.get("version"));
 					server.setLagcomp(serverRules.get("lagcomp"));
 					server.setMap(serverRules.get("mapname"));
-
+					
 					final ObservableList<Player> playerList = FXCollections.observableArrayList();
 					query.getBasicPlayerInfo().ifPresent(players -> playerList.addAll(players));
 					final long ping = query.getPing();
-
+					
 					applyData(server, playerList, ping);
 					FavouritesController.updateServerData(server);
 				}
@@ -391,10 +421,10 @@ public class ServerListController implements ViewController {
 				}
 			}
 		});
-
+		
 		serverInfoUpdateThread.start();
 	}
-
+	
 	private void setVisibleDetailsToRetrieving(final SampServer server) {
 		playerTable.getItems().clear();
 		playerTable.setPlaceholder(new Label(RETRIEVING));
@@ -407,7 +437,7 @@ public class ServerListController implements ViewController {
 		websiteLink.setUnderline(false);
 		websiteLink.setOnAction(null);
 	}
-
+	
 	private void applyData(final SampServer server, final ObservableList<Player> playerList, final long ping) {
 		if (!serverInfoUpdateThread.isInterrupted()) {
 			Platform.runLater(() -> {
@@ -416,19 +446,19 @@ public class ServerListController implements ViewController {
 				mapLabel.setText(server.getMap());
 				websiteLink.setText(server.getWebsite());
 				playerTable.setItems(playerList);
-
+				
 				final String websiteToLower = server.getWebsite().toLowerCase();
 				final String websiteFixed = StringUtility.fixUrlIfNecessary(websiteToLower);
-
+				
 				if (StringUtility.isValidURL(websiteFixed)) {
 					websiteLink.setUnderline(true);
 					websiteLink.setOnAction(__ -> OSUtility.browse(server.getWebsite()));
 				}
-
+				
 				final boolean noPlayers = playerList.isEmpty();
 				if (noPlayers) {
 					playerTable.setPlaceholder(new Label(SERVER_EMPTY));
-
+					
 					if (server.getPlayers() >= 100) {
 						final Label label = new Label(TOO_MUCH_PLAYERS);
 						label.setWrapText(true);
@@ -436,13 +466,13 @@ public class ServerListController implements ViewController {
 						playerTable.setPlaceholder(label);
 					}
 				}
-
+				
 				serverLagcomp.setText(server.getLagcomp());
 				updateGlobalInfo();
 			});
 		}
 	}
-
+	
 	private void displayOfflineInformation() {
 		serverPing.setText(SERVER_OFFLINE);
 		serverPassword.setText("");
@@ -453,21 +483,21 @@ public class ServerListController implements ViewController {
 		websiteLink.setOnAction(null);
 		playerTable.setPlaceholder(new Label(SERVER_OFFLINE));
 	}
-
+	
 	/**
 	 * Updates the {@link Label Labels} at the bottom of the Serverlist view.
 	 */
 	protected void updateGlobalInfo() {
 		int playersPlaying = 0;
-
+		
 		for (final SampServer server : serverTable.getItems()) {
 			playersPlaying += server.getPlayers();
 		}
-
+		
 		setServerCount(serverTable.getItems().size());
 		setPlayerCount(playersPlaying);
 	}
-
+	
 	@Override
 	public void onClose() {
 		killServerLookupThreads();

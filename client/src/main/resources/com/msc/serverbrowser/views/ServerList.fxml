@@ -53,7 +53,7 @@
 						<PropertyValueFactory property="hostname" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnPlayers" maxWidth="66.0" minWidth="66.0" sortable="true" text="%playersTableHeader">
+				<TableColumn fx:id="columnPlayers" maxWidth="70.0" minWidth="70.0" sortable="true" text="%playersTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="playersAndMaxPlayers" />
 					</cellValueFactory>
@@ -71,6 +71,11 @@
 				<TableColumn maxWidth="75.0" minWidth="75.0" sortable="true" text="%versionTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="version" />
+					</cellValueFactory>
+				</TableColumn>
+				<TableColumn fx:id="columnLastJoin" visible="false" sortable="true" text="Last visit">
+					<cellValueFactory>
+						<PropertyValueFactory property="lastJoin" />
 					</cellValueFactory>
 				</TableColumn>
 			</columns>
