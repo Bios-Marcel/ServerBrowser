@@ -103,7 +103,13 @@ User Documentation (not complete) is available under: (https://github.com/Bios-M
 ## You want to help?
 You can help by [reporting bugs](https://github.com/Bios-Marcel/ServerBrowser/issues), [recommending new features](https://github.com/Bios-Marcel/ServerBrowser/issues) or [creating pull requests](https://github.com/Bios-Marcel/ServerBrowser/pulls).
 
-Another way for you to contribute, is to help localizing the application, simply look at the language files and translate it into your native language.
+Another way for you to contribute, is to help localizing the application
+
+### How to create a new language file
+
+If you want to translate the program into another language, simply copy `/client/src/main/resources/com/msc/serverbrowser/localization/Lang_en.properties` and name it `lang_YOUR_COUNTRIES_SHORTCUT.propeties`.
+After having done the translation, send me the file or do a pull request on GitHub. Please be careful to not modify any of the key names, that means only edit whats behind a `=`.
+If possible try to escape all characters, since there is currently to UTF-8 support for language files.
 
 ### To be localized
 

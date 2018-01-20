@@ -38,7 +38,6 @@ public final class CacheController {
 
 			// Otherwise, we delete the invalid one and return false
 			cachedVersion.delete();
-			return false;
 		}
 
 		return false;
