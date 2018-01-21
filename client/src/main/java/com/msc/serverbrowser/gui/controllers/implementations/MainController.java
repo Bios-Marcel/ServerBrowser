@@ -29,11 +29,11 @@ import javafx.scene.text.Font;
  */
 public class MainController implements ViewController {
 	private View activeView;
-	
+
 	private final MainView mainView;
-	
+
 	private ViewController activeSubViewController;
-	
+
 	/**
 	 * @param mainView
 	 *            the view to be used by this controller
@@ -44,7 +44,7 @@ public class MainController implements ViewController {
 		configureMenuItems();
 		registerBottomBarHyperlinks();
 	}
-	
+
 	private void configureMenuItems() {
 		mainView.setMenuItemAllAction(__ -> onServersMenuItemClicked());
 		mainView.setMenuItemUsernameAction(__ -> onUsernameMenuItemClicked());
@@ -52,24 +52,25 @@ public class MainController implements ViewController {
 		mainView.setMenuItemFilesAction(__ -> onFilesMenuItemClicked());
 		mainView.setMenuItemSettingsAction(__ -> onSettingsMenuItemClicked());
 	}
-	
+
 	@Override
 	public void initialize() {
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.SAVE_LAST_VIEW)) {
 			final View view = View.valueOf(ClientPropertiesController.getPropertyAsInt(Property.LAST_VIEW)).orElse(View.SERVERS);
 			loadView(view);
-		} else {
+		}
+		else {
 			loadView(View.valueOf(ClientPropertiesController.getDefaultAsInt(Property.LAST_VIEW)).get());
 		}
-		
+
 	}
-	
+
 	private void registerBottomBarHyperlinks() {
 		mainView.setGitHubHyperlink("https://github.com/Bios-Marcel/ServerBrowser");
 		mainView.setHelpHyperlink("https://github.com/Bios-Marcel/ServerBrowser/wiki");
 		mainView.setDonateHyperlink("https://github.com/Bios-Marcel/ServerBrowser#donate");
 	}
-	
+
 	/**
 	 * Adds nodes to the Clients bottom bar.
 	 *
@@ -79,14 +80,14 @@ public class MainController implements ViewController {
 	public void addItemsToBottomBar(final Node... nodes) {
 		mainView.addToBottomBar(nodes);
 	}
-	
+
 	/**
 	 * @return the progress {@link DoubleProperty} of the {@link #globalProgressBar}
 	 */
 	public DoubleProperty progressProperty() {
 		return mainView.globalProgressProperty();
 	}
-	
+
 	/**
 	 * Sets the text infront of the global {@link ProgressBar} bar.
 	 *
@@ -96,27 +97,27 @@ public class MainController implements ViewController {
 	public void setGlobalProgressText(final String text) {
 		mainView.setGlobalProgressBarText(text);
 	}
-	
+
 	private void onServersMenuItemClicked() {
 		loadView(View.SERVERS);
 	}
-	
+
 	private void onUsernameMenuItemClicked() {
 		loadView(View.USERNAME_CHANGER);
 	}
-	
+
 	private void onVersionMenuItemClicked() {
 		loadView(View.VERSION_CHANGER);
 	}
-	
+
 	private void onFilesMenuItemClicked() {
 		loadView(View.FILES);
 	}
-	
+
 	private void onSettingsMenuItemClicked() {
 		loadView(View.SETTINGS);
 	}
-	
+
 	/**
 	 * Loads a specific view.
 	 *
@@ -124,13 +125,13 @@ public class MainController implements ViewController {
 	 *            the view to be loaded
 	 */
 	public void loadView(final View view) {
-		
+
 		if (Objects.nonNull(activeSubViewController)) {
 			activeSubViewController.onClose();
 		}
-		
+
 		mainView.removeNodesFromBottomBar();
-		
+
 		final Parent loadedNode;
 		switch (view) {
 			case FILES:
@@ -141,56 +142,57 @@ public class MainController implements ViewController {
 				loadedNode = loadFXML(view);
 				break;
 		}
-		
+
 		initViewData(view, loadedNode);
 		activeView = view;
 	}
-	
+
 	private Parent loadFilesView() {
 		final FilesView filesView = new FilesView();
 		activeSubViewController = new FilesController(filesView);
 		return filesView.getRootPane();
 	}
-	
+
 	private Parent loadFXML(final View view) {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
 			loader.setResources(Client.lang);
-			
+
 			// Creating a new instance of the specified controller, controllers never have
 			// constructor arguments, therefore this is supposedly fine.
 			activeSubViewController = view.getControllerType().newInstance();
 			loader.setController(activeSubViewController);
 			return loader.load();
-		} catch (final IOException | InstantiationException | IllegalAccessException exception) {
+		}
+		catch (final IOException | InstantiationException | IllegalAccessException exception) {
 			Logging.error("Couldn't load view.", exception);
 		}
-		
+
 		return new Label("Error loading view.");
 	}
-	
+
 	private void initViewData(final View view, final Parent loadedNode) {
 		loadedNode.getStylesheets().setAll(view.getStylesheetPath());
 		mainView.selectMenuItemForView(view);
 		mainView.setActiveViewNode(loadedNode);
 		Client.getInstance().setTitle(Client.APPLICATION_NAME + " - " + view.getTitle());
 	}
-	
+
 	/**
 	 * @return the current view
 	 */
 	public View getActiveView() {
 		return activeView;
 	}
-	
+
 	/**
 	 * Reloads the current view.
 	 */
 	public void reloadView() {
 		loadView(activeView);
 	}
-	
+
 	@Override
 	public void onClose() {
 		ClientPropertiesController.setProperty(Property.LAST_VIEW, activeView.getId());

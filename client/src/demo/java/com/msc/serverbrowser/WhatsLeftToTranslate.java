@@ -6,7 +6,16 @@ import java.util.ResourceBundle;
 
 import com.msc.serverbrowser.util.Language;
 
+/**
+ * Prints all keys that are awating translation
+ *
+ * @author Marcel
+ * @since 21.01.2018
+ */
 public class WhatsLeftToTranslate {
+	/**
+	 * @param args unused
+	 */
 	public static void main(final String[] args) {
 
 		final ResourceBundle englishLanguage = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", new Locale(Language.EN.getShortcut()));

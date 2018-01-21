@@ -110,7 +110,7 @@ jfx {
     // this is used for files below "src/main/deploy", e.g. "src/main/deploy/windows/$rootProject.name.ico"
     appName = "SA-MP-ServerBrowser"
     additionalAppResources = 'src/main/additionalFiles'
-    jfxMainAppJarName = "$appName"+"-"+"$projectVersion"+".jar"
+    jfxMainAppJarName = "$appName"+".jar"
     
     //precompiles the CSS to binary. Useful performance gain, if the CSS files are not modified during runtime
     css2bin = true

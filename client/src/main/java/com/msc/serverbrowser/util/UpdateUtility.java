@@ -34,7 +34,7 @@ public final class UpdateUtility {
 	 * since in the feature i'll to know this as for having to update the jre aswell.
 	 * </p>
 	 */
-	public static final String VERSION = "8.5.1";
+	public static final String VERSION = "8.5.2";
 
 	private UpdateUtility() {
 		// Constructor to prevent instantiation
@@ -87,7 +87,7 @@ public final class UpdateUtility {
 	 *             if any of the arguments is empty
 	 */
 	public static CompareResult compareVersions(final String versionOne, final String versionTwo)
-					throws NullPointerException, NumberFormatException, IllegalArgumentException {
+			throws NullPointerException, NumberFormatException, IllegalArgumentException {
 		// Throw NullPointer if any is null and throw IllegalArgument if any is empty
 		final String trimmedOne = versionOne.trim();
 		final String trimmedTwo = versionTwo.trim();
@@ -98,7 +98,7 @@ public final class UpdateUtility {
 		// Split Versions into their subversions;
 		final String[] versionOneParts = trimmedOne.split("[.]");
 		final String[] versionTwoParts = trimmedTwo.split("[.]");
-		
+
 		// Do first comparison
 		final int longest = Integer.max(versionOneParts.length, versionTwoParts.length);
 		final int length = Integer.min(versionOneParts.length, versionTwoParts.length);

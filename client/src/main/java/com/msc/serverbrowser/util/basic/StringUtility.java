@@ -1,5 +1,7 @@
 package com.msc.serverbrowser.util.basic;
 
+import java.text.MessageFormat;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -9,6 +11,25 @@ import java.util.Optional;
 public final class StringUtility {
 	private StringUtility() {
 		// Constructor to prevent instantiation
+	}
+
+	/**
+	 * Escapes SQL Statements.
+	 *
+	 * @param string the sql statement
+	 * @param replacements replacements for valueplaceholders
+	 * @return the escaped statements containing given values
+	 */
+	public static String escapeFormat(final String string, final Object... replacements) {
+		final String[] replacementsNew = new String[replacements.length];
+		for (int i = 0; i < replacements.length; i++) {
+			final Object value = replacements[i];
+			final String replacementValue = Objects.isNull(value) ? null : value.toString();
+			if (replacementValue != null) {
+				replacementsNew[i] = replacementValue.replace("'", "''");
+			}
+		}
+		return MessageFormat.format(string, (Object[]) replacementsNew);
 	}
 
 	/**

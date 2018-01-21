@@ -12,11 +12,11 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.basic.StringUtility;
 import com.msc.serverbrowser.util.samp.SampQuery;
 
 /**
@@ -87,8 +87,8 @@ public final class FavouritesController {
 		}
 		else {
 			String statement = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
-			statement = escapeFormat(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server.getPlayers()
-					.toString(), server.getMaxPlayers().toString(), server.getMode(), server.getPort().toString(), server.getVersion(), server.getWebsite());
+			statement = StringUtility.escapeFormat(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server
+					.getPlayers(), server.getMaxPlayers(), server.getMode(), server.getPort(), server.getVersion(), server.getWebsite());
 			SQLDatabase.getInstance().execute(statement);
 		}
 	}
@@ -112,20 +112,11 @@ public final class FavouritesController {
 	 */
 	public static void updateServerData(final SampServer server) {
 		String statement = "UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
-		statement = escapeFormat(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
-				.getMaxPlayers().toString(), server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
+		statement = StringUtility
+				.escapeFormat(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
+						.getMaxPlayers()
+						.toString(), server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
 		SQLDatabase.getInstance().execute(statement);
-	}
-
-	private static String escapeFormat(final String string, final String... replacements) {
-		final String[] replacementsNew = new String[replacements.length];
-		for (int i = 0; i < replacements.length; i++) {
-			final String replacementValue = replacements[i];
-			if (Objects.nonNull(replacementValue)) {
-				replacementsNew[i] = replacementValue.replace("'", "''");
-			}
-		}
-		return MessageFormat.format(string, (Object[]) replacementsNew);
 	}
 
 	/**

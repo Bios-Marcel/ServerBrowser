@@ -42,33 +42,32 @@
 			<children>
 				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" selected="true" onAction="#toggleFavouritesMode" text="Favourites" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
 				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleAllMode" text="All" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-				<!--RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleHistoryMode" text="History" maxWidth="Infinity" HBox.hgrow="ALWAYS"/-->
+				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleHistoryMode" text="History" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
 			</children>
 		</HBox>
-		<SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity"
-			minWidth="-Infinity" prefHeight="100.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+		<SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
 			<columns>
 				<TableColumn sortable="true" text="%hostnameTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="hostname" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnPlayers" maxWidth="70.0" minWidth="70.0" sortable="true" text="%playersTableHeader">
+				<TableColumn fx:id="columnPlayers" sortable="true" text="%playersTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="playersAndMaxPlayers" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn minWidth="80.0" sortable="true" text="%gamemodeTableHeader">
+				<TableColumn sortable="true" text="%gamemodeTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="mode" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn minWidth="80.0" sortable="true" text="%languageTableHeader">
+				<TableColumn sortable="true" text="%languageTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="language" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn maxWidth="75.0" minWidth="75.0" sortable="true" text="%versionTableHeader">
+				<TableColumn sortable="true" text="%versionTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="version" />
 					</cellValueFactory>
@@ -85,15 +84,14 @@
 		</SampServerTable>
 		<HBox spacing="5.0">
 			<children>
-				<TableView fx:id="playerTable" maxHeight="Infinity" maxWidth="Infinity" prefHeight="200.0"
-					tableMenuButtonVisible="false">
+				<TableView fx:id="playerTable" maxHeight="Infinity" maxWidth="Infinity" prefHeight="200.0">
 					<columns>
 						<TableColumn text="%playerTableHeader">
 							<cellValueFactory>
 								<PropertyValueFactory property="playerName" />
 							</cellValueFactory>
 						</TableColumn>
-						<TableColumn text="%scoreTableHeader" maxWidth="85.0" minWidth="85.0" resizable="false">
+						<TableColumn text="%scoreTableHeader" maxWidth="85.0" minWidth="85.0">
 							<cellValueFactory>
 								<PropertyValueFactory property="playerScore" />
 							</cellValueFactory>

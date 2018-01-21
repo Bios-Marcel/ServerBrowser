@@ -104,5 +104,13 @@
 	-fx-background-insets: 0.0 5.0 0.0 5.0;
 	-fx-font-weight: bold;
 	-fx-background-radius: 3.0;
-	
 }
+
+/**
+ * Tables
+ */
+ 
+ .table-view .placeholder .label
+ {
+ 	-fx-padding: 10.0;
+ }

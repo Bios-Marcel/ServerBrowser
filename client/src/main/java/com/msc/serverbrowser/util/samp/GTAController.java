@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,7 @@ import com.github.sarxos.winreg.WindowsRegistry;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.PastUsernames;
+import com.msc.serverbrowser.data.ServerConfig;
 import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
@@ -34,6 +36,9 @@ import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 
 /**
@@ -191,7 +196,17 @@ public final class GTAController {
 		}
 		catch (final IOException exception) {
 			Logging.warn("Couldn't connect to server.", exception);
-			showCantConnectToServerError();
+
+			final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("serverMightBeOfflineConnectAnyways"), ButtonType.YES, ButtonType.NO);
+			alert.setTitle(Client.lang.getString("connectingToServer"));
+			Client.insertAlertOwner(alert);
+
+			alert.showAndWait().ifPresent(button -> {
+				if (button == ButtonType.YES) {
+					// TODO Optionally this hould be able with a password
+					GTAController.connectToServer(address, port, "");
+				}
+			});
 		}
 	}
 
@@ -316,8 +331,20 @@ public final class GTAController {
 	 *            server port
 	 * @param password
 	 *            the password to use for connecting
+	 * @return true if the connection was successful, otherwise false
 	 */
 	public static void connectToServer(final String address, final Integer port, final String password) {
+		final boolean successfulConnection = connect(address, port, password);
+
+		if (successfulConnection) {
+			ServerConfig.setLastTimeJoinedForServer(address, port, Instant.now().toEpochMilli());
+		}
+		else {
+			showCantConnectToServerError();
+		}
+	}
+
+	private static boolean connect(final String address, final Integer port, final String password) {
 		if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CLOSE_GTA)) {
 			killGTA();
 		}
@@ -326,25 +353,33 @@ public final class GTAController {
 		if (gtaPath.isPresent()) {
 			if (!connectWithDLLInjection(address, port, password)) {
 				final String ipAndPort = address + ":" + port;
-				try {
-					Logging.info("Connecting using executeable.");
-					final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
-					builder.directory(new File(gtaPath.get()));
-					builder.start();
-				}
-				catch (final IOException exception) {
-					if (Objects.isNull(password) || password.isEmpty()) {
-						connectToServerUsingProtocol(ipAndPort);
-					}
-					else {
-						Logging.warn("Couldn't connect to server", exception);
-					}
-				}
+				return connectUsingExecuteable(password, gtaPath, ipAndPort);
 			}
+			return true;
 		}
-		else {
-			displayCantLocateGTANotification();
+
+		displayCantLocateGTANotification();
+		return false;
+	}
+
+	private static boolean connectUsingExecuteable(final String password, final Optional<String> gtaPath, final String ipAndPort) {
+		try {
+			Logging.info("Connecting using executeable.");
+			final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
+			builder.directory(new File(gtaPath.get()));
+			builder.start();
+			return true;
 		}
+		catch (final IOException exception) {
+			Logging.warn("Error connecting to server " + ipAndPort + " manually calling the executeable");
+
+			if (Objects.isNull(password) || password.isEmpty()) {
+				return connectToServerUsingProtocol(ipAndPort);
+			}
+			Logging.warn("Couldn't connect to server", exception);
+
+		}
+		return false;
 	}
 
 	/**
