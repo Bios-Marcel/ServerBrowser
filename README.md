@@ -120,8 +120,6 @@ Note: Some of the follwing key-value pairs might already be correct, in that cas
 lagcomp=lagcomp:
 inputMethodText=Input method text editing and language switching
 updatesSettingTitle=Updates
-connectingToServer=Connecting to server
-serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 ```
 
 #### Georgian
