@@ -220,9 +220,9 @@ public final class Client extends Application {
 	 * the user will be asked if he wants to update.
 	 */
 	public void checkForUpdates() {
-		Logging.info("Check for updates.");
+		Logging.info("Checking for updates.");
 
-		if (!updatingProperty.get()) {
+		if (updatingProperty.get()) {
 			// If an update is ongoing already, then we won't start another.
 			return;
 		}
