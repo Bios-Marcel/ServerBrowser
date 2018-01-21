@@ -117,9 +117,11 @@ Note: Some of the follwing key-value pairs might already be correct, in that cas
 
 #### German
 ```
+lagcomp=lagcomp:
 inputMethodText=Input method text editing and language switching
-updating=Updating
 updatesSettingTitle=Updates
+connectingToServer=Connecting to server
+serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 ```
 
 #### Georgian
@@ -134,10 +136,14 @@ rememberLastView=Remember last view
 inputMethodText=Input method text editing and language switching
 cantFindGTA=Can't find GTA installation
 customSampPath=Custom SA-MP Path
+noFavouriteServers=You don't have any favourites.
 directmode=Directmode (Fix chat text drawing problems)
 activePlayers=Active players: {0}
+connectingToServer=Connecting to server
 allowCachingSampVersions=Allow caching downloaded SA-MP versions
 retrieving=Retrieving ...
+serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
+noServerHistory=You haven't joined any servers recently.
 multicoreUsage=Multicore usage
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
@@ -154,11 +160,15 @@ generalSettingsTitle=General
 sampVersion=SA-MP Version {0}
 cantFindGTA=Can't find GTA installation
 ping=Ping:
+noFavouriteServers=You don't have any favourites.
 informationSettingsTitle=Information
 versionInfo=Version: {0}
 chatlogs=Chatlogs
+connectingToServer=Connecting to server
 retrieving=Retrieving ...
 servers=Servers: {0}
+serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
+noServerHistory=You haven't joined any servers recently.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
@@ -174,9 +184,13 @@ ping=Ping:
 downloadSettingTitle=Downloads
 map=Map:
 website=Website:
+noFavouriteServers=You don't have any favourites.
 updatesSettingTitle=Updates
+connectingToServer=Connecting to server
 retrieving=Retrieving ...
 servers=Servers: {0}
+serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
+noServerHistory=You haven't joined any servers recently.
 serverOffline=Server is offline.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
@@ -188,7 +202,11 @@ lagcomp=lagcomp:
 locateGTAManually=Click here to enter your GTA path manually.
 cantFindGTA=Can't find GTA installation
 ping=Ping:
+noFavouriteServers=You don't have any favourites.
+connectingToServer=Connecting to server
 retrieving=Retrieving ...
+serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
+noServerHistory=You haven't joined any servers recently.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
@@ -200,7 +218,11 @@ lagcomp=lagcomp:
 locateGTAManually=Click here to enter your GTA path manually.
 cantFindGTA=Can't find GTA installation
 ping=Ping:
+noFavouriteServers=You don't have any favourites.
+connectingToServer=Connecting to server
 retrieving=Retrieving ...
+serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
+noServerHistory=You haven't joined any servers recently.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
@@ -209,12 +231,20 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 lagcomp=lagcomp:
 generalSettingsTitle=General
 ping=Ping:
+noFavouriteServers=You don't have any favourites.
+connectingToServer=Connecting to server
+serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
+noServerHistory=You haven't joined any servers recently.
 ```
 
 #### Spanish
 ```
 generalSettingsTitle=General
+noFavouriteServers=You don't have any favourites.
 no=No
+connectingToServer=Connecting to server
+serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
+noServerHistory=You haven't joined any servers recently.
 ```
 
 ## Build
