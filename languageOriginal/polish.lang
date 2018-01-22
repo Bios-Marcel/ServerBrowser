@@ -53,9 +53,9 @@ serverOffline=Serwer jest wyłączony
 serverEmpty=Serwer jest pusty
 activePlayers=Aktywni gracze: {0}
 servers=Serwery: {0}
-fetchingServers=Fetching servers, please wait a moment.
-errorFetchingServers=Couldn't fetch servers
-retrieving=Retrieving ...
+fetchingServers=Pobieranie serwerów, proszę chwilę czekać.
+errorFetchingServers=Nie można pobrać serwerów
+retrieving=Trwa pobieranie ...
 
 # Past Usernames
 enterUsername=Wpisz nazwę użytkownika
@@ -125,3 +125,11 @@ checkLogsForMoreInformation=Aby uzyskać więcej informacji, sprawdź pliki dzie
 couldntClearChatLog=Dziennik czatu nie mógł zostać usunięty
 installingSampFromCache=Instalowanie SA-MP z pamięci podręcznej
 errorInstallingSampFromCache=Wystąpił błąd podczas próby zainstalowania SA-MP z pamięci podręcznej, sprawdź dzienniki w celu uzyskania dalszych informacji.
+
+locateGTAManually=Kliknij tutaj, aby ręcznie wprowadzić ścieżkę GTA.
+cantFindGTA=Nie można znaleźć instalacji GTA
+noFavouriteServers=Nie masz żadnych ulubionych.
+connectingToServer=Połącz z serwerem
+serverMightBeOfflineConnectAnyways=Serwer może nie być online, czy mimo to chcesz spróbować połączyć się z nim?
+noServerHistory=Ostatnio nie dołączyłeś do żadnego serwera.
+openDonationPageTooltip=Otwiera sekcję 'Donate' na stronie projektu GitHub
