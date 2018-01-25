@@ -17,6 +17,7 @@ import com.msc.serverbrowser.util.Language;
 import com.msc.serverbrowser.util.UpdateUtility;
 import com.msc.serverbrowser.util.basic.StringUtility;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -62,7 +63,7 @@ public class SettingsController implements ViewController {
 	@FXML private CheckBox			directModeCheckBox;
 	@FXML private CheckBox			nameTagStatusCheckBox;
 
-	// TODO(MSC) Connection Settings
+	// TODO(MSC) Connection Settings SERIOUSLY TODO TODO
 	// @FXML
 	// private CheckBox askForUsernameOnConnectCheckBox;
 
@@ -77,9 +78,7 @@ public class SettingsController implements ViewController {
 	@Override
 	public void initialize() {
 		initInformationArea();
-
 		initPropertyComponents();
-
 		// SA-MP properties
 		configureLegacyPropertyComponents();
 	}
@@ -229,13 +228,11 @@ public class SettingsController implements ViewController {
 		});
 	}
 
-	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickManualUpdate() {
 		Client.getInstance().checkForUpdates();
 	}
 
-	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickClearDownloadCache() {
 		InstallationCandidateCache.clearVersionCache();
@@ -245,7 +242,6 @@ public class SettingsController implements ViewController {
 	 * Restores all settings to default. Some settings like {@link Property#DEVELOPMENT} and
 	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change those anyways.
 	 */
-	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickRestore() {
 		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("sureYouWantToRestoreSettings"), ButtonType.YES, ButtonType.NO);
@@ -276,6 +272,16 @@ public class SettingsController implements ViewController {
 		ClientPropertiesController.restorePropertyToDefault(Property.CHANGELOG_ENABLED);
 		ClientPropertiesController.restorePropertyToDefault(Property.SAMP_PATH);
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CACHING_DOWNLOADS);
+	}
+
+	/**
+	 * Selects the {@link TextField} which contains the SA-MP / GTA path.
+	 */
+	public void selectSampPathTextField() {
+		// HACK Not quite sure why Platform#runLater is necessary here.
+		Platform.runLater(() -> {
+			sampPathTextField.requestFocus();
+		});
 	}
 
 	@Override

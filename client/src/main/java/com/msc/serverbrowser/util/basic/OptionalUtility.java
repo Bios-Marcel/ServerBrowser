@@ -33,6 +33,17 @@ public final class OptionalUtility {
 		return Optional.empty();
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> Optional<T> cast(final Object object) {
+		try {
+			return Optional.ofNullable((T) object);
+		}
+		catch (@SuppressWarnings("unused") final Exception ignored) {
+			// Ignoring the exception, because in case of failure, we just want Optional#empty
+		}
+		return Optional.empty();
+	}
+
 	/**
 	 * Attempts retrieving an object from the given {@link Supplier}, in case the retrieval fails or
 	 * the retrieved {@link Object} equals <code>null</code>, {@link Optional#empty()} will be

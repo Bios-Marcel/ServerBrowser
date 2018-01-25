@@ -27,6 +27,7 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
+import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
 import com.msc.serverbrowser.gui.views.MainView;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.UpdateUtility;
@@ -438,5 +439,12 @@ public final class Client extends Application {
 		if (mainController.getActiveView() == view) {
 			mainController.reloadView();
 		}
+	}
+
+	public void selectSampPathTextField() {
+		if (mainController.getActiveView() != View.SETTINGS) {
+			loadView(View.SETTINGS);
+		}
+		mainController.getSettingsController().ifPresent(SettingsController::selectSampPathTextField);
 	}
 }

@@ -2,6 +2,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
@@ -11,6 +12,7 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.gui.views.FilesView;
 import com.msc.serverbrowser.gui.views.MainView;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.basic.OptionalUtility;
 
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
@@ -191,6 +193,10 @@ public class MainController implements ViewController {
 	 */
 	public void reloadView() {
 		loadView(activeView);
+	}
+
+	public Optional<SettingsController> getSettingsController() {
+		return OptionalUtility.cast(activeSubViewController);
 	}
 
 	@Override

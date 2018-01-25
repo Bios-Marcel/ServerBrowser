@@ -96,7 +96,7 @@ public class VersionChangeController implements ViewController {
 
 			final Button installButton = new Button(INSTALL_TEXT);
 			installButton.setUserData(candidate);
-			installButton.setOnAction(__ -> installAction(installButton));
+			installButton.setOnAction(__ -> installSamp(installButton));
 			installButton.getStyleClass().add("installButton");
 			buttons.add(installButton);
 
@@ -110,28 +110,36 @@ public class VersionChangeController implements ViewController {
 	}
 
 	/**
+	 * TODO Don't use {@link Button#getUserData()} anymore, thanks future Me
+	 * <p>
 	 * Triggers the installation of the chosen {@link SAMPVersion}.
+	 * </p>
 	 *
 	 * @param button
 	 *            the {@link Button} which was clicked.
 	 */
-	private void installAction(final Button button) {
-		final InstallationCandidate toInstall = (InstallationCandidate) button.getUserData();
-		final Optional<InstallationCandidate> installedVersion = GTAController.getInstalledVersion();
+	private void installSamp(final Button button) {
+		if (!GTAController.getGtaPath().isPresent()) {
+			Client.getInstance().selectSampPathTextField();
+		}
+		else {
+			final InstallationCandidate toInstall = (InstallationCandidate) button.getUserData();
+			final Optional<InstallationCandidate> installedVersion = GTAController.getInstalledVersion();
 
-		if (!installedVersion.isPresent() || !installedVersion.get().equals(toInstall)) {
-			setAllButtonsDisabled(true);
-			button.setText(INSTALLING_TEXT);
+			if (!installedVersion.isPresent() || !installedVersion.get().equals(toInstall)) {
+				setAllButtonsDisabled(true);
+				button.setText(INSTALLING_TEXT);
 
-			GTAController.killSAMP();
-			GTAController.killGTA();
+				GTAController.killGTA();
+				GTAController.killSAMP();
 
-			// TODO(MSC) Check JavaFX Threading API (Task / Service)
-			// Using a thread here, incase someone wants to keep using the app meanwhile
-			new Thread(() -> {
-				Installer.installViaInstallationCandidate(toInstall);
-				finishInstalling();
-			}).start();
+				// TODO(MSC) Check JavaFX Threading API (Task / Service)
+				// Using a thread here, incase someone wants to keep using the app meanwhile
+				new Thread(() -> {
+					Installer.installViaInstallationCandidate(toInstall);
+					finishInstalling();
+				}).start();
+			}
 		}
 	}
 
