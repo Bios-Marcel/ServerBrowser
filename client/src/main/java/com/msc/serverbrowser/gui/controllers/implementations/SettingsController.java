@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import com.msc.serverbrowser.Client;
-import com.msc.serverbrowser.data.CacheController;
+import com.msc.serverbrowser.data.InstallationCandidateCache;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.LegacySettingsController;
 import com.msc.serverbrowser.data.properties.Property;
@@ -238,7 +238,7 @@ public class SettingsController implements ViewController {
 	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickClearDownloadCache() {
-		CacheController.clearVersionCache();
+		InstallationCandidateCache.clearVersionCache();
 	}
 
 	/**

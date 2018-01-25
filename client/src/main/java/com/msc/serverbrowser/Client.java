@@ -342,6 +342,10 @@ public final class Client extends Application {
 	}
 
 	/**
+	 * <p>
+	 * TODO
+	 * BROKEN WHEN STARTED WITH INSTALLER.
+	 * </p>
 	 * Restarts the application.
 	 */
 	private static void selfRestart() {
