@@ -54,7 +54,7 @@ public final class InstallationCandidateCache {
 	 * @return The correct path or an empty {@link Optional}
 	 */
 	public static Optional<String> getPathForCachedVersion(final InstallationCandidate candidate) {
-		final String installerPrefix = PathConstants.CLIENT_CACHE + File.separator + candidate.getName() + "_" + candidate.getCheckSum();
+		final String installerPrefix = PathConstants.CLIENT_CACHE + File.separator + candidate.getCheckSum();
 		if (candidate.getUrl().endsWith(".zip")) {
 			return Optional.of(installerPrefix + ".zip");
 		}
@@ -90,11 +90,23 @@ public final class InstallationCandidateCache {
 	}
 
 	/**
-	 * Clears the cache for downloaded SA-MP versions.
+	 * @return true if the cache is empty, otherwise false
 	 */
-	public static void clearVersionCache() {
+	public static boolean isEmpty() {
+		return new File(PathConstants.CLIENT_CACHE).listFiles().length < 1;
+	}
+
+	/**
+	 * Clears the cache for downloaded SA-MP versions.
+	 *
+	 * @return true if the cache has been cleared sucessfully
+	 */
+	public static boolean clearVersionCache() {
 		final File clientCacheFolder = new File(PathConstants.CLIENT_CACHE);
-		FileUtility.deleteRecursively(clientCacheFolder);
-		clientCacheFolder.mkdirs();
+		final boolean deletionSuccessful = FileUtility.deleteRecursively(clientCacheFolder);
+		if (deletionSuccessful) {
+			clientCacheFolder.mkdirs();
+		}
+		return deletionSuccessful;
 	}
 }

@@ -195,6 +195,12 @@ public class MainController implements ViewController {
 		loadView(activeView);
 	}
 
+	/**
+	 * Returns an {@link Optional} of the current {@link ViewController} and tries casting it into
+	 * {@link SettingsController}.
+	 *
+	 * @return {@link Optional} of {@link #activeSubViewController} or empty
+	 */
 	public Optional<SettingsController> getSettingsController() {
 		return OptionalUtility.cast(activeSubViewController);
 	}

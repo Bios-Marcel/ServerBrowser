@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import com.github.plushaze.traynotification.animations.Animations;
+import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
+import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.InstallationCandidateCache;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
@@ -79,8 +82,7 @@ public class SettingsController implements ViewController {
 	public void initialize() {
 		initInformationArea();
 		initPropertyComponents();
-		// SA-MP properties
-		configureLegacyPropertyComponents();
+		configureSampLegacyPropertyComponents();
 	}
 
 	private void initPropertyComponents() {
@@ -137,7 +139,7 @@ public class SettingsController implements ViewController {
 		manualUpdateButton.setDisable(updatingProperty.get());
 	}
 
-	private void configureLegacyPropertyComponents() {
+	private void configureSampLegacyPropertyComponents() {
 		final Properties legacyProperties = LegacySettingsController.getLegacyProperties().orElse(new Properties());
 		initLegacySettings(legacyProperties);
 
@@ -235,7 +237,25 @@ public class SettingsController implements ViewController {
 
 	@FXML
 	private void onClickClearDownloadCache() {
-		InstallationCandidateCache.clearVersionCache();
+
+		final boolean cacheSuccessfullyCleared = InstallationCandidateCache.clearVersionCache();
+
+		if (cacheSuccessfullyCleared) {
+			new TrayNotificationBuilder()
+					.type(NotificationTypeImplementations.SUCCESS)
+					.message("Cache has been successfully cleared.")
+					.title("Clearing cache")
+					.animation(Animations.POPUP)
+					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+		}
+		else {
+			new TrayNotificationBuilder()
+					.type(NotificationTypeImplementations.ERROR)
+					.message("Couldn't clear cache.")
+					.animation(Animations.POPUP)
+					.title("Clearing cache")
+					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+		}
 	}
 
 	/**

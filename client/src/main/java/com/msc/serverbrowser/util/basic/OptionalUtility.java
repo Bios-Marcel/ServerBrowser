@@ -33,6 +33,13 @@ public final class OptionalUtility {
 		return Optional.empty();
 	}
 
+	/**
+	 * Casts an object into T and wraps it within an {@link Optional} or returns an empty
+	 * {@link Optional} on failure.
+	 *
+	 * @param object the object to be casted
+	 * @return an {@link Optional} containing the casted object or empty
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> Optional<T> cast(final Object object) {
 		try {

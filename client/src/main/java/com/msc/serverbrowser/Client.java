@@ -42,6 +42,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -441,6 +442,10 @@ public final class Client extends Application {
 		}
 	}
 
+	/**
+	 * Loads the {@link View#SETTINGS settings view} and selects the {@link TextField} which
+	 * contains the SA-MP / GTA path.
+	 */
 	public void selectSampPathTextField() {
 		if (mainController.getActiveView() != View.SETTINGS) {
 			loadView(View.SETTINGS);

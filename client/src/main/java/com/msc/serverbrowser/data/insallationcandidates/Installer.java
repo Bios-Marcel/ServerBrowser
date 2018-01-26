@@ -35,14 +35,17 @@ public class Installer {
 			// Check wether its an installer or a zip
 			if (candidate.getUrl().endsWith(".exe")) {
 				runNullSoftInstaller(installer, gtaPath);
+				Logging.info("Ran installer: " + installer);
 			}
 			else {
 				FileUtility.unzip(installer, gtaPath);
+				Logging.info("Unzipped installation files: " + installer);
 			}
 
 			// In case the cache wasn't use, we don't want to keep the temporary file.
 			if (installer.equals(PathConstants.TEMP_INSTALLER_EXE) || installer.equals(PathConstants.TEMP_INSTALLER_EXE)) {
 				Files.delete(Paths.get(installer));
+				Logging.info("Deleted temporary installation files: " + installer);
 			}
 		}
 		catch (final IOException exception) {

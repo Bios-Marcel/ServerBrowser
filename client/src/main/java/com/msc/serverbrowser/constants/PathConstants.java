@@ -28,16 +28,15 @@ public final class PathConstants {
 	public static final String	SAMP_CMD		= SAMPEX_PATH + File.separator + "sampcmd.exe";
 
 	// GTA / SAMP specific Paths
-	public static final String	GTA_USER_FILES			= FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator
+	public static final String	GTA_USER_FILES		= FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + File.separator
 			+ "GTA San Andreas User Files";
-	public static final String	SAMP_PATH				= GTA_USER_FILES + File.separator + "SAMP";
-	public static final String	SAMP_SCREENS			= SAMP_PATH + File.separator + "//screens";
-	public static final String	SAMP_CFG				= SAMP_PATH + File.separator + "sa-mp.cfg";
-	public static final String	SAMP_CHATLOG			= SAMP_PATH + "\\chatlog.txt";
-	public static final String	SAMP_USERDATA			= SAMP_PATH + "\\USERDATA.DAT";
-	public static final String	SAMP_DOWNLOAD_LOCATION	= "https://raw.githubusercontent.com/Bios-Marcel/SA-MP-Versions/master/";
-	public static final String	TEMP_INSTALLER_ZIP		= SAMPEX_PATH + File.separator + "tempInstaller.zip";
-	public static final String	TEMP_INSTALLER_EXE		= SAMPEX_PATH + File.separator + "tempInstaller.exe";
+	public static final String	SAMP_PATH			= GTA_USER_FILES + File.separator + "SAMP";
+	public static final String	SAMP_SCREENS		= SAMP_PATH + File.separator + "//screens";
+	public static final String	SAMP_CFG			= SAMP_PATH + File.separator + "sa-mp.cfg";
+	public static final String	SAMP_CHATLOG		= SAMP_PATH + "\\chatlog.txt";
+	public static final String	SAMP_USERDATA		= SAMP_PATH + "\\USERDATA.DAT";
+	public static final String	TEMP_INSTALLER_ZIP	= SAMPEX_PATH + File.separator + "tempInstaller.zip";
+	public static final String	TEMP_INSTALLER_EXE	= SAMPEX_PATH + File.separator + "tempInstaller.exe";
 
 	private PathConstants() {
 		// Constructor to prevent instantiation
