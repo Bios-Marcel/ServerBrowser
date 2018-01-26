@@ -30,13 +30,14 @@ This software is currently available in the following languages (some might not 
 
 * English
 * German 
-* Georgian (Thanks to Medzvel)
-* Greek (Thanks to vassilis)
-* Dutch (Thanks to Jsytlez)
-* Russian (Thanks to Codeah)
-* Polish (Thanks to AbyssMorgan)
-* Romanian (Thanks to IstuntmanI)
-* Spanish (Thanks to Unrea1, updated by RIDE2DAY)
+* Georgian (Translated by Medzvel)
+* Greek (Translated by vassilis)
+* Dutch (Translated by Jsytlez)
+* Russian (Translated by Codeah)
+* Polish (Translated by AbyssMorgan)
+* Romanian (Translated by IstuntmanI)
+* Spanish (Translated by Unrea1, updated by RIDE2DAY)
+* Turkish (Translated by MustafaKemalAtaturk)
 
 ## Installation
 
