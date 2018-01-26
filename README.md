@@ -229,10 +229,6 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 lagcomp=lagcomp:
 generalSettingsTitle=General
 ping=Ping:
-noFavouriteServers=You don't have any favourites.
-connectingToServer=Connecting to server
-serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
-noServerHistory=You haven't joined any servers recently.
 ```
 
 #### Spanish

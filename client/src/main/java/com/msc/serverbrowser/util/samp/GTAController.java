@@ -226,18 +226,20 @@ public final class GTAController {
 			arguments.add("-p");
 			arguments.add(port.toString());
 			arguments.add("-n");
-			arguments.add(retrieveUsernameFromRegistry());
+			// TODO Solve better
+			arguments.add(Optional.ofNullable(retrieveUsernameFromRegistry()).orElse("CHOOSE_NAME"));
 			if (Objects.nonNull(password) && !password.isEmpty()) {
 				arguments.add("-z");
 				arguments.add(password);
 			}
+
 			builder.command(arguments);
 
 			try {
 				builder.start();
 				return true;
 			}
-			catch (final IOException exception) {
+			catch (final Exception exception) {
 				Logging.warn("Error using sampcmd.exe", exception);
 			}
 		}
