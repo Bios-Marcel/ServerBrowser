@@ -49,7 +49,7 @@ The latest `launcher.jar` is available under https://github.com/Bios-Marcel/Serv
 #### Downloading the latest Installer
 
 The latest installer is also available under https://github.com/Bios-Marcel/ServerBrowser/releases/latest
-Unlike when using the `launcher.jar` file, the installer **won't require** you to download anything other than the installer himself.
+Unlike when using the `launcher.jar` file, the installer **won't require** you to download anything other than the installer itself.
 
 #### Build all the stuff yourself
 
