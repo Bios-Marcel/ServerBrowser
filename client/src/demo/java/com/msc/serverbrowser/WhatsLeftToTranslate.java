@@ -12,7 +12,12 @@ import com.msc.serverbrowser.util.Language;
  * @author Marcel
  * @since 21.01.2018
  */
-public class WhatsLeftToTranslate {
+public final class WhatsLeftToTranslate {
+
+	private WhatsLeftToTranslate() {
+		// Private constructor to prevent instanziation
+	}
+
 	/**
 	 * @param args unused
 	 */

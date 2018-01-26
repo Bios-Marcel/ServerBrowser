@@ -16,7 +16,11 @@ import com.msc.serverbrowser.util.samp.SampQuery;
  * @author Marcel
  * @since 21.01.2018
  */
-public class PrintServerStatistics {
+public final class PrintServerStatistics {
+	private PrintServerStatistics() {
+		// Private constructor to prevent instanziation
+	}
+
 	/**
 	 * @param args
 	 * @throws IOException
