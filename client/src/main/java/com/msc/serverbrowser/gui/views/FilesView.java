@@ -43,8 +43,8 @@ public class FilesView {
 		chatLogTextArea = new TextArea();
 		chatLogTextArea.setEditable(false);
 
-		clearLogsButton = new Button(Client.lang.getString("clear"));
-		loadLogsButton = new Button(Client.lang.getString("reload"));
+		clearLogsButton = new Button(Client.getString("clear"));
+		loadLogsButton = new Button(Client.getString("reload"));
 
 		final ButtonBar buttonBar = new ButtonBar();
 		buttonBar.getButtons().addAll(loadLogsButton, clearLogsButton);
@@ -52,7 +52,7 @@ public class FilesView {
 		final VBox chatLogsTabContent = new VBox(5.0, chatLogTextArea, buttonBar);
 		VBox.setVgrow(chatLogTextArea, Priority.ALWAYS);
 
-		chatLogsTab = new Tab(Client.lang.getString("chatlogs"), chatLogsTabContent);
+		chatLogsTab = new Tab(Client.getString("chatlogs"), chatLogsTabContent);
 
 		rootPane = new TabPane(chatLogsTab);
 		rootPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);

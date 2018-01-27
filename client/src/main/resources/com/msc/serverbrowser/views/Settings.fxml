@@ -67,7 +67,7 @@
 									<children>
 										<Label maxHeight="Infinity" text="%fpsLimit" />
 										<Label maxHeight="Infinity" text="%pageSize" GridPane.rowIndex="1" />
-										<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1" editable="true">
+										<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1" editable="true" >
 											<valueFactory>
 												<SpinnerValueFactory.IntegerSpinnerValueFactory max="90" min="20" />
 											</valueFactory>

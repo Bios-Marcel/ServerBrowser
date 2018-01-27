@@ -1,10 +1,8 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.text.MessageFormat;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import com.github.plushaze.traynotification.animations.Animations;
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
@@ -18,6 +16,7 @@ import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.Language;
 import com.msc.serverbrowser.util.UpdateUtility;
+import com.msc.serverbrowser.util.basic.MathUtility;
 import com.msc.serverbrowser.util.basic.StringUtility;
 
 import javafx.application.Platform;
@@ -98,9 +97,8 @@ public class SettingsController implements ViewController {
 		final Language toSelectLanguage = Language.getByShortcut(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE)).get();
 		languageComboBox.getSelectionModel().select(toSelectLanguage);
 		languageComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, newVal) -> {
-			final Locale locale = new Locale(newVal.getShortcut());
-			Client.lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
 			ClientPropertiesController.setProperty(Property.LANGUAGE, newVal.getShortcut());
+			Client.initLanguageFiles();
 			Client.getInstance().reloadViewIfLoaded(View.SETTINGS);
 		});
 
@@ -132,7 +130,7 @@ public class SettingsController implements ViewController {
 		setupCheckBox(allowCachingDownloadsCheckBox, Property.ALLOW_CACHING_DOWNLOADS);
 
 		// Adding a listener to disable the update button incase an update is ongoing
-		final BooleanProperty updatingProperty = Client.getInstance().updatingProperty;
+		final BooleanProperty updatingProperty = Client.getInstance().updateOngoingProperty;
 		updatingProperty.addListener((observable, oldVal, newVal) -> {
 			manualUpdateButton.setDisable(newVal);
 		});
@@ -143,8 +141,14 @@ public class SettingsController implements ViewController {
 		final Properties legacyProperties = LegacySettingsController.getLegacyProperties().orElse(new Properties());
 		initLegacySettings(legacyProperties);
 
-		fpsLimitSpinner.valueProperty().addListener(__ -> changeLegacyIntegerSetting(LegacySettingsController.FPS_LIMIT, fpsLimitSpinner.getValue()));
-		pageSizeSpinner.valueProperty().addListener(__ -> changeLegacyIntegerSetting(LegacySettingsController.PAGE_SIZE, pageSizeSpinner.getValue()));
+		fpsLimitSpinner.valueProperty().addListener(__ -> {
+			final int value = MathUtility.limitUpperAndLower(fpsLimitSpinner.getValue(), 20, 90);
+			changeLegacyIntegerSetting(LegacySettingsController.FPS_LIMIT, value);
+		});
+		pageSizeSpinner.valueProperty().addListener(__ -> {
+			final int value = MathUtility.limitUpperAndLower(pageSizeSpinner.getValue(), 10, 20);
+			changeLegacyIntegerSetting(LegacySettingsController.PAGE_SIZE, value);
+		});
 
 		multicoreCheckbox.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.MULTICORE, multicoreCheckbox.isSelected()));
 		audioMsgCheckBox.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.AUDIO_MESSAGE_OFF, !audioMsgCheckBox.isSelected()));
@@ -160,7 +164,7 @@ public class SettingsController implements ViewController {
 		final StringBuilder builder = new StringBuilder(40);
 
 		builder.append("SA-MP Server Browser").append(System.lineSeparator()).append(System.lineSeparator())
-				.append(MessageFormat.format(Client.lang.getString("versionInfo"), UpdateUtility.VERSION));
+				.append(MessageFormat.format(Client.getString("versionInfo"), UpdateUtility.VERSION));
 
 		informationLabel.setText(builder.toString());
 	}
@@ -264,8 +268,8 @@ public class SettingsController implements ViewController {
 	 */
 	@FXML
 	private void onClickRestore() {
-		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("sureYouWantToRestoreSettings"), ButtonType.YES, ButtonType.NO);
-		alert.setTitle(Client.lang.getString("restoreSettingsToDefault"));
+		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.getString("sureYouWantToRestoreSettings"), ButtonType.YES, ButtonType.NO);
+		alert.setTitle(Client.getString("restoreSettingsToDefault"));
 		Client.insertAlertOwner(alert);
 
 		final Optional<ButtonType> result = alert.showAndWait();

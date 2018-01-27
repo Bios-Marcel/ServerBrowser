@@ -67,11 +67,11 @@ public class ServerListController implements ViewController {
 	private static Thread	serverLookup;
 	private static Thread	serverInfoUpdateThread;
 
-	private final String RETRIEVING = Client.lang.getString("retrieving");
+	private final String RETRIEVING = Client.getString("retrieving");
 
-	private final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
-	private final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
-	private final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
+	private final String	TOO_MUCH_PLAYERS	= Client.getString("tooMuchPlayers");
+	private final String	SERVER_OFFLINE		= Client.getString("serverOffline");
+	private final String	SERVER_EMPTY		= Client.getString("serverEmpty");
 
 	@FXML private ToggleGroup tableTypeToggleGroup;
 
@@ -191,19 +191,19 @@ public class ServerListController implements ViewController {
 		switch (mode) {
 			case ALL:
 				columnLastJoin.setVisible(false);
-				serverTable.setPlaceholder(new Label(Client.lang.getString("fetchingServers")));
+				serverTable.setPlaceholder(new Label(Client.getString("fetchingServers")));
 				fillTableWithOnlineServerList();
 				break;
 			case FAVOURITES:
 				columnLastJoin.setVisible(false);
 				// TODO-localize
-				serverTable.setPlaceholder(new Label(Client.lang.getString("noFavouriteServers")));
+				serverTable.setPlaceholder(new Label(Client.getString("noFavouriteServers")));
 				serverTable.addAll(FavouritesController.getFavourites());
 				ServerConfig.initLastJoinData(serverTable.getDataList());
 				break;
 			case HISTORY:
 				// TODO-localize
-				serverTable.setPlaceholder(new Label(Client.lang.getString("noServerHistory")));
+				serverTable.setPlaceholder(new Label(Client.getString("noServerHistory")));
 				columnLastJoin.setVisible(true);
 				final List<SampServer> servers = ServerConfig.getLastJoinedServers();
 				servers.forEach(server -> updateServerInfo(server, false));
@@ -229,7 +229,7 @@ public class ServerListController implements ViewController {
 			}
 			catch (final IOException exception) {
 				Logging.error("Couldn't retrieve data from announce api.", exception);
-				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.lang.getString("errorFetchingServers"))));
+				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.getString("errorFetchingServers"))));
 			}
 
 			Platform.runLater(() -> updateGlobalInfo());
@@ -252,7 +252,7 @@ public class ServerListController implements ViewController {
 	 *            the number of active players
 	 */
 	protected void setPlayerCount(final int activePlayers) {
-		playerCount.setText(MessageFormat.format(Client.lang.getString("activePlayers"), activePlayers));
+		playerCount.setText(MessageFormat.format(Client.getString("activePlayers"), activePlayers));
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class ServerListController implements ViewController {
 	 *            the number of active servers
 	 */
 	private void setServerCount(final int activeServers) {
-		serverCount.setText(MessageFormat.format(Client.lang.getString("servers"), activeServers));
+		serverCount.setText(MessageFormat.format(Client.getString("servers"), activeServers));
 	}
 
 	private void setPlayerComparator() {
@@ -312,7 +312,7 @@ public class ServerListController implements ViewController {
 				addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
 			}
 			else {
-				new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("addToFavourites"))
+				new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.getString("addToFavourites"))
 						.message("cantAddToFavouritesAddressInvalid").animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 			}
 		}
@@ -477,7 +477,7 @@ public class ServerListController implements ViewController {
 	private void applyData(final SampServer server, final ObservableList<Player> playerList, final long ping) {
 		if (!serverInfoUpdateThread.isInterrupted()) {
 			Platform.runLater(() -> {
-				serverPassword.setText(server.isPassworded() ? Client.lang.getString("yes") : Client.lang.getString("no"));
+				serverPassword.setText(server.isPassworded() ? Client.getString("yes") : Client.getString("no"));
 				serverPing.setText(String.valueOf(ping));
 				mapLabel.setText(server.getMap());
 				websiteLink.setText(server.getWebsite());

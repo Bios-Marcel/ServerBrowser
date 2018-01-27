@@ -33,6 +33,7 @@ import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.UpdateUtility;
 import com.msc.serverbrowser.util.basic.ArrayUtility;
 import com.msc.serverbrowser.util.basic.FileUtility;
+import com.msc.serverbrowser.util.basic.OptionalUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Application;
@@ -77,13 +78,13 @@ public final class Client extends Application {
 	/**
 	 * RessourceBundle which contains all the localized strings.
 	 */
-	public static ResourceBundle lang;
+	private static ResourceBundle lang;
 
 	/**
 	 * This property that indicates if an update check / download progress is
 	 * ongoing.
 	 */
-	public final BooleanProperty updatingProperty = new SimpleBooleanProperty(false);
+	public final BooleanProperty updateOngoingProperty = new SimpleBooleanProperty(false);
 
 	/**
 	 * @return the clients singleton instance
@@ -184,8 +185,8 @@ public final class Client extends Application {
 
 			final TrayNotification trayNotification = new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.INFORMATION)
-					.title(Client.lang.getString("updated"))
-					.message(Client.lang.getString("clickForChangelog"))
+					.title(Client.getString("updated"))
+					.message(Client.getString("clickForChangelog"))
 					.animation(Animations.SLIDE).build();
 
 			trayNotification.setOnMouseClicked(__ -> {
@@ -224,7 +225,7 @@ public final class Client extends Application {
 	public void checkForUpdates() {
 		Logging.info("Checking for updates.");
 
-		if (updatingProperty.get()) {
+		if (updateOngoingProperty.get()) {
 			// If an update is ongoing already, then we won't start another.
 			return;
 		}
@@ -233,7 +234,7 @@ public final class Client extends Application {
 		mainController.setGlobalProgressText("Checking for updates");
 
 		new Thread(() -> {
-			updatingProperty.set(true);
+			updateOngoingProperty.set(true);
 			try {
 				if (UpdateUtility.isUpToDate()) {
 					Logging.info("Client is up to date.");
@@ -259,13 +260,13 @@ public final class Client extends Application {
 				mainController.setGlobalProgressText("");
 				mainController.progressProperty().set(0);
 			});
-			updatingProperty.set(false);
+			updateOngoingProperty.set(false);
 		}).start();
 	}
 
 	private static void displayUpdateNotification() {
-		final TrayNotification trayNotification = new TrayNotificationBuilder().title(Client.lang.getString("updateInstalled"))
-				.message(Client.lang.getString("clickToRestart"))
+		final TrayNotification trayNotification = new TrayNotificationBuilder().title(Client.getString("updateInstalled"))
+				.message(Client.getString("clickToRestart"))
 				.animation(Animations.SLIDE).build();
 
 		trayNotification.setOnMouseClicked(__ -> {
@@ -276,9 +277,9 @@ public final class Client extends Application {
 	}
 
 	private static void displayCantRetrieveUpdate() {
-		final TrayNotification trayNotification = new TrayNotificationBuilder().message(Client.lang.getString("couldntRetrieveUpdate"))
+		final TrayNotification trayNotification = new TrayNotificationBuilder().message(Client.getString("couldntRetrieveUpdate"))
 				.animation(Animations.POPUP)
-				.type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("updating")).build();
+				.type(NotificationTypeImplementations.ERROR).title(Client.getString("updating")).build();
 
 		trayNotification.setOnMouseClicked(clicked -> {
 			OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
@@ -327,8 +328,8 @@ public final class Client extends Application {
 		}
 		catch (final IOException exception) {
 			Logging.error("Failed to update.", exception);
-			final TrayNotification notification = new TrayNotificationBuilder().title(Client.lang.getString("applyingUpdate"))
-					.message(Client.lang.getString("couldntApplyUpdate"))
+			final TrayNotification notification = new TrayNotificationBuilder().title(Client.getString("applyingUpdate"))
+					.message(Client.getString("couldntApplyUpdate"))
 					.type(NotificationTypeImplementations.ERROR).build();
 
 			notification.setOnMouseClicked(__ -> {
@@ -451,5 +452,13 @@ public final class Client extends Application {
 			loadView(View.SETTINGS);
 		}
 		mainController.getSettingsController().ifPresent(SettingsController::selectSampPathTextField);
+	}
+
+	public static ResourceBundle getLangaugeResourceBundle() {
+		return lang;
+	}
+
+	public static String getString(final String key) {
+		return OptionalUtility.attempt(() -> lang.getString(key)).orElse("Invalid Key");
 	}
 }

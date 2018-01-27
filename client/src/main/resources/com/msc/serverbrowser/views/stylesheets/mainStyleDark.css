@@ -8,7 +8,7 @@
 	-component-background-color-selected: #404040;
 	-menu-color: derive( -component-background-color, -10.0%);
 	-menu-color-selected: -component-background-color-selected;
-	-mark-color: white;
+	-mark-color: #D5C9C9;
 	-border-color: -component-background-color-selected;
 	
 	-special-button-color: #9239ad;
@@ -16,7 +16,7 @@
     -fx-text-fill: #CCCCCC;
     -fx-background-color: #212121;
     -component-inner-color: #212121;
-	-fx-focus-color: white;
+	-fx-focus-color: #D5C9C9;
 	
 	-fx-background-insets: 0.0;
 	-fx-border-radius: 0.0;
@@ -41,7 +41,7 @@
 
 .bar
 {
-	-fx-background-color: lightgreen;
+	-fx-background-color: #8BD38B;
 }
 
 /**
@@ -83,6 +83,15 @@
 }
 
 /**
+ * TextField
+ */
+ 
+.text-field
+{
+	-fx-padding: 3.0;	
+}
+
+/**
  * TextArea
  */
  
@@ -99,6 +108,16 @@
 
 .combo-box > .cell:selected {
     -fx-background-color: inherit;
+}
+
+.combo-box .arrow-button
+{
+	-fx-padding: 3.0 8.0 3.0 8.0;
+}
+
+.combo-box .list-cell
+{
+	-fx-padding: 3.0;
 }
 
 /**
@@ -155,7 +174,7 @@
 
 .button
 {
-    -fx-padding: 5.0;
+    -fx-padding: 4.0;
     -fx-background-color: -component-background-color;
 }
 
@@ -198,6 +217,7 @@
 
 .column-header
 {
+	-fx-padding: 3.0;
 	-fx-border-width: 0.0 1.0 0.0 1.0;
 	-fx-border-insets: 0.0 -1.0 0.0 -1.0;
 	-fx-border-color: -border-color;
@@ -294,6 +314,7 @@
 .check-box .box
 {
 	-fx-border-color: -border-color;
+	-fx-padding: 1.0;
 }
 
 .check-box:selected
@@ -301,11 +322,15 @@
 	-fx-background-insets: 10000.0; /* HACK(MSC) Fix visible background bug when selected */
 }
 
-.check-box:selected > .box > .mark
+.check-box:selected .box
 {
-	-fx-background-color: -mark-color;
+	-fx-background-color: #8BD38B;
 }
 
+.check-box:selected .mark
+{
+	-fx-background-color: transparent;
+}
 
 /**
  * Tab Pane (Menu)

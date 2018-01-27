@@ -135,14 +135,12 @@ public class MainController implements ViewController {
 		mainView.removeNodesFromBottomBar();
 
 		final Parent loadedNode;
-		switch (view) {
-			case FILES:
-				loadedNode = loadFilesView();
-				break;
-			// $CASES-OMITTED$
-			default:
-				loadedNode = loadFXML(view);
-				break;
+
+		if (view == View.FILES) {
+			loadedNode = loadFilesView();
+		}
+		else {
+			loadedNode = loadFXML(view);
 		}
 
 		initViewData(view, loadedNode);
@@ -159,7 +157,7 @@ public class MainController implements ViewController {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
-			loader.setResources(Client.lang);
+			loader.setResources(Client.getLangaugeResourceBundle());
 
 			// Creating a new instance of the specified controller, controllers never have
 			// constructor arguments, therefore this is supposedly fine.

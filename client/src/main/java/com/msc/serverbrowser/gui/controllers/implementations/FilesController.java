@@ -70,8 +70,8 @@ public class FilesController implements ViewController {
 			new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.ERROR)
 					.animation(Animations.POPUP)
-					.title(Client.lang.getString("couldntClearChatLog"))
-					.message(Client.lang.getString("checkLogsForMoreInformation")).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+					.title(Client.getString("couldntClearChatLog"))
+					.message(Client.getString("checkLogsForMoreInformation")).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 
 			Logging.warn("Couldn't clear chatlog", exception);
 		}
