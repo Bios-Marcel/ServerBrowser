@@ -57,9 +57,9 @@ public class FilesView {
 		buttonBar.getButtons().addAll(loadLogsButton, clearLogsButton);
 
 		// TODO Localize
-		final CheckBox showTimesCheckBox = new CheckBox("Show times if available");
+		final CheckBox showTimesCheckBox = new CheckBox(Client.getString("showTimestamps"));
 		showTimesIfAvailableProperty.bind(showTimesCheckBox.selectedProperty());
-		final CheckBox showColorsCheckBox = new CheckBox("Show colors");
+		final CheckBox showColorsCheckBox = new CheckBox(Client.getString("showChatlogColors"));
 		showColorsProperty.bind(showColorsCheckBox.selectedProperty());
 
 		final HBox optionCheckBoxes = new HBox(5.0, showColorsCheckBox, showTimesCheckBox);

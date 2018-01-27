@@ -95,8 +95,6 @@ public class FilesController implements ViewController {
 			Logging.error("Error loading chatlog.", exception);
 		}
 
-		System.out.println(newContent.toString());
-
 		filesView.setChatLogTextAreaContent(newContent.toString());
 	}
 
