@@ -117,9 +117,7 @@ If possible try to escape all characters, since there is currently to UTF-8 supp
 Note: Some of the follwing key-value pairs might already be correct, in that case i don't know it though.
 
 #### German
-```
-inputMethodText=Input method text editing and language switching
-```
+Done
 
 #### Georgian
 ```
