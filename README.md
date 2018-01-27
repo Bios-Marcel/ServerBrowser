@@ -118,17 +118,17 @@ Note: Some of the follwing key-value pairs might already be correct, in that cas
 
 #### German
 ```
-lagcomp=lagcomp:
 inputMethodText=Input method text editing and language switching
-updatesSettingTitle=Updates
 ```
 
 #### Georgian
 ```
 errorFetchingServers=Couldn't fetch servers
+favourites=Favourites
 pageSize=PageSize
 fetchingServers=Fetching servers, please wait a moment.
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 gtaNotFoundPrompt=Will be automatically detected if left empty
 rememberLastView=Remember last view
@@ -137,10 +137,20 @@ cantFindGTA=Can't find GTA installation
 customSampPath=Custom SA-MP Path
 noFavouriteServers=You don't have any favourites.
 directmode=Directmode (Fix chat text drawing problems)
+tr=Turkish
 activePlayers=Active players: {0}
+showChatlogColors=Show colors
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+removeUsernamePlural=Remove usernames
 connectingToServer=Connecting to server
 allowCachingSampVersions=Allow caching downloaded SA-MP versions
 retrieving=Retrieving ...
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
 multicoreUsage=Multicore usage
@@ -150,9 +160,11 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 #### Greek
 ```
 errorFetchingServers=Couldn't fetch servers
+favourites=Favourites
 fetchingServers=Fetching servers, please wait a moment.
 chatTimestamps=Chat Timestamps
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 gtaNotFoundPrompt=Will be automatically detected if left empty
 generalSettingsTitle=General
@@ -160,12 +172,22 @@ sampVersion=SA-MP Version {0}
 cantFindGTA=Can't find GTA installation
 ping=Ping:
 noFavouriteServers=You don't have any favourites.
+tr=Turkish
 informationSettingsTitle=Information
+showChatlogColors=Show colors
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
 versionInfo=Version: {0}
+history=History
 chatlogs=Chatlogs
+removeUsernamePlural=Remove usernames
 connectingToServer=Connecting to server
 retrieving=Retrieving ...
 servers=Servers: {0}
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
@@ -174,8 +196,10 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 #### Dutch
 ```
 errorFetchingServers=Couldn't fetch servers
+favourites=Favourites
 fetchingServers=Fetching servers, please wait a moment.
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 gamemodeTableHeader=Gamemode
 cantFindGTA=Can't find GTA installation
@@ -184,10 +208,20 @@ downloadSettingTitle=Downloads
 map=Map:
 website=Website:
 noFavouriteServers=You don't have any favourites.
+tr=Turkish
+showChatlogColors=Show colors
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+removeUsernamePlural=Remove usernames
 updatesSettingTitle=Updates
 connectingToServer=Connecting to server
 retrieving=Retrieving ...
 servers=Servers: {0}
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
 serverOffline=Server is offline.
@@ -197,13 +231,25 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 #### Russian
 ```
 errorFetchingServers=Couldn't fetch servers
+favourites=Favourites
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 cantFindGTA=Can't find GTA installation
 ping=Ping:
 noFavouriteServers=You don't have any favourites.
+tr=Turkish
+showChatlogColors=Show colors
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+removeUsernamePlural=Remove usernames
 connectingToServer=Connecting to server
 retrieving=Retrieving ...
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
@@ -211,35 +257,82 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 
 #### Polish
 ```
-errorFetchingServers=Couldn't fetch servers
-fetchingServers=Fetching servers, please wait a moment.
+favourites=Favourites
 lagcomp=lagcomp:
-locateGTAManually=Click here to enter your GTA path manually.
-cantFindGTA=Can't find GTA installation
+showTimestamps=Show times if available
 ping=Ping:
-noFavouriteServers=You don't have any favourites.
-connectingToServer=Connecting to server
-retrieving=Retrieving ...
-serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
-noServerHistory=You haven't joined any servers recently.
-openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
+tr=Turkish
+showChatlogColors=Show colors
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+removeUsernamePlural=Remove usernames
+checkingForUpdates=Checking for updates
 ```
 
 #### Romanian
 ```
+favourites=Favourites
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 generalSettingsTitle=General
 ping=Ping:
+tr=Turkish
+showChatlogColors=Show colors
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+removeUsernamePlural=Remove usernames
+checkingForUpdates=Checking for updates
 ```
 
 #### Spanish
 ```
+favourites=Favourites
+showTimestamps=Show times if available
 generalSettingsTitle=General
 noFavouriteServers=You don't have any favourites.
+tr=Turkish
+showChatlogColors=Show colors
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+removeUsernamePlural=Remove usernames
 no=No
 connectingToServer=Connecting to server
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
+```
+
+#### Turkish
+```
+favourites=Favourites
+pageSize=PageSize
+showTimestamps=Show times if available
+gamemodeTableHeader=Gamemode
+ping=Ping:
+fpsLimit=FPS Limit
+website=Website:
+showChatlogColors=Show colors
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+removeUsernamePlural=Remove usernames
+retrieving=Retrieving ...
+checkingForUpdates=Checking for updates
 ```
 
 ## Build

@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.msc.serverbrowser.util.Language;
+import com.msc.serverbrowser.util.basic.ArrayUtility;
 
 /**
  * Prints all keys that are awating translation
@@ -23,14 +24,20 @@ public final class WhatsLeftToTranslate {
 	 */
 	public static void main(final String[] args) {
 
+		final boolean forSampForums = ArrayUtility.contains(args, "sampforums");
 		final ResourceBundle englishLanguage = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", new Locale(Language.EN.getShortcut()));
 
 		Arrays.stream(Language.values())
 				.filter(lang -> lang != Language.EN)
 				.forEach(lang -> {
-
-					System.out.println("#### " + englishLanguage.getString(lang.getShortcut()));
-					System.out.println("```");
+					if (forSampForums) {
+						System.out.println(englishLanguage.getString(lang.getShortcut()) + ":");
+						System.out.println("[CODE]");
+					}
+					else {
+						System.out.println("#### " + englishLanguage.getString(lang.getShortcut()));
+						System.out.println("```");
+					}
 					final ResourceBundle langProperties = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", new Locale(lang.getShortcut()));
 
 					for (final String key : englishLanguage.keySet()) {
@@ -40,7 +47,12 @@ public final class WhatsLeftToTranslate {
 							System.out.println(key + "=" + value);
 						}
 					}
-					System.out.println("```");
+					if (forSampForums) {
+						System.out.println("[/CODE]");
+					}
+					else {
+						System.out.println("```");
+					}
 					System.out.println();
 				});
 	}
