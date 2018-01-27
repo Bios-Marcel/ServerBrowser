@@ -231,7 +231,7 @@ public final class Client extends Application {
 		}
 
 		mainController.progressProperty().set(0.0);
-		mainController.setGlobalProgressText("Checking for updates");
+		mainController.setGlobalProgressText(Client.getString("checkingForUpdates"));
 
 		new Thread(() -> {
 			updateOngoingProperty.set(true);
@@ -242,7 +242,7 @@ public final class Client extends Application {
 				else {
 					Platform.runLater(() -> {
 						mainController.progressProperty().set(0.1);
-						mainController.setGlobalProgressText("Downloading update");
+						mainController.setGlobalProgressText(Client.getString("downloadingUpdate"));
 					});
 					Logging.info("Downloading update.");
 					downloadUpdate();

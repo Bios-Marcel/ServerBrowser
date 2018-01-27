@@ -101,7 +101,7 @@ public class MainView {
 		helpLink.getStyleClass().add("info-icon");
 		helpLink.setTooltip(new Tooltip(Client.getString("openGithubWikiTooltip")));
 		helpLink.setFocusTraversable(false);
-		donateLink = new Hyperlink("Donate \uf0d6");
+		donateLink = new Hyperlink(Client.getString("donate") + " \uf0d6");
 		donateLink.getStyleClass().add("donate-button");
 		donateLink.setTooltip(new Tooltip(Client.getString("openDonationPageTooltip")));
 		donateLink.setMaxHeight(Double.MAX_VALUE);

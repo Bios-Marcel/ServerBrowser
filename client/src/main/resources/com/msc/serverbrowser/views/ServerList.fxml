@@ -40,9 +40,9 @@
 				<ToggleGroup fx:id="tableTypeToggleGroup"/>  
 			</fx:define>
 			<children>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" selected="true" onAction="#toggleFavouritesMode" text="Favourites" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleAllMode" text="All" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleHistoryMode" text="History" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" selected="true" onAction="#toggleFavouritesMode" text="%favourites" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleAllMode" text="%all" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleHistoryMode" text="%history" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
 			</children>
 		</HBox>
 		<SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">

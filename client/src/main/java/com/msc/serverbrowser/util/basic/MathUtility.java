@@ -4,7 +4,11 @@ package com.msc.serverbrowser.util.basic;
  * @author Marcel
  * @since 27.01.2018
  */
-public class MathUtility {
+public final class MathUtility {
+
+	private MathUtility() {
+		// Private constructor to prevent instanziation
+	}
 
 	/**
 	 * Decreases or increases a number if its out of the given bounds.
