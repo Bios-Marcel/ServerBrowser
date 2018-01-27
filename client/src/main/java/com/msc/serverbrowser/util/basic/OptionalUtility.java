@@ -45,10 +45,10 @@ public final class OptionalUtility {
 		try {
 			return Optional.ofNullable((T) object);
 		}
-		catch (@SuppressWarnings("unused") final Exception ignored) {
+		catch (@SuppressWarnings("unused") final ClassCastException ignored) {
 			// Ignoring the exception, because in case of failure, we just want Optional#empty
+			return Optional.empty();
 		}
-		return Optional.empty();
 	}
 
 	/**

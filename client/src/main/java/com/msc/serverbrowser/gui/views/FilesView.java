@@ -32,8 +32,6 @@ import javafx.scene.web.WebView;
 public class FilesView {
 	private final TabPane rootPane;
 
-	private final Tab chatLogsTab;
-
 	private final WebView chatLogTextArea;
 
 	private final Button	clearLogsButton;
@@ -67,7 +65,7 @@ public class FilesView {
 		final VBox chatLogsTabContent = new VBox(5.0, chatLogTextArea, optionCheckBoxes, buttonBar);
 		VBox.setVgrow(chatLogTextArea, Priority.ALWAYS);
 
-		chatLogsTab = new Tab(Client.getString("chatlogs"), chatLogsTabContent);
+		final Tab chatLogsTab = new Tab(Client.getString("chatlogs"), chatLogsTabContent);
 
 		rootPane = new TabPane(chatLogsTab);
 		rootPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
