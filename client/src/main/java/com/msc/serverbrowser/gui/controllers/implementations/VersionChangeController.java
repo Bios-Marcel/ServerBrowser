@@ -116,10 +116,7 @@ public class VersionChangeController implements ViewController {
 	 *            the {@link Button} which was clicked.
 	 */
 	private void installSamp(final Button button) {
-		if (!GTAController.getGtaPath().isPresent()) {
-			Client.getInstance().selectSampPathTextField();
-		}
-		else {
+		if (GTAController.getGtaPath().isPresent()) {
 			final InstallationCandidate toInstall = (InstallationCandidate) button.getUserData();
 			final Optional<InstallationCandidate> installedVersion = GTAController.getInstalledVersion();
 
@@ -137,6 +134,9 @@ public class VersionChangeController implements ViewController {
 					finishInstalling();
 				}).start();
 			}
+		}
+		else {
+			Client.getInstance().selectSampPathTextField();
 		}
 	}
 

@@ -454,10 +454,17 @@ public final class Client extends Application {
 		mainController.getSettingsController().ifPresent(SettingsController::selectSampPathTextField);
 	}
 
+	/**
+	 * @return {@link #lang the resourcebundle containing the currently loaded language}
+	 */
 	public static ResourceBundle getLangaugeResourceBundle() {
 		return lang;
 	}
 
+	/**
+	 * @param key they key to retrieve the value for
+	 * @return the value for the given key, using the {@link #lang} resource bundle
+	 */
 	public static String getString(final String key) {
 		return OptionalUtility.attempt(() -> lang.getString(key)).orElse("Invalid Key");
 	}

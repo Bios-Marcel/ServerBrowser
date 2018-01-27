@@ -116,6 +116,15 @@
 }
 
 /**
+ * TabPane
+ */
+ 
+ .tab-pane .tab-header-area
+ {
+ 	-fx-padding: 0.0;
+ }
+
+/**
  * Tables
  */
  

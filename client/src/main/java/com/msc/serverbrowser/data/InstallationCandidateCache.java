@@ -29,19 +29,21 @@ public final class InstallationCandidateCache {
 	 * @return true wenn die Version gecached ist.
 	 */
 	public static boolean isVersionCached(final InstallationCandidate version) {
-		final Optional<String> path = getPathForCachedVersion(version);
+		final Optional<String> CachedVersionPath = getPathForCachedVersion(version);
 
-		if (path.isPresent()) {
-			final File cachedVersion = new File(path.get());
+		if (CachedVersionPath.isPresent()) {
+			return false;
+		}
 
-			if (cachedVersion.exists()) {
-				if (FileUtility.validateFile(cachedVersion, version.getCheckSum())) {
-					return true;
-				}
+		final File cachedVersion = new File(CachedVersionPath.get());
 
-				// Otherwise, we delete the invalid one and return false
-				cachedVersion.delete();
+		if (cachedVersion.exists()) {
+			if (FileUtility.validateFile(cachedVersion, version.getCheckSum())) {
+				return true;
 			}
+
+			// Otherwise, we delete the invalid one and return false
+			cachedVersion.delete();
 		}
 
 		return false;
