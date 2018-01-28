@@ -87,6 +87,11 @@
 								<CheckBox fx:id="imeCheckBox" mnemonicParsing="false" text="%inputMethodText" />
 								<CheckBox fx:id="directModeCheckBox" mnemonicParsing="false" text="%directmode" />
 								<CheckBox fx:id="nameTagStatusCheckBox" mnemonicParsing="false" text="%showAfkSymbols" />
+								<HBox alignment="CENTER_RIGHT">
+									<children>
+										<Button onAction="#restoreLegacySettings" text="%restoreDefaults"/>
+									</children>
+								</HBox>
 							</children>
 						</VBox>
 					</content>

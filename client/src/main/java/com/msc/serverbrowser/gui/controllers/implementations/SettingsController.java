@@ -277,25 +277,59 @@ public class SettingsController implements ViewController {
 		result.ifPresent(button -> {
 			if (button == ButtonType.YES) {
 				restoreApplicationSettings();
-				LegacySettingsController.restoreLegacySettings();
+				restoreLegacySettings(true);
 
-				// Reapply theme, since it might have been changed
-				Client.getInstance().applyTheme();
-				// Assure the view that the displays the correct data.
-				Client.getInstance().reloadViewIfLoaded(View.SETTINGS);
+				reloadSettingsView();
 			}
 		});
 	}
 
+	public void reloadSettingsView() {
+		// Reapply theme, since it might have been changed
+		Client.getInstance().applyTheme();
+		// Assure the view that the displays the correct data.
+		Client.getInstance().reloadViewIfLoaded(View.SETTINGS);
+	}
+
 	private static void restoreApplicationSettings() {
-		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_GTA);
-		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_SAMP);
 		ClientPropertiesController.restorePropertyToDefault(Property.ASK_FOR_NAME_ON_CONNECT);
+		ClientPropertiesController.restorePropertyToDefault(Property.SAMP_PATH);
+		ClientPropertiesController.restorePropertyToDefault(Property.LANGUAGE);
 		ClientPropertiesController.restorePropertyToDefault(Property.SAVE_LAST_VIEW);
 		ClientPropertiesController.restorePropertyToDefault(Property.USE_DARK_THEME);
+		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_GTA);
+		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_SAMP);
 		ClientPropertiesController.restorePropertyToDefault(Property.CHANGELOG_ENABLED);
-		ClientPropertiesController.restorePropertyToDefault(Property.SAMP_PATH);
+		ClientPropertiesController.restorePropertyToDefault(Property.AUTOMTAIC_UPDATES);
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CACHING_DOWNLOADS);
+	}
+
+	@FXML
+	private void restoreLegacySettings() {
+		if (restoreLegacySettings(false)) {
+			reloadSettingsView();
+		}
+	}
+
+	private boolean restoreLegacySettings(final boolean inAdditionToSomethingElse) {
+		String text;
+		if (inAdditionToSomethingElse) {
+			text = Client.getString("sureYouWantToRestoreLegacySettingsAswell");
+		}
+		else {
+			text = Client.getString("sureYouWantToRestoreLegacySettings");
+		}
+		final Alert alert = new Alert(AlertType.CONFIRMATION, text, ButtonType.YES, ButtonType.NO);
+		alert.setTitle(Client.getString("restoreLegacySettingsToDefault"));
+		Client.insertAlertOwner(alert);
+
+		final Optional<ButtonType> result = alert.showAndWait();
+
+		if (result.isPresent() && result.get() == ButtonType.YES) {
+			LegacySettingsController.restoreLegacySettings();
+			return true;
+		}
+		return false;
 	}
 
 	/**
