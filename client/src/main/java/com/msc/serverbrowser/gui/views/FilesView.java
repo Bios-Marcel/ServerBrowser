@@ -4,14 +4,18 @@ import com.msc.serverbrowser.Client;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -37,9 +41,9 @@ public class FilesView {
 	private final Button	clearLogsButton;
 	private final Button	loadLogsButton;
 
-	private final BooleanProperty showTimesIfAvailableProperty = new SimpleBooleanProperty(false);
-
-	private final BooleanProperty showColorsProperty = new SimpleBooleanProperty(false);
+	private final BooleanProperty	showTimesIfAvailableProperty	= new SimpleBooleanProperty(false);
+	private final BooleanProperty	showColorsProperty				= new SimpleBooleanProperty(false);
+	private final StringProperty	lineFilterProperty				= new SimpleStringProperty("");
 
 	/**
 	 * Initializes the whole view.
@@ -54,20 +58,28 @@ public class FilesView {
 		final ButtonBar buttonBar = new ButtonBar();
 		buttonBar.getButtons().addAll(loadLogsButton, clearLogsButton);
 
-		// TODO Localize
 		final CheckBox showTimesCheckBox = new CheckBox(Client.getString("showTimestamps"));
 		showTimesIfAvailableProperty.bind(showTimesCheckBox.selectedProperty());
+		showTimesCheckBox.setAlignment(Pos.CENTER);
+		showTimesCheckBox.setMaxHeight(Double.MAX_VALUE);
+
 		final CheckBox showColorsCheckBox = new CheckBox(Client.getString("showChatlogColors"));
 		showColorsProperty.bind(showColorsCheckBox.selectedProperty());
+		showColorsCheckBox.setAlignment(Pos.CENTER);
+		showColorsCheckBox.setMaxHeight(Double.MAX_VALUE);
 
-		final HBox optionCheckBoxes = new HBox(5.0, showColorsCheckBox, showTimesCheckBox);
+		final TextField filterTextField = new TextField();
+		filterTextField.setPromptText(Client.getString("enterFilterValue"));
+		lineFilterProperty.bind(filterTextField.textProperty());
+
+		final HBox optionCheckBoxes = new HBox(5.0, showColorsCheckBox, showTimesCheckBox, filterTextField);
 
 		final VBox chatLogsTabContent = new VBox(5.0, chatLogTextArea, optionCheckBoxes, buttonBar);
 		VBox.setVgrow(chatLogTextArea, Priority.ALWAYS);
 
 		final Tab chatLogsTab = new Tab(Client.getString("chatlogs"), chatLogsTabContent);
 
-		rootPane = new TabPane(chatLogsTab);
+		rootPane = new TabPane(chatLogsTab, new Tab("Wtf"));
 		rootPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 	}
 
@@ -83,6 +95,13 @@ public class FilesView {
 	 */
 	public BooleanProperty getShowColorsProperty() {
 		return showColorsProperty;
+	}
+
+	/**
+	 * @return {@link #lineFilterProperty}
+	 */
+	public StringProperty getLineFilterProperty() {
+		return lineFilterProperty;
 	}
 
 	/**

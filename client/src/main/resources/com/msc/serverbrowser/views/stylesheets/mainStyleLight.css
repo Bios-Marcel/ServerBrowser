@@ -4,6 +4,7 @@
 	-mark-color: #538ED7;
 	-menu-color: #538ED7;
 	-menu-color-selected: #1F5FAE;
+	-scroll-bar-arrow-color: -mark-color;
 }
 
 /**
@@ -23,7 +24,6 @@
 .scroll-bar .thumb
 {
 	-fx-background-color: -mark-color;
-	-fx-background-radius: 0.0;
 }
 
 .scroll-bar, .scroll-bar .track-background, .scroll-bar .track

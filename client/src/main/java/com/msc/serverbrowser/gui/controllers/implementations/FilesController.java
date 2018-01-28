@@ -46,6 +46,8 @@ public class FilesController implements ViewController {
 		filesView.getShowColorsProperty().addListener(__ -> loadChatLog());
 		filesView.getShowTimesIfAvailableProperty().addListener(__ -> loadChatLog());
 
+		filesView.getLineFilterProperty().addListener(__ -> loadChatLog());
+
 		loadChatLog();
 	}
 
@@ -58,6 +60,7 @@ public class FilesController implements ViewController {
 			FileUtility.readAllLinesTryEncodings(path, ISO_8859_1, UTF_8, US_ASCII)
 					.stream()
 					.filter(line -> !line.isEmpty())
+					.filter(line -> line.toLowerCase().contains(filesView.getLineFilterProperty().getValueSafe().toLowerCase()))
 					.map(StringUtility::escapeHTML)
 					.map(line -> {
 						if (filesView.getShowTimesIfAvailableProperty().get()) {

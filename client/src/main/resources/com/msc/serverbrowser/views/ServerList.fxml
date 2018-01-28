@@ -48,32 +48,32 @@
 		</HBox>
 		<SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
 			<columns>
-				<TableColumn sortable="true" text="%hostnameTableHeader">
+				<TableColumn text="%hostnameTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="hostname" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnPlayers" sortable="true" text="%playersTableHeader">
+				<TableColumn fx:id="columnPlayers" text="%playersTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="playersAndMaxPlayers" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn sortable="true" text="%gamemodeTableHeader">
+				<TableColumn text="%gamemodeTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="mode" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn sortable="true" text="%languageTableHeader">
+				<TableColumn text="%languageTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="language" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn sortable="true" text="%versionTableHeader">
+				<TableColumn text="%versionTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="version" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnLastJoin" visible="false" sortable="true" text="Last visit">
+				<TableColumn fx:id="columnLastJoin" visible="false" text="%lastVisit">
 					<cellValueFactory>
 						<PropertyValueFactory property="lastJoin" />
 					</cellValueFactory>

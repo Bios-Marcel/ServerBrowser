@@ -14,9 +14,9 @@ This application offers a row of tools for the `San Andreas-Multiplayer` mod for
 * Version changer
 * Username history
 * Access to SA-MP Settings via graphical userinterface
-* Access to SA-MP chatlogs
+* Access to SA-MP chatlogs (with colors and timestamps)
+* Server history
 * MORE TO COME ...
-  * Server history
   * Serverspecific usernames
   * Screenshot viewer
 

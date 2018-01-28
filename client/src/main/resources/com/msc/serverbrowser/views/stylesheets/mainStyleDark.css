@@ -6,10 +6,11 @@
 {
 	-component-background-color: #121212;
 	-component-background-color-selected: #404040;
+	-border-color: -component-background-color-selected;
 	-menu-color: derive( -component-background-color, -10.0%);
 	-menu-color-selected: -component-background-color-selected;
 	-mark-color: #D5C9C9;
-	-border-color: -component-background-color-selected;
+	-scroll-bar-arrow-color: -component-background-color-selected;
 	
 	-special-button-color: #9239ad;
 	
@@ -36,7 +37,6 @@
 .progress-bar
 {
 	-fx-border-color: -border-color;	
-	-fx-border-width: 1.0;
 }
 
 .bar
@@ -290,10 +290,11 @@
 	-fx-background-color: transparent;
 }
 
-.tab:selected
+.tab:selected, .tab:selected .tab-label
 {
-	-fx-border-width: 1.0;
-	-fx-border-color: white;
+	-fx-background-color: -component-background-color-selected;
+	/*-fx-border-width: 1.0;
+	-fx-border-color: white;*/
 }
 
 .tab-pane .tab-content-area
@@ -365,10 +366,16 @@
     -fx-border-color: -border-color;
 
 }
+
 .spinner .increment-arrow-button, .spinner .decrement-arrow-button
 {
     -fx-background-color: -component-background-color-selected;
     -fx-padding: 3.0 5.0 3.0 5.0;
+}
+
+.spinner .increment-arrow, .spinner .decrement-arrow
+{
+    -fx-background-color: -mark-color;
 }
 
 .spinner .text-input

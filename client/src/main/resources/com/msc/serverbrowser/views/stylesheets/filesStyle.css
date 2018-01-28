@@ -4,3 +4,8 @@
     -fx-background-position: center;
 	-fx-background-size: contain;
 }
+
+.scroll-button-container
+{
+	-fx-background-color: transparent;
+}
