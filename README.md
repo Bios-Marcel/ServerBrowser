@@ -87,9 +87,9 @@ There is a light and a dark theme, here are screenshots including both themes:
 
 ![Version Changer Light](https://i.imgur.com/B8ZnpDv.png)
 
-![Files Dark](https://i.imgur.com/r8fVdVx.png)
+![Files Dark](https://i.imgur.com/3sTYXAw.png)
 
-![Files Light](https://i.imgur.com/VNNX8TK.png)
+![Files Light](https://i.imgur.com/RnTOzla.png)
 
 ![Settings Dark](https://i.imgur.com/RiFGrv7.png)
 
