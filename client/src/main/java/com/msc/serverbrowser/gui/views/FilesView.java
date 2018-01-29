@@ -79,7 +79,7 @@ public class FilesView {
 
 		final Tab chatLogsTab = new Tab(Client.getString("chatlogs"), chatLogsTabContent);
 
-		rootPane = new TabPane(chatLogsTab, new Tab("Wtf"));
+		rootPane = new TabPane(chatLogsTab);
 		rootPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 	}
 
