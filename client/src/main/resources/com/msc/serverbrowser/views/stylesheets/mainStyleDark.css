@@ -10,7 +10,7 @@
 	-menu-color: derive( -component-background-color, -10.0%);
 	-menu-color-selected: -component-background-color-selected;
 	-mark-color: #D5C9C9;
-	-scroll-bar-arrow-color: -component-background-color-selected;
+	-scroll-bar-arrow-and-thumb-color: -component-background-color-selected;
 	
 	-special-button-color: #9239ad;
 	
@@ -20,8 +20,6 @@
 	-fx-focus-color: #D5C9C9;
 	
 	-fx-background-insets: 0.0;
-	-fx-border-radius: 0.0;
-    -fx-background-radius: 0.0;
 }
 
 *:selected
@@ -48,15 +46,14 @@
  * Focus styles
  */
 
-.combo-box:focused, .text-field:focused, .check-box:focused > .box, .table-view:focused, .spinner:focused, .text-area:focused
+.combo-box:focused, .text-field:focused, .check-box:focused > .box, .table-view:focused, .spinner:focused, .text-area:focused, .button:focused
 {
 	-fx-border-color: -fx-focus-color !important;
 }
 
 .button:focused
 {
-	-fx-padding: 4.0;
-	-fx-border-color: -fx-focus-color;
+	-fx-padding: 3.0;
 }
 /**
  * Container that contains the elements of the specific view
@@ -65,11 +62,6 @@
 .viewContent
 {
 	-fx-padding: 5.0;	
-}
-
-.viewContent > .scroll-bar
-{
-	-fx-border-width: 0.0px;
 }
 
 /**
@@ -227,7 +219,6 @@
 {
 	-fx-border-color: -border-color; 	
 	-fx-border-width: 1.0;
-    -fx-background-radius: 0.0;
 }
 
 .table-view .placeholder
@@ -253,20 +244,6 @@
 .table-view .show-hide-columns-button .show-hide-column-image
 {
 	-fx-background-color: -mark-color;
-}
-
-/**
- * ScrollBar
- */
-
-.scroll-bar .thumb
-{
-	-fx-background-color: -component-background-color-selected;
-}
-
-.scroll-bar
-{
-	-fx-border-width: 0.0 0.0 0.0 0.0;
 }
 
 /**
@@ -300,7 +277,6 @@
 .tab-pane .tab-content-area
 {	
 	-fx-border-color: -border-color;
-	-fx-padding: 5.0;
 }
 
 .tab .tab-container .focus-indicator
@@ -341,11 +317,6 @@
 .tabPane
 {
 	-fx-background-color: -menu-color;
-}
-
-.tabScrollPane .scroll-bar
-{
-	-fx-border-width: 0.0px;
 }
 
 .MenuItem:hover

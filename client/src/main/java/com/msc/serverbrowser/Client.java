@@ -402,6 +402,7 @@ public final class Client extends Application {
 
 	private static void readApplicationArguments(final String[] args) {
 		developmentMode = ArrayUtility.contains(args, "-d");
+
 	}
 
 	/**

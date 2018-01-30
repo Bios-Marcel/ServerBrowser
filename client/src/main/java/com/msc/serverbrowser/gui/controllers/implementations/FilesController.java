@@ -16,6 +16,8 @@ import com.github.plushaze.traynotification.notification.NotificationTypeImpleme
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.constants.PathConstants;
+import com.msc.serverbrowser.data.properties.ClientPropertiesController;
+import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.gui.views.FilesView;
 import com.msc.serverbrowser.logging.Logging;
@@ -53,7 +55,14 @@ public class FilesController implements ViewController {
 
 	private void loadChatLog() {
 
-		final StringBuilder newContent = new StringBuilder("<html><body style='background-color: #333131; color: #FFFFFF'>");
+		final Boolean darkThemeInUse = ClientPropertiesController.getPropertyAsBoolean(Property.USE_DARK_THEME);
+		final String gray = "#333131";
+		final String white = "#FFFFFF";
+		final StringBuilder newContent = new StringBuilder("<html><body style='background-color: ");
+		newContent.append(darkThemeInUse ? gray : white);
+		newContent.append("; color: ");
+		newContent.append(darkThemeInUse ? white : gray);
+		newContent.append("'>");
 
 		try {
 			final Path path = Paths.get(PathConstants.SAMP_CHATLOG);

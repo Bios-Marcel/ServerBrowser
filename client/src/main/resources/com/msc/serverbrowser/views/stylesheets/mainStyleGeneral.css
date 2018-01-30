@@ -2,45 +2,61 @@
  * Main
  */
  
+*
+{
+	-fx-border-radius: 0.0;
+    -fx-background-radius: 0.0;
+}
+
 .root-pane
 {
-	-fx-spacing: 1;
+	-fx-spacing: 1.0;
 }
 
 /**
- * ScrollBar
+ * ScrollBar/Pane
  */
- 
-.scroll-bar .thumb
-{
-	-fx-background-radius: 0.0;
-	-fx-background-insets: 0.0;
-}
 
 .scroll-bar:horizontal .increment-arrow,
 .scroll-bar:vertical .increment-arrow,
 .scroll-bar:horizontal .decrement-arrow,
 .scroll-bar:vertical .decrement-arrow
 {
-	-fx-background-color: -scroll-bar-arrow-color;
+	-fx-background-color: -scroll-bar-arrow-and-thumb-color;
 	-fx-shape: "M 0 0 L 4 8 L 8 0 Z";
-	-fx-background-radius: 0.0;
 	-fx-background-insets: -1.0;
 	-fx-effect: none;	
 }
  
 .scroll-bar:horizontal .increment-arrow {
-	-fx-rotate: -90;
+	-fx-rotate: -90.0;
 }
 .scroll-bar:vertical .increment-arrow {
-	-fx-rotate: 0;
+	-fx-rotate: 0.0;
 }
 .scroll-bar:horizontal .decrement-arrow {
-	-fx-rotate: 90;
+	-fx-rotate: 90.0;
 }
 .scroll-bar:vertical .decrement-arrow {
-	-fx-rotate: -180;
+	-fx-rotate: -180.0;
 }
+
+.scroll-bar, .scroll-bar .track-background, .scroll-bar .track
+{
+	-fx-background-color: transparent;
+	-fx-border-width: 0.0;
+}
+
+.scroll-pane
+{
+	-fx-background-insets: 0.0
+}
+
+.scroll-bar .thumb
+{
+	-fx-background-color: -scroll-bar-arrow-and-thumb-color;
+}
+
 
 /**
  * View change area
@@ -99,8 +115,8 @@
 .bottom-bar
 {
 	-fx-border-width: 1.0 0.0 0.0 0.0;
-	-fx-padding: 5;
-	-fx-spacing: 5;
+	-fx-padding: 5.0;
+	-fx-spacing: 5.0;
 }
 
 .bottom-bar-custom
@@ -154,10 +170,15 @@
  * TabPane
  */
  
- .tab-pane .tab-header-area
- {
- 	-fx-padding: 0.0;
- }
+.tab-pane .tab-header-area
+{
+	-fx-padding: 0.0;
+}
+ 
+.tab-pane .tab-content-area
+{	
+	-fx-padding: 5.0;
+}
 
 /**
  * Tables

@@ -1,4 +1,4 @@
-# SA-MP Server Browser
+file# SA-MP Server Browser
 
 [![Build Status](https://travis-ci.org/Bios-Marcel/ServerBrowser.svg?branch=master)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e9eab6cb5644617a590ef4e81a2e466)](https://www.codacy.com/app/Bios-Marcel/ServerBrowser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Bios-Marcel/ServerBrowser&amp;utm_campaign=Badge_Grade)
@@ -89,7 +89,7 @@ There is a light and a dark theme, here are screenshots including both themes:
 
 ![Files Dark](https://i.imgur.com/3sTYXAw.png)
 
-![Files Light](https://i.imgur.com/RnTOzla.png)
+![Files Light](https://i.imgur.com/UvEcPHo.png)
 
 ![Settings Dark](https://i.imgur.com/RiFGrv7.png)
 

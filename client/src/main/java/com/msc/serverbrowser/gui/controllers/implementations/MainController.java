@@ -21,6 +21,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 
 /**
@@ -45,6 +47,20 @@ public class MainController implements ViewController {
 		Font.loadFont(MainController.class.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(), 12);
 		configureMenuItems();
 		registerBottomBarHyperlinks();
+		if (Client.isDevelopmentModeActivated()) {
+			registerDevShortcuts();
+		}
+	}
+
+	private void registerDevShortcuts() {
+		mainView.getRootPane().addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+			if (event.isControlDown() && event.getCode() == KeyCode.D) {
+				final boolean currentValue = ClientPropertiesController.getPropertyAsBoolean(Property.USE_DARK_THEME);
+				ClientPropertiesController.setProperty(Property.USE_DARK_THEME, !currentValue);
+				Client.getInstance().applyTheme();
+				Client.getInstance().reloadViewIfLoaded(getActiveView());
+			}
+		});
 	}
 
 	private void configureMenuItems() {
