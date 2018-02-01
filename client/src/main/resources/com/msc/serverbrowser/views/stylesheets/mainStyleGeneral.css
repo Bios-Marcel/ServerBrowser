@@ -184,7 +184,17 @@
  * Tables
  */
  
- .table-view .placeholder .label
- {
- 	-fx-padding: 10.0;
- }
+ 
+/**
+ * TableView
+ */
+ 
+.column-header
+{
+	-fx-size: 20.0;
+}
+ 
+.table-view .placeholder .label
+{
+	-fx-padding: 10.0;
+}
