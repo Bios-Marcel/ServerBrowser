@@ -6,7 +6,7 @@
 {
 	-component-background-color: #121212;
 	-component-background-color-selected: #404040;
-	-border-color: -component-background-color-selected;
+	-border-color: derive(-component-background-color-selected , -20.0%);
 	-menu-color: derive( -component-background-color, -10.0%);
 	-menu-color-selected: -component-background-color-selected;
 	-mark-color: #D5C9C9;
@@ -25,6 +25,11 @@
 *:selected
 {
     -fx-background-color: -component-background-color-selected;
+}
+
+.scroll-bar .track-background, .scroll-bar .track
+{
+	-fx-background-color: -component-inner-color;
 }
 
 .bottom-bar

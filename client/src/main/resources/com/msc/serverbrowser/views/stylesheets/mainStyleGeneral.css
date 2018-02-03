@@ -41,9 +41,8 @@
 	-fx-rotate: -180.0;
 }
 
-.scroll-bar, .scroll-bar .track-background, .scroll-bar .track
+.scroll-bar .track-background, .scroll-bar .track
 {
-	-fx-background-color: transparent;
 	-fx-border-width: 0.0;
 }
 
@@ -192,6 +191,7 @@
 .column-header
 {
 	-fx-size: 20.0;
+	background-color: red !important;
 }
  
 .table-view .placeholder .label

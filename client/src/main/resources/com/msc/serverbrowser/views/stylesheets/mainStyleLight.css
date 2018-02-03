@@ -7,6 +7,11 @@
 	-scroll-bar-arrow-and-thumb-color: -mark-color;
 }
 
+.scroll-bar .track-background, .scroll-bar .track
+{
+	-fx-background-color: rgb(244,244,244);
+}
+
 .tabPane
 {
 	-fx-background-color: -menu-color;
