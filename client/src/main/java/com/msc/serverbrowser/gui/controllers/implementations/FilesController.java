@@ -46,6 +46,7 @@ public class FilesController implements ViewController {
 		filesView.setClearChatLogsButtonAction(__ -> clearChatLog());
 
 		filesView.getShowColorsProperty().addListener(__ -> loadChatLog());
+		filesView.getShowColorsAsTextProperty().addListener(__ -> loadChatLog());
 		filesView.getShowTimesIfAvailableProperty().addListener(__ -> loadChatLog());
 
 		filesView.getLineFilterProperty().addListener(__ -> loadChatLog());
@@ -84,15 +85,26 @@ public class FilesController implements ViewController {
 						return line;
 					})
 					.map(line -> {
+						final boolean showColorsAsText = filesView.getShowColorsAsTextProperty().get();
+						final boolean showColors = filesView.getShowColorsProperty().get();
+						if (showColorsAsText && !showColors) {
+							return line;
+						}
+
 						final String colorRegex = "([{](.{6})[}])";
 
-						if (filesView.getShowColorsProperty().get()) {
+						if (showColors) {
 							String fixedLine = "<span>" + line.replace("{000000}", "{FFFFFF}");
 							final Matcher colorCodeMatcher = Pattern.compile(colorRegex).matcher(fixedLine);
 							while (colorCodeMatcher.find()) {
 
-								final String replacement = "#" + colorCodeMatcher.group(2);
-								fixedLine = fixedLine.replace(colorCodeMatcher.group(1), "</span><span style='color:" + replacement + ";'>");
+								final String replacementColorCode = "#" + colorCodeMatcher.group(2);
+								final String color = colorCodeMatcher.group(1);
+								String replacement = "</span><span style='color:" + replacementColorCode + ";'>";
+								if (showColorsAsText) {
+									replacement += color;
+								}
+								fixedLine = fixedLine.replace(color, replacement);
 							}
 
 							return fixedLine + "</span>";

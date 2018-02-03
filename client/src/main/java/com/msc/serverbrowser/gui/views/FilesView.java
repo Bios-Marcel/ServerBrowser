@@ -43,6 +43,7 @@ public class FilesView {
 
 	private final BooleanProperty	showTimesIfAvailableProperty	= new SimpleBooleanProperty(false);
 	private final BooleanProperty	showColorsProperty				= new SimpleBooleanProperty(false);
+	private final BooleanProperty	showColorsAsTextProperty		= new SimpleBooleanProperty(false);
 	private final StringProperty	lineFilterProperty				= new SimpleStringProperty("");
 
 	/**
@@ -60,19 +61,22 @@ public class FilesView {
 
 		final CheckBox showTimesCheckBox = new CheckBox(Client.getString("showTimestamps"));
 		showTimesIfAvailableProperty.bind(showTimesCheckBox.selectedProperty());
-		showTimesCheckBox.setAlignment(Pos.CENTER);
-		showTimesCheckBox.setMaxHeight(Double.MAX_VALUE);
+		setupCheckBox(showTimesCheckBox);
 
 		final CheckBox showColorsCheckBox = new CheckBox(Client.getString("showChatlogColors"));
 		showColorsProperty.bind(showColorsCheckBox.selectedProperty());
-		showColorsCheckBox.setAlignment(Pos.CENTER);
-		showColorsCheckBox.setMaxHeight(Double.MAX_VALUE);
+		setupCheckBox(showColorsCheckBox);
+
+		// TODO Localize
+		final CheckBox showColorsAsTextCheckBox = new CheckBox(Client.getString("showChatlogColorsAsText"));
+		showColorsAsTextProperty.bind(showColorsAsTextCheckBox.selectedProperty());
+		setupCheckBox(showColorsAsTextCheckBox);
 
 		final TextField filterTextField = new TextField();
 		filterTextField.setPromptText(Client.getString("enterFilterValue"));
 		lineFilterProperty.bind(filterTextField.textProperty());
 
-		final HBox optionCheckBoxes = new HBox(5.0, showColorsCheckBox, showTimesCheckBox, filterTextField);
+		final HBox optionCheckBoxes = new HBox(5.0, showColorsCheckBox, showTimesCheckBox, showColorsAsTextCheckBox, filterTextField);
 
 		final VBox chatLogsTabContent = new VBox(5.0, chatLogTextArea, optionCheckBoxes, buttonBar);
 		VBox.setVgrow(chatLogTextArea, Priority.ALWAYS);
@@ -81,6 +85,11 @@ public class FilesView {
 
 		rootPane = new TabPane(chatLogsTab);
 		rootPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+	}
+
+	public void setupCheckBox(final CheckBox showColorsAsTextCheckBox) {
+		showColorsAsTextCheckBox.setAlignment(Pos.CENTER);
+		showColorsAsTextCheckBox.setMaxHeight(Double.MAX_VALUE);
 	}
 
 	/**
@@ -95,6 +104,13 @@ public class FilesView {
 	 */
 	public BooleanProperty getShowColorsProperty() {
 		return showColorsProperty;
+	}
+
+	/**
+	 * @return {@link #showColorsAsTextProperty}
+	 */
+	public BooleanProperty getShowColorsAsTextProperty() {
+		return showColorsAsTextProperty;
 	}
 
 	/**
