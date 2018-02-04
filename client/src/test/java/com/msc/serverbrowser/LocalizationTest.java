@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import com.msc.serverbrowser.util.Language;
 
 /**
+ * Checks all localization files for completion. There is a seperate test for every language in
+ * order to assure that every file gets tested.
+ *
  * @author Marcel
  * @since 21.09.2017
  */
@@ -58,6 +61,11 @@ public class LocalizationTest {
 	@Test
 	public void testLanguageTurkish() {
 		testLanguage(Language.TR);
+	}
+
+	@Test
+	public void testLanguageBosnian() {
+		testLanguage(Language.BA);
 	}
 
 	private void testLanguage(final Language lang) {
