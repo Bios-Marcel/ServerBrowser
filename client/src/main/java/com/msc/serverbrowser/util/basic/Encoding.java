@@ -12,7 +12,7 @@ import org.mozilla.universalchardet.UniversalDetector;
  * @author Marcel
  */
 public final class Encoding {
-	private static final UniversalDetector detector = new UniversalDetector(null);
+	private static final UniversalDetector DETECTOR = new UniversalDetector(null);
 
 	private Encoding() {
 		// Constructor to prevent instantiation
@@ -48,10 +48,10 @@ public final class Encoding {
 	 */
 	public static Optional<String> getEncoding(final byte[] data) {
 		try {
-			detector.handleData(data, 0, data.length - 1);
-			detector.dataEnd();
-			final String charset = detector.getDetectedCharset();
-			detector.reset();
+			DETECTOR.handleData(data, 0, data.length - 1);
+			DETECTOR.dataEnd();
+			final String charset = DETECTOR.getDetectedCharset();
+			DETECTOR.reset();
 			return Optional.ofNullable(charset);
 		}
 		catch (@SuppressWarnings("unused") final NullPointerException exception) {

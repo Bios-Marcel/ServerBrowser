@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,59 +60,23 @@ public class FilesController implements ViewController {
 		final Boolean darkThemeInUse = ClientPropertiesController.getPropertyAsBoolean(Property.USE_DARK_THEME);
 		final String gray = "#333131";
 		final String white = "#FFFFFF";
-		final StringBuilder newContent = new StringBuilder("<html><body style='background-color: ");
-		newContent.append(darkThemeInUse ? gray : white);
-		newContent.append("; color: ");
-		newContent.append(darkThemeInUse ? white : gray);
-		newContent.append("'>");
+		final StringBuilder newContent = new StringBuilder("<html><body style='background-color: ")
+				.append(darkThemeInUse ? gray : white)
+				.append("; color: ")
+				.append(darkThemeInUse ? white : gray)
+				.append("'>");
 
 		try {
 			final Path path = Paths.get(PathConstants.SAMP_CHATLOG);
+			final String filterProperty = filesView.getLineFilterProperty().getValueSafe().toLowerCase();
+
 			FileUtility.readAllLinesTryEncodings(path, ISO_8859_1, UTF_8, US_ASCII)
 					.stream()
-					.filter(line -> !line.isEmpty())
-					.filter(line -> line.toLowerCase().contains(filesView.getLineFilterProperty().getValueSafe().toLowerCase()))
+					.filter(((Predicate<String>) String::isEmpty).negate())
+					.filter(line -> line.toLowerCase().contains(filterProperty))
 					.map(StringUtility::escapeHTML)
-					.map(line -> {
-						if (filesView.getShowTimesIfAvailableProperty().get()) {
-							return line;
-						}
-
-						final String timeRegex = "\\[(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)\\]";
-						if (line.length() >= 10 && line.substring(0, 10).matches(timeRegex)) {
-							return line.replaceFirst(timeRegex, "");
-						}
-
-						return line;
-					})
-					.map(line -> {
-						final boolean showColorsAsText = filesView.getShowColorsAsTextProperty().get();
-						final boolean showColors = filesView.getShowColorsProperty().get();
-						if (showColorsAsText && !showColors) {
-							return line;
-						}
-
-						final String colorRegex = "([{](.{6})[}])";
-
-						if (showColors) {
-							String fixedLine = "<span>" + line.replace("{000000}", "{FFFFFF}");
-							final Matcher colorCodeMatcher = Pattern.compile(colorRegex).matcher(fixedLine);
-							while (colorCodeMatcher.find()) {
-
-								final String replacementColorCode = "#" + colorCodeMatcher.group(2);
-								final String color = colorCodeMatcher.group(1);
-								String replacement = "</span><span style='color:" + replacementColorCode + ";'>";
-								if (showColorsAsText) {
-									replacement += color;
-								}
-								fixedLine = fixedLine.replace(color, replacement);
-							}
-
-							return fixedLine + "</span>";
-						}
-
-						return line.replaceAll(colorRegex, "");
-					})
+					.map(this::processSampChatlogTimestamps)
+					.map(this::processSampColorCodes)
 					.map(line -> line + "<br/>")
 					.forEach(newContent::append);
 		}
@@ -120,6 +85,48 @@ public class FilesController implements ViewController {
 		}
 
 		filesView.setChatLogTextAreaContent(newContent.toString());
+	}
+
+	private String processSampChatlogTimestamps(final String line) {
+		if (filesView.getShowTimesIfAvailableProperty().get()) {
+			return line;
+		}
+
+		final String timeRegex = "\\[(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)\\]";
+		if (line.length() >= 10 && line.substring(0, 10).matches(timeRegex)) {
+			return line.replaceFirst(timeRegex, "");
+		}
+
+		return line;
+	}
+
+	private String processSampColorCodes(final String line) {
+		final boolean showColorsAsText = filesView.getShowColorsAsTextProperty().get();
+		final boolean showColors = filesView.getShowColorsProperty().get();
+		if (showColorsAsText && !showColors) {
+			return line;
+		}
+
+		final String colorRegex = "([{](.{6})[}])";
+
+		if (showColors) {
+			String fixedLine = "<span>" + line.replace("{000000}", "{FFFFFF}");
+			final Matcher colorCodeMatcher = Pattern.compile(colorRegex).matcher(fixedLine);
+			while (colorCodeMatcher.find()) {
+
+				final String replacementColorCode = "#" + colorCodeMatcher.group(2);
+				final String color = colorCodeMatcher.group(1);
+				String replacement = "</span><span style='color:" + replacementColorCode + ";'>";
+				if (showColorsAsText) {
+					replacement += color;
+				}
+				fixedLine = fixedLine.replace(color, replacement);
+			}
+
+			return fixedLine + "</span>";
+		}
+
+		return line.replaceAll(colorRegex, "");
 	}
 
 	private void clearChatLog() {
