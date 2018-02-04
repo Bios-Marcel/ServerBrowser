@@ -45,11 +45,11 @@ import javafx.scene.input.MouseEvent;
 public class SampServerTable extends TableView<SampServer> {
 	private SampServerTableMode tableMode = SampServerTableMode.FAVOURITES;
 
-	private final MenuItem	addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
-	private final MenuItem	removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
-	private final MenuItem	visitWebsiteMenuItem			= new MenuItem("Visit Website");
-	private final MenuItem	connectMenuItem					= new MenuItem("Connect to Server");
-	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
+	private final MenuItem	addToFavouritesMenuItem			= new MenuItem(Client.getString("addToFavourites"));
+	private final MenuItem	removeFromFavouritesMenuItem	= new MenuItem(Client.getString("removeFromFavourites"));
+	private final MenuItem	visitWebsiteMenuItem			= new MenuItem(Client.getString("visitWebsite"));
+	private final MenuItem	connectMenuItem					= new MenuItem(Client.getString("connectToServer"));
+	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem(Client.getString("copyIpAddressAndPort"));
 
 	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 

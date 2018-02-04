@@ -25,7 +25,8 @@ public enum Language {
 	PL("pl", "Polish"),
 	RO("ro", "Romanian"),
 	ES("es", "Spanish"),
-	TR("tr", "Turkish");
+	TR("tr", "Turkish"),
+	BA("ba", "Bosnian");
 
 	private final String	shortcut;
 	private final String	defaultName;
