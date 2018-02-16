@@ -184,8 +184,8 @@ public final class GTAController {
 
 			if (serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {
 				final TextInputDialog dialog = new TextInputDialog();
-				dialog.setTitle("Connect to Server");
-				dialog.setHeaderText("Enter the servers password (Leave empty if u think there is none).");
+				dialog.setTitle(Client.getString("connectToServer"));
+				dialog.setHeaderText(Client.getString("enterServerPasswordMessage"));
 
 				final Optional<String> result = dialog.showAndWait();
 				result.ifPresent(password -> GTAController.connectToServer(address, port, password));
