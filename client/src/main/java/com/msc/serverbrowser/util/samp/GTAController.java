@@ -184,6 +184,7 @@ public final class GTAController {
 
 			if (serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {
 				final TextInputDialog dialog = new TextInputDialog();
+				Client.insertAlertOwner(dialog);
 				dialog.setTitle(Client.getString("connectToServer"));
 				dialog.setHeaderText(Client.getString("enterServerPasswordMessage"));
 

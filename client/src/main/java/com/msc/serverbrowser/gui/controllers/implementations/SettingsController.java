@@ -312,7 +312,7 @@ public class SettingsController implements ViewController {
 	}
 
 	private boolean restoreLegacySettings(final boolean inAdditionToSomethingElse) {
-		String text;
+		final String text;
 		if (inAdditionToSomethingElse) {
 			text = Client.getString("sureYouWantToRestoreLegacySettingsAswell");
 		}
