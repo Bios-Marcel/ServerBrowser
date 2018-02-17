@@ -42,7 +42,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -115,7 +115,7 @@ public final class Client extends Application {
 	 * @param alert
 	 *            the alert to set the owner in
 	 */
-	public static void insertAlertOwner(final Alert alert) {
+	public static void insertAlertOwner(final Dialog<?> alert) {
 		alert.initOwner(getInstance().stage);
 	}
 
