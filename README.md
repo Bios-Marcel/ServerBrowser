@@ -1,8 +1,8 @@
 # SA-MP Server Browser
 
-[![Build Status](https://travis-ci.org/Bios-Marcel/ServerBrowser.svg?branch=master)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e9eab6cb5644617a590ef4e81a2e466)](https://www.codacy.com/app/Bios-Marcel/ServerBrowser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Bios-Marcel/ServerBrowser&amp;utm_campaign=Badge_Grade)
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/Bios-Marcel/ServerBrowser.svg?columns=all)](https://waffle.io/Bios-Marcel/ServerBrowser) 
+[![Build Status](https://img.shields.io/travis/Bios-Marcel/ServerBrowser.svg?style=flat-square)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
+[![Codacy grade](https://img.shields.io/codacy/grade/7e9eab6cb5644617a590ef4e81a2e466.svg?style=flat-square)](https://app.codacy.com/app/Bios-Marcel/ServerBrowser/dashboard)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/Bios-Marcel/ServerBrowser.svg?columns=all&style=flat-square)](https://waffle.io/Bios-Marcel/ServerBrowser) 
 
 ## Description
 
