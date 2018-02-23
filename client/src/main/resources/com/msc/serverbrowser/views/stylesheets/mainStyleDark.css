@@ -47,6 +47,12 @@
 	-fx-background-color: #8BD38B;
 }
 
+.overline
+{
+	-fx-border-color: white;
+	-fx-border-width: 1.0 0.0 0.0 0.0;
+}
+
 /**
  * Focus styles
  */
