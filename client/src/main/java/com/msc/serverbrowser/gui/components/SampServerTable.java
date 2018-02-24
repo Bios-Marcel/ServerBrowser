@@ -35,6 +35,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -143,70 +144,10 @@ public class SampServerTable extends TableView<SampServer> {
 			final TableRow<SampServer> row = new TableRow<>();
 
 			row.setOnDragOver(event -> event.acceptTransferModes(TransferMode.MOVE));
-
-			row.setOnDragEntered(event -> {
-				row.getStyleClass().add("overline");
-			});
-
-			row.setOnDragExited(event -> {
-				row.getStyleClass().remove("overline");
-			});
-
-			row.setOnDragDetected(event -> {
-				final List<SampServer> selectedServers = getSelectionModel().getSelectedItems();
-				final SampServer rowServer = row.getItem();
-				if (servers.size() <= 1 || selectedServers.size() < 1 || !selectedServers.contains(rowServer)) {
-					return;
-				}
-
-				final ClipboardContent clipboardContent = new ClipboardContent();
-
-				final List<Integer> selectedServerIndices = getSelectionModel().getSelectedItems().stream()
-						.map(servers::indexOf)
-						.collect(Collectors.toList());
-				clipboardContent.put(OLD_INDEXES_LIST_DATA_FORMAT, selectedServerIndices);
-
-				final StringJoiner ghostString = new StringJoiner(System.lineSeparator());
-				selectedServers.forEach(server -> ghostString.add(server.getHostname() + " - " + server.toString()));
-
-				final Dragboard dragBoard = startDragAndDrop(TransferMode.MOVE);
-				dragBoard.setDragView(new Text(ghostString.toString()).snapshot(null, null), event.getX(), event.getY());
-				dragBoard.setContent(clipboardContent);
-			});
-
-			row.setOnDragDropped(event -> {
-				final Dragboard dragBoard = event.getDragboard();
-				final List<Integer> oldIndexes = (List<Integer>) dragBoard.getContent(OLD_INDEXES_LIST_DATA_FORMAT);
-				final int newIndex = servers.indexOf(row.getItem());
-				final int newIndexCorrect = newIndex == -1 ? servers.size() : newIndex;
-
-				if (oldIndexes.contains(newIndexCorrect)) {
-					return;
-				}
-
-				if (newIndexCorrect != oldIndexes.get(0)) {
-					final List<SampServer> draggedServer = getSelectionModel().getSelectedItems().stream().collect(Collectors.toList());
-
-					if (oldIndexes.get(0) < newIndexCorrect) {
-						Collections.reverse(draggedServer);
-						draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
-
-						Collections.sort(oldIndexes);
-						Collections.reverse(oldIndexes);
-						oldIndexes.forEach(index -> servers.remove(index.intValue()));
-					}
-					else {
-						Collections.sort(oldIndexes);
-						Collections.reverse(oldIndexes);
-						oldIndexes.forEach(index -> servers.remove(index.intValue()));
-
-						Collections.reverse(draggedServer);
-						draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
-					}
-				}
-
-			});
-
+			row.setOnDragEntered(event -> row.getStyleClass().add("overline"));
+			row.setOnDragExited(event -> row.getStyleClass().remove("overline"));
+			row.setOnDragDetected(event -> onRowDragDetected(row, event));
+			row.setOnDragDropped(event -> onRowDragDropped(row, event));
 			row.setOnMouseClicked(clicked -> {
 				// A row has been clicked, so we want to hide the previous context menu
 				contextMenu.hide();
@@ -223,7 +164,61 @@ public class SampServerTable extends TableView<SampServer> {
 
 			return row;
 		});
+	}
 
+	private void onRowDragDropped(final TableRow<SampServer> row, final DragEvent event) {
+		final Dragboard dragBoard = event.getDragboard();
+		@SuppressWarnings("unchecked")
+		final List<Integer> oldIndexes = (List<Integer>) dragBoard.getContent(OLD_INDEXES_LIST_DATA_FORMAT);
+		final int newIndex = servers.indexOf(row.getItem());
+		final int newIndexCorrect = newIndex == -1 ? servers.size() : newIndex;
+
+		if (oldIndexes.contains(newIndexCorrect)) {
+			return;
+		}
+
+		if (newIndexCorrect != oldIndexes.get(0)) {
+			final List<SampServer> draggedServer = getSelectionModel().getSelectedItems().stream().collect(Collectors.toList());
+
+			if (oldIndexes.get(0) < newIndexCorrect) {
+				Collections.reverse(draggedServer);
+				draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
+
+				Collections.sort(oldIndexes);
+				Collections.reverse(oldIndexes);
+				oldIndexes.forEach(index -> servers.remove(index.intValue()));
+			}
+			else {
+				Collections.sort(oldIndexes);
+				Collections.reverse(oldIndexes);
+				oldIndexes.forEach(index -> servers.remove(index.intValue()));
+
+				Collections.reverse(draggedServer);
+				draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
+			}
+		}
+	}
+
+	private void onRowDragDetected(final TableRow<SampServer> row, final MouseEvent event) {
+		final List<SampServer> selectedServers = getSelectionModel().getSelectedItems();
+		final SampServer rowServer = row.getItem();
+		if (servers.size() <= 1 || selectedServers.size() < 1 || !selectedServers.contains(rowServer)) {
+			return;
+		}
+
+		final ClipboardContent clipboardContent = new ClipboardContent();
+
+		final List<Integer> selectedServerIndices = getSelectionModel().getSelectedItems().stream()
+				.map(servers::indexOf)
+				.collect(Collectors.toList());
+		clipboardContent.put(OLD_INDEXES_LIST_DATA_FORMAT, selectedServerIndices);
+
+		final StringJoiner ghostString = new StringJoiner(System.lineSeparator());
+		selectedServers.forEach(server -> ghostString.add(server.getHostname() + " - " + server.toString()));
+
+		final Dragboard dragBoard = startDragAndDrop(TransferMode.MOVE);
+		dragBoard.setDragView(new Text(ghostString.toString()).snapshot(null, null), event.getX(), event.getY());
+		dragBoard.setContent(clipboardContent);
 	}
 
 	private void handleClick(final TableRow<SampServer> row, final MouseEvent clicked) {
