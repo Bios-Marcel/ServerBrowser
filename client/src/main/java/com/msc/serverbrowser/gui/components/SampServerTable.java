@@ -202,7 +202,7 @@ public class SampServerTable extends TableView<SampServer> {
 	private void onRowDragDetected(final TableRow<SampServer> row, final MouseEvent event) {
 		final List<SampServer> selectedServers = getSelectionModel().getSelectedItems();
 		final SampServer rowServer = row.getItem();
-		if (servers.size() <= 1 || selectedServers.size() < 1 || !selectedServers.contains(rowServer)) {
+		if (servers.size() <= 1 || selectedServers.isEmpty() || !selectedServers.contains(rowServer)) {
 			return;
 		}
 

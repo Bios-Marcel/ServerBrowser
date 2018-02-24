@@ -64,7 +64,8 @@ public class FilesController implements ViewController {
 				.append(darkThemeInUse ? gray : white)
 				.append("; color: ")
 				.append(darkThemeInUse ? white : gray)
-				.append("'>");
+				.append("';")
+				.append(">");
 
 		try {
 			final Path path = Paths.get(PathConstants.SAMP_CHATLOG);
@@ -115,10 +116,12 @@ public class FilesController implements ViewController {
 			while (colorCodeMatcher.find()) {
 
 				final String replacementColorCode = "#" + colorCodeMatcher.group(2);
+				final StringBuilder replacement = new StringBuilder("</span><span style='color:")
+						.append(replacementColorCode)
+						.append(";'>");
 				final String color = colorCodeMatcher.group(1);
-				String replacement = "</span><span style='color:" + replacementColorCode + ";'>";
 				if (showColorsAsText) {
-					replacement += color;
+					replacement.append(color);
 				}
 				fixedLine = fixedLine.replace(color, replacement);
 			}
