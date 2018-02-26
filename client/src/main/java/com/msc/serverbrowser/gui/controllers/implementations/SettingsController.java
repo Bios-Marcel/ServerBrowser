@@ -299,7 +299,7 @@ public class SettingsController implements ViewController {
 		result.ifPresent(button -> {
 			if (button == ButtonType.YES) {
 				restoreApplicationSettings();
-				restoreLegacySettings(true);
+				restoreLegacySettings(Client.getString("sureYouWantToRestoreLegacySettingsAswell"));
 
 				reloadSettingsView();
 			}
@@ -332,20 +332,13 @@ public class SettingsController implements ViewController {
 
 	@FXML
 	private void restoreLegacySettings() {
-		if (restoreLegacySettings(false)) {
+		if (restoreLegacySettings(Client.getString("sureYouWantToRestoreLegacySettings"))) {
 			reloadSettingsView();
 		}
 	}
 
-	private boolean restoreLegacySettings(final boolean inAdditionToSomethingElse) {
-		final String text;
-		if (inAdditionToSomethingElse) {
-			text = Client.getString("sureYouWantToRestoreLegacySettingsAswell");
-		}
-		else {
-			text = Client.getString("sureYouWantToRestoreLegacySettings");
-		}
-		final Alert alert = new Alert(AlertType.CONFIRMATION, text, ButtonType.YES, ButtonType.NO);
+	private boolean restoreLegacySettings(final String alertTest) {
+		final Alert alert = new Alert(AlertType.CONFIRMATION, alertTest, ButtonType.YES, ButtonType.NO);
 		alert.setTitle(Client.getString("restoreLegacySettingsToDefault"));
 		Client.insertAlertOwner(alert);
 
