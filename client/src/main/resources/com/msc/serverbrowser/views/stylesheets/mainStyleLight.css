@@ -4,6 +4,23 @@
 	-mark-color: #538ED7;
 	-menu-color: #538ED7;
 	-menu-color-selected: #1F5FAE;
+	-scroll-bar-arrow-and-thumb-color: -mark-color;
+}
+
+.overline
+{
+	-fx-border-color: black;
+	-fx-border-width: 1.0 0.0 0.0 0.0;
+}
+
+.scroll-bar .track-background, .scroll-bar .track
+{
+	-fx-background-color: rgb(244,244,244);
+}
+
+.tabPane
+{
+	-fx-background-color: -menu-color;
 }
 
 /**
@@ -15,35 +32,8 @@
 	-fx-padding: 5.0;	
 }
 
-.scroll-pane
-{
-	-fx-background-insets: 0.0
-}
-
-.scroll-bar .thumb
-{
-	-fx-background-color: -mark-color;
-	-fx-background-radius: 0.0;
-}
-
-.scroll-bar, .scroll-bar .track-background, .scroll-bar .track
-{
-	-fx-background-color: transparent;
-	-fx-border-width: 0.0;
-}
-
 /**
- * TitledPane
- */
-
-.titled-pane .title
-{
-	-fx-background-radius: 0.0;
-	-fx-border-radius: 0.0;
-}
-
-/**
- * TabePane
+ * TabPane
  */
  
  .tab-header-background
@@ -51,10 +41,15 @@
  	-fx-background-color: transparent;
  }
 
-.tabPane
-{
-	-fx-background-color: -menu-color;
+
+.tab-pane .tab-content-area
+{	
+	-fx-border-color: lightgray;
 }
+
+/*
+ * menu 
+ */
 
 .MenuItem
 {

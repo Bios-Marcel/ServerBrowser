@@ -1,10 +1,12 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
+import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.PastUsernames;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.samp.GTAController;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
@@ -24,8 +26,8 @@ public class UsernameController implements ViewController {
 
 	@FXML private ListView<String> nameList;
 
-	private final MenuItem	applyNameMenuItem	= new MenuItem("Apply Username");
-	private final MenuItem	removeNameMenuItem	= new MenuItem("Remove username");
+	private final MenuItem	applyNameMenuItem	= new MenuItem(Client.getString("applyUsername"));
+	private final MenuItem	removeNameMenuItem	= new MenuItem(Client.getString("removeUsernameSingular"));
 
 	private final ContextMenu menu = new ContextMenu(applyNameMenuItem, removeNameMenuItem);
 
@@ -45,56 +47,37 @@ public class UsernameController implements ViewController {
 
 		if (event.getButton().equals(MouseButton.SECONDARY)) {
 
-			final int numberOfSelectedItems = nameList.getSelectionModel().getSelectedItems().size();
-
-			// If the selection is emoty, we don't really care
-			if (numberOfSelectedItems == 0) {
-				return;
-			}
+			final ObservableList<String> selectedItems = nameList.getSelectionModel().getSelectedItems();
 
 			/*
 			 * Making an array copy of the list, because iterating over the ObservableList would
 			 * lead to mistakes.
 			 */
-			final String[] usernames = nameList.getSelectionModel().getSelectedItems().toArray(new String[numberOfSelectedItems]);
+			final String[] usernames = selectedItems.toArray(new String[selectedItems.size()]);
 
-			if (numberOfSelectedItems == 1) {
-				showContextMenuForSingleItem(event.getScreenX(), event.getScreenY(), usernames[0]);
-			}
-			else if (numberOfSelectedItems > 1) {
-				showContextMenuForMultipleItems(event.getScreenX(), event.getScreenY(), usernames);
-			}
+			showContextMenuForMultipleItems(event.getScreenX(), event.getScreenY(), usernames);
 		}
 	}
 
-	private void showContextMenuForMultipleItems(final double showAtX, final double showAtY, final String[] usernames) {
+	private void showContextMenuForMultipleItems(final double showAtX, final double showAtY, final String... names) {
 
-		applyNameMenuItem.setVisible(false);
-		removeNameMenuItem.setText("Remove Usernames");
+		if (names == null || names.length == 0) {
+			return;
+		}
 
-		removeNameMenuItem.setOnAction(__ -> {
-			for (final String name : usernames) {
-				PastUsernames.removePastUsername(name);
-				nameList.getItems().remove(name);
-			}
-		});
-
-		menu.show(nameList, showAtX, showAtY);
-	}
-
-	private void showContextMenuForSingleItem(final double showAtX, final double showAtY, final String name) {
-
-		applyNameMenuItem.setVisible(true);
-		removeNameMenuItem.setText("Remove Username");
-
+		final boolean singleUsername = names.length == 1;
+		applyNameMenuItem.setVisible(singleUsername);
 		applyNameMenuItem.setOnAction(__ -> {
-			usernameTextField.setText(name);
+			usernameTextField.setText(names[0]);
 			applyUsername();
 		});
 
+		removeNameMenuItem.setText(singleUsername ? Client.getString("removeUsernameSingular") : Client.getString("removeUsernamePlural"));
 		removeNameMenuItem.setOnAction(__ -> {
-			PastUsernames.removePastUsername(name);
-			nameList.getItems().remove(name);
+			for (final String name : names) {
+				PastUsernames.removePastUsername(name);
+				nameList.getItems().remove(name);
+			}
 		});
 
 		menu.show(nameList, showAtX, showAtY);

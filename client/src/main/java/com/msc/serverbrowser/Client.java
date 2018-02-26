@@ -27,11 +27,13 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
+import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
 import com.msc.serverbrowser.gui.views.MainView;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.UpdateUtility;
 import com.msc.serverbrowser.util.basic.ArrayUtility;
 import com.msc.serverbrowser.util.basic.FileUtility;
+import com.msc.serverbrowser.util.basic.OptionalUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 import javafx.application.Application;
@@ -40,7 +42,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -75,13 +78,13 @@ public final class Client extends Application {
 	/**
 	 * RessourceBundle which contains all the localized strings.
 	 */
-	public static ResourceBundle lang;
+	private static ResourceBundle lang;
 
 	/**
 	 * This property that indicates if an update check / download progress is
 	 * ongoing.
 	 */
-	public final BooleanProperty updatingProperty = new SimpleBooleanProperty(false);
+	public final BooleanProperty updateOngoingProperty = new SimpleBooleanProperty(false);
 
 	/**
 	 * @return the clients singleton instance
@@ -112,7 +115,7 @@ public final class Client extends Application {
 	 * @param alert
 	 *            the alert to set the owner in
 	 */
-	public static void insertAlertOwner(final Alert alert) {
+	public static void insertAlertOwner(final Dialog<?> alert) {
 		alert.initOwner(getInstance().stage);
 	}
 
@@ -182,8 +185,8 @@ public final class Client extends Application {
 
 			final TrayNotification trayNotification = new TrayNotificationBuilder()
 					.type(NotificationTypeImplementations.INFORMATION)
-					.title(Client.lang.getString("updated"))
-					.message(Client.lang.getString("clickForChangelog"))
+					.title(Client.getString("updated"))
+					.message(Client.getString("clickForChangelog"))
 					.animation(Animations.SLIDE).build();
 
 			trayNotification.setOnMouseClicked(__ -> {
@@ -222,16 +225,16 @@ public final class Client extends Application {
 	public void checkForUpdates() {
 		Logging.info("Checking for updates.");
 
-		if (updatingProperty.get()) {
+		if (updateOngoingProperty.get()) {
 			// If an update is ongoing already, then we won't start another.
 			return;
 		}
 
 		mainController.progressProperty().set(0.0);
-		mainController.setGlobalProgressText("Checking for updates");
+		mainController.setGlobalProgressText(Client.getString("checkingForUpdates"));
 
 		new Thread(() -> {
-			updatingProperty.set(true);
+			updateOngoingProperty.set(true);
 			try {
 				if (UpdateUtility.isUpToDate()) {
 					Logging.info("Client is up to date.");
@@ -239,7 +242,7 @@ public final class Client extends Application {
 				else {
 					Platform.runLater(() -> {
 						mainController.progressProperty().set(0.1);
-						mainController.setGlobalProgressText("Downloading update");
+						mainController.setGlobalProgressText(Client.getString("downloadingUpdate"));
 					});
 					Logging.info("Downloading update.");
 					downloadUpdate();
@@ -257,13 +260,13 @@ public final class Client extends Application {
 				mainController.setGlobalProgressText("");
 				mainController.progressProperty().set(0);
 			});
-			updatingProperty.set(false);
+			updateOngoingProperty.set(false);
 		}).start();
 	}
 
 	private static void displayUpdateNotification() {
-		final TrayNotification trayNotification = new TrayNotificationBuilder().title(Client.lang.getString("updateInstalled"))
-				.message(Client.lang.getString("clickToRestart"))
+		final TrayNotification trayNotification = new TrayNotificationBuilder().title(Client.getString("updateInstalled"))
+				.message(Client.getString("clickToRestart"))
 				.animation(Animations.SLIDE).build();
 
 		trayNotification.setOnMouseClicked(__ -> {
@@ -274,9 +277,9 @@ public final class Client extends Application {
 	}
 
 	private static void displayCantRetrieveUpdate() {
-		final TrayNotification trayNotification = new TrayNotificationBuilder().message(Client.lang.getString("couldntRetrieveUpdate"))
+		final TrayNotification trayNotification = new TrayNotificationBuilder().message(Client.getString("couldntRetrieveUpdate"))
 				.animation(Animations.POPUP)
-				.type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("updating")).build();
+				.type(NotificationTypeImplementations.ERROR).title(Client.getString("updating")).build();
 
 		trayNotification.setOnMouseClicked(clicked -> {
 			OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest");
@@ -325,8 +328,8 @@ public final class Client extends Application {
 		}
 		catch (final IOException exception) {
 			Logging.error("Failed to update.", exception);
-			final TrayNotification notification = new TrayNotificationBuilder().title(Client.lang.getString("applyingUpdate"))
-					.message(Client.lang.getString("couldntApplyUpdate"))
+			final TrayNotification notification = new TrayNotificationBuilder().title(Client.getString("applyingUpdate"))
+					.message(Client.getString("couldntApplyUpdate"))
 					.type(NotificationTypeImplementations.ERROR).build();
 
 			notification.setOnMouseClicked(__ -> {
@@ -342,6 +345,10 @@ public final class Client extends Application {
 	}
 
 	/**
+	 * <p>
+	 * TODO
+	 * BROKEN WHEN STARTED WITH INSTALLER.
+	 * </p>
 	 * Restarts the application.
 	 */
 	private static void selfRestart() {
@@ -395,6 +402,7 @@ public final class Client extends Application {
 
 	private static void readApplicationArguments(final String[] args) {
 		developmentMode = ArrayUtility.contains(args, "-d");
+
 	}
 
 	/**
@@ -434,5 +442,31 @@ public final class Client extends Application {
 		if (mainController.getActiveView() == view) {
 			mainController.reloadView();
 		}
+	}
+
+	/**
+	 * Loads the {@link View#SETTINGS settings view} and selects the {@link TextField} which
+	 * contains the SA-MP / GTA path.
+	 */
+	public void selectSampPathTextField() {
+		if (mainController.getActiveView() != View.SETTINGS) {
+			loadView(View.SETTINGS);
+		}
+		mainController.getSettingsController().ifPresent(SettingsController::selectSampPathTextField);
+	}
+
+	/**
+	 * @return {@link #lang the resourcebundle containing the currently loaded language}
+	 */
+	public static ResourceBundle getLangaugeResourceBundle() {
+		return lang;
+	}
+
+	/**
+	 * @param key they key to retrieve the value for
+	 * @return the value for the given key, using the {@link #lang} resource bundle
+	 */
+	public static String getString(final String key) {
+		return OptionalUtility.attempt(() -> lang.getString(key)).orElse("Invalid Key");
 	}
 }

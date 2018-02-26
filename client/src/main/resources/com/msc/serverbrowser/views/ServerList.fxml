@@ -22,6 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import com.msc.serverbrowser.gui.components.SampServerTable?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ButtonBar?>
 
 
 
@@ -35,44 +36,44 @@
 				<Button mnemonicParsing="false" onAction="#onClickAddToFavourites" text="%addToFavourites" />
 			</children>
 		</HBox>
-		<HBox spacing="5.0">
+		<HBox spacing="5.0" fx:id="tableTypeButtonContainer">
 			<fx:define>
 				<ToggleGroup fx:id="tableTypeToggleGroup"/>  
 			</fx:define>
 			<children>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" selected="true" onAction="#toggleFavouritesMode" text="Favourites" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleAllMode" text="All" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" onAction="#toggleHistoryMode" text="History" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" prefWidth="${tableTypeButtonContainer.width*0.33}" onAction="#toggleFavouritesMode" text="%favourites" maxWidth="Infinity" HBox.hgrow="ALWAYS" selected="true"/>
+				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" prefWidth="${tableTypeButtonContainer.width*0.33}" onAction="#toggleAllMode" text="%all" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" prefWidth="${tableTypeButtonContainer.width*0.33}" onAction="#toggleHistoryMode" text="%history" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
 			</children>
 		</HBox>
 		<SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
 			<columns>
-				<TableColumn sortable="true" text="%hostnameTableHeader">
+				<TableColumn text="%hostnameTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="hostname" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnPlayers" sortable="true" text="%playersTableHeader">
+				<TableColumn fx:id="columnPlayers" text="%playersTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="playersAndMaxPlayers" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn sortable="true" text="%gamemodeTableHeader">
+				<TableColumn text="%gamemodeTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="mode" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn sortable="true" text="%languageTableHeader">
+				<TableColumn text="%languageTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="language" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn sortable="true" text="%versionTableHeader">
+				<TableColumn text="%versionTableHeader">
 					<cellValueFactory>
 						<PropertyValueFactory property="version" />
 					</cellValueFactory>
 				</TableColumn>
-				<TableColumn fx:id="columnLastJoin" visible="false" sortable="true" text="Last visit">
+				<TableColumn fx:id="columnLastJoin" visible="false" text="%lastVisit">
 					<cellValueFactory>
 						<PropertyValueFactory property="lastJoin" />
 					</cellValueFactory>
@@ -133,6 +134,7 @@
 									<items>
 										<FXCollections fx:factory="observableArrayList">
 											<String fx:value="" />
+											<String fx:value="0.3.DL" />
 											<String fx:value="0.3.8" />
 											<String fx:value="0.3.7" />
 											<String fx:value="0.3z" />

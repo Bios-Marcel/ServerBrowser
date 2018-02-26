@@ -184,8 +184,9 @@ public final class GTAController {
 
 			if (serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {
 				final TextInputDialog dialog = new TextInputDialog();
-				dialog.setTitle("Connect to Server");
-				dialog.setHeaderText("Enter the servers password (Leave empty if u think there is none).");
+				Client.insertAlertOwner(dialog);
+				dialog.setTitle(Client.getString("connectToServer"));
+				dialog.setHeaderText(Client.getString("enterServerPasswordMessage"));
 
 				final Optional<String> result = dialog.showAndWait();
 				result.ifPresent(password -> GTAController.connectToServer(address, port, password));
@@ -197,8 +198,8 @@ public final class GTAController {
 		catch (final IOException exception) {
 			Logging.warn("Couldn't connect to server.", exception);
 
-			final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("serverMightBeOfflineConnectAnyways"), ButtonType.YES, ButtonType.NO);
-			alert.setTitle(Client.lang.getString("connectingToServer"));
+			final Alert alert = new Alert(AlertType.CONFIRMATION, Client.getString("serverMightBeOfflineConnectAnyways"), ButtonType.YES, ButtonType.NO);
+			alert.setTitle(Client.getString("connectingToServer"));
 			Client.insertAlertOwner(alert);
 
 			alert.showAndWait().ifPresent(button -> {
@@ -226,18 +227,20 @@ public final class GTAController {
 			arguments.add("-p");
 			arguments.add(port.toString());
 			arguments.add("-n");
-			arguments.add(retrieveUsernameFromRegistry());
+			// TODO Solve better
+			arguments.add(Optional.ofNullable(retrieveUsernameFromRegistry()).orElse("CHOOSE_NAME"));
 			if (Objects.nonNull(password) && !password.isEmpty()) {
 				arguments.add("-z");
 				arguments.add(password);
 			}
+
 			builder.command(arguments);
 
 			try {
 				builder.start();
 				return true;
 			}
-			catch (final IOException exception) {
+			catch (final Exception exception) {
 				Logging.warn("Error using sampcmd.exe", exception);
 			}
 		}
@@ -250,8 +253,8 @@ public final class GTAController {
 	 * possible.
 	 */
 	public static void showCantConnectToServerError() {
-		new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("cantConnect"))
-				.message(Client.lang.getString("addressNotValid"))
+		new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.getString("cantConnect"))
+				.message(Client.getString("addressNotValid"))
 				.animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 
@@ -389,8 +392,8 @@ public final class GTAController {
 	public static void displayCantLocateGTANotification() {
 		final TrayNotification trayNotification = new TrayNotificationBuilder()
 				.type(NotificationTypeImplementations.ERROR)
-				.title(Client.lang.getString("cantFindGTA"))
-				.message(Client.lang.getString("locateGTAManually"))
+				.title(Client.getString("cantFindGTA"))
+				.message(Client.getString("locateGTAManually"))
 				.animation(Animations.POPUP).build();
 
 		// TODO(MSC) Improve and try to focus component

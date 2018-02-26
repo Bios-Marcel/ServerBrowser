@@ -1,7 +1,8 @@
 # SA-MP Server Browser
 
-[![Build Status](https://travis-ci.org/Bios-Marcel/ServerBrowser.svg?branch=master)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7e9eab6cb5644617a590ef4e81a2e466)](https://www.codacy.com/app/Bios-Marcel/ServerBrowser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Bios-Marcel/ServerBrowser&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://img.shields.io/travis/Bios-Marcel/ServerBrowser.svg?style=flat-square)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
+[![Codacy grade](https://img.shields.io/codacy/grade/7e9eab6cb5644617a590ef4e81a2e466.svg?style=flat-square)](https://app.codacy.com/app/Bios-Marcel/ServerBrowser/dashboard)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/Bios-Marcel/ServerBrowser.svg?columns=all&style=flat-square)](https://waffle.io/Bios-Marcel/ServerBrowser) 
 
 ## Description
 
@@ -14,9 +15,9 @@ This application offers a row of tools for the `San Andreas-Multiplayer` mod for
 * Version changer
 * Username history
 * Access to SA-MP Settings via graphical userinterface
-* Access to SA-MP chatlogs
+* Access to SA-MP chatlogs (with colors and timestamps)
+* Server history
 * MORE TO COME ...
-  * Server history
   * Serverspecific usernames
   * Screenshot viewer
 
@@ -30,13 +31,15 @@ This software is currently available in the following languages (some might not 
 
 * English
 * German 
-* Georgian (Thanks to Medzvel)
-* Greek (Thanks to vassilis)
-* Dutch (Thanks to Jsytlez)
-* Russian (Thanks to Codeah)
-* Polish (Thanks to AbyssMorgan)
-* Romanian (Thanks to IstuntmanI)
-* Spanish (Thanks to Unrea1, updated by RIDE2DAY)
+* Georgian (Translated by Medzvel)
+* Greek (Translated by vassilis)
+* Dutch (Translated by Jsytlez)
+* Russian (Translated by Codeah)
+* Polish (Translated by AbyssMorgan)
+* Romanian (Translated by IstuntmanI)
+* Spanish (Translated by Unrea1, updated by RIDE2DAY)
+* Turkish (Translated by MustafaKemalAtaturk)
+* Bosnian (Translated by Tagic)
 
 ## Installation
 
@@ -49,7 +52,7 @@ The latest `launcher.jar` is available under https://github.com/Bios-Marcel/Serv
 #### Downloading the latest Installer
 
 The latest installer is also available under https://github.com/Bios-Marcel/ServerBrowser/releases/latest
-Unlike when using the `launcher.jar` file, the installer **won't require** you to download anything other than the installer himself.
+Unlike when using the `launcher.jar` file, the installer **won't require** you to download anything other than the installer itself.
 
 #### Build all the stuff yourself
 
@@ -86,9 +89,9 @@ There is a light and a dark theme, here are screenshots including both themes:
 
 ![Version Changer Light](https://i.imgur.com/B8ZnpDv.png)
 
-![Files Dark](https://i.imgur.com/r8fVdVx.png)
+![Files Dark](https://i.imgur.com/3sTYXAw.png)
 
-![Files Light](https://i.imgur.com/VNNX8TK.png)
+![Files Light](https://i.imgur.com/UvEcPHo.png)
 
 ![Settings Dark](https://i.imgur.com/RiFGrv7.png)
 
@@ -116,30 +119,50 @@ If possible try to escape all characters, since there is currently to UTF-8 supp
 Note: Some of the follwing key-value pairs might already be correct, in that case i don't know it though.
 
 #### German
-```
-lagcomp=lagcomp:
-inputMethodText=Input method text editing and language switching
-updatesSettingTitle=Updates
-```
+Done
 
 #### Georgian
 ```
 errorFetchingServers=Couldn't fetch servers
+favourites=Favourites
 pageSize=PageSize
 fetchingServers=Fetching servers, please wait a moment.
+enterFilterValue=Enter filter value
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
+lastVisit=Last visit
+visitWebsite=Visit Website
 gtaNotFoundPrompt=Will be automatically detected if left empty
+addToFavourites=Add to favourites
 rememberLastView=Remember last view
 inputMethodText=Input method text editing and language switching
+ba=Bosnian
+sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 cantFindGTA=Can't find GTA installation
+sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 customSampPath=Custom SA-MP Path
 noFavouriteServers=You don't have any favourites.
 directmode=Directmode (Fix chat text drawing problems)
+tr=Turkish
 activePlayers=Active players: {0}
+showChatlogColors=Show colors
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+restoreLegacySettingsToDefault=Restore SA-MP settings to default
+removeUsernamePlural=Remove usernames
 connectingToServer=Connecting to server
 allowCachingSampVersions=Allow caching downloaded SA-MP versions
 retrieving=Retrieving ...
+connectToServer=Connect to server
+removeFromFavourites=Remove from favourites
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
 multicoreUsage=Multicore usage
@@ -149,22 +172,46 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 #### Greek
 ```
 errorFetchingServers=Couldn't fetch servers
+favourites=Favourites
 fetchingServers=Fetching servers, please wait a moment.
 chatTimestamps=Chat Timestamps
+enterFilterValue=Enter filter value
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
+lastVisit=Last visit
+visitWebsite=Visit Website
 gtaNotFoundPrompt=Will be automatically detected if left empty
+addToFavourites=Add to favourites
+ba=Bosnian
 generalSettingsTitle=General
+sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 sampVersion=SA-MP Version {0}
 cantFindGTA=Can't find GTA installation
 ping=Ping:
+sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 noFavouriteServers=You don't have any favourites.
+tr=Turkish
 informationSettingsTitle=Information
+showChatlogColors=Show colors
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
 versionInfo=Version: {0}
+history=History
 chatlogs=Chatlogs
+restoreLegacySettingsToDefault=Restore SA-MP settings to default
+removeUsernamePlural=Remove usernames
 connectingToServer=Connecting to server
 retrieving=Retrieving ...
+connectToServer=Connect to server
 servers=Servers: {0}
+removeFromFavourites=Remove from favourites
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
@@ -173,20 +220,44 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 #### Dutch
 ```
 errorFetchingServers=Couldn't fetch servers
+favourites=Favourites
 fetchingServers=Fetching servers, please wait a moment.
+enterFilterValue=Enter filter value
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 gamemodeTableHeader=Gamemode
+lastVisit=Last visit
+visitWebsite=Visit Website
+addToFavourites=Add to favourites
+ba=Bosnian
+sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 cantFindGTA=Can't find GTA installation
 ping=Ping:
 downloadSettingTitle=Downloads
+sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 map=Map:
 website=Website:
 noFavouriteServers=You don't have any favourites.
+tr=Turkish
+showChatlogColors=Show colors
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+restoreLegacySettingsToDefault=Restore SA-MP settings to default
+removeUsernamePlural=Remove usernames
 updatesSettingTitle=Updates
 connectingToServer=Connecting to server
 retrieving=Retrieving ...
+connectToServer=Connect to server
 servers=Servers: {0}
+removeFromFavourites=Remove from favourites
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
 serverOffline=Server is offline.
@@ -196,13 +267,37 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 #### Russian
 ```
 errorFetchingServers=Couldn't fetch servers
+favourites=Favourites
+enterFilterValue=Enter filter value
 lagcomp=lagcomp:
+showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
+lastVisit=Last visit
+visitWebsite=Visit Website
+addToFavourites=Add to favourites
+ba=Bosnian
+sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 cantFindGTA=Can't find GTA installation
 ping=Ping:
+sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 noFavouriteServers=You don't have any favourites.
+tr=Turkish
+showChatlogColors=Show colors
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+restoreLegacySettingsToDefault=Restore SA-MP settings to default
+removeUsernamePlural=Remove usernames
 connectingToServer=Connecting to server
 retrieving=Retrieving ...
+connectToServer=Connect to server
+removeFromFavourites=Remove from favourites
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
@@ -210,39 +305,132 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 
 #### Polish
 ```
-errorFetchingServers=Couldn't fetch servers
-fetchingServers=Fetching servers, please wait a moment.
+favourites=Favourites
+enterFilterValue=Enter filter value
 lagcomp=lagcomp:
-locateGTAManually=Click here to enter your GTA path manually.
-cantFindGTA=Can't find GTA installation
+showTimestamps=Show times if available
+lastVisit=Last visit
+visitWebsite=Visit Website
+addToFavourites=Add to favourites
+ba=Bosnian
+sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 ping=Ping:
-noFavouriteServers=You don't have any favourites.
-connectingToServer=Connecting to server
-retrieving=Retrieving ...
-serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
-noServerHistory=You haven't joined any servers recently.
-openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
+sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
+tr=Turkish
+showChatlogColors=Show colors
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+restoreLegacySettingsToDefault=Restore SA-MP settings to default
+removeUsernamePlural=Remove usernames
+connectToServer=Connect to server
+removeFromFavourites=Remove from favourites
+checkingForUpdates=Checking for updates
 ```
 
 #### Romanian
 ```
 lagcomp=lagcomp:
+lastVisit=Last visit
+visitWebsite=Visit Website
+addToFavourites=Add to favourites
+ba=Bosnian
 generalSettingsTitle=General
+sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 ping=Ping:
-noFavouriteServers=You don't have any favourites.
-connectingToServer=Connecting to server
-serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
-noServerHistory=You haven't joined any servers recently.
+sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+restoreLegacySettingsToDefault=Restore SA-MP settings to default
+connectToServer=Connect to server
+removeFromFavourites=Remove from favourites
 ```
 
 #### Spanish
 ```
+favourites=Favourites
+enterFilterValue=Enter filter value
+showTimestamps=Show times if available
+lastVisit=Last visit
+visitWebsite=Visit Website
+addToFavourites=Add to favourites
+ba=Bosnian
 generalSettingsTitle=General
+sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
+sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 noFavouriteServers=You don't have any favourites.
+tr=Turkish
+showChatlogColors=Show colors
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+restoreLegacySettingsToDefault=Restore SA-MP settings to default
+removeUsernamePlural=Remove usernames
 no=No
 connectingToServer=Connecting to server
+connectToServer=Connect to server
+removeFromFavourites=Remove from favourites
+checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
+```
+
+#### Turkish
+```
+favourites=Favourites
+pageSize=PageSize
+enterFilterValue=Enter filter value
+showTimestamps=Show times if available
+gamemodeTableHeader=Gamemode
+lastVisit=Last visit
+visitWebsite=Visit Website
+addToFavourites=Add to favourites
+ba=Bosnian
+sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
+ping=Ping:
+sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
+fpsLimit=FPS Limit
+website=Website:
+showChatlogColors=Show colors
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+donate=Donate
+applyUsername=Apply username
+all=All
+removeUsernameSingular=Remove username
+downloadingUpdate=Downloading update
+history=History
+restoreLegacySettingsToDefault=Restore SA-MP settings to default
+removeUsernamePlural=Remove usernames
+retrieving=Retrieving ...
+connectToServer=Connect to server
+removeFromFavourites=Remove from favourites
+checkingForUpdates=Checking for updates
+```
+
+#### Bosnian
+```
+pageSize=PageSize
+lagcomp=lagcomp:
+gamemodeTableHeader=Gamemode
+visitWebsite=Visit Website
+addToFavourites=Add to favourites
+ping=Ping:
+fpsLimit=FPS Limit
+showChatlogColorsAsText=Show colors as text
+copyIpAddressAndPort=Copy IP address and port
+connectToServer=Connect to server
+removeFromFavourites=Remove from favourites
 ```
 
 ## Build

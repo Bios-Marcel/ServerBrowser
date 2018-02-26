@@ -24,9 +24,8 @@ public final class StringUtility {
 		final String[] replacementsNew = new String[replacements.length];
 		for (int i = 0; i < replacements.length; i++) {
 			final Object value = replacements[i];
-			final String replacementValue = Objects.isNull(value) ? null : value.toString();
-			if (replacementValue != null) {
-				replacementsNew[i] = replacementValue.replace("'", "''");
+			if (Objects.nonNull(value)) {
+				replacementsNew[i] = value.toString().replace("'", "''");
 			}
 		}
 		return MessageFormat.format(string, (Object[]) replacementsNew);
@@ -144,5 +143,15 @@ public final class StringUtility {
 
 		return possibleUrl
 				.matches("^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3})(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:/[^\\s]*)?$");
+	}
+
+	/**
+	 * Escapes certain characters in given html:
+	 *
+	 * @param html html to be escaped
+	 * @return the escaped html
+	 */
+	public static String escapeHTML(final String html) {
+		return html.replace("\"", "&quot").replace("&", "&amp").replace("<", "&lt").replace("<", "&gt");
 	}
 }

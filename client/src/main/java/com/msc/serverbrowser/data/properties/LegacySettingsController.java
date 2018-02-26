@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.basic.StringUtility;
 
 /**
  * Contains convenient methods for interacting with the SA-MP legacy settings.
@@ -85,14 +84,17 @@ public final class LegacySettingsController {
 	public static void restoreLegacySettings() {
 		final Properties properties = getLegacyProperties().orElse(new Properties());
 
-		properties.put(LegacySettingsController.AUDIO_MESSAGE_OFF, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT));
-		properties.put(LegacySettingsController.AUDIO_PROXY_OFF, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
-		properties.put(LegacySettingsController.DIRECT_MODE, StringUtility.stringToBoolean(LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT));
-		properties.put(LegacySettingsController.HEAD_MOVE, StringUtility.stringToBoolean(LegacySettingsController.DISABLE_HEAD_MOVE_DEFAULT));
-		properties.put(LegacySettingsController.FPS_LIMIT, Integer.parseInt(LegacySettingsController.FPS_LIMIT_DEFAULT));
-		properties.put(LegacySettingsController.PAGE_SIZE, Integer.parseInt(LegacySettingsController.PAGE_SIZE_DEFAULT));
-		properties.put(LegacySettingsController.IME, StringUtility.stringToBoolean(LegacySettingsController.IME_DEFAULT));
-		properties.put(LegacySettingsController.MULTICORE, StringUtility.stringToBoolean(LegacySettingsController.MULTICORE_DEFAULT));
-		properties.put(LegacySettingsController.TIMESTAMP, StringUtility.stringToBoolean(LegacySettingsController.TIMESTAMP_DEFAULT));
+		properties.put(LegacySettingsController.AUDIO_MESSAGE_OFF, LegacySettingsController.AUDIO_MESSAGE_OFF_DEFAULT);
+		properties.put(LegacySettingsController.AUDIO_PROXY_OFF, LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT);
+		properties.put(LegacySettingsController.DIRECT_MODE, LegacySettingsController.AUDIO_PROXY_OFF_DEFAULT);
+		properties.put(LegacySettingsController.HEAD_MOVE, LegacySettingsController.DISABLE_HEAD_MOVE_DEFAULT);
+		properties.put(LegacySettingsController.FPS_LIMIT, LegacySettingsController.FPS_LIMIT_DEFAULT);
+		properties.put(LegacySettingsController.PAGE_SIZE, LegacySettingsController.PAGE_SIZE_DEFAULT);
+		properties.put(LegacySettingsController.IME, LegacySettingsController.IME_DEFAULT);
+		properties.put(LegacySettingsController.MULTICORE, LegacySettingsController.MULTICORE_DEFAULT);
+		properties.put(LegacySettingsController.TIMESTAMP, LegacySettingsController.TIMESTAMP_DEFAULT);
+		properties.put(LegacySettingsController.NO_NAME_TAG_STATUS, LegacySettingsController.NO_NAME_TAG_STATUS_DEFAULT);
+
+		save(properties);
 	}
 }

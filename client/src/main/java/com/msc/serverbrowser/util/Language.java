@@ -24,7 +24,9 @@ public enum Language {
 	RU("ru", "Russian"),
 	PL("pl", "Polish"),
 	RO("ro", "Romanian"),
-	ES("es", "Spanish");
+	ES("es", "Spanish"),
+	TR("tr", "Turkish"),
+	BA("ba", "Bosnian");
 
 	private final String	shortcut;
 	private final String	defaultName;
@@ -46,8 +48,8 @@ public enum Language {
 
 	@Override
 	public String toString() {
-		if (Objects.nonNull(Client.lang)) {
-			final String languageName = Client.lang.getString(shortcut);
+		if (Objects.nonNull(Client.getLangaugeResourceBundle())) {
+			final String languageName = Client.getString(shortcut);
 
 			if (ClientPropertiesController.getPropertyAsString(Property.LANGUAGE).equalsIgnoreCase(EN.shortcut)) {
 				return languageName;

@@ -67,7 +67,7 @@
 									<children>
 										<Label maxHeight="Infinity" text="%fpsLimit" />
 										<Label maxHeight="Infinity" text="%pageSize" GridPane.rowIndex="1" />
-										<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1" editable="true">
+										<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1" editable="true" >
 											<valueFactory>
 												<SpinnerValueFactory.IntegerSpinnerValueFactory max="90" min="20" />
 											</valueFactory>
@@ -87,6 +87,11 @@
 								<CheckBox fx:id="imeCheckBox" mnemonicParsing="false" text="%inputMethodText" />
 								<CheckBox fx:id="directModeCheckBox" mnemonicParsing="false" text="%directmode" />
 								<CheckBox fx:id="nameTagStatusCheckBox" mnemonicParsing="false" text="%showAfkSymbols" />
+								<HBox alignment="CENTER_RIGHT">
+									<children>
+										<Button onAction="#restoreLegacySettings" text="%restoreDefaults"/>
+									</children>
+								</HBox>
 							</children>
 						</VBox>
 					</content>

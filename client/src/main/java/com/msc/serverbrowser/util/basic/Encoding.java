@@ -12,12 +12,12 @@ import org.mozilla.universalchardet.UniversalDetector;
  * @author Marcel
  */
 public final class Encoding {
-	private static UniversalDetector detector = new UniversalDetector(null);
-	
+	private static final UniversalDetector DETECTOR = new UniversalDetector(null);
+
 	private Encoding() {
 		// Constructor to prevent instantiation
 	}
-	
+
 	/**
 	 * Tries to decode a given byte array using the given charset. As a fallback
 	 * {@link StandardCharsets#UTF_8} will be used.
@@ -31,11 +31,13 @@ public final class Encoding {
 	public static String decodeUsingCharsetIfPossible(final byte[] toDecode, final String charset) {
 		try {
 			return new String(toDecode, charset);
-		} catch (@SuppressWarnings("unused") final UnsupportedEncodingException exception) {// In case that the given encoding is invalid, we use UTF-8 as fallback
+		}
+		catch (@SuppressWarnings("unused") final UnsupportedEncodingException exception) {
+			// In case that the given encoding is invalid, we use UTF-8 as fallback
 			return new String(toDecode, StandardCharsets.UTF_8);
 		}
 	}
-	
+
 	/**
 	 * Returns an {@link Optional} of the charset that has been used or an {@link Optional#empty()}
 	 * if no charset could be found.
@@ -45,11 +47,15 @@ public final class Encoding {
 	 * @return {@link Optional} of the charset or an {@link Optional#empty()}
 	 */
 	public static Optional<String> getEncoding(final byte[] data) {
-		detector.handleData(data, 0, data.length - 1);
-		detector.dataEnd();
-		
-		final String charset = detector.getDetectedCharset();
-		detector.reset();
-		return Optional.ofNullable(charset);
+		try {
+			DETECTOR.handleData(data, 0, data.length - 1);
+			DETECTOR.dataEnd();
+			final String charset = DETECTOR.getDetectedCharset();
+			DETECTOR.reset();
+			return Optional.ofNullable(charset);
+		}
+		catch (@SuppressWarnings("unused") final NullPointerException exception) {
+			return Optional.empty();
+		}
 	}
 }

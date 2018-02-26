@@ -95,15 +95,15 @@ public class MainView {
 
 		githubLink = new Hyperlink("\uf09b");
 		githubLink.getStyleClass().add("info-icon");
-		githubLink.setTooltip(new Tooltip(Client.lang.getString("openGithubTooltip")));
+		githubLink.setTooltip(new Tooltip(Client.getString("openGithubTooltip")));
 		githubLink.setFocusTraversable(false);
 		helpLink = new Hyperlink("\uf059");
 		helpLink.getStyleClass().add("info-icon");
-		helpLink.setTooltip(new Tooltip(Client.lang.getString("openGithubWikiTooltip")));
+		helpLink.setTooltip(new Tooltip(Client.getString("openGithubWikiTooltip")));
 		helpLink.setFocusTraversable(false);
-		donateLink = new Hyperlink("Donate \uf0d6");
+		donateLink = new Hyperlink(Client.getString("donate") + " \uf0d6");
 		donateLink.getStyleClass().add("donate-button");
-		donateLink.setTooltip(new Tooltip(Client.lang.getString("openDonationPageTooltip")));
+		donateLink.setTooltip(new Tooltip(Client.getString("openDonationPageTooltip")));
 		donateLink.setMaxHeight(Double.MAX_VALUE);
 		donateLink.setFocusTraversable(false);
 

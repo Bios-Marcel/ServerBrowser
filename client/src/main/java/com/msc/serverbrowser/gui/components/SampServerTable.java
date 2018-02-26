@@ -2,11 +2,14 @@ package com.msc.serverbrowser.gui.components;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.FavouritesController;
@@ -31,9 +34,14 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
+import javafx.scene.text.Text;
 
 /**
  * {@link TableView} that was made for the ServerList View, contains a special TableRowFactory and
@@ -45,18 +53,19 @@ import javafx.scene.input.MouseEvent;
 public class SampServerTable extends TableView<SampServer> {
 	private SampServerTableMode tableMode = SampServerTableMode.FAVOURITES;
 
-	private final MenuItem	addToFavouritesMenuItem			= new MenuItem("Add to Favourites");
-	private final MenuItem	removeFromFavouritesMenuItem	= new MenuItem("Remove from Favourites");
-	private final MenuItem	visitWebsiteMenuItem			= new MenuItem("Visit Website");
-	private final MenuItem	connectMenuItem					= new MenuItem("Connect to Server");
-	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem("Copy IP Address and Port");
+	private final MenuItem	addToFavouritesMenuItem			= new MenuItem(Client.getString("addToFavourites"));
+	private final MenuItem	removeFromFavouritesMenuItem	= new MenuItem(Client.getString("removeFromFavourites"));
+	private final MenuItem	visitWebsiteMenuItem			= new MenuItem(Client.getString("visitWebsite"));
+	private final MenuItem	connectMenuItem					= new MenuItem(Client.getString("connectToServer"));
+	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem(Client.getString("copyIpAddressAndPort"));
 
 	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	private final ObservableList<SampServer> servers = getItems();
 
-	private final FilteredList<SampServer>	filteredServers	= new FilteredList<>(servers);
-	private final SortedList<SampServer>	sortedServers	= new SortedList<>(filteredServers);
+	private final FilteredList<SampServer>	filteredServers					= new FilteredList<>(servers);
+	private final SortedList<SampServer>	sortedServers					= new SortedList<>(filteredServers);
+	private static final DataFormat			OLD_INDEXES_LIST_DATA_FORMAT	= new DataFormat("index");
 
 	/**
 	 * Contructor; sets the TableRowFactory, the ContextMenu Actions and table settings.
@@ -115,9 +124,9 @@ public class SampServerTable extends TableView<SampServer> {
 	}
 
 	private void deleteSelectedFavourites() {
-		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("sureYouWantToDeleteFavourites"), ButtonType.YES, ButtonType.NO);
+		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.getString("sureYouWantToDeleteFavourites"), ButtonType.YES, ButtonType.NO);
 		Client.insertAlertOwner(alert);
-		alert.setTitle(Client.lang.getString("deleteFavourites"));
+		alert.setTitle(Client.getString("deleteFavourites"));
 		final Optional<ButtonType> result = alert.showAndWait();
 
 		result.ifPresent(buttonType -> {
@@ -130,9 +139,15 @@ public class SampServerTable extends TableView<SampServer> {
 	}
 
 	private void initTableRowFactory() {
+
 		setRowFactory(facotry -> {
 			final TableRow<SampServer> row = new TableRow<>();
 
+			row.setOnDragOver(event -> event.acceptTransferModes(TransferMode.MOVE));
+			row.setOnDragEntered(event -> row.getStyleClass().add("overline"));
+			row.setOnDragExited(event -> row.getStyleClass().remove("overline"));
+			row.setOnDragDetected(event -> onRowDragDetected(row, event));
+			row.setOnDragDropped(event -> onRowDragDropped(row, event));
 			row.setOnMouseClicked(clicked -> {
 				// A row has been clicked, so we want to hide the previous context menu
 				contextMenu.hide();
@@ -149,6 +164,61 @@ public class SampServerTable extends TableView<SampServer> {
 
 			return row;
 		});
+	}
+
+	private void onRowDragDropped(final TableRow<SampServer> row, final DragEvent event) {
+		final Dragboard dragBoard = event.getDragboard();
+		@SuppressWarnings("unchecked")
+		final List<Integer> oldIndexes = (List<Integer>) dragBoard.getContent(OLD_INDEXES_LIST_DATA_FORMAT);
+		final int newIndex = servers.indexOf(row.getItem());
+		final int newIndexCorrect = newIndex == -1 ? servers.size() : newIndex;
+
+		if (oldIndexes.contains(newIndexCorrect)) {
+			return;
+		}
+
+		if (newIndexCorrect != oldIndexes.get(0)) {
+			final List<SampServer> draggedServer = getSelectionModel().getSelectedItems().stream().collect(Collectors.toList());
+
+			if (oldIndexes.get(0) < newIndexCorrect) {
+				Collections.reverse(draggedServer);
+				draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
+
+				Collections.sort(oldIndexes);
+				Collections.reverse(oldIndexes);
+				oldIndexes.forEach(index -> servers.remove(index.intValue()));
+			}
+			else {
+				Collections.sort(oldIndexes);
+				Collections.reverse(oldIndexes);
+				oldIndexes.forEach(index -> servers.remove(index.intValue()));
+
+				Collections.reverse(draggedServer);
+				draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
+			}
+		}
+	}
+
+	private void onRowDragDetected(final TableRow<SampServer> row, final MouseEvent event) {
+		final List<SampServer> selectedServers = getSelectionModel().getSelectedItems();
+		final SampServer rowServer = row.getItem();
+		if (servers.size() <= 1 || selectedServers.isEmpty() || !selectedServers.contains(rowServer)) {
+			return;
+		}
+
+		final ClipboardContent clipboardContent = new ClipboardContent();
+
+		final List<Integer> selectedServerIndices = getSelectionModel().getSelectedItems().stream()
+				.map(servers::indexOf)
+				.collect(Collectors.toList());
+		clipboardContent.put(OLD_INDEXES_LIST_DATA_FORMAT, selectedServerIndices);
+
+		final StringJoiner ghostString = new StringJoiner(System.lineSeparator());
+		selectedServers.forEach(server -> ghostString.add(server.getHostname() + " - " + server.toString()));
+
+		final Dragboard dragBoard = startDragAndDrop(TransferMode.MOVE);
+		dragBoard.setDragView(new Text(ghostString.toString()).snapshot(null, null), event.getX(), event.getY());
+		dragBoard.setContent(clipboardContent);
 	}
 
 	private void handleClick(final TableRow<SampServer> row, final MouseEvent clicked) {

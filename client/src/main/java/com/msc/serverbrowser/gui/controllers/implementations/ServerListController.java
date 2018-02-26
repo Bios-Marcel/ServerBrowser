@@ -56,6 +56,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Pair;
 
 /**
  * Controller for the Server view.
@@ -67,11 +68,11 @@ public class ServerListController implements ViewController {
 	private static Thread	serverLookup;
 	private static Thread	serverInfoUpdateThread;
 
-	private final String RETRIEVING = Client.lang.getString("retrieving");
+	private final String RETRIEVING = Client.getString("retrieving");
 
-	private final String	TOO_MUCH_PLAYERS	= Client.lang.getString("tooMuchPlayers");
-	private final String	SERVER_OFFLINE		= Client.lang.getString("serverOffline");
-	private final String	SERVER_EMPTY		= Client.lang.getString("serverEmpty");
+	private final String	TOO_MUCH_PLAYERS	= Client.getString("tooMuchPlayers");
+	private final String	SERVER_OFFLINE		= Client.getString("serverOffline");
+	private final String	SERVER_EMPTY		= Client.getString("serverEmpty");
 
 	@FXML private ToggleGroup tableTypeToggleGroup;
 
@@ -191,19 +192,17 @@ public class ServerListController implements ViewController {
 		switch (mode) {
 			case ALL:
 				columnLastJoin.setVisible(false);
-				serverTable.setPlaceholder(new Label(Client.lang.getString("fetchingServers")));
+				serverTable.setPlaceholder(new Label(Client.getString("fetchingServers")));
 				fillTableWithOnlineServerList();
 				break;
 			case FAVOURITES:
 				columnLastJoin.setVisible(false);
-				// TODO-localize
-				serverTable.setPlaceholder(new Label(Client.lang.getString("noFavouriteServers")));
+				serverTable.setPlaceholder(new Label(Client.getString("noFavouriteServers")));
 				serverTable.addAll(FavouritesController.getFavourites());
 				ServerConfig.initLastJoinData(serverTable.getDataList());
 				break;
 			case HISTORY:
-				// TODO-localize
-				serverTable.setPlaceholder(new Label(Client.lang.getString("noServerHistory")));
+				serverTable.setPlaceholder(new Label(Client.getString("noServerHistory")));
 				columnLastJoin.setVisible(true);
 				final List<SampServer> servers = ServerConfig.getLastJoinedServers();
 				servers.forEach(server -> updateServerInfo(server, false));
@@ -220,16 +219,16 @@ public class ServerListController implements ViewController {
 			try {
 				final List<SampServer> serversToAdd = ServerUtility.fetchServersFromSouthclaws();
 				ServerConfig.initLastJoinData(serversToAdd);
-				Platform.runLater(() -> {
-					if (Objects.nonNull(serverLookup) && !serverLookup.isInterrupted() && serverTable.getTableMode() == SampServerTableMode.ALL) {
+				if (Objects.nonNull(serverLookup) && !serverLookup.isInterrupted() && serverTable.getTableMode() == SampServerTableMode.ALL) {
+					Platform.runLater(() -> {
 						serverTable.addAll(serversToAdd);
 						serverTable.refresh();
-					}
-				});
+					});
+				}
 			}
 			catch (final IOException exception) {
 				Logging.error("Couldn't retrieve data from announce api.", exception);
-				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.lang.getString("errorFetchingServers"))));
+				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.getString("errorFetchingServers"))));
 			}
 
 			Platform.runLater(() -> updateGlobalInfo());
@@ -252,7 +251,7 @@ public class ServerListController implements ViewController {
 	 *            the number of active players
 	 */
 	protected void setPlayerCount(final int activePlayers) {
-		playerCount.setText(MessageFormat.format(Client.lang.getString("activePlayers"), activePlayers));
+		playerCount.setText(MessageFormat.format(Client.getString("activePlayers"), activePlayers));
 	}
 
 	/**
@@ -262,12 +261,12 @@ public class ServerListController implements ViewController {
 	 *            the number of active servers
 	 */
 	private void setServerCount(final int activeServers) {
-		serverCount.setText(MessageFormat.format(Client.lang.getString("servers"), activeServers));
+		serverCount.setText(MessageFormat.format(Client.getString("servers"), activeServers));
 	}
 
 	private void setPlayerComparator() {
 		columnPlayers.setComparator((stringOne, stringTwo) -> {
-			final String maxPlayersRemovalRegex = "[/](.*)";
+			final String maxPlayersRemovalRegex = "/.*";
 			final int playersOne = Integer.parseInt(stringOne.replaceAll(maxPlayersRemovalRegex, ""));
 			final int playersTwo = Integer.parseInt(stringTwo.replaceAll(maxPlayersRemovalRegex, ""));
 
@@ -302,20 +301,23 @@ public class ServerListController implements ViewController {
 
 	@FXML
 	private void onClickAddToFavourites() {
-		final String address = addressTextField.getText();
-		if (Objects.nonNull(address) && !address.isEmpty()) {
-			final String[] ipAndPort = addressTextField.getText().split("[:]");
-			if (ipAndPort.length == 1) {
-				addServerToFavourites(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT);
-			}
-			else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1])) {
-				addServerToFavourites(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
+
+		final Optional<Pair<String, String>> address = getIpAndPort();
+
+		address.ifPresent(data -> {
+			if (ServerUtility.isPortValid(data.getValue())) {
+				addServerToFavourites(data.getKey(), Integer.parseInt(data.getValue()));
 			}
 			else {
-				new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.lang.getString("addToFavourites"))
-						.message("cantAddToFavouritesAddressInvalid").animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+				new TrayNotificationBuilder()
+						.type(NotificationTypeImplementations.ERROR)
+						.title(Client.getString("addToFavourites"))
+						.message(Client.getString("cantAddToFavouritesAddressInvalid"))
+						.animation(Animations.POPUP)
+						.build()
+						.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 			}
-		}
+		});
 	}
 
 	private void addServerToFavourites(final String ip, final int port) {
@@ -327,16 +329,33 @@ public class ServerListController implements ViewController {
 
 	@FXML
 	private void onClickConnect() {
-		final String[] ipAndPort = Optional.ofNullable(addressTextField.getText()).orElse("").split("[:]");
-		if (ipAndPort.length == 1) {
-			GTAController.tryToConnect(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT);
+
+		final Optional<Pair<String, String>> address = getIpAndPort();
+
+		address.ifPresent(data -> {
+			if (ServerUtility.isPortValid(data.getValue())) {
+				GTAController.tryToConnect(data.getKey(), Integer.parseInt(data.getValue()));
+			}
+			else {
+				GTAController.showCantConnectToServerError();
+			}
+		});
+	}
+
+	private Optional<Pair<String, String>> getIpAndPort() {
+		final String address = addressTextField.getText();
+
+		if (Objects.nonNull(address) && !address.isEmpty()) {
+			final String[] ipAndPort = addressTextField.getText().split("[:]");
+			if (ipAndPort.length == 1) {
+				return Optional.of(new Pair<>(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT.toString()));
+			}
+			else if (ipAndPort.length == 2) {
+				return Optional.of(new Pair<>(ipAndPort[0], ipAndPort[1]));
+			}
 		}
-		else if (ipAndPort.length == 2 && ServerUtility.isPortValid(ipAndPort[1])) {
-			GTAController.tryToConnect(ipAndPort[0], Integer.parseInt(ipAndPort[1]));
-		}
-		else {
-			GTAController.showCantConnectToServerError();
-		}
+
+		return Optional.empty();
 	}
 
 	@FXML
@@ -445,7 +464,7 @@ public class ServerListController implements ViewController {
 					query.getBasicPlayerInfo().ifPresent(players -> playerList.addAll(players));
 					final long ping = query.getPing();
 
-					if (applyDataToUI) {
+					if (!serverInfoUpdateThread.isInterrupted() && applyDataToUI) {
 						applyData(server, playerList, ping);
 					}
 					FavouritesController.updateServerData(server);
@@ -477,7 +496,7 @@ public class ServerListController implements ViewController {
 	private void applyData(final SampServer server, final ObservableList<Player> playerList, final long ping) {
 		if (!serverInfoUpdateThread.isInterrupted()) {
 			Platform.runLater(() -> {
-				serverPassword.setText(server.isPassworded() ? Client.lang.getString("yes") : Client.lang.getString("no"));
+				serverPassword.setText(server.isPassworded() ? Client.getString("yes") : Client.getString("no"));
 				serverPing.setText(String.valueOf(ping));
 				mapLabel.setText(server.getMap());
 				websiteLink.setText(server.getWebsite());

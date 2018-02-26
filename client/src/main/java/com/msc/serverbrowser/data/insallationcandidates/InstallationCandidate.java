@@ -14,24 +14,24 @@ public class InstallationCandidate {
 	 * tells us which installation candidate it belongs to.
 	 */
 	private final String sampDllChecksum;
-	
+
 	/**
 	 * The Name of the release candidate, for example 'SA-MP Client 5.0'.
 	 */
 	private final String name;
-	
+
 	/**
 	 * This is where the installation candidate lies, might be inside of jar, the
 	 * filesystem or even somewhere on the internet.
 	 */
 	private final String url;
-	
+
 	/**
 	 * Used to verify that the version of SA-MP that is to be installed hasn't been
 	 * altered after creation of this {@link InstallationCandidate}.
 	 */
 	private final String checksum;
-	
+
 	/**
 	 * <p>
 	 * Determines wether the source for this {@link InstallationCandidate} is on the
@@ -42,14 +42,14 @@ public class InstallationCandidate {
 	 * parse the url in order to understand what it stands for.
 	 * </p>
 	 */
-	private final SourceType sourceType;
-	
+	private final boolean download;
+
 	/**
 	 * Determines wether this installation is usermade or one of the default
 	 * installation candidates.
 	 */
 	private final boolean custom;
-	
+
 	/**
 	 * @param sampDllChecksum
 	 *            Checksum used to find out wich version is installe
@@ -59,56 +59,56 @@ public class InstallationCandidate {
 	 *            The url from where the files are take
 	 * @param custom
 	 *            usermade or default
-	 * @param sourceType
-	 *            Internet, FileSystem or Ressource in Jar
+	 * @param download
+	 *            true if the ressource lies in the internet
 	 * @param urlTargetChecksum
 	 *            Checksum of files behind url
 	 */
-	public InstallationCandidate(final String sampDllChecksum, final String name, final String url, final boolean custom, final SourceType sourceType,
-					final String urlTargetChecksum) {
+	public InstallationCandidate(final String sampDllChecksum, final String name, final String url, final boolean custom, final boolean download,
+			final String urlTargetChecksum) {
 		this.sampDllChecksum = Objects.requireNonNull(sampDllChecksum);
 		this.name = name;
 		this.url = url;
 		this.custom = custom;
-		this.sourceType = sourceType;
+		this.download = download;
 		this.checksum = urlTargetChecksum;
 	}
-	
+
 	/**
 	 * @return {@link #sampDllChecksum}
 	 */
 	public String getSampDLLChecksum() {
 		return sampDllChecksum;
 	}
-	
+
 	/**
 	 * @return {@link #name}
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @return {@link #url}
 	 */
 	public String getUrl() {
 		return url;
 	}
-	
+
 	/**
 	 * @return {@link #custom}
 	 */
 	public boolean isCustom() {
 		return custom;
 	}
-	
+
 	/**
-	 * @return {@link #sourceType}
+	 * @return {@link #download}
 	 */
-	public SourceType getSourceType() {
-		return sourceType;
+	public boolean isDownload() {
+		return download;
 	}
-	
+
 	/**
 	 * @return {@link #checksum}
 	 */

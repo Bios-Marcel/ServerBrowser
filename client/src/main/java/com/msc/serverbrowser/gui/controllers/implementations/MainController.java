@@ -2,6 +2,7 @@ package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.msc.serverbrowser.Client;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
@@ -11,6 +12,7 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.gui.views.FilesView;
 import com.msc.serverbrowser.gui.views.MainView;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.basic.OptionalUtility;
 
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
@@ -19,6 +21,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 
 /**
@@ -43,6 +47,20 @@ public class MainController implements ViewController {
 		Font.loadFont(MainController.class.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(), 12);
 		configureMenuItems();
 		registerBottomBarHyperlinks();
+		if (Client.isDevelopmentModeActivated()) {
+			registerDevShortcuts();
+		}
+	}
+
+	private void registerDevShortcuts() {
+		mainView.getRootPane().addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+			if (event.isControlDown() && event.getCode() == KeyCode.D) {
+				final boolean currentValue = ClientPropertiesController.getPropertyAsBoolean(Property.USE_DARK_THEME);
+				ClientPropertiesController.setProperty(Property.USE_DARK_THEME, !currentValue);
+				Client.getInstance().applyTheme();
+				Client.getInstance().reloadViewIfLoaded(getActiveView());
+			}
+		});
 	}
 
 	private void configureMenuItems() {
@@ -133,14 +151,12 @@ public class MainController implements ViewController {
 		mainView.removeNodesFromBottomBar();
 
 		final Parent loadedNode;
-		switch (view) {
-			case FILES:
-				loadedNode = loadFilesView();
-				break;
-			// $CASES-OMITTED$
-			default:
-				loadedNode = loadFXML(view);
-				break;
+
+		if (view == View.FILES) {
+			loadedNode = loadFilesView();
+		}
+		else {
+			loadedNode = loadFXML(view);
 		}
 
 		initViewData(view, loadedNode);
@@ -157,7 +173,7 @@ public class MainController implements ViewController {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
-			loader.setResources(Client.lang);
+			loader.setResources(Client.getLangaugeResourceBundle());
 
 			// Creating a new instance of the specified controller, controllers never have
 			// constructor arguments, therefore this is supposedly fine.
@@ -191,6 +207,16 @@ public class MainController implements ViewController {
 	 */
 	public void reloadView() {
 		loadView(activeView);
+	}
+
+	/**
+	 * Returns an {@link Optional} of the current {@link ViewController} and tries casting it into
+	 * {@link SettingsController}.
+	 *
+	 * @return {@link Optional} of {@link #activeSubViewController} or empty
+	 */
+	public Optional<SettingsController> getSettingsController() {
+		return OptionalUtility.cast(activeSubViewController);
 	}
 
 	@Override

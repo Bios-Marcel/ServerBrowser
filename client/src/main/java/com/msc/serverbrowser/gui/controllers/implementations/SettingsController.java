@@ -1,13 +1,14 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.text.MessageFormat;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
+import com.github.plushaze.traynotification.animations.Animations;
+import com.github.plushaze.traynotification.notification.NotificationTypeImplementations;
+import com.github.plushaze.traynotification.notification.TrayNotificationBuilder;
 import com.msc.serverbrowser.Client;
-import com.msc.serverbrowser.data.CacheController;
+import com.msc.serverbrowser.data.InstallationCandidateCache;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.LegacySettingsController;
 import com.msc.serverbrowser.data.properties.Property;
@@ -15,8 +16,10 @@ import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 import com.msc.serverbrowser.util.Language;
 import com.msc.serverbrowser.util.UpdateUtility;
+import com.msc.serverbrowser.util.basic.MathUtility;
 import com.msc.serverbrowser.util.basic.StringUtility;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -62,7 +65,7 @@ public class SettingsController implements ViewController {
 	@FXML private CheckBox			directModeCheckBox;
 	@FXML private CheckBox			nameTagStatusCheckBox;
 
-	// TODO(MSC) Connection Settings
+	// TODO(MSC) Connection Settings SERIOUSLY TODO TODO
 	// @FXML
 	// private CheckBox askForUsernameOnConnectCheckBox;
 
@@ -77,11 +80,8 @@ public class SettingsController implements ViewController {
 	@Override
 	public void initialize() {
 		initInformationArea();
-
 		initPropertyComponents();
-
-		// SA-MP properties
-		configureLegacyPropertyComponents();
+		configureSampLegacyPropertyComponents();
 	}
 
 	private void initPropertyComponents() {
@@ -97,9 +97,8 @@ public class SettingsController implements ViewController {
 		final Language toSelectLanguage = Language.getByShortcut(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE)).get();
 		languageComboBox.getSelectionModel().select(toSelectLanguage);
 		languageComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, newVal) -> {
-			final Locale locale = new Locale(newVal.getShortcut());
-			Client.lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
 			ClientPropertiesController.setProperty(Property.LANGUAGE, newVal.getShortcut());
+			Client.initLanguageFiles();
 			Client.getInstance().reloadViewIfLoaded(View.SETTINGS);
 		});
 
@@ -131,19 +130,25 @@ public class SettingsController implements ViewController {
 		setupCheckBox(allowCachingDownloadsCheckBox, Property.ALLOW_CACHING_DOWNLOADS);
 
 		// Adding a listener to disable the update button incase an update is ongoing
-		final BooleanProperty updatingProperty = Client.getInstance().updatingProperty;
+		final BooleanProperty updatingProperty = Client.getInstance().updateOngoingProperty;
 		updatingProperty.addListener((observable, oldVal, newVal) -> {
 			manualUpdateButton.setDisable(newVal);
 		});
 		manualUpdateButton.setDisable(updatingProperty.get());
 	}
 
-	private void configureLegacyPropertyComponents() {
+	private void configureSampLegacyPropertyComponents() {
 		final Properties legacyProperties = LegacySettingsController.getLegacyProperties().orElse(new Properties());
 		initLegacySettings(legacyProperties);
 
-		fpsLimitSpinner.valueProperty().addListener(__ -> changeLegacyIntegerSetting(LegacySettingsController.FPS_LIMIT, fpsLimitSpinner.getValue()));
-		pageSizeSpinner.valueProperty().addListener(__ -> changeLegacyIntegerSetting(LegacySettingsController.PAGE_SIZE, pageSizeSpinner.getValue()));
+		fpsLimitSpinner.valueProperty().addListener(__ -> {
+			final int value = MathUtility.limitUpperAndLower(fpsLimitSpinner.getValue(), 20, 90);
+			changeLegacyIntegerSetting(LegacySettingsController.FPS_LIMIT, value);
+		});
+		pageSizeSpinner.valueProperty().addListener(__ -> {
+			final int value = MathUtility.limitUpperAndLower(pageSizeSpinner.getValue(), 10, 20);
+			changeLegacyIntegerSetting(LegacySettingsController.PAGE_SIZE, value);
+		});
 
 		multicoreCheckbox.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.MULTICORE, multicoreCheckbox.isSelected()));
 		audioMsgCheckBox.setOnAction(__ -> changeLegacyBooleanSetting(LegacySettingsController.AUDIO_MESSAGE_OFF, !audioMsgCheckBox.isSelected()));
@@ -159,7 +164,7 @@ public class SettingsController implements ViewController {
 		final StringBuilder builder = new StringBuilder(40);
 
 		builder.append("SA-MP Server Browser").append(System.lineSeparator()).append(System.lineSeparator())
-				.append(MessageFormat.format(Client.lang.getString("versionInfo"), UpdateUtility.VERSION));
+				.append(MessageFormat.format(Client.getString("versionInfo"), UpdateUtility.VERSION));
 
 		informationLabel.setText(builder.toString());
 	}
@@ -229,27 +234,42 @@ public class SettingsController implements ViewController {
 		});
 	}
 
-	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickManualUpdate() {
 		Client.getInstance().checkForUpdates();
 	}
 
-	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickClearDownloadCache() {
-		CacheController.clearVersionCache();
+
+		final boolean cacheSuccessfullyCleared = InstallationCandidateCache.clearVersionCache();
+
+		if (cacheSuccessfullyCleared) {
+			new TrayNotificationBuilder()
+					.type(NotificationTypeImplementations.SUCCESS)
+					.message("Cache has been successfully cleared.")
+					.title("Clearing cache")
+					.animation(Animations.POPUP)
+					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+		}
+		else {
+			new TrayNotificationBuilder()
+					.type(NotificationTypeImplementations.ERROR)
+					.message("Couldn't clear cache.")
+					.animation(Animations.POPUP)
+					.title("Clearing cache")
+					.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
+		}
 	}
 
 	/**
 	 * Restores all settings to default. Some settings like {@link Property#DEVELOPMENT} and
 	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change those anyways.
 	 */
-	@SuppressWarnings("static-method") // Can't be static because of FXML injection
 	@FXML
 	private void onClickRestore() {
-		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.lang.getString("sureYouWantToRestoreSettings"), ButtonType.YES, ButtonType.NO);
-		alert.setTitle(Client.lang.getString("restoreSettingsToDefault"));
+		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.getString("sureYouWantToRestoreSettings"), ButtonType.YES, ButtonType.NO);
+		alert.setTitle(Client.getString("restoreSettingsToDefault"));
 		Client.insertAlertOwner(alert);
 
 		final Optional<ButtonType> result = alert.showAndWait();
@@ -257,25 +277,69 @@ public class SettingsController implements ViewController {
 		result.ifPresent(button -> {
 			if (button == ButtonType.YES) {
 				restoreApplicationSettings();
-				LegacySettingsController.restoreLegacySettings();
+				restoreLegacySettings(true);
 
-				// Reapply theme, since it might have been changed
-				Client.getInstance().applyTheme();
-				// Assure the view that the displays the correct data.
-				Client.getInstance().reloadViewIfLoaded(View.SETTINGS);
+				reloadSettingsView();
 			}
 		});
 	}
 
+	public void reloadSettingsView() {
+		// Reapply theme, since it might have been changed
+		Client.getInstance().applyTheme();
+		// Assure the view that the displays the correct data.
+		Client.getInstance().reloadViewIfLoaded(View.SETTINGS);
+	}
+
 	private static void restoreApplicationSettings() {
-		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_GTA);
-		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_SAMP);
 		ClientPropertiesController.restorePropertyToDefault(Property.ASK_FOR_NAME_ON_CONNECT);
+		ClientPropertiesController.restorePropertyToDefault(Property.SAMP_PATH);
+		ClientPropertiesController.restorePropertyToDefault(Property.LANGUAGE);
 		ClientPropertiesController.restorePropertyToDefault(Property.SAVE_LAST_VIEW);
 		ClientPropertiesController.restorePropertyToDefault(Property.USE_DARK_THEME);
+		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_GTA);
+		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_SAMP);
 		ClientPropertiesController.restorePropertyToDefault(Property.CHANGELOG_ENABLED);
-		ClientPropertiesController.restorePropertyToDefault(Property.SAMP_PATH);
+		ClientPropertiesController.restorePropertyToDefault(Property.AUTOMTAIC_UPDATES);
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CACHING_DOWNLOADS);
+	}
+
+	@FXML
+	private void restoreLegacySettings() {
+		if (restoreLegacySettings(false)) {
+			reloadSettingsView();
+		}
+	}
+
+	private boolean restoreLegacySettings(final boolean inAdditionToSomethingElse) {
+		final String text;
+		if (inAdditionToSomethingElse) {
+			text = Client.getString("sureYouWantToRestoreLegacySettingsAswell");
+		}
+		else {
+			text = Client.getString("sureYouWantToRestoreLegacySettings");
+		}
+		final Alert alert = new Alert(AlertType.CONFIRMATION, text, ButtonType.YES, ButtonType.NO);
+		alert.setTitle(Client.getString("restoreLegacySettingsToDefault"));
+		Client.insertAlertOwner(alert);
+
+		final Optional<ButtonType> result = alert.showAndWait();
+
+		if (result.isPresent() && result.get() == ButtonType.YES) {
+			LegacySettingsController.restoreLegacySettings();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Selects the {@link TextField} which contains the SA-MP / GTA path.
+	 */
+	public void selectSampPathTextField() {
+		// HACK Not quite sure why Platform#runLater is necessary here.
+		Platform.runLater(() -> {
+			sampPathTextField.requestFocus();
+		});
 	}
 
 	@Override

@@ -82,7 +82,7 @@ public final class Logging {
 	 * @param throwable the {@link Throwable} which has caused this logging action
 	 */
 	public static void info(final String message, final Throwable throwable) {
-		log(Level.SEVERE, message, throwable);
+		log(Level.INFO, message, throwable);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public final class Logging {
 	 * @param throwable the {@link Throwable} which has caused this logging action
 	 */
 	public static void warn(final String message, final Throwable throwable) {
-		log(Level.SEVERE, message, throwable);
+		log(Level.WARNING, message, throwable);
 	}
 
 	/**
