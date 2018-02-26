@@ -8,15 +8,14 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.logging.Logging;
-import com.msc.serverbrowser.util.basic.StringUtility;
 import com.msc.serverbrowser.util.samp.SampQuery;
 
 /**
@@ -80,17 +79,36 @@ public final class FavouritesController {
 	 *
 	 * @param server
 	 *            the server to add to the favourites
+	 * @return true if the action was a success, otherwise false
 	 */
-	public static void addServerToFavourites(final SampServer server) {
+	public static boolean addServerToFavourites(final SampServer server) {
 		if (isFavourite(server)) {
 			Logging.info("Server wasn't added, because it already is a favourite.");
 		}
 		else {
-			String statement = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (''{0}'', ''{1}'', ''{2}'', ''{3}'', {4}, {5}, ''{6}'', {7}, ''{8}'', ''{9}'');";
-			statement = StringUtility.escapeFormat(statement, server.getHostname(), server.getAddress(), server.getLagcomp(), server.getLanguage(), server
-					.getPlayers(), server.getMaxPlayers(), server.getMode(), server.getPort(), server.getVersion(), server.getWebsite());
-			SQLDatabase.getInstance().execute(statement);
+			String query = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+			try {
+				PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
+
+				statement.setString(1, server.getHostname());
+				statement.setString(2, server.getAddress());
+				statement.setString(3, server.getLagcomp());
+				statement.setString(4, server.getLanguage());
+				statement.setInt(5, server.getPlayers());
+				statement.setInt(6, server.getMaxPlayers());
+				statement.setString(7, server.getMode());
+				statement.setInt(8, server.getPort());	
+				statement.setString(9, server.getVersion());
+				statement.setString(10, server.getWebsite());
+
+				return statement.execute();
+			}
+			catch (SQLException exception) {
+				Logging.error("Error while adding server to favourites.", exception);
+			}
 		}
+
+		return false;
 	}
 
 	/**
@@ -109,14 +127,29 @@ public final class FavouritesController {
 	 *
 	 * @param server
 	 *            the server to update
+	 * @return true if the action was a success, otherwise false
 	 */
-	public static void updateServerData(final SampServer server) {
-		String statement = "UPDATE favourite SET hostname = ''{0}'', lagcomp = ''{1}'', language = ''{2}'', players = {3}, maxplayers = {4}, mode = ''{5}'', version = ''{6}'', website = ''{7}'' WHERE ip = ''{8}'' AND port = {9};";
-		statement = StringUtility
-				.escapeFormat(statement, server.getHostname(), server.getLagcomp(), server.getLanguage(), server.getPlayers().toString(), server
-						.getMaxPlayers()
-						.toString(), server.getMode(), server.getVersion(), server.getWebsite(), server.getAddress(), server.getPort().toString());
-		SQLDatabase.getInstance().execute(statement);
+	public static boolean updateServerData(final SampServer server) {
+		String query = "UPDATE favourite SET hostname = ?, lagcomp = ?, language = ?, players = ?, maxplayers = ?, mode = ?, version = ?, website = ? WHERE ip = ? AND port = {9};";
+		try {
+			PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
+
+			statement.setString(1, server.getHostname());
+			statement.setString(2, server.getLagcomp());
+			statement.setString(3, server.getLanguage());
+			statement.setInt(4, server.getPlayers());
+			statement.setInt(5, server.getMaxPlayers());
+			statement.setString(6, server.getMode());
+			statement.setString(7, server.getVersion());
+			statement.setString(8, server.getWebsite());
+			statement.setString(9, server.getAddress());
+			statement.setInt(10, server.getPort());	
+
+			return statement.execute();
+		} catch (SQLException exception) {
+			Logging.error("Error while updaing server in favourites.", exception);
+			return false;
+		}
 	}
 
 	/**
@@ -124,11 +157,23 @@ public final class FavouritesController {
 	 *
 	 * @param server
 	 *            the server to remove from favourites
+	 * @return true if the action was a success, otherwise false
 	 */
-	public static void removeServerFromFavourites(final SampServer server) {
-		String statement = "DELETE FROM favourite WHERE ip = ''{0}'' AND port = ''{1}'';";
-		statement = MessageFormat.format(statement, server.getAddress(), server.getPort().toString());
-		SQLDatabase.getInstance().execute(statement);
+	public static boolean removeServerFromFavourites(final SampServer server) {
+		String query = "DELETE FROM favourite WHERE ip = ? AND port = ?;";
+
+		try {
+			PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
+
+			statement.setString(1, server.getAddress());
+			statement.setInt(2, server.getPort());	
+
+			return statement.execute();
+		}
+		catch (SQLException exception) {
+			Logging.error("Error while deleting server from favourites.", exception);
+			return false;
+		}
 	}
 
 	/**
