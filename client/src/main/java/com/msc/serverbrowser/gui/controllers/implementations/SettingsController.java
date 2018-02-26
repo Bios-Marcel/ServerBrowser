@@ -92,6 +92,8 @@ public class SettingsController implements ViewController {
 	@FXML
 	private CheckBox	enableAutomaticUpdatesCheckBox;
 	@FXML
+	private CheckBox	usePreReleasesCheckBox;
+	@FXML
 	private Button		manualUpdateButton;
 
 	// Downloads
@@ -146,6 +148,7 @@ public class SettingsController implements ViewController {
 		// Update Properties
 		setupCheckBox(showChangelogCheckBox, Property.CHANGELOG_ENABLED);
 		setupCheckBox(enableAutomaticUpdatesCheckBox, Property.AUTOMTAIC_UPDATES);
+		setupCheckBox(usePreReleasesCheckBox, Property.DOWNLOAD_PRE_RELEASES);
 
 		// Update Properties
 		setupCheckBox(allowCachingDownloadsCheckBox, Property.ALLOW_CACHING_DOWNLOADS);
@@ -250,9 +253,7 @@ public class SettingsController implements ViewController {
 	 */
 	private static void setupCheckBox(final CheckBox box, final Property property) {
 		box.selectedProperty().set(ClientPropertiesController.getPropertyAsBoolean(property));
-		box.selectedProperty().addListener((__, ___, newValue) -> {
-			ClientPropertiesController.setProperty(property, newValue);
-		});
+		box.selectedProperty().addListener((__, ___, newValue) -> ClientPropertiesController.setProperty(property, newValue));
 	}
 
 	@FXML
@@ -326,6 +327,7 @@ public class SettingsController implements ViewController {
 		ClientPropertiesController.restorePropertyToDefault(Property.CHANGELOG_ENABLED);
 		ClientPropertiesController.restorePropertyToDefault(Property.AUTOMTAIC_UPDATES);
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CACHING_DOWNLOADS);
+		ClientPropertiesController.restorePropertyToDefault(Property.DOWNLOAD_PRE_RELEASES);
 	}
 
 	@FXML

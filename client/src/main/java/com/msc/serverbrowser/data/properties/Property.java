@@ -3,6 +3,14 @@ package com.msc.serverbrowser.data.properties;
 /**
  * Holds all existent properties. Do not adjust any of the ids.
  *
+ * <pre>
+ * TODO Write unit test
+ * <ul>
+ * <li>Test for duplicate IDs</li>
+ * </ul>
+ * TODO Think about a way to do one time database migration and cleanup ids
+ * </pre>
+ *
  * @author Marcel
  */
 @SuppressWarnings("javadoc")
@@ -21,7 +29,8 @@ public enum Property {
 	ALLOW_CACHING_DOWNLOADS(15, true, Boolean.class),
 	AUTOMTAIC_UPDATES(16, true, Boolean.class),
 	LANGUAGE(17, "en", String.class),
-	CONNECT_ON_DOUBLECLICK(18, true, Boolean.class);
+	CONNECT_ON_DOUBLECLICK(18, true, Boolean.class),
+	DOWNLOAD_PRE_RELEASES(19, false, Boolean.class);
 
 	private final int		id;
 	private final String	defaultValue;
