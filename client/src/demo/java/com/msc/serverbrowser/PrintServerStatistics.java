@@ -18,7 +18,7 @@ import com.msc.serverbrowser.util.samp.SampQuery;
  */
 public final class PrintServerStatistics {
 	private PrintServerStatistics() {
-		// Private constructor to prevent instanziation
+		// Private constructor to prevent instantiation
 	}
 
 	/**

@@ -12,7 +12,7 @@ import java.util.function.Supplier;
  */
 public final class OptionalUtility {
 	private OptionalUtility() {
-		// Prevent instanziation
+		// Prevent instantiation
 	}
 
 	/**

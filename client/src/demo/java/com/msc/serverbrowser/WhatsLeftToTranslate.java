@@ -16,7 +16,7 @@ import com.msc.serverbrowser.util.basic.ArrayUtility;
 public final class WhatsLeftToTranslate {
 
 	private WhatsLeftToTranslate() {
-		// Private constructor to prevent instanziation
+		// Private constructor to prevent instantiation
 	}
 
 	/**
