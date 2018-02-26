@@ -22,8 +22,8 @@ import com.msc.serverbrowser.logging.Logging;
 public final class SQLDatabase {
 	private static final String DB_LOCATION = PathConstants.SAMPEX_PATH + File.separator + "samp.db";
 
-	private static SQLDatabase instance;
-	private Connection sqlConnection;
+	private static SQLDatabase	instance;
+	private Connection			sqlConnection;
 
 	/**
 	 * @return the singleton instance of this class
@@ -74,7 +74,8 @@ public final class SQLDatabase {
 				final String createTableSettings = "CREATE TABLE IF NOT EXISTS setting (id INTEGER PRIMARY KEY, value TEXT);";
 				statement.execute(createTableSettings);
 			}
-		} catch (final SQLException exception) {
+		}
+		catch (final SQLException exception) {
 			Logging.error("Error while initializing local Database connection.", exception);
 		}
 	}
@@ -93,7 +94,8 @@ public final class SQLDatabase {
 	public boolean execute(final String statement) {
 		try {
 			return sqlConnection.createStatement().execute(statement);
-		} catch (final SQLException exception) {
+		}
+		catch (final SQLException exception) {
 			Logging.error("Couldn't execute query.", exception);
 			return false;
 		}
@@ -111,7 +113,8 @@ public final class SQLDatabase {
 	public Optional<ResultSet> executeGetResult(final String statement) {
 		try {
 			return executeGetResult(sqlConnection.prepareStatement(statement));
-		} catch (final SQLException exception) {
+		}
+		catch (final SQLException exception) {
 			Logging.error("Failed to execute SQL query!", exception);
 			return Optional.empty();
 		}
@@ -128,7 +131,8 @@ public final class SQLDatabase {
 	public Optional<ResultSet> executeGetResult(final PreparedStatement statement) {
 		try {
 			return Optional.ofNullable(statement.executeQuery());
-		} catch (final SQLException exception) {
+		}
+		catch (final SQLException exception) {
 			Logging.error("Failed to execute SQL query!", exception);
 			return Optional.empty();
 		}

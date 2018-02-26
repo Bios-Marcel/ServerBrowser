@@ -74,9 +74,11 @@ public class ServerListController implements ViewController {
 	private final String	SERVER_OFFLINE		= Client.getString("serverOffline");
 	private final String	SERVER_EMPTY		= Client.getString("serverEmpty");
 
-	@FXML private ToggleGroup tableTypeToggleGroup;
+	@FXML
+	private ToggleGroup tableTypeToggleGroup;
 
-	@FXML private TextField				addressTextField;
+	@FXML
+	private TextField					addressTextField;
 	private final static StringProperty	SERVER_ADDRESS_PROPERTY	= new SimpleStringProperty();
 
 	private final ObjectProperty<Predicate<SampServer>>	userFilterProperty	= new SimpleObjectProperty<>(__ -> true);
@@ -86,7 +88,8 @@ public class ServerListController implements ViewController {
 	/**
 	 * This Table contains all available servers / favourite servers, depending on the active view.
 	 */
-	@FXML protected SampServerTable serverTable;
+	@FXML
+	protected SampServerTable serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
@@ -97,23 +100,37 @@ public class ServerListController implements ViewController {
 	 */
 	private Label	serverCount;
 
-	@FXML private TextField	serverAddress;
-	@FXML private Label		serverLagcomp;
-	@FXML private Label		serverPing;
-	@FXML private Label		serverPassword;
-	@FXML private Label		mapLabel;
-	@FXML private Hyperlink	websiteLink;
+	@FXML
+	private TextField	serverAddress;
+	@FXML
+	private Label		serverLagcomp;
+	@FXML
+	private Label		serverPing;
+	@FXML
+	private Label		serverPassword;
+	@FXML
+	private Label		mapLabel;
+	@FXML
+	private Hyperlink	websiteLink;
 
-	@FXML private TableView<Player> playerTable;
+	@FXML
+	private TableView<Player> playerTable;
 
-	@FXML private TableColumn<SampServer, String>	columnPlayers;
-	@FXML private TableColumn<SampServer, Long>		columnLastJoin;
+	@FXML
+	private TableColumn<SampServer, String>	columnPlayers;
+	@FXML
+	private TableColumn<SampServer, Long>	columnLastJoin;
 
-	@FXML private CheckBox			regexCheckBox;
-	@FXML private TextField			nameFilter;
-	@FXML private TextField			modeFilter;
-	@FXML private TextField			languageFilter;
-	@FXML private ComboBox<String>	versionFilter;
+	@FXML
+	private CheckBox			regexCheckBox;
+	@FXML
+	private TextField			nameFilter;
+	@FXML
+	private TextField			modeFilter;
+	@FXML
+	private TextField			languageFilter;
+	@FXML
+	private ComboBox<String>	versionFilter;
 
 	@Override
 	public void initialize() {

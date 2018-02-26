@@ -8,5 +8,7 @@ package com.msc.serverbrowser.data.insallationcandidates;
  */
 @SuppressWarnings("javadoc")
 public enum SourceType {
-	INTERNET, FILE_SYSTEM, RESSOURCE;
+	INTERNET,
+	FILE_SYSTEM,
+	RESSOURCE;
 }

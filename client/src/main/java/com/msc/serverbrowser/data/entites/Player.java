@@ -22,7 +22,7 @@ public class Player {
 	private final StringProperty	playerName	= new SimpleStringProperty();
 	/** Property for holding the players score */
 	private final IntegerProperty	playerScore	= new SimpleIntegerProperty();
-	
+
 	/**
 	 * @param playerName
 	 *            Ingame name of the player
@@ -33,14 +33,14 @@ public class Player {
 		this.playerName.set(playerName);
 		this.playerScore.set(playerScore);
 	}
-	
+
 	/**
 	 * @return {@link #playerName}
 	 */
 	public StringProperty playerNameProperty() {
 		return playerName;
 	}
-	
+
 	/**
 	 * @return {@link #playerScore}
 	 */

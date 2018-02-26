@@ -97,7 +97,7 @@ public final class FavouritesController {
 				statement.setInt(5, server.getPlayers());
 				statement.setInt(6, server.getMaxPlayers());
 				statement.setString(7, server.getMode());
-				statement.setInt(8, server.getPort());	
+				statement.setInt(8, server.getPort());
 				statement.setString(9, server.getVersion());
 				statement.setString(10, server.getWebsite());
 
@@ -143,10 +143,11 @@ public final class FavouritesController {
 			statement.setString(7, server.getVersion());
 			statement.setString(8, server.getWebsite());
 			statement.setString(9, server.getAddress());
-			statement.setInt(10, server.getPort());	
+			statement.setInt(10, server.getPort());
 
 			return statement.execute();
-		} catch (SQLException exception) {
+		}
+		catch (SQLException exception) {
 			Logging.error("Error while updaing server in favourites.", exception);
 			return false;
 		}
@@ -166,7 +167,7 @@ public final class FavouritesController {
 			PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
 
 			statement.setString(1, server.getAddress());
-			statement.setInt(2, server.getPort());	
+			statement.setInt(2, server.getPort());
 
 			return statement.execute();
 		}

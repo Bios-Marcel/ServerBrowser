@@ -39,43 +39,64 @@ import javafx.scene.control.TextField;
  */
 public class SettingsController implements ViewController {
 	// Information
-	@FXML private Label informationLabel;
+	@FXML
+	private Label informationLabel;
 
 	// General Settings
-	@FXML private TextField				sampPathTextField;
-	@FXML private CheckBox				saveLastViewCheckBox;
-	@FXML private ComboBox<Language>	languageComboBox;
+	@FXML
+	private TextField			sampPathTextField;
+	@FXML
+	private CheckBox			saveLastViewCheckBox;
+	@FXML
+	private ComboBox<Language>	languageComboBox;
 
 	// Appearance Settings
-	@FXML private CheckBox darkThemeCheckBox;
+	@FXML
+	private CheckBox darkThemeCheckBox;
 
 	// Permission Settings
-	@FXML private CheckBox	allowCloseSampCheckBox;
-	@FXML private CheckBox	allowCloseGtaCheckBox;
+	@FXML
+	private CheckBox	allowCloseSampCheckBox;
+	@FXML
+	private CheckBox	allowCloseGtaCheckBox;
 
 	// SA-MP Settings
-	@FXML private Spinner<Integer>	fpsLimitSpinner;
-	@FXML private Spinner<Integer>	pageSizeSpinner;
-	@FXML private CheckBox			audioproxyCheckBox;
-	@FXML private CheckBox			timestampsCheckBox;
-	@FXML private CheckBox			multicoreCheckbox;
-	@FXML private CheckBox			audioMsgCheckBox;
-	@FXML private CheckBox			headMoveCheckBox;
-	@FXML private CheckBox			imeCheckBox;
-	@FXML private CheckBox			directModeCheckBox;
-	@FXML private CheckBox			nameTagStatusCheckBox;
+	@FXML
+	private Spinner<Integer>	fpsLimitSpinner;
+	@FXML
+	private Spinner<Integer>	pageSizeSpinner;
+	@FXML
+	private CheckBox			audioproxyCheckBox;
+	@FXML
+	private CheckBox			timestampsCheckBox;
+	@FXML
+	private CheckBox			multicoreCheckbox;
+	@FXML
+	private CheckBox			audioMsgCheckBox;
+	@FXML
+	private CheckBox			headMoveCheckBox;
+	@FXML
+	private CheckBox			imeCheckBox;
+	@FXML
+	private CheckBox			directModeCheckBox;
+	@FXML
+	private CheckBox			nameTagStatusCheckBox;
 
 	// TODO(MSC) Connection Settings SERIOUSLY TODO TODO
 	// @FXML
 	// private CheckBox askForUsernameOnConnectCheckBox;
 
 	// Update Settings
-	@FXML private CheckBox	showChangelogCheckBox;
-	@FXML private CheckBox	enableAutomaticUpdatesCheckBox;
-	@FXML private Button	manualUpdateButton;
+	@FXML
+	private CheckBox	showChangelogCheckBox;
+	@FXML
+	private CheckBox	enableAutomaticUpdatesCheckBox;
+	@FXML
+	private Button		manualUpdateButton;
 
 	// Downloads
-	@FXML private CheckBox allowCachingDownloadsCheckBox;
+	@FXML
+	private CheckBox allowCachingDownloadsCheckBox;
 
 	@Override
 	public void initialize() {

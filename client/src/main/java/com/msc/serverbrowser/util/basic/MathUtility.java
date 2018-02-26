@@ -19,10 +19,10 @@ public final class MathUtility {
 	 * @return the number or lowerLimit / upperLimit
 	 */
 	public static int limitUpperAndLower(final int number, final int lowerLimit, final int upperLimit) {
-		if(lowerLimit > upperLimit) {
+		if (lowerLimit > upperLimit) {
 			throw new IllegalArgumentException("Lower bound can not be higher than upper bound (" + lowerLimit + "-" + upperLimit + ")");
 		}
-	
+
 		return Math.max(Math.min(upperLimit, number), lowerLimit);
 	}
 }

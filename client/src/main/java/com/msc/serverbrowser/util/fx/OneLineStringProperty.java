@@ -18,7 +18,7 @@ public class OneLineStringProperty extends SimpleStringProperty {
 	public OneLineStringProperty() {
 		this("");
 	}
-	
+
 	/**
 	 * @param initialValue
 	 *            the initial value for this property
@@ -26,19 +26,19 @@ public class OneLineStringProperty extends SimpleStringProperty {
 	public OneLineStringProperty(final String initialValue) {
 		super(replaceLineBreaks(initialValue));
 	}
-	
+
 	@Override
 	public void setValue(final String value) {
 		final String toSet = replaceLineBreaks(value);
 		super.setValue(toSet);
 	}
-	
+
 	@Override
 	public void set(final String value) {
 		final String toSet = replaceLineBreaks(value);
 		super.set(toSet);
 	}
-	
+
 	private static String replaceLineBreaks(final String value) {
 		/*
 		 * Replacing \r\n first and afterwards leftover \n by doing it like that, i never replace a
