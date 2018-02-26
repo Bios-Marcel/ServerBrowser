@@ -31,7 +31,8 @@ public final class ArrayUtility {
 
 		if (arrayOne.length > arrayTwo.length) {
 			return Optional.of(arrayOne);
-		} else if (arrayTwo.length > arrayOne.length) {
+		}
+		else if (arrayTwo.length > arrayOne.length) {
 			return Optional.of(arrayTwo);
 		}
 

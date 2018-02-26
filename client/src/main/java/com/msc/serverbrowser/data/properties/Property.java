@@ -22,31 +22,31 @@ public enum Property {
 	AUTOMTAIC_UPDATES(16, true, Boolean.class),
 	LANGUAGE(17, "en", String.class),
 	CONNECT_ON_DOUBLECLICK(18, true, Boolean.class);
-	
+
 	private final int		id;
 	private final String	defaultValue;
 	private final Class<?>	datatype;
-	
+
 	private <T extends Object> Property(final int id, final T defaultValue, final Class<T> datatype) {
 		this.id = id;
 		this.defaultValue = defaultValue == null ? null : defaultValue.toString();
 		this.datatype = datatype;
 	}
-	
+
 	/**
 	 * @return the datatype of this property
 	 */
 	public Class<?> getDatatype() {
 		return datatype;
 	}
-	
+
 	/**
 	 * @return an integer that is used to identify the property
 	 */
 	public int getId() {
 		return id;
 	}
-	
+
 	/**
 	 * @return the default value for this property
 	 */

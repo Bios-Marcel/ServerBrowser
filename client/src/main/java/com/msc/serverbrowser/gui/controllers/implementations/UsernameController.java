@@ -22,9 +22,11 @@ import javafx.scene.input.MouseEvent;
  * @author Marcel
  */
 public class UsernameController implements ViewController {
-	@FXML private TextField usernameTextField;
+	@FXML
+	private TextField usernameTextField;
 
-	@FXML private ListView<String> nameList;
+	@FXML
+	private ListView<String> nameList;
 
 	private final MenuItem	applyNameMenuItem	= new MenuItem(Client.getString("applyUsername"));
 	private final MenuItem	removeNameMenuItem	= new MenuItem(Client.getString("removeUsernameSingular"));

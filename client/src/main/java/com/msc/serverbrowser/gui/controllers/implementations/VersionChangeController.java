@@ -40,7 +40,8 @@ public class VersionChangeController implements ViewController {
 	 */
 	public static final ObservableList<InstallationCandidate> INSTALLATION_CANDIDATES = FXCollections.observableArrayList();
 
-	@FXML private VBox buttonContainer;
+	@FXML
+	private VBox buttonContainer;
 
 	/**
 	 * Adding all usable InstallationCandidates, but this could probably be made in a more

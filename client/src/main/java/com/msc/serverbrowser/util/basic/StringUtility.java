@@ -13,11 +13,9 @@ public final class StringUtility {
 
 	/**
 	 * Puts <code>http://</code> infront of the url if not it already has
-	 * <code>http://</code> or
-	 * <code>https://</code> infront of it.
+	 * <code>http://</code> or <code>https://</code> infront of it.
 	 *
-	 * @param url
-	 *            the url to fix
+	 * @param url the url to fix
 	 * @return the fixed url or the original if there was no need to fix
 	 */
 	public static String fixUrlIfNecessary(final String url) {
@@ -32,8 +30,9 @@ public final class StringUtility {
 	 * 'https://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java'>
 	 * this StackOverflow question</a>
 	 * <p>
-	 * Checks if a {@link String} looks like a Number and tries to parse it ito an {@link Integer},
-	 * if it fails an empty {@link Optional} will be returned instead.
+	 * Checks if a {@link String} looks like a Number and tries to parse it ito an
+	 * {@link Integer}, if it fails an empty {@link Optional} will be returned
+	 * instead.
 	 * </p>
 	 *
 	 * @param string
@@ -96,7 +95,8 @@ public final class StringUtility {
 	 *
 	 * @param bytes
 	 *            that will be converted
-	 * @return a human readable string following the example given in the method description
+	 * @return a human readable string following the example given in the method
+	 *         description
 	 */
 	public static String humanReadableByteCount(final long bytes) {
 		final int unit = 1024;

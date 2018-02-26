@@ -20,11 +20,11 @@ import com.msc.serverbrowser.gui.controllers.interfaces.ViewController;
 @SuppressWarnings("javadoc")
 public enum View {
 	SERVERS(1, "Servers", ServerListController.class, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH
-		+ "serverListStyle.css"),
+			+ "serverListStyle.css"),
 	USERNAME_CHANGER(2, "Username Changer", UsernameController.class, PathConstants.VIEW_PATH + "Username.fxml", PathConstants.STYLESHEET_PATH
-		+ "usernameStyle.css"),
+			+ "usernameStyle.css"),
 	VERSION_CHANGER(3, "Version Changer", VersionChangeController.class, PathConstants.VIEW_PATH + "Version.fxml", PathConstants.STYLESHEET_PATH
-		+ "versionStyle.css"),
+			+ "versionStyle.css"),
 	SETTINGS(4, "Settings", SettingsController.class, PathConstants.VIEW_PATH + "Settings.fxml", PathConstants.STYLESHEET_PATH + "settingsStyle.css"),
 	FILES(5, "Files", FilesController.class, PathConstants.VIEW_PATH + "Files.fxml", PathConstants.STYLESHEET_PATH + "filesStyle.css");
 
@@ -45,7 +45,7 @@ public enum View {
 	}
 
 	private View(final int id, final String title, final Class<? extends ViewController> controllerType, final String fxmlPath,
-					final String stylesheetPathCss) {
+			final String stylesheetPathCss) {
 		this.id = id;
 		this.title = title;
 		this.controllerType = controllerType;

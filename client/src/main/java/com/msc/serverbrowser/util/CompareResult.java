@@ -6,5 +6,7 @@ package com.msc.serverbrowser.util;
  */
 @SuppressWarnings("javadoc")
 public enum CompareResult {
-	LESS, EQUAL, GREATER;
+	LESS,
+	EQUAL,
+	GREATER;
 }

@@ -179,8 +179,7 @@ public final class ServerConfig {
 					}
 				}
 				catch (final SQLException exception) {
-					Logging.error("Error while retrieving field: '" + field + " of server: " + ip + ":" + port,
-							exception);
+					Logging.error("Error while retrieving field: '" + field + " of server: " + ip + ":" + port, exception);
 				}
 			}
 		}

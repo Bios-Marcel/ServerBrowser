@@ -32,11 +32,11 @@ public class SampQuery implements AutoCloseable {
 	private static final char	PACKET_GET_RULES			= 'r';
 	private static final char	PACKET_MIRROR_CHARACTERS	= 'p';
 	private static final char	PACKET_GET_BASIC_PLAYERINFO	= 'c';
-	
+
 	private final DatagramSocket	socket;
 	private final InetAddress		server;
 	private final int				serverPort;
-	
+
 	/**
 	 * Configures the socket and the address that will be used for doing the queries.
 	 *
@@ -58,7 +58,7 @@ public class SampQuery implements AutoCloseable {
 		this.serverPort = serverPort;
 		checkConnection();
 	}
-	
+
 	/**
 	 * Configures the socket and the address.
 	 *
@@ -74,7 +74,7 @@ public class SampQuery implements AutoCloseable {
 	public SampQuery(final String serverAddress, final int serverPort) throws SocketException, UnknownHostException {
 		this(serverAddress, serverPort, 2000);
 	}
-	
+
 	/**
 	 * Returns whether a successful connection was made.
 	 */
@@ -89,12 +89,12 @@ public class SampQuery implements AutoCloseable {
 			throw new SocketException("Couldn't connect to Server");
 		}
 	}
-	
+
 	@Override
 	public void close() throws SocketException {
 		socket.close();
 	}
-	
+
 	/**
 	 * Returns a String array, containing information about the server.
 	 *
@@ -113,19 +113,19 @@ public class SampQuery implements AutoCloseable {
 				final ByteBuffer buffer = wrapReply(reply);
 				final String[] serverInfo = new String[6];
 				final String encoding = Encoding.getEncoding(reply).orElse(StandardCharsets.UTF_8.toString());
-				
+
 				// Password Yes / No
 				final short password = buffer.get();
 				serverInfo[0] = String.valueOf(password);
-				
+
 				// Players connected
 				final short players = buffer.getShort();
 				serverInfo[1] = String.valueOf(players);
-				
+
 				// Max Players
 				final short maxPlayers = buffer.getShort();
 				serverInfo[2] = String.valueOf(maxPlayers);
-				
+
 				// add hostname, gamemode and language
 				for (int valueIndex = 3; valueIndex < 6; valueIndex++) {
 					final int len = buffer.getInt();
@@ -133,13 +133,13 @@ public class SampQuery implements AutoCloseable {
 					IntStream.range(0, len).forEach(j -> value[j] = buffer.get());
 					serverInfo[valueIndex] = Encoding.decodeUsingCharsetIfPossible(value, encoding);
 				}
-				
+
 				return Optional.of(serverInfo);
 			}
 		}
 		return Optional.empty();
 	}
-	
+
 	/**
 	 * Returns an {@link Optional} of a {@link List} of {@link Player} objects, containing all
 	 * players on the server.
@@ -149,14 +149,14 @@ public class SampQuery implements AutoCloseable {
 	 */
 	public Optional<List<Player>> getBasicPlayerInfo() {
 		List<Player> players = null;
-		
+
 		if (send(PACKET_GET_BASIC_PLAYERINFO)) {
 			final byte[] reply = receiveBytes();
 			if (Objects.nonNull(reply)) {
 				final ByteBuffer buffer = wrapReply(reply);
 				final int numberOfPlayers = buffer.getShort();
 				players = new ArrayList<>();
-				
+
 				for (int i = 0; i < numberOfPlayers; i++) {
 					final byte len = buffer.get();
 					final byte[] playerName = new byte[len];
@@ -167,7 +167,7 @@ public class SampQuery implements AutoCloseable {
 		}
 		return Optional.ofNullable(players);
 	}
-	
+
 	/**
 	 * Returns a Map containing all server rules. The Key is always the rules name.
 	 *
@@ -179,20 +179,20 @@ public class SampQuery implements AutoCloseable {
 			if (Objects.nonNull(reply)) {
 				final ByteBuffer buffer = wrapReply(reply);
 				final Map<String, String> rules = new HashMap<>();
-				
+
 				final short ruleCount = buffer.getShort();
-				
+
 				for (int i = 0; i < ruleCount; i++) {
 					// fill string for rule name
 					int len = buffer.get();
 					final byte[] ruleName = new byte[len];
 					IntStream.range(0, len).forEach(j -> ruleName[j] = buffer.get());
-					
+
 					// fill string for rule value
 					len = buffer.get();
 					final byte[] ruleValue = new byte[len];
 					IntStream.range(0, len).forEach(j -> ruleValue[j] = buffer.get());
-					
+
 					rules.put(new String(ruleName), new String(ruleValue));
 				}
 				return Optional.of(rules);
@@ -200,7 +200,7 @@ public class SampQuery implements AutoCloseable {
 		}
 		return Optional.empty();
 	}
-	
+
 	/**
 	 * <p>
 	 * Wraps the received bytes in a {@link ByteBuffer} for easier usage.
@@ -228,7 +228,7 @@ public class SampQuery implements AutoCloseable {
 		buffer.position(11);
 		return buffer;
 	}
-	
+
 	/**
 	 * Returns the server's ping.
 	 *
@@ -240,33 +240,36 @@ public class SampQuery implements AutoCloseable {
 		receiveBytes();
 		return System.currentTimeMillis() - beforeSend;
 	}
-	
+
 	private DatagramPacket assemblePacket(final char type) {
 		final StringTokenizer tok = new StringTokenizer(server.getHostAddress(), ".");
 		final StringBuffer packetData = new StringBuffer("SAMP");
-		
-		while (tok.hasMoreTokens()) {// The splitted parts of the ip will be parsed into ints and casted into characters
+
+		while (tok.hasMoreTokens()) {// The splitted parts of the ip will be parsed into ints and
+										// casted into characters
 			packetData.append((char) Integer.parseInt(tok.nextToken()));
 		}
-		
+
 		/*
 		 * At this point the buffer contains something like 'SAMPx!2.' where each character after
 		 * 'SAMP' is a part of the ip address
 		 */
-		
+
 		packetData.append((char) (serverPort & 0xFF)).append((char) (serverPort >> 8 & 0xFF)).append(type);
-		
-		if (type == PACKET_MIRROR_CHARACTERS) {// Apply 4 random bytes, in case it was a mirror query
-												// final Random random = ThreadLocalRandom.current();
+
+		if (type == PACKET_MIRROR_CHARACTERS) {// Apply 4 random bytes, in case it was a mirror
+												// query
+												// final Random random =
+												// ThreadLocalRandom.current();
 												// final byte[] toMirror = new byte[4];
 												// random.nextBytes(toMirror);
 			packetData.append("0101"); // TODO(MSC) Fix temporarily
 		}
-		
+
 		final byte[] data = packetData.toString().getBytes(StandardCharsets.US_ASCII);
 		return new DatagramPacket(data, data.length, server, serverPort);
 	}
-	
+
 	/**
 	 * Sends a packet to te server
 	 *
@@ -278,11 +281,12 @@ public class SampQuery implements AutoCloseable {
 			final DatagramPacket packet = assemblePacket(packetType);
 			socket.send(packet);
 			return true;
-		} catch (@SuppressWarnings("unused") final IOException exception) {
+		}
+		catch (@SuppressWarnings("unused") final IOException exception) {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Reseives a package from the server
 	 *
@@ -295,7 +299,8 @@ public class SampQuery implements AutoCloseable {
 			final DatagramPacket receivedPacket = new DatagramPacket(receivedData, receivedData.length);
 			socket.receive(receivedPacket);
 			return receivedPacket.getData();
-		} catch (@SuppressWarnings("unused") final IOException exception) {
+		}
+		catch (@SuppressWarnings("unused") final IOException exception) {
 			return null;
 		}
 	}
