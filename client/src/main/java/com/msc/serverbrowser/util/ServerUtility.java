@@ -91,13 +91,12 @@ public final class ServerUtility {
 	private static List<SampServer> fetchFromAPI(final String apiAddress) throws MalformedURLException, IOException {
 		final List<SampServer> servers = new ArrayList<>();
 
-		// The pages are 1 indexed, so we start at 1 and go up to 100, lets be real, 100 is too much
-		// anyways.
-		for (int i = 1; i < MAX_PAGES; i++) {
-			final String json = readUrl(apiAddress + "?page=" + i);
+		// The pages are 1 indexed, so we start at 1 and go up to the given max amount of pages
+		for (int page = 1; page < MAX_PAGES; page++) {
+			final String json = readUrl(apiAddress + "?page=" + page);
 
 			// In case the page equals null, we have already received all data.
-			if (Objects.isNull(json) || json.equalsIgnoreCase("null")) {
+			if (Objects.isNull(json) || "null".equalsIgnoreCase(json)) {
 				break;
 			}
 
