@@ -305,6 +305,9 @@ public class SettingsController implements ViewController {
 		});
 	}
 
+	/**
+	 * Reapplies the current theme and reloads the saettings view.
+	 */
 	public void reloadSettingsView() {
 		// Reapply theme, since it might have been changed
 		Client.getInstance().applyTheme();

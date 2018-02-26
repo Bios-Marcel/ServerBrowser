@@ -87,6 +87,11 @@ public class FilesView {
 		rootPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 	}
 
+	/**
+	 * Adjusts the layout properties for a {@link CheckBox}.
+	 *
+	 * @param showColorsAsTextCheckBox {@link CheckBox} to adjust the properties for
+	 */
 	public void setupCheckBox(final CheckBox showColorsAsTextCheckBox) {
 		showColorsAsTextCheckBox.setAlignment(Pos.CENTER);
 		showColorsAsTextCheckBox.setMaxHeight(Double.MAX_VALUE);

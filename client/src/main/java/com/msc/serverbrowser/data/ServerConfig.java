@@ -43,9 +43,7 @@ public final class ServerConfig {
 				+ "?," // Port
 				+ "(select username from serverconfig where ip=? and port=?)," // Username
 				+ "?);"; // lastTimeJoined
-		try {
-			PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
-
+		try (PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 			statement.setString(1, ip);
 			statement.setInt(2, port);
 			statement.setString(3, ip);
@@ -54,7 +52,7 @@ public final class ServerConfig {
 
 			return statement.execute();
 		}
-		catch (SQLException exception) {
+		catch (final SQLException exception) {
 			Logging.error("Error while setting last join time.", exception);
 			return false;
 		}
@@ -76,9 +74,7 @@ public final class ServerConfig {
 				+ "?," // Port
 				+ "?," // Username
 				+ "(select lastjoin from serverconfig where ip=? and port=?));"; // lastTimeJoined
-		try {
-			PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
-
+		try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 			statement.setString(1, ip);
 			statement.setInt(2, port);
 			statement.setString(3, username);
@@ -87,7 +83,7 @@ public final class ServerConfig {
 
 			return statement.execute();
 		}
-		catch (SQLException exception) {
+		catch (final SQLException exception) {
 			Logging.error("Error while setting username.", exception);
 			return false;
 		}
@@ -163,9 +159,7 @@ public final class ServerConfig {
 		final String query = "SELECT " + field + " FROM serverconfig WHERE ip=''{0}'' and port={1} AND " + field
 				+ " IS NOT NULL;";
 
-		PreparedStatement statement;
-		try {
-			statement = SQLDatabase.getInstance().createPreparedStatement(query);
+		try (PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 
 			statement.setString(1, ip);
 			statement.setInt(2, port);
@@ -183,7 +177,7 @@ public final class ServerConfig {
 				}
 			}
 		}
-		catch (SQLException exception) {
+		catch (final SQLException exception) {
 			Logging.error("Error getting field from server config.", exception);
 		}
 

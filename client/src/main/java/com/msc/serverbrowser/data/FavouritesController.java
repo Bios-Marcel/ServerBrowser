@@ -86,10 +86,8 @@ public final class FavouritesController {
 			Logging.info("Server wasn't added, because it already is a favourite.");
 		}
 		else {
-			String query = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-			try {
-				PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
-
+			final String query = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+			try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 				statement.setString(1, server.getHostname());
 				statement.setString(2, server.getAddress());
 				statement.setString(3, server.getLagcomp());
@@ -103,7 +101,7 @@ public final class FavouritesController {
 
 				return statement.execute();
 			}
-			catch (SQLException exception) {
+			catch (final SQLException exception) {
 				Logging.error("Error while adding server to favourites.", exception);
 			}
 		}
@@ -130,10 +128,8 @@ public final class FavouritesController {
 	 * @return true if the action was a success, otherwise false
 	 */
 	public static boolean updateServerData(final SampServer server) {
-		String query = "UPDATE favourite SET hostname = ?, lagcomp = ?, language = ?, players = ?, maxplayers = ?, mode = ?, version = ?, website = ? WHERE ip = ? AND port = {9};";
-		try {
-			PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
-
+		final String query = "UPDATE favourite SET hostname = ?, lagcomp = ?, language = ?, players = ?, maxplayers = ?, mode = ?, version = ?, website = ? WHERE ip = ? AND port = {9};";
+		try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 			statement.setString(1, server.getHostname());
 			statement.setString(2, server.getLagcomp());
 			statement.setString(3, server.getLanguage());
@@ -147,7 +143,7 @@ public final class FavouritesController {
 
 			return statement.execute();
 		}
-		catch (SQLException exception) {
+		catch (final SQLException exception) {
 			Logging.error("Error while updaing server in favourites.", exception);
 			return false;
 		}
@@ -161,17 +157,16 @@ public final class FavouritesController {
 	 * @return true if the action was a success, otherwise false
 	 */
 	public static boolean removeServerFromFavourites(final SampServer server) {
-		String query = "DELETE FROM favourite WHERE ip = ? AND port = ?;";
+		final String query = "DELETE FROM favourite WHERE ip = ? AND port = ?;";
 
-		try {
-			PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query);
+		try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 
 			statement.setString(1, server.getAddress());
 			statement.setInt(2, server.getPort());
 
 			return statement.execute();
 		}
-		catch (SQLException exception) {
+		catch (final SQLException exception) {
 			Logging.error("Error while deleting server from favourites.", exception);
 			return false;
 		}

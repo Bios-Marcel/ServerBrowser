@@ -80,7 +80,13 @@ public final class SQLDatabase {
 		}
 	}
 
-	public PreparedStatement createPreparedStatement(String query) throws SQLException {
+	/**
+	 * @param query the query to be used for the {@link PreparedStatement}
+	 * @return a {@link PreparedStatement} using the given query
+	 * @throws SQLException if a database access error occurs or this method is called on a closed
+	 *             connection
+	 */
+	public PreparedStatement createPreparedStatement(final String query) throws SQLException {
 		return sqlConnection.prepareStatement(query);
 	}
 
