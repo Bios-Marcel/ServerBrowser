@@ -81,9 +81,10 @@ public class SampQuery implements AutoCloseable {
 	 * Returns whether a successful connection was made.
 	 */
 	private void checkConnection() throws SocketException {
-		// TODO(MSC) Check if server deactivated querying, since this will only tell if
-		// the server
-		// is online, but will still work with servers that have deactivated querying
+		/*
+		 * TODO(MSC) Check if server deactivated querying, since this will only tell if the server
+		 * is online, but will still work with servers that have deactivated querying
+		 */
 		send(PACKET_MIRROR_CHARACTERS);
 		final byte[] reply = receiveBytes();
 		// Removed the checks if the reply was valid, i think its not even necessary

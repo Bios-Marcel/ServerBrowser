@@ -1,8 +1,9 @@
 package com.msc.serverbrowser.gui.controllers.implementations;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import com.msc.serverbrowser.Client;
@@ -32,8 +33,8 @@ public class VersionChangeController implements ViewController {
 	private final String	INSTALLING_TEXT	= Client.getString("installing");
 	private final String	SAMP_VERSION	= Client.getString("sampVersion");
 
-	private static Optional<InstallationCandidate>	currentlyInstalling	= Optional.empty();
-	private final List<Button>						buttons				= new ArrayList<>();
+	private static Optional<InstallationCandidate>		currentlyInstalling	= Optional.empty();
+	private final Map<InstallationCandidate, Button>	buttons				= new HashMap<>();
 
 	/**
 	 * Contains all available Installation candidates
@@ -75,8 +76,8 @@ public class VersionChangeController implements ViewController {
 	}
 
 	/**
-	 * Will create an {@link HBox} for every {@link SAMPVersion}, said {@link HBox}
-	 * will contain a {@link Label} and a {@link Button}.
+	 * Will create a {@link HBox} for every {@link InstallationCandidate}, said {@link HBox} will
+	 * contain a {@link Label} and a {@link Button}.
 	 */
 	private void createAndSetupButtons() {
 		for (final InstallationCandidate candidate : INSTALLATION_CANDIDATES) {
@@ -93,10 +94,9 @@ public class VersionChangeController implements ViewController {
 			title.setMaxWidth(Double.MAX_VALUE);
 
 			final Button installButton = new Button(INSTALL_TEXT);
-			installButton.setUserData(candidate);
-			installButton.setOnAction(__ -> installSamp(installButton));
+			installButton.setOnAction(__ -> installSamp(installButton, candidate));
 			installButton.getStyleClass().add("installButton");
-			buttons.add(installButton);
+			buttons.put(candidate, installButton);
 
 			versionContainer.getChildren().add(title);
 			versionContainer.getChildren().add(installButton);
@@ -108,17 +108,15 @@ public class VersionChangeController implements ViewController {
 	}
 
 	/**
-	 * TODO Don't use {@link Button#getUserData()} anymore, thanks future Me
 	 * <p>
-	 * Triggers the installation of the chosen {@link SAMPVersion}.
+	 * Triggers the installation of the chosen {@link InstallationCandidate}.
 	 * </p>
 	 *
-	 * @param button
-	 *            the {@link Button} which was clicked.
+	 * @param button the {@link Button} which was clicked.
+	 * @param toInstall {@link InstallationCandidate} which will be installed
 	 */
-	private void installSamp(final Button button) {
+	private void installSamp(final Button button, final InstallationCandidate toInstall) {
 		if (GTAController.getGtaPath().isPresent()) {
-			final InstallationCandidate toInstall = (InstallationCandidate) button.getUserData();
 			final Optional<InstallationCandidate> installedVersion = GTAController.getInstalledVersion();
 
 			if (!installedVersion.isPresent() || !installedVersion.get().equals(toInstall)) {
@@ -128,8 +126,10 @@ public class VersionChangeController implements ViewController {
 				GTAController.killGTA();
 				GTAController.killSAMP();
 
-				// TODO(MSC) Check JavaFX Threading API (Task / Service)
-				// Using a thread here, incase someone wants to keep using the app meanwhile
+				/*
+				 * TODO(MSC) Check JavaFX Threading API (Task / Service) Using a thread here, in
+				 * case someone wants to keep using the application meanwhile
+				 */
 				new Thread(() -> {
 					Installer.installViaInstallationCandidate(toInstall);
 					finishInstalling();
@@ -155,10 +155,9 @@ public class VersionChangeController implements ViewController {
 		final Optional<InstallationCandidate> installedVersion = GTAController.getInstalledVersion();
 		final boolean ongoingInstallation = currentlyInstalling.isPresent();
 
-		for (final Button button : buttons) {
-			// Safe cast, because i only use this method to indicate what version this
-			// button reflects, noone has access on the outside.
-			final InstallationCandidate buttonVersion = (InstallationCandidate) button.getUserData();
+		for (final Entry<InstallationCandidate, Button> entry : buttons.entrySet()) {
+			final Button button = entry.getValue();
+			final InstallationCandidate buttonVersion = entry.getKey();
 
 			if (installedVersion.isPresent() && installedVersion.get() == buttonVersion) {
 				button.setText(INSTALLED_TEXT);
@@ -176,7 +175,7 @@ public class VersionChangeController implements ViewController {
 	}
 
 	private void setAllButtonsDisabled(final boolean disabled) {
-		buttons.forEach(button -> button.setDisable(disabled));
+		buttons.entrySet().forEach(entry -> entry.getValue().setDisable(disabled));
 	}
 
 	@Override
