@@ -2,14 +2,7 @@ package com.msc.serverbrowser.data.properties;
 
 /**
  * Holds all existent properties. Do not adjust any of the ids.
- *
- * <pre>
- * TODO Write unit test
- * <ul>
- * <li>Test for duplicate IDs</li>
- * </ul>
  * TODO Think about a way to do one time database migration and cleanup ids
- * </pre>
  *
  * @author Marcel
  */
@@ -36,7 +29,7 @@ public enum Property {
 	private final String	defaultValue;
 	private final Class<?>	datatype;
 
-	private <T extends Object> Property(final int id, final T defaultValue, final Class<T> datatype) {
+	private <T> Property(final int id, final T defaultValue, final Class<T> datatype) {
 		this.id = id;
 		this.defaultValue = defaultValue == null ? null : defaultValue.toString();
 		this.datatype = datatype;

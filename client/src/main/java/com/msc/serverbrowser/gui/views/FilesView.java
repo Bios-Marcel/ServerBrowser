@@ -67,7 +67,6 @@ public class FilesView {
 		showColorsProperty.bind(showColorsCheckBox.selectedProperty());
 		setupCheckBox(showColorsCheckBox);
 
-		// TODO Localize
 		final CheckBox showColorsAsTextCheckBox = new CheckBox(Client.getString("showChatlogColorsAsText"));
 		showColorsAsTextProperty.bind(showColorsAsTextCheckBox.selectedProperty());
 		setupCheckBox(showColorsAsTextCheckBox);

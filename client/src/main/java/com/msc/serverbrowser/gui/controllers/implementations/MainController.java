@@ -92,15 +92,15 @@ public class MainController implements ViewController {
 	/**
 	 * Adds nodes to the Clients bottom bar.
 	 *
-	 * @param nodes
-	 *            the node that will be added
+	 * @param nodes the node that will be added
 	 */
 	public void addItemsToBottomBar(final Node... nodes) {
 		mainView.addToBottomBar(nodes);
 	}
 
 	/**
-	 * @return the progress {@link DoubleProperty} of the {@link #globalProgressBar}
+	 * @return the progress {@link DoubleProperty} of the {@link ProgressBar} which resides in the
+	 *         {@link MainView}
 	 */
 	public DoubleProperty progressProperty() {
 		return mainView.globalProgressProperty();
@@ -109,8 +109,7 @@ public class MainController implements ViewController {
 	/**
 	 * Sets the text infront of the global {@link ProgressBar} bar.
 	 *
-	 * @param text
-	 *            the text tht appears infront of the global {@link ProgressBar}
+	 * @param text the text tht appears infront of the global {@link ProgressBar}
 	 */
 	public void setGlobalProgressText(final String text) {
 		mainView.setGlobalProgressBarText(text);

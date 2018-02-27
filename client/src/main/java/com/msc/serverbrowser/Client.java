@@ -78,7 +78,7 @@ public final class Client extends Application {
 	/**
 	 * RessourceBundle which contains all the localized strings.
 	 */
-	private static ResourceBundle lang;
+	private static ResourceBundle languageBundle;
 
 	/**
 	 * This property that indicates if an update check / download progress is
@@ -112,8 +112,7 @@ public final class Client extends Application {
 	/**
 	 * Sets the current {@link Client} stage as the clients owner.
 	 *
-	 * @param alert
-	 *            the alert to set the owner in
+	 * @param alert the alert to set the owner in
 	 */
 	public static void insertAlertOwner(final Dialog<?> alert) {
 		alert.initOwner(getInstance().stage);
@@ -131,8 +130,7 @@ public final class Client extends Application {
 	}
 
 	/**
-	 * Deletes the scenes current stylesheets and reapplies either the dark theme or
-	 * the default
+	 * Deletes the scenes current stylesheets and applies either the dark theme or the default
 	 * theme.
 	 */
 	public void applyTheme() {
@@ -155,8 +153,7 @@ public final class Client extends Application {
 	/**
 	 * Loads the main UI.
 	 *
-	 * @param primaryStage
-	 *            the stage to use for displaying the UI
+	 * @param primaryStage the stage to use for displaying the UI
 	 */
 	private void loadUI(final Stage primaryStage) {
 		stage = primaryStage;
@@ -219,8 +216,7 @@ public final class Client extends Application {
 
 	/**
 	 * Compares the local version number to the one lying on the server. If an
-	 * update is available
-	 * the user will be asked if he wants to update.
+	 * update is available the user will be asked if he wants to update.
 	 */
 	public void checkForUpdates() {
 		Logging.info("Checking for updates.");
@@ -292,8 +288,7 @@ public final class Client extends Application {
 	/**
 	 * Adds nodes to the Clients bottom bar.
 	 *
-	 * @param nodes
-	 *            the node that will be added
+	 * @param nodes the node that will be added
 	 */
 	public void addItemsToBottomBar(final Node... nodes) {
 		mainController.addItemsToBottomBar(nodes);
@@ -346,8 +341,7 @@ public final class Client extends Application {
 
 	/**
 	 * <p>
-	 * TODO
-	 * BROKEN WHEN STARTED WITH INSTALLER.
+	 * TODO BROKEN WHEN STARTED WITH INSTALLER.
 	 * </p>
 	 * Restarts the application.
 	 */
@@ -377,12 +371,9 @@ public final class Client extends Application {
 	/**
 	 * Programs entry point, it also does specific things when passed specific arguments.
 	 *
-	 * @param args
-	 *            evaluated by {@link #readApplicationArguments}
-	 * @throws IOException
-	 *             if there was an error while loading language files
-	 * @throws FileNotFoundException
-	 *             if language files don't exist
+	 * @param args evaluated by {@link #readApplicationArguments}
+	 * @throws IOException if there was an error while loading language files
+	 * @throws FileNotFoundException if language files don't exist
 	 */
 	public static void main(final String[] args) throws FileNotFoundException, IOException {
 		createFolderStructure();
@@ -397,7 +388,7 @@ public final class Client extends Application {
 	 */
 	public static void initLanguageFiles() {
 		final Locale locale = new Locale(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE));
-		lang = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
+		languageBundle = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale);
 	}
 
 	private static void readApplicationArguments(final String[] args) {
@@ -415,8 +406,7 @@ public final class Client extends Application {
 	/**
 	 * Sets the Applications title.
 	 *
-	 * @param title
-	 *            the title to set
+	 * @param title the title to set
 	 */
 	public void setTitle(final String title) {
 		stage.setTitle(title);
@@ -425,8 +415,7 @@ public final class Client extends Application {
 	/**
 	 * Loads a specific view.
 	 *
-	 * @param view
-	 *            the view to be loaded
+	 * @param view the view to be loaded
 	 */
 	public void loadView(final View view) {
 		mainController.loadView(view);
@@ -435,8 +424,7 @@ public final class Client extends Application {
 	/**
 	 * Reloads the active view, if it is the given one.
 	 *
-	 * @param view
-	 *            the view to reload
+	 * @param view the view to reload
 	 */
 	public void reloadViewIfLoaded(final View view) {
 		if (mainController.getActiveView() == view) {
@@ -456,17 +444,24 @@ public final class Client extends Application {
 	}
 
 	/**
-	 * @return {@link #lang the resourcebundle containing the currently loaded language}
+	 * @return an {@link Optional} of the current {@link SettingsController}.
+	 */
+	public Optional<SettingsController> getSettingsController() {
+		return mainController.getSettingsController();
+	}
+
+	/**
+	 * @return {@link #languageBundle the resourcebundle containing the currently loaded language}
 	 */
 	public static ResourceBundle getLangaugeResourceBundle() {
-		return lang;
+		return languageBundle;
 	}
 
 	/**
 	 * @param key they key to retrieve the value for
-	 * @return the value for the given key, using the {@link #lang} resource bundle
+	 * @return the value for the given key, using the {@link #languageBundle} resource bundle
 	 */
 	public static String getString(final String key) {
-		return OptionalUtility.attempt(() -> lang.getString(key)).orElse("Invalid Key");
+		return OptionalUtility.attempt(() -> languageBundle.getString(key)).orElse("Invalid Key");
 	}
 }

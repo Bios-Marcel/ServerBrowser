@@ -1,8 +1,8 @@
 package com.msc.serverbrowser.data.properties;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -123,16 +123,17 @@ public final class ClientPropertiesController {
 		if (Objects.nonNull(value) && !omitCheck) {// Check will only be performed if its non null
 			checkDataType(property, value.getClass());
 		}
-		String statement = null;
-		if (Objects.isNull(value)) {
-			statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, NULL);";
-			statement = MessageFormat.format(statement, property.getId());
+
+		final String query = "INSERT OR REPLACE INTO setting (id, value) VALUES(?, ?);";
+		try (PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
+			statement.setInt(1, property.getId());
+			statement.setString(2, Objects.nonNull(value) ? value.toString() : null);
+
+			statement.execute();
 		}
-		else {
-			statement = "INSERT OR REPLACE INTO setting (id, value) VALUES({0}, ''{1}'');";
-			statement = MessageFormat.format(statement, property.getId(), value);
+		catch (final SQLException exception) {
+			Logging.error("Error setting property: " + property + " to value " + value, exception);
 		}
-		SQLDatabase.getInstance().execute(statement);
 	}
 
 	/**

@@ -386,8 +386,11 @@ public class ServerListController implements ViewController {
 			if (!versionFilter.getSelectionModel().isEmpty()) {
 				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString().toLowerCase();
 
-				// TODO(MSC) Only necessary because i don't retrieve the version when querying
-				// southclaws api. I should request a change in the api.
+				/*
+				 * At this point and time i am assuring that the versio is not null, since in
+				 * earlier versions of the backend i am using, the version wasn't part of the data
+				 * one receives by default.
+				 */
 				final String serverVersion = Objects.isNull(server.getVersion()) ? "" : server.getVersion();
 				versionFilterApplies = serverVersion.toLowerCase().contains(versionFilterSetting);
 			}

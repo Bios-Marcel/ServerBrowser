@@ -69,7 +69,7 @@ public final class InstallationCandidateCache {
 	}
 
 	/**
-	 * Caches a file for the specified {@link SAMPVersion}.
+	 * Caches a file for the specified {@link InstallationCandidate}.
 	 *
 	 * @param candidate
 	 *            Version to cache the file for

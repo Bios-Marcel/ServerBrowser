@@ -12,8 +12,8 @@ import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.logging.Logging;
 
 /**
- * Allows controller over server specific settings. TODO(MSC) I could still
- * improve the setter methods in case the table gets more fields.
+ * Allows controller over server specific settings.
+ * TODO(MSC) I could still improve the setter methods in case the table gets more fields.
  *
  * @author marcel
  * @since Jan 17, 2018
@@ -30,12 +30,9 @@ public final class ServerConfig {
 	/**
 	 * Saves the last time a server has been joined.
 	 *
-	 * @param ip
-	 *            ip
-	 * @param port
-	 *            port
-	 * @param lastTimeJoined
-	 *            lastTimeJoined
+	 * @param ip ip
+	 * @param port port
+	 * @param lastTimeJoined lastTimeJoined
 	 * @return true if the action was a success, otherwise false
 	 */
 	public static boolean setLastTimeJoinedForServer(final String ip, final Integer port, final long lastTimeJoined) {
@@ -61,12 +58,9 @@ public final class ServerConfig {
 	/**
 	 * Sets the username to use when connect to to that specific server.
 	 *
-	 * @param ip
-	 *            server ip
-	 * @param port
-	 *            server port
-	 * @param username
-	 *            the username to be set
+	 * @param ip server ip
+	 * @param port server port
+	 * @param username the username to be set
 	 * @return true if the action was a success, otherwise false
 	 */
 	public boolean setUsernameForServer(final String ip, final Integer port, final String username) {
@@ -93,10 +87,8 @@ public final class ServerConfig {
 	 * Returns the username to use for a specific server or an empty
 	 * {@link Optional} in case no username has been set.
 	 *
-	 * @param ip
-	 *            server ip
-	 * @param port
-	 *            server port
+	 * @param ip server ip
+	 * @param port server port
 	 * @return An {@link Optional} containing the to be used username or empty
 	 */
 	public Optional<String> getUsernameForServer(final String ip, final Integer port) {
@@ -107,10 +99,8 @@ public final class ServerConfig {
 	 * Returns the username to use for a specific server or an empty
 	 * {@link Optional} in case no username has been set.
 	 *
-	 * @param ip
-	 *            server ip
-	 * @param port
-	 *            server port
+	 * @param ip server ip
+	 * @param port server port
 	 * @return An {@link Optional} containing the to be used username or empty
 	 */
 	public static Optional<Long> getLastJoinForServer(final String ip, final Integer port) {
@@ -147,7 +137,7 @@ public final class ServerConfig {
 	/**
 	 * Fills a {@link Collection} of servers with their last join date.
 	 *
-	 * @param servers
+	 * @param servers servers to inject their last join date into
 	 */
 	public static void initLastJoinData(final Collection<SampServer> servers) {
 		servers.forEach(server -> {
@@ -156,8 +146,7 @@ public final class ServerConfig {
 	}
 
 	private static Optional<String> getStringOfField(final String ip, final Integer port, final String field) {
-		final String query = "SELECT " + field + " FROM serverconfig WHERE ip=''{0}'' and port={1} AND " + field
-				+ " IS NOT NULL;";
+		final String query = "SELECT " + field + " FROM serverconfig WHERE ip=? and port=? AND " + field + " IS NOT NULL;";
 
 		try (PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 

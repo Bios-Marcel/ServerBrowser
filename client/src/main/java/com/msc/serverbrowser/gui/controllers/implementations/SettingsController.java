@@ -356,9 +356,7 @@ public class SettingsController implements ViewController {
 	 */
 	public void selectSampPathTextField() {
 		// HACK Not quite sure why Platform#runLater is necessary here.
-		Platform.runLater(() -> {
-			sampPathTextField.requestFocus();
-		});
+		Platform.runLater(() -> sampPathTextField.requestFocus());
 	}
 
 	@Override

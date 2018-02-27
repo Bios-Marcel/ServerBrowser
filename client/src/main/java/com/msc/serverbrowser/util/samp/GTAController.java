@@ -28,6 +28,7 @@ import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.gui.View;
+import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
 import com.msc.serverbrowser.gui.controllers.implementations.VersionChangeController;
 import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.basic.HashingUtility;
@@ -136,11 +137,10 @@ public final class GTAController {
 	}
 
 	/**
-	 * Returns the {@link SAMPVersion} value that represents the currently installed
+	 * Returns the {@link InstallationCandidate} value that represents the currently installed
 	 * samp version.
 	 *
-	 * @return {@link Optional} of installed versions version number or an
-	 *         {@link Optional#empty()}
+	 * @return {@link Optional} of installed versions version number or an {@link Optional#empty()}
 	 */
 	public static Optional<InstallationCandidate> getInstalledVersion() {
 		final Optional<String> path = getGtaPath();
@@ -169,14 +169,11 @@ public final class GTAController {
 	}
 
 	/**
-	 * Connects to a server, depending on if it is passworded, the user will be
-	 * asked to enter a
+	 * Connects to a server, depending on if it is passworded, the user will be asked to enter a
 	 * password. If the server is not reachable the user can not connect.
 	 *
-	 * @param address
-	 *            server address
-	 * @param port
-	 *            server port
+	 * @param address server address
+	 * @param port server port
 	 */
 	public static void tryToConnect(final String address, final Integer port) {
 		try (final SampQuery query = new SampQuery(address, port)) {
@@ -259,15 +256,12 @@ public final class GTAController {
 	}
 
 	/**
-	 * Connects to the given server (IP and Port) using an empty (no) password.
-	 * Other than
+	 * Connects to the given server (IP and Port) using an empty (no) password. Other than
 	 * {@link GTAController#connectToServer(String)} and
 	 * {@link GTAController#connectToServer(String, String)}, this method uses the
-	 * <code>samp://</code> protocol to connect to make the samp launcher connect to
-	 * the server.
+	 * <code>samp://</code> protocol to connect to make the samp launcher connect to the server.
 	 *
-	 * @param ipAndPort
-	 *            the server to connect to
+	 * @param ipAndPort the server to connect to
 	 * @return true if it was most likely successful
 	 */
 	private static boolean connectToServerUsingProtocol(final String ipAndPort) {
@@ -308,8 +302,7 @@ public final class GTAController {
 	/**
 	 * Kills a process with a given name.
 	 *
-	 * @param processName
-	 *            the name that determines what processes will be killed
+	 * @param processName the name that determines what processes will be killed
 	 */
 	private static void kill(final String processName) {
 		if (!OSUtility.isWindows()) {
@@ -326,15 +319,11 @@ public final class GTAController {
 
 	/**
 	 * Connects to the given server (IP and Port) using the given password. Uses the
-	 * commandline to open samp and connect to the server.
+	 * command line to open SA-MP and connect to the server.
 	 *
-	 * @param address
-	 *            server address
-	 * @param port
-	 *            server port
-	 * @param password
-	 *            the password to use for connecting
-	 * @return true if the connection was successful, otherwise false
+	 * @param address server address
+	 * @param port server port
+	 * @param password the password to use for connecting
 	 */
 	public static void connectToServer(final String address, final Integer port, final String password) {
 		final boolean successfulConnection = connect(address, port, password);
@@ -396,9 +385,11 @@ public final class GTAController {
 				.message(Client.getString("locateGTAManually"))
 				.animation(Animations.POPUP).build();
 
-		// TODO(MSC) Improve and try to focus component
-		trayNotification.setOnMouseClicked(__ -> Client.getInstance().loadView(View.SETTINGS));
-
+		trayNotification.setOnMouseClicked(__ -> {
+			final Client clientInstance = Client.getInstance();
+			clientInstance.loadView(View.SETTINGS);
+			clientInstance.getSettingsController().ifPresent(SettingsController::selectSampPathTextField);
+		});
 		trayNotification.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 }

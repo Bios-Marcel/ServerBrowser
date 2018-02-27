@@ -128,7 +128,7 @@ public final class FavouritesController {
 	 * @return true if the action was a success, otherwise false
 	 */
 	public static boolean updateServerData(final SampServer server) {
-		final String query = "UPDATE favourite SET hostname = ?, lagcomp = ?, language = ?, players = ?, maxplayers = ?, mode = ?, version = ?, website = ? WHERE ip = ? AND port = {9};";
+		final String query = "UPDATE favourite SET hostname = ?, lagcomp = ?, language = ?, players = ?, maxplayers = ?, mode = ?, version = ?, website = ? WHERE ip = ? AND port = ?;";
 		try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 			statement.setString(1, server.getHostname());
 			statement.setString(2, server.getLagcomp());

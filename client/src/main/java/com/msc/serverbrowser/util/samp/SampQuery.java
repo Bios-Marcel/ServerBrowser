@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 import com.msc.serverbrowser.data.entites.Player;
@@ -257,13 +259,18 @@ public class SampQuery implements AutoCloseable {
 
 		packetData.append((char) (serverPort & 0xFF)).append((char) (serverPort >> 8 & 0xFF)).append(type);
 
-		if (type == PACKET_MIRROR_CHARACTERS) {// Apply 4 random bytes, in case it was a mirror
-												// query
-												// final Random random =
-												// ThreadLocalRandom.current();
-												// final byte[] toMirror = new byte[4];
-												// random.nextBytes(toMirror);
-			packetData.append("0101"); // TODO(MSC) Fix temporarily
+		if (type == PACKET_MIRROR_CHARACTERS) {
+
+			/**
+			 * Applying random bytes for the server to mirror them back.
+			 * TODO Currently those bytes aren't reused to check if the server did everything
+			 * correctly.
+			 */
+
+			final Random random = ThreadLocalRandom.current();
+			final byte[] toMirror = new byte[4];
+			random.nextBytes(toMirror);
+			packetData.append(new String(toMirror, StandardCharsets.US_ASCII));
 		}
 
 		final byte[] data = packetData.toString().getBytes(StandardCharsets.US_ASCII);
