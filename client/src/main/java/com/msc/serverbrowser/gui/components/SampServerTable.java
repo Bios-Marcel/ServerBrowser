@@ -57,9 +57,10 @@ public class SampServerTable extends TableView<SampServer> {
 	private final MenuItem	removeFromFavouritesMenuItem	= new MenuItem(Client.getString("removeFromFavourites"));
 	private final MenuItem	visitWebsiteMenuItem			= new MenuItem(Client.getString("visitWebsite"));
 	private final MenuItem	connectMenuItem					= new MenuItem(Client.getString("connectToServer"));
+	private final MenuItem	connectWithPasswordMenuItem		= new MenuItem("Connect using password");
 	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem(Client.getString("copyIpAddressAndPort"));
 
-	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
+	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, connectWithPasswordMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	private final ObservableList<SampServer> servers = getItems();
 
@@ -100,7 +101,12 @@ public class SampServerTable extends TableView<SampServer> {
 
 	private void setMenuItemDefaultActions() {
 		connectMenuItem.setOnAction(__ -> {
-			getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
+			getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), ""));
+		});
+
+		connectWithPasswordMenuItem.setOnAction(__ -> {
+			final String serverPassword = GTAController.askForServerPassword().orElse("");
+			getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), serverPassword));
 		});
 
 		visitWebsiteMenuItem.setOnAction(__ -> getFirstIfAnythingSelected().ifPresent(server -> OSUtility.browse(server.getWebsite())));
@@ -251,7 +257,7 @@ public class SampServerTable extends TableView<SampServer> {
 
 		if (wasDoubleClick && onlyOneSelectedItem) {
 			if (ClientPropertiesController.getPropertyAsBoolean(Property.CONNECT_ON_DOUBLECLICK)) {
-				getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort()));
+				getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), ""));
 			}
 		}
 		else {

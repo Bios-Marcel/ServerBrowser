@@ -1,15 +1,8 @@
 package com.msc.serverbrowser.util.samp;
 
-import java.awt.Desktop;
-import java.awt.Desktop.Action;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -21,9 +14,7 @@ import com.github.sarxos.winreg.HKey;
 import com.github.sarxos.winreg.RegistryException;
 import com.github.sarxos.winreg.WindowsRegistry;
 import com.msc.serverbrowser.Client;
-import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.PastUsernames;
-import com.msc.serverbrowser.data.ServerConfig;
 import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
@@ -83,7 +74,7 @@ public final class GTAController {
 	 *
 	 * @return Username or "404 name not found"
 	 */
-	private static String retrieveUsernameFromRegistry() {
+	static String retrieveUsernameFromRegistry() {
 		if (!OSUtility.isWindows()) {
 			return "You are on Linux ;D";
 		}
@@ -174,75 +165,46 @@ public final class GTAController {
 	 *
 	 * @param address server address
 	 * @param port server port
+	 * @param serverPassword the password to be used for this connection
 	 */
-	public static void tryToConnect(final String address, final Integer port) {
+	public static void tryToConnect(final String address, final Integer port, final String serverPassword) {
 		try (final SampQuery query = new SampQuery(address, port)) {
 			final Optional<String[]> serverInfo = query.getBasicServerInfo();
 
-			if (serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {
-				final TextInputDialog dialog = new TextInputDialog();
-				Client.insertAlertOwner(dialog);
-				dialog.setTitle(Client.getString("connectToServer"));
-				dialog.setHeaderText(Client.getString("enterServerPasswordMessage"));
-
-				final Optional<String> result = dialog.showAndWait();
-				result.ifPresent(password -> GTAController.connectToServer(address, port, password));
+			if (Objects.isNull(serverPassword) || serverPassword.isEmpty() && serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {
+				final Optional<String> passwordOptional = askForServerPassword();
+				passwordOptional.ifPresent(password -> SAMPLauncher.connect(address, port, password));
 			}
 			else {
-				GTAController.connectToServer(address, port, "");
+				SAMPLauncher.connect(address, port, serverPassword);
 			}
 		}
 		catch (final IOException exception) {
 			Logging.warn("Couldn't connect to server.", exception);
 
-			final Alert alert = new Alert(AlertType.CONFIRMATION, Client.getString("serverMightBeOfflineConnectAnyways"), ButtonType.YES, ButtonType.NO);
-			alert.setTitle(Client.getString("connectingToServer"));
-			Client.insertAlertOwner(alert);
-
-			alert.showAndWait().ifPresent(button -> {
+			final Optional<ButtonType> decision = askUserIfHeWantsToConnectAnyways();
+			decision.ifPresent(button -> {
 				if (button == ButtonType.YES) {
-					// TODO Optionally this hould be able with a password
-					GTAController.connectToServer(address, port, "");
+					SAMPLauncher.connect(address, port, serverPassword);
 				}
 			});
 		}
 	}
 
-	private static boolean connectWithDLLInjection(final String address, final Integer port, final String password) {
-		final ProcessBuilder builder = new ProcessBuilder();
+	private static Optional<ButtonType> askUserIfHeWantsToConnectAnyways() {
+		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.getString("serverMightBeOfflineConnectAnyways"), ButtonType.YES, ButtonType.NO);
+		alert.setTitle(Client.getString("connectingToServer"));
+		Client.insertAlertOwner(alert);
+		return alert.showAndWait();
+	}
 
-		final Optional<String> path = getGtaPath();
+	public static Optional<String> askForServerPassword() {
+		final TextInputDialog dialog = new TextInputDialog();
+		Client.insertAlertOwner(dialog);
+		dialog.setTitle(Client.getString("connectToServer"));
+		dialog.setHeaderText(Client.getString("enterServerPasswordMessage"));
 
-		if (path.isPresent()) {
-			builder.directory(new File(path.get()));
-
-			final List<String> arguments = new ArrayList<>();
-			arguments.add(PathConstants.SAMP_CMD);
-			arguments.add("-c");
-			arguments.add("-h");
-			arguments.add(address);
-			arguments.add("-p");
-			arguments.add(port.toString());
-			arguments.add("-n");
-			// TODO Solve better
-			arguments.add(Optional.ofNullable(retrieveUsernameFromRegistry()).orElse("CHOOSE_NAME"));
-			if (Objects.nonNull(password) && !password.isEmpty()) {
-				arguments.add("-z");
-				arguments.add(password);
-			}
-
-			builder.command(arguments);
-
-			try {
-				builder.start();
-				return true;
-			}
-			catch (final Exception exception) {
-				Logging.warn("Error using sampcmd.exe", exception);
-			}
-		}
-
-		return false;
+		return dialog.showAndWait();
 	}
 
 	/**
@@ -250,39 +212,12 @@ public final class GTAController {
 	 * possible.
 	 */
 	public static void showCantConnectToServerError() {
-		new TrayNotificationBuilder().type(NotificationTypeImplementations.ERROR).title(Client.getString("cantConnect"))
+		new TrayNotificationBuilder()
+				.type(NotificationTypeImplementations.ERROR)
+				.title(Client.getString("cantConnect"))
 				.message(Client.getString("addressNotValid"))
-				.animation(Animations.POPUP).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
-	}
-
-	/**
-	 * Connects to the given server (IP and Port) using an empty (no) password. Other than
-	 * {@link GTAController#connectToServer(String)} and
-	 * {@link GTAController#connectToServer(String, String)}, this method uses the
-	 * <code>samp://</code> protocol to connect to make the samp launcher connect to the server.
-	 *
-	 * @param ipAndPort the server to connect to
-	 * @return true if it was most likely successful
-	 */
-	private static boolean connectToServerUsingProtocol(final String ipAndPort) {
-		if (!OSUtility.isWindows()) {
-			return false;
-		}
-
-		try {
-			Logging.info("Connecting using protocol.");
-			final Desktop desktop = Desktop.getDesktop();
-
-			if (desktop.isSupported(Action.BROWSE)) {
-				desktop.browse(new URI("samp://" + ipAndPort));
-				return true;
-			}
-		}
-		catch (final IOException | URISyntaxException exception) {
-			Logging.warn("Error connecting to server.", exception);
-		}
-
-		return false;
+				.animation(Animations.POPUP)
+				.build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME);
 	}
 
 	/**
@@ -315,63 +250,6 @@ public final class GTAController {
 		catch (final IOException exception) {
 			Logging.error("Couldn't kill " + processName, exception);
 		}
-	}
-
-	/**
-	 * Connects to the given server (IP and Port) using the given password. Uses the
-	 * command line to open SA-MP and connect to the server.
-	 *
-	 * @param address server address
-	 * @param port server port
-	 * @param password the password to use for connecting
-	 */
-	public static void connectToServer(final String address, final Integer port, final String password) {
-		final boolean successfulConnection = connect(address, port, password);
-
-		if (successfulConnection) {
-			ServerConfig.setLastTimeJoinedForServer(address, port, Instant.now().toEpochMilli());
-		}
-		else {
-			showCantConnectToServerError();
-		}
-	}
-
-	private static boolean connect(final String address, final Integer port, final String password) {
-		if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CLOSE_GTA)) {
-			killGTA();
-		}
-
-		final Optional<String> gtaPath = getGtaPath();
-		if (gtaPath.isPresent()) {
-			if (!connectWithDLLInjection(address, port, password)) {
-				final String ipAndPort = address + ":" + port;
-				return connectUsingExecuteable(password, gtaPath, ipAndPort);
-			}
-			return true;
-		}
-
-		displayCantLocateGTANotification();
-		return false;
-	}
-
-	private static boolean connectUsingExecuteable(final String password, final Optional<String> gtaPath, final String ipAndPort) {
-		try {
-			Logging.info("Connecting using executeable.");
-			final ProcessBuilder builder = new ProcessBuilder(gtaPath.get() + File.separator + "samp.exe ", ipAndPort, password);
-			builder.directory(new File(gtaPath.get()));
-			builder.start();
-			return true;
-		}
-		catch (final IOException exception) {
-			Logging.warn("Error connecting to server " + ipAndPort + " manually calling the executeable");
-
-			if (Objects.isNull(password) || password.isEmpty()) {
-				return connectToServerUsingProtocol(ipAndPort);
-			}
-			Logging.warn("Couldn't connect to server", exception);
-
-		}
-		return false;
 	}
 
 	/**

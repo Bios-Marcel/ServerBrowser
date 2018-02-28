@@ -351,7 +351,7 @@ public class ServerListController implements ViewController {
 
 		address.ifPresent(data -> {
 			if (ServerUtility.isPortValid(data.getValue())) {
-				GTAController.tryToConnect(data.getKey(), Integer.parseInt(data.getValue()));
+				GTAController.tryToConnect(data.getKey(), Integer.parseInt(data.getValue()), "");
 			}
 			else {
 				GTAController.showCantConnectToServerError();
