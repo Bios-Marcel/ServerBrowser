@@ -105,8 +105,9 @@ public class SampServerTable extends TableView<SampServer> {
 		});
 
 		connectWithPasswordMenuItem.setOnAction(__ -> {
-			final String serverPassword = GTAController.askForServerPassword().orElse("");
-			getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), serverPassword));
+			GTAController.askForServerPassword().ifPresent(serverPassword -> {
+				getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), serverPassword));
+			});
 		});
 
 		visitWebsiteMenuItem.setOnAction(__ -> getFirstIfAnythingSelected().ifPresent(server -> OSUtility.browse(server.getWebsite())));
