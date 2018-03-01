@@ -65,8 +65,7 @@ import javafx.util.Pair;
  * @since 02.07.2017
  */
 public class ServerListController implements ViewController {
-	private static Thread	serverLookup;
-	private static Thread	serverInfoUpdateThread;
+	private static Thread serverLookup;
 
 	private final String RETRIEVING = Client.getString("retrieving");
 
@@ -131,6 +130,8 @@ public class ServerListController implements ViewController {
 	private TextField			languageFilter;
 	@FXML
 	private ComboBox<String>	versionFilter;
+
+	private Optional<SampServer> lookingUpForServer = Optional.empty();
 
 	@Override
 	public void initialize() {
@@ -264,8 +265,7 @@ public class ServerListController implements ViewController {
 	/**
 	 * Sets the text for the label that states how many active players there are.
 	 *
-	 * @param activePlayers
-	 *            the number of active players
+	 * @param activePlayers the number of active players
 	 */
 	protected void setPlayerCount(final int activePlayers) {
 		playerCount.setText(MessageFormat.format(Client.getString("activePlayers"), activePlayers));
@@ -274,8 +274,7 @@ public class ServerListController implements ViewController {
 	/**
 	 * Sets the text for the label that states how many active servers there are.
 	 *
-	 * @param activeServers
-	 *            the number of active servers
+	 * @param activeServers the number of active servers
 	 */
 	private void setServerCount(final int activeServers) {
 		serverCount.setText(MessageFormat.format(Client.getString("servers"), activeServers));
@@ -310,9 +309,6 @@ public class ServerListController implements ViewController {
 	private static void killServerLookupThreads() {
 		if (Objects.nonNull(serverLookup)) {
 			serverLookup.interrupt();
-		}
-		if (Objects.nonNull(serverInfoUpdateThread)) {
-			serverInfoUpdateThread.interrupt();
 		}
 	}
 
@@ -436,8 +432,7 @@ public class ServerListController implements ViewController {
 	/**
 	 * Updates the data that the {@link SampServer} holds.
 	 *
-	 * @param server
-	 *            the {@link SampServer} object to update locally
+	 * @param server the {@link SampServer} object to update locally
 	 */
 	private void updateServerInfo(final SampServer server) {
 		updateServerInfo(server, true);
@@ -447,17 +442,25 @@ public class ServerListController implements ViewController {
 	 * Updates the data that the {@link SampServer} holds and optionally displays the correct values
 	 * on the UI.
 	 *
-	 * @param server
-	 *            the {@link SampServer} object to update locally
+	 * @param server the {@link SampServer} object to update locally
 	 * @param applyDataToUI if true, the data of the server will be shown in the ui
 	 */
 	private void updateServerInfo(final SampServer server, final boolean applyDataToUI) {
-		if (applyDataToUI) {
-			setVisibleDetailsToRetrieving(server);
-		}
 		killServerLookupThreads();
 
-		serverInfoUpdateThread = new Thread(() -> {
+		synchronized (lookingUpForServer) {
+			lookingUpForServer = Optional.of(server);
+		}
+
+		runIfLookupRunning(server, () -> {
+			if (applyDataToUI) {
+				setVisibleDetailsToRetrieving(server);
+			}
+		});
+
+		final Thread serverInfoUpdateThread = new Thread(() -> {
+			System.out.println("lookup for: " + server.getHostname());
+
 			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort())) {
 				final Optional<String[]> infoOptional = query.getBasicServerInfo();
 				final Optional<Map<String, String>> serverRulesOptional = query.getServersRules();
@@ -484,20 +487,36 @@ public class ServerListController implements ViewController {
 					query.getBasicPlayerInfo().ifPresent(players -> playerList.addAll(players));
 					final long ping = query.getPing();
 
-					if (!serverInfoUpdateThread.isInterrupted() && applyDataToUI) {
+					runIfLookupRunning(server, () -> {
+						System.out.println("Apply data for: " + server.getHostname());
 						applyData(server, playerList, ping);
-					}
+					});
 					FavouritesController.updateServerData(server);
+
+				}
+
+				synchronized (lookingUpForServer) {
+					lookingUpForServer = Optional.empty();
 				}
 			}
 			catch (@SuppressWarnings("unused") final IOException exception) {
-				if (!serverInfoUpdateThread.isInterrupted()) {
+				runIfLookupRunning(server, () -> {
+					System.out.println("Applying data for: " + server.getHostname());
 					Platform.runLater(() -> displayOfflineInformations());
-				}
+					lookingUpForServer = Optional.empty();
+				});
 			}
 		});
 
 		serverInfoUpdateThread.start();
+	}
+
+	private void runIfLookupRunning(final SampServer server, final Runnable runnable) {
+		synchronized (lookingUpForServer) {
+			if (lookingUpForServer.isPresent() && lookingUpForServer.get().equals(server)) {
+				runnable.run();
+			}
+		}
 	}
 
 	private void setVisibleDetailsToRetrieving(final SampServer server) {
@@ -514,7 +533,7 @@ public class ServerListController implements ViewController {
 	}
 
 	private void applyData(final SampServer server, final ObservableList<Player> playerList, final long ping) {
-		if (!serverInfoUpdateThread.isInterrupted()) {
+		runIfLookupRunning(server, () -> {
 			Platform.runLater(() -> {
 				serverPassword.setText(server.isPassworded() ? Client.getString("yes") : Client.getString("no"));
 				serverPing.setText(String.valueOf(ping));
@@ -545,7 +564,7 @@ public class ServerListController implements ViewController {
 				serverLagcomp.setText(server.getLagcomp());
 				updateGlobalInfo();
 			});
-		}
+		});
 	}
 
 	private void displayOfflineInformations() {

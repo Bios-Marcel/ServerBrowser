@@ -49,8 +49,7 @@ public final class GTAController {
 	}
 
 	/**
-	 * Writes the actual username (from registry) into the past usernames list and
-	 * sets the new name
+	 * Writes the actual username (from registry) into the past usernames list and sets the new name
 	 */
 	public static void applyUsername() {
 		if (!OSUtility.isWindows()) {
@@ -91,8 +90,7 @@ public final class GTAController {
 	/**
 	 * Returns the GTA path.
 	 *
-	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA
-	 *         couldn't be found
+	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA couldn't be found
 	 */
 	public static Optional<String> getGtaPath() {
 		if (!OSUtility.isWindows()) {
@@ -128,8 +126,8 @@ public final class GTAController {
 	}
 
 	/**
-	 * Returns the {@link InstallationCandidate} value that represents the currently installed
-	 * samp version.
+	 * Returns the {@link InstallationCandidate} value that represents the currently installed samp
+	 * version.
 	 *
 	 * @return {@link Optional} of installed versions version number or an {@link Optional#empty()}
 	 */
@@ -172,7 +170,7 @@ public final class GTAController {
 			final Optional<String[]> serverInfo = query.getBasicServerInfo();
 
 			if (Objects.isNull(serverPassword) || serverPassword.isEmpty() && serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {
-				final Optional<String> passwordOptional = askForServerPassword();
+				final Optional<String> passwordOptional = promptUserForServerPassword();
 				passwordOptional.ifPresent(password -> SAMPLauncher.connect(address, port, password));
 			}
 			else {
@@ -198,7 +196,13 @@ public final class GTAController {
 		return alert.showAndWait();
 	}
 
-	public static Optional<String> askForServerPassword() {
+	/**
+	 * Shows a dialog prompting the user for a server password.
+	 *
+	 * @return an {@link Optional} containing either a string (empty or filled) or
+	 *         {@link Optional#empty()}
+	 */
+	public static Optional<String> promptUserForServerPassword() {
 		final TextInputDialog dialog = new TextInputDialog();
 		Client.insertAlertOwner(dialog);
 		dialog.setTitle(Client.getString("connectToServer"));
@@ -208,8 +212,7 @@ public final class GTAController {
 	}
 
 	/**
-	 * Shows a TrayNotification that states, that connecting to the server wasn't
-	 * possible.
+	 * Shows a TrayNotification that states, that connecting to the server wasn't possible.
 	 */
 	public static void showCantConnectToServerError() {
 		new TrayNotificationBuilder()
@@ -253,8 +256,7 @@ public final class GTAController {
 	}
 
 	/**
-	 * Displays a notifcation that states, that GTA couldn't be located and links
-	 * the Settings page.
+	 * Displays a notifcation that states, that GTA couldn't be located and links the Settings page.
 	 */
 	public static void displayCantLocateGTANotification() {
 		final TrayNotification trayNotification = new TrayNotificationBuilder()

@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.awt.Desktop.Action;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
@@ -17,6 +18,7 @@ import com.msc.serverbrowser.data.ServerConfig;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.basic.OptionalUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 /**
@@ -56,9 +58,13 @@ public class SAMPLauncher {
 		}
 
 		final String gtaPath = gtaPathOptional.get();
-		if (connectInternal(gtaPath, address, port, serverPassword)) {
-			ServerConfig.setLastTimeJoinedForServer(address, port, Instant.now().toEpochMilli());
-			return true;
+		final Optional<String> ipAddress = OptionalUtility.attempt(() -> InetAddress.getByName(address).getHostAddress());
+
+		if (ipAddress.isPresent()) {
+			if (connectInternal(gtaPath, ipAddress.get(), port, serverPassword)) {
+				ServerConfig.setLastTimeJoinedForServer(address, port, Instant.now().toEpochMilli());
+				return true;
+			}
 		}
 
 		GTAController.showCantConnectToServerError();
