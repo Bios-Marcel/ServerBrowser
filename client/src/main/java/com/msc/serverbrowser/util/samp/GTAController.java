@@ -180,28 +180,22 @@ public final class GTAController {
 		catch (final IOException exception) {
 			Logging.warn("Couldn't connect to server.", exception);
 
-			final Optional<ButtonType> decision = askUserIfHeWantsToConnectAnyways();
-			decision.ifPresent(button -> {
-				if (button == ButtonType.YES) {
-					SAMPLauncher.connect(address, port, serverPassword);
-				}
-			});
+			if (askUserIfHeWantsToConnectAnyways()) {
+				SAMPLauncher.connect(address, port, serverPassword);
+			}
 		}
 	}
 
-	private static Optional<ButtonType> askUserIfHeWantsToConnectAnyways() {
+	private static boolean askUserIfHeWantsToConnectAnyways() {
 		final Alert alert = new Alert(AlertType.CONFIRMATION, Client.getString("serverMightBeOfflineConnectAnyways"), ButtonType.YES, ButtonType.NO);
 		alert.setTitle(Client.getString("connectingToServer"));
 		Client.insertAlertOwner(alert);
-		return alert.showAndWait();
+		return alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES;
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Shows a dialog prompting the user for a server password.
 	 *
-=======
->>>>>>> branch 'master' of https://github.com/Bios-Marcel/ServerBrowser/
 	 * @return an {@link Optional} containing either a string (empty or filled) or
 	 *         {@link Optional#empty()}
 	 */
