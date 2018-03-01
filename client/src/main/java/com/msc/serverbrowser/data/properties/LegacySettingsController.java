@@ -48,8 +48,7 @@ public final class LegacySettingsController {
 	}
 
 	/**
-	 * @return {@link Properties} object containing the present legacy SA-MP
-	 *         Settings or an empty
+	 * @return {@link Properties} object containing the present legacy SA-MP Settings or an empty
 	 *         {@link Optional}
 	 */
 	public static Optional<Properties> getLegacyProperties() {
@@ -65,12 +64,9 @@ public final class LegacySettingsController {
 	}
 
 	/**
-	 * Override the SA-MP legacy settings using the passed {@link Properties}
-	 * object.
+	 * Override the SA-MP legacy settings using the passed {@link Properties} object.
 	 *
-	 * @param properties
-	 *            the {@link Properties} object to overwrite the legacy properties
-	 *            with
+	 * @param properties the {@link Properties} object to overwrite the legacy properties with
 	 */
 	public static void save(final Properties properties) {
 		try (FileOutputStream output = new FileOutputStream(PathConstants.SAMP_CFG)) {

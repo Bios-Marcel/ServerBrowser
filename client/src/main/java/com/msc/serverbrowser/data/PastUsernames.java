@@ -20,8 +20,7 @@ public final class PastUsernames {
 	/**
 	 * Adds a username to the past usernames list.
 	 *
-	 * @param username
-	 *            the username to add
+	 * @param username the username to add
 	 */
 	public static void addPastUsername(final String username) {
 		if (!getPastUsernames().contains(username)) {
@@ -34,8 +33,7 @@ public final class PastUsernames {
 	/**
 	 * Removes a username from the past usernames list.
 	 *
-	 * @param username
-	 *            the username to removes
+	 * @param username the username to removes
 	 */
 	public static void removePastUsername(final String username) {
 		String statement = "DELETE FROM username WHERE username = ''{0}'';";

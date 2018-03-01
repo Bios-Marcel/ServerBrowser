@@ -246,10 +246,8 @@ public class SettingsController implements ViewController {
 	 * of the {@link CheckBox} according to the {@link Property Properties} value. As soon as the
 	 * {@link CheckBox} value changes, the {@link Property} value will also change.
 	 *
-	 * @param box
-	 *            the {@link CheckBox} to be set up
-	 * @param property
-	 *            the {@link Property} that will be bound to the {@link CheckBox}
+	 * @param box the {@link CheckBox} to be set up
+	 * @param property the {@link Property} that will be bound to the {@link CheckBox}
 	 */
 	private static void setupCheckBox(final CheckBox box, final Property property) {
 		box.selectedProperty().set(ClientPropertiesController.getPropertyAsBoolean(property));

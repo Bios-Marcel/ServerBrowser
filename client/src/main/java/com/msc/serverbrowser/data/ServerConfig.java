@@ -12,8 +12,8 @@ import com.msc.serverbrowser.data.entites.SampServer;
 import com.msc.serverbrowser.logging.Logging;
 
 /**
- * Allows controller over server specific settings.
- * TODO(MSC) I could still improve the setter methods in case the table gets more fields.
+ * Allows controller over server specific settings. TODO(MSC) I could still improve the setter
+ * methods in case the table gets more fields.
  *
  * @author marcel
  * @since Jan 17, 2018
@@ -84,8 +84,8 @@ public final class ServerConfig {
 	}
 
 	/**
-	 * Returns the username to use for a specific server or an empty
-	 * {@link Optional} in case no username has been set.
+	 * Returns the username to use for a specific server or an empty {@link Optional} in case no
+	 * username has been set.
 	 *
 	 * @param ip server ip
 	 * @param port server port
@@ -96,8 +96,8 @@ public final class ServerConfig {
 	}
 
 	/**
-	 * Returns the username to use for a specific server or an empty
-	 * {@link Optional} in case no username has been set.
+	 * Returns the username to use for a specific server or an empty {@link Optional} in case no
+	 * username has been set.
 	 *
 	 * @param ip server ip
 	 * @param port server port
@@ -108,8 +108,8 @@ public final class ServerConfig {
 	}
 
 	/**
-	 * Returns a list of all {@link SampServer}s which have a lastJoin date, the
-	 * returned data doesn't contain any other data whatsoever (hostname and so on).
+	 * Returns a list of all {@link SampServer}s which have a lastJoin date, the returned data
+	 * doesn't contain any other data whatsoever (hostname and so on).
 	 *
 	 * @return a {@link List} of all previously joined {@link SampServer}s
 	 */

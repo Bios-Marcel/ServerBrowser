@@ -264,8 +264,7 @@ public class ServerListController implements ViewController {
 	/**
 	 * Sets the text for the label that states how many active players there are.
 	 *
-	 * @param activePlayers
-	 *            the number of active players
+	 * @param activePlayers the number of active players
 	 */
 	protected void setPlayerCount(final int activePlayers) {
 		playerCount.setText(MessageFormat.format(Client.getString("activePlayers"), activePlayers));
@@ -274,8 +273,7 @@ public class ServerListController implements ViewController {
 	/**
 	 * Sets the text for the label that states how many active servers there are.
 	 *
-	 * @param activeServers
-	 *            the number of active servers
+	 * @param activeServers the number of active servers
 	 */
 	private void setServerCount(final int activeServers) {
 		serverCount.setText(MessageFormat.format(Client.getString("servers"), activeServers));
@@ -436,8 +434,7 @@ public class ServerListController implements ViewController {
 	/**
 	 * Updates the data that the {@link SampServer} holds.
 	 *
-	 * @param server
-	 *            the {@link SampServer} object to update locally
+	 * @param server the {@link SampServer} object to update locally
 	 */
 	private void updateServerInfo(final SampServer server) {
 		updateServerInfo(server, true);
@@ -447,8 +444,7 @@ public class ServerListController implements ViewController {
 	 * Updates the data that the {@link SampServer} holds and optionally displays the correct values
 	 * on the UI.
 	 *
-	 * @param server
-	 *            the {@link SampServer} object to update locally
+	 * @param server the {@link SampServer} object to update locally
 	 * @param applyDataToUI if true, the data of the server will be shown in the ui
 	 */
 	private void updateServerInfo(final SampServer server, final boolean applyDataToUI) {

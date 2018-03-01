@@ -24,10 +24,8 @@ public class Player {
 	private final IntegerProperty	playerScore	= new SimpleIntegerProperty();
 
 	/**
-	 * @param playerName
-	 *            Ingame name of the player
-	 * @param playerScore
-	 *            Ingame score of the player
+	 * @param playerName Ingame name of the player
+	 * @param playerScore Ingame score of the player
 	 */
 	public Player(final String playerName, final Integer playerScore) {
 		this.playerName.set(playerName);

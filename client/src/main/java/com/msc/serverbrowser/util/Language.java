@@ -64,8 +64,7 @@ public enum Language {
 	 * Returns a language by matching its shortcut, for example an input of <code>de</code> would
 	 * output the value {@link Language#DE}.
 	 *
-	 * @param shortcut
-	 *            the shortcut to searh for
+	 * @param shortcut the shortcut to searh for
 	 * @return An {@link Optional} containg the enum value or {@link Optional#empty()}
 	 */
 	public static Optional<Language> getByShortcut(final String shortcut) {

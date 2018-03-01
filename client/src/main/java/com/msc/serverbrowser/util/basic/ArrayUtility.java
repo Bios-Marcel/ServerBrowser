@@ -16,13 +16,10 @@ public final class ArrayUtility {
 	/**
 	 * Returns the longer of two arrays or an empty {@link Optional}.
 	 *
-	 * @param arrayOne
-	 *            first array
-	 * @param arrayTwo
-	 *            second array
+	 * @param arrayOne first array
+	 * @param arrayTwo second array
 	 * @return the array that is longer, or none if they are of the same size
-	 * @throws NullPointerException
-	 *             if any of the arrays is null
+	 * @throws NullPointerException if any of the arrays is null
 	 */
 	public static <T> Optional<T[]> getLongestArray(final T[] arrayOne, final T[] arrayTwo) throws NullPointerException {
 		if (Objects.isNull(arrayOne) || Objects.isNull(arrayTwo)) {
@@ -42,10 +39,8 @@ public final class ArrayUtility {
 	/**
 	 * Checks if the array contains the given item.
 	 *
-	 * @param array
-	 *            the array to search in for
-	 * @param searchFor
-	 *            the item to search for
+	 * @param array the array to search in for
+	 * @param searchFor the item to search for
 	 * @return true if the array contains the item, otherwise false
 	 */
 	public static <T> boolean contains(final T[] array, final T searchFor) {
@@ -67,10 +62,8 @@ public final class ArrayUtility {
 	 * <code>arrayOne + arrayTwo + ...</code>
 	 * </p>
 	 *
-	 * @param arrayOne
-	 *            Array one
-	 * @param arrays
-	 *            following arrays
+	 * @param arrayOne Array one
+	 * @param arrays following arrays
 	 * @return the combined byte array
 	 */
 	public static byte[] merge(final byte[] arrayOne, final byte[]... arrays) {

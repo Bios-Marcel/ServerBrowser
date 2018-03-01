@@ -49,8 +49,7 @@ public final class GTAController {
 	}
 
 	/**
-	 * Writes the actual username (from registry) into the past usernames list and
-	 * sets the new name
+	 * Writes the actual username (from registry) into the past usernames list and sets the new name
 	 */
 	public static void applyUsername() {
 		if (!OSUtility.isWindows()) {
@@ -91,8 +90,7 @@ public final class GTAController {
 	/**
 	 * Returns the GTA path.
 	 *
-	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA
-	 *         couldn't be found
+	 * @return {@link Optional} of GTA path or an empty {@link Optional} if GTA couldn't be found
 	 */
 	public static Optional<String> getGtaPath() {
 		if (!OSUtility.isWindows()) {
@@ -128,8 +126,8 @@ public final class GTAController {
 	}
 
 	/**
-	 * Returns the {@link InstallationCandidate} value that represents the currently installed
-	 * samp version.
+	 * Returns the {@link InstallationCandidate} value that represents the currently installed samp
+	 * version.
 	 *
 	 * @return {@link Optional} of installed versions version number or an {@link Optional#empty()}
 	 */
@@ -208,8 +206,7 @@ public final class GTAController {
 	}
 
 	/**
-	 * Shows a TrayNotification that states, that connecting to the server wasn't
-	 * possible.
+	 * Shows a TrayNotification that states, that connecting to the server wasn't possible.
 	 */
 	public static void showCantConnectToServerError() {
 		new TrayNotificationBuilder()
@@ -253,8 +250,7 @@ public final class GTAController {
 	}
 
 	/**
-	 * Displays a notifcation that states, that GTA couldn't be located and links
-	 * the Settings page.
+	 * Displays a notifcation that states, that GTA couldn't be located and links the Settings page.
 	 */
 	public static void displayCantLocateGTANotification() {
 		final TrayNotification trayNotification = new TrayNotificationBuilder()

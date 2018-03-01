@@ -39,8 +39,7 @@ public class MainController implements ViewController {
 	private ViewController activeSubViewController;
 
 	/**
-	 * @param mainView
-	 *            the view to be used by this controller
+	 * @param mainView the view to be used by this controller
 	 */
 	public MainController(final MainView mainView) {
 		this.mainView = mainView;
@@ -138,8 +137,7 @@ public class MainController implements ViewController {
 	/**
 	 * Loads a specific view.
 	 *
-	 * @param view
-	 *            the view to be loaded
+	 * @param view the view to be loaded
 	 */
 	public void loadView(final View view) {
 

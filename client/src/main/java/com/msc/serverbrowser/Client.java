@@ -81,8 +81,7 @@ public final class Client extends Application {
 	private static ResourceBundle languageBundle;
 
 	/**
-	 * This property that indicates if an update check / download progress is
-	 * ongoing.
+	 * This property that indicates if an update check / download progress is ongoing.
 	 */
 	public final BooleanProperty updateOngoingProperty = new SimpleBooleanProperty(false);
 
@@ -195,8 +194,8 @@ public final class Client extends Application {
 	}
 
 	/**
-	 * Creates files and folders that are necessary for the application to run
-	 * properly and migrates old xml data.
+	 * Creates files and folders that are necessary for the application to run properly and migrates
+	 * old xml data.
 	 */
 	private static void createFolderStructure() {
 		final File sampexFolder = new File(PathConstants.SAMPEX_PATH);
@@ -215,8 +214,8 @@ public final class Client extends Application {
 	}
 
 	/**
-	 * Compares the local version number to the one lying on the server. If an
-	 * update is available the user will be asked if he wants to update.
+	 * Compares the local version number to the one lying on the server. If an update is available
+	 * the user will be asked if he wants to update.
 	 */
 	public void checkForUpdates() {
 		Logging.info("Checking for updates.");

@@ -91,8 +91,7 @@ public enum View {
 	/**
 	 * Returns the Enum Value that has the given id.
 	 *
-	 * @param idToGet
-	 *            id to check against
+	 * @param idToGet id to check against
 	 * @return the found Enum Value
 	 */
 	public static Optional<View> valueOf(final int idToGet) {

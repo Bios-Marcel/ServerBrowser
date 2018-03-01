@@ -34,15 +34,13 @@ public final class OSUtility {
 	 * Opens a website using the default browser. It will automatically apply http:// infront of the
 	 * url if not existant already.
 	 *
-	 * @param urlAsString
-	 *            website to visit
+	 * @param urlAsString website to visit
 	 */
 	public static void browse(final String urlAsString) {
 		if (Desktop.isDesktopSupported()) {
 			/**
-			 * HACK
-			 * Workaround for Unix, since the Desktop Class seems to freeze the application unless
-			 * the call is threaded.
+			 * HACK Workaround for Unix, since the Desktop Class seems to freeze the application
+			 * unless the call is threaded.
 			 */
 			new Thread(() -> {
 				final Desktop desktop = Desktop.getDesktop();

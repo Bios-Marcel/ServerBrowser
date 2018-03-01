@@ -41,8 +41,7 @@ public final class ServerUtility {
 	/**
 	 * Retrieves servers from the SA-MP masterlist for the given version.
 	 *
-	 * @param version
-	 *            to filter for
+	 * @param version to filter for
 	 * @return List of {@link SampServer} instances
 	 */
 	public static List<SampServer> retrieveMasterlistServers(final String version) {
@@ -81,8 +80,7 @@ public final class ServerUtility {
 	 * Queries Southclaws Rest API for servers.
 	 *
 	 * @return a {@link List} of {@link SampServer SampServers}
-	 * @throws IOException
-	 *             when querying Southclaws server has failed
+	 * @throws IOException when querying Southclaws server has failed
 	 */
 	public static List<SampServer> fetchServersFromSouthclaws() throws IOException {
 		return fetchFromAPI("http://api.samp.southcla.ws/v2/servers");
@@ -128,8 +126,7 @@ public final class ServerUtility {
 	/**
 	 * Validates the given port.
 	 *
-	 * @param portAsString
-	 *            the port to be validated
+	 * @param portAsString the port to be validated
 	 * @return true if it is an integer and between 0 and 65535
 	 */
 	public static boolean isPortValid(final String portAsString) {
@@ -140,8 +137,7 @@ public final class ServerUtility {
 	/**
 	 * Validates the given port.
 	 *
-	 * @param portNumber
-	 *            the port to be validated
+	 * @param portNumber the port to be validated
 	 * @return true if it is between 0 and 65535
 	 */
 	public static boolean isPortValid(final Integer portNumber) {

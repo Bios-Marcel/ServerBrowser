@@ -24,8 +24,7 @@ public final class InstallationCandidateCache {
 	/**
 	 * Checks if a version is cached.
 	 *
-	 * @param version
-	 *            to check
+	 * @param version to check
 	 * @return true wenn die Version gecached ist.
 	 */
 	public static boolean isVersionCached(final InstallationCandidate version) {
@@ -71,10 +70,8 @@ public final class InstallationCandidateCache {
 	/**
 	 * Caches a file for the specified {@link InstallationCandidate}.
 	 *
-	 * @param candidate
-	 *            Version to cache the file for
-	 * @param pathOfCandidate
-	 *            file path that should be cached
+	 * @param candidate Version to cache the file for
+	 * @param pathOfCandidate file path that should be cached
 	 * @return true if the version was cached, otherwise false
 	 */
 	public static boolean addCandidateToCache(final InstallationCandidate candidate, final String pathOfCandidate) {

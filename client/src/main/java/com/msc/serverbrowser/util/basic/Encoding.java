@@ -22,10 +22,8 @@ public final class Encoding {
 	 * Tries to decode a given byte array using the given charset. As a fallback
 	 * {@link StandardCharsets#UTF_8} will be used.
 	 *
-	 * @param toDecode
-	 *            the byte array to decode
-	 * @param charset
-	 *            the charset to be used for decoding
+	 * @param toDecode the byte array to decode
+	 * @param charset the charset to be used for decoding
 	 * @return the decoded string
 	 */
 	public static String decodeUsingCharsetIfPossible(final byte[] toDecode, final String charset) {
@@ -42,8 +40,7 @@ public final class Encoding {
 	 * Returns an {@link Optional} of the charset that has been used or an {@link Optional#empty()}
 	 * if no charset could be found.
 	 *
-	 * @param data
-	 *            the byte array that the charset should be found of
+	 * @param data the byte array that the charset should be found of
 	 * @return {@link Optional} of the charset or an {@link Optional#empty()}
 	 */
 	public static Optional<String> getEncoding(final byte[] data) {

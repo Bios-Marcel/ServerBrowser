@@ -19,15 +19,11 @@ public final class HashingUtility {
 	/**
 	 * Gets a files SHA-256 Checksum.
 	 *
-	 * @param file
-	 *            and name of a file that is to be verified
+	 * @param file and name of a file that is to be verified
 	 * @return true The SHA-256 checksum or an empty string.
-	 * @throws IOException
-	 *             if there was an error reading the file that is to be hashed
-	 * @throws FileNotFoundException
-	 *             if the file that is to be hashed couldn't be found
-	 * @throws NoSuchAlgorithmException
-	 *             if the used Hashing Algorithm couldn't be found
+	 * @throws IOException if there was an error reading the file that is to be hashed
+	 * @throws FileNotFoundException if the file that is to be hashed couldn't be found
+	 * @throws NoSuchAlgorithmException if the used Hashing Algorithm couldn't be found
 	 */
 	public static String generateChecksum(final String file) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
 		try (final FileInputStream fis = new FileInputStream(file)) {

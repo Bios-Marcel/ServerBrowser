@@ -18,8 +18,7 @@ public final class OptionalUtility {
 	/**
 	 * Returns an {@link Optional} of the first non-null Object found within the given objects.
 	 *
-	 * @param objects
-	 *            objects to get the first non-null from
+	 * @param objects objects to get the first non-null from
 	 * @return first non-null object or an empty {@link Optional}
 	 */
 	@SafeVarargs
@@ -56,8 +55,7 @@ public final class OptionalUtility {
 	 * the retrieved {@link Object} equals <code>null</code>, {@link Optional#empty()} will be
 	 * returned.
 	 *
-	 * @param supplier
-	 *            {@link Supplier} that supplies the returned (wrapped) object
+	 * @param supplier {@link Supplier} that supplies the returned (wrapped) object
 	 * @return An {@link Optional} of the {@link Object} returned by the {@link Supplier} or
 	 *         {@link Optional#empty()}
 	 */

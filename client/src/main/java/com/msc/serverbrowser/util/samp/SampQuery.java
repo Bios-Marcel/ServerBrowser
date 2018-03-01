@@ -42,16 +42,12 @@ public class SampQuery implements AutoCloseable {
 	/**
 	 * Configures the socket and the address that will be used for doing the queries.
 	 *
-	 * @param serverAddress
-	 *            hostname / ip
-	 * @param serverPort
-	 *            port
-	 * @param timeout
-	 *            the maximum time, that the socket tries connecting
-	 * @throws SocketException
-	 *             Thrown if the connection is closed unexpectedly / has never been opened properly
-	 * @throws UnknownHostException
-	 *             if the host is unknown
+	 * @param serverAddress hostname / ip
+	 * @param serverPort port
+	 * @param timeout the maximum time, that the socket tries connecting
+	 * @throws SocketException Thrown if the connection is closed unexpectedly / has never been
+	 *             opened properly
+	 * @throws UnknownHostException if the host is unknown
 	 */
 	public SampQuery(final String serverAddress, final int serverPort, final int timeout) throws SocketException, UnknownHostException {
 		this.server = InetAddress.getByName(serverAddress);
@@ -64,14 +60,10 @@ public class SampQuery implements AutoCloseable {
 	/**
 	 * Configures the socket and the address.
 	 *
-	 * @param serverAddress
-	 *            hostname / ip
-	 * @param serverPort
-	 *            port
-	 * @throws SocketException
-	 *             if the connection couldn't be established
-	 * @throws UnknownHostException
-	 *             if the host is unknown
+	 * @param serverAddress hostname / ip
+	 * @param serverPort port
+	 * @throws SocketException if the connection couldn't be established
+	 * @throws UnknownHostException if the host is unknown
 	 */
 	public SampQuery(final String serverAddress, final int serverPort) throws SocketException, UnknownHostException {
 		this(serverAddress, serverPort, 2000);
@@ -221,8 +213,7 @@ public class SampQuery implements AutoCloseable {
 	 * setting the byte buffers initial position to eleven.
 	 * </p>
 	 *
-	 * @param the
-	 *            byte array to be wrapped
+	 * @param the byte array to be wrapped
 	 * @return the {@link ByteBuffer} that wraps the byte array
 	 */
 	private static ByteBuffer wrapReply(final byte[] reply) {
@@ -263,9 +254,8 @@ public class SampQuery implements AutoCloseable {
 		if (type == PACKET_MIRROR_CHARACTERS) {
 
 			/**
-			 * Applying random bytes for the server to mirror them back.
-			 * TODO Currently those bytes aren't reused to check if the server did everything
-			 * correctly.
+			 * Applying random bytes for the server to mirror them back. TODO Currently those bytes
+			 * aren't reused to check if the server did everything correctly.
 			 */
 
 			final Random random = ThreadLocalRandom.current();
@@ -281,8 +271,7 @@ public class SampQuery implements AutoCloseable {
 	/**
 	 * Sends a packet to te server
 	 *
-	 * @param packet
-	 *            that is supposed to be sent
+	 * @param packet that is supposed to be sent
 	 */
 	private boolean send(final char packetType) {
 		try {

@@ -129,8 +129,7 @@ public class MainView {
 	/**
 	 * Inserts the {@link Node} into the {@link #contentScrollPane}.
 	 *
-	 * @param node
-	 *            the {@link Node} to be inserted into the {@link #contentScrollPane}
+	 * @param node the {@link Node} to be inserted into the {@link #contentScrollPane}
 	 */
 	public void setActiveViewNode(final Node node) {
 		contentScrollPane.setContent(node);
@@ -139,8 +138,7 @@ public class MainView {
 	/**
 	 * Adds {@link Node}s to the custom part of the BottomBar
 	 *
-	 * @param nodes
-	 *            the {@link Node}s to be added
+	 * @param nodes the {@link Node}s to be added
 	 */
 	public void addToBottomBar(final Node... nodes) {
 		bottomBarCustom.getChildren().addAll(nodes);
@@ -156,8 +154,7 @@ public class MainView {
 	/**
 	 * Sets the text for the global {@link ProgressBar}.
 	 *
-	 * @param text
-	 *            the text to be set
+	 * @param text the text to be set
 	 */
 	public void setGlobalProgressBarText(final String text) {
 		globalProgressLabel.setText(text);
@@ -173,8 +170,7 @@ public class MainView {
 	/**
 	 * Selects the proper menu item, depending on which {@link View} was given.
 	 *
-	 * @param view
-	 *            the {@link View} to select the menu item for
+	 * @param view the {@link View} to select the menu item for
 	 */
 	public void selectMenuItemForView(final View view) {
 		switch (view) {
@@ -202,8 +198,7 @@ public class MainView {
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemServers}.
 	 *
-	 * @param handler
-	 *            {@link EventHandler} to be set
+	 * @param handler {@link EventHandler} to be set
 	 */
 	public void setMenuItemAllAction(final EventHandler<ActionEvent> handler) {
 		menuItemServers.setOnAction(handler);
@@ -213,8 +208,7 @@ public class MainView {
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemUser}.
 	 *
-	 * @param handler
-	 *            {@link EventHandler} to be set
+	 * @param handler {@link EventHandler} to be set
 	 */
 	public void setMenuItemUsernameAction(final EventHandler<ActionEvent> handler) {
 		menuItemUser.setOnAction(handler);
@@ -224,8 +218,7 @@ public class MainView {
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemVersion}.
 	 *
-	 * @param handler
-	 *            {@link EventHandler} to be set
+	 * @param handler {@link EventHandler} to be set
 	 */
 	public void setMenuItemVersionAction(final EventHandler<ActionEvent> handler) {
 		menuItemVersion.setOnAction(handler);
@@ -235,8 +228,7 @@ public class MainView {
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemFiles}.
 	 *
-	 * @param handler
-	 *            {@link EventHandler} to be set
+	 * @param handler {@link EventHandler} to be set
 	 */
 	public void setMenuItemFilesAction(final EventHandler<ActionEvent> handler) {
 		menuItemFiles.setOnAction(handler);
@@ -246,8 +238,7 @@ public class MainView {
 	 * Sets the {@link EventHandler} to handle all {@link ActionEvent}s on the
 	 * {@link #menuItemSettings}.
 	 *
-	 * @param handler
-	 *            {@link EventHandler} to be set
+	 * @param handler {@link EventHandler} to be set
 	 */
 	public void setMenuItemSettingsAction(final EventHandler<ActionEvent> handler) {
 		menuItemSettings.setOnAction(handler);
@@ -263,8 +254,7 @@ public class MainView {
 	/**
 	 * Sets a browse action for the {@link #githubLink} using the given {@link String} as the URL.
 	 *
-	 * @param string
-	 *            the URL
+	 * @param string the URL
 	 */
 	public void setGitHubHyperlink(final String string) {
 		githubLink.setOnAction(__ -> OSUtility.browse(string));
@@ -273,8 +263,7 @@ public class MainView {
 	/**
 	 * Sets a browse action for the {@link #helpLink} using the given {@link String} as the URL.
 	 *
-	 * @param string
-	 *            the URL
+	 * @param string the URL
 	 */
 	public void setHelpHyperlink(final String string) {
 		helpLink.setOnAction(__ -> OSUtility.browse(string));
@@ -283,8 +272,7 @@ public class MainView {
 	/**
 	 * Sets a browse action for the {@link #donateLink} using the given {@link String} as the URL.
 	 *
-	 * @param string
-	 *            the URL
+	 * @param string the URL
 	 */
 	public void setDonateHyperlink(final String string) {
 		donateLink.setOnAction(__ -> OSUtility.browse(string));
