@@ -123,7 +123,7 @@ public class SAMPLauncher {
 		arguments.add("-n");
 
 		// TODO Solve better
-		arguments.add(Optional.ofNullable(GTAController.retrieveUsernameFromRegistry()).orElse("CHOOSE_NAME"));
+		arguments.add(GTAController.retrieveUsernameFromRegistry().orElse("CHOOSE_NAME"));
 
 		passwordOptional.ifPresent(password -> {
 			if (!password.isEmpty()) {

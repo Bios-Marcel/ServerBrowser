@@ -42,7 +42,7 @@ public final class GTAController {
 	/**
 	 * Holds the users username.
 	 */
-	public static StringProperty usernameProperty = new SimpleStringProperty(retrieveUsernameFromRegistry());
+	public static StringProperty usernameProperty = new SimpleStringProperty(retrieveUsernameFromRegistry().orElse(""));
 
 	private GTAController() {
 		// Constructor to prevent instantiation
@@ -53,11 +53,17 @@ public final class GTAController {
 	 */
 	public static void applyUsername() {
 		if (!OSUtility.isWindows()) {
+			// TODO Localize
+			final Alert alert = new Alert(AlertType.ERROR, "The feature you are trying to use is not available on your operating system.", ButtonType.OK);
+			Client.insertAlertOwner(alert);
+			alert.setTitle("Apply username");
+			alert.showAndWait();
 			return;
 		}
 
 		killSAMP();
-		PastUsernames.addPastUsername(retrieveUsernameFromRegistry());
+		retrieveUsernameFromRegistry().ifPresent(PastUsernames::addPastUsername);
+
 		try {
 			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get());
 		}
@@ -73,17 +79,17 @@ public final class GTAController {
 	 *
 	 * @return Username or "404 name not found"
 	 */
-	static String retrieveUsernameFromRegistry() {
+	protected static Optional<String> retrieveUsernameFromRegistry() {
 		if (!OSUtility.isWindows()) {
-			return "You are on Linux ;D";
+			return Optional.empty();
 		}
 
 		try {
-			return WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName");
+			return Optional.ofNullable(WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName"));
 		}
 		catch (final RegistryException exception) {
 			Logging.warn("Couldn't retrieve Username from registry.", exception);
-			return "404 Name not found";
+			return Optional.empty();
 		}
 	}
 

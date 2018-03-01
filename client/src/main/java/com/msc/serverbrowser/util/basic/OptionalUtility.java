@@ -4,8 +4,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.junit.jupiter.api.function.ThrowingSupplier;
-
 /**
  * Contains methods for working with {@link Optional}.
  *
