@@ -143,4 +143,15 @@ public final class ServerUtility {
 	public static boolean isPortValid(final Integer portNumber) {
 		return portNumber >= MIN_PORT && portNumber <= MAX_PORT;
 	}
+
+	/**
+	 * Valdiates an IP-Address against a simple regex. Works only for IPv4.
+	 * 
+	 * @param address the address that needs to be validated
+	 * @return true if the IP-Address was valid, otherwise false.
+	 */
+	public static boolean isValidIPAddress(final String address) {
+		return address
+				.matches("(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)");
+	}
 }
