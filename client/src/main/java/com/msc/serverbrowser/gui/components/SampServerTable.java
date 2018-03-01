@@ -57,7 +57,7 @@ public class SampServerTable extends TableView<SampServer> {
 	private final MenuItem	removeFromFavouritesMenuItem	= new MenuItem(Client.getString("removeFromFavourites"));
 	private final MenuItem	visitWebsiteMenuItem			= new MenuItem(Client.getString("visitWebsite"));
 	private final MenuItem	connectMenuItem					= new MenuItem(Client.getString("connectToServer"));
-	private final MenuItem	connectWithPasswordMenuItem		= new MenuItem("Connect using password");
+	private final MenuItem	connectWithPasswordMenuItem		= new MenuItem(Client.getString("connectToServerUsingPassword"));
 	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem(Client.getString("copyIpAddressAndPort"));
 
 	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, connectWithPasswordMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
@@ -184,24 +184,26 @@ public class SampServerTable extends TableView<SampServer> {
 			return;
 		}
 
-		if (newIndexCorrect != oldIndexes.get(0)) {
+		final int firstOfOldIndexes = oldIndexes.get(0).intValue();
+		if (newIndexCorrect != firstOfOldIndexes) {
 			final List<SampServer> draggedServer = getSelectionModel().getSelectedItems().stream().collect(Collectors.toList());
+			final Runnable reverseAndAdd = () -> {
+				Collections.reverse(draggedServer);
+				draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
+			};
+			final Runnable sortReverseAndRemove = () -> {
+				Collections.sort(oldIndexes);
+				Collections.reverse(oldIndexes);
+				oldIndexes.forEach(index -> servers.remove(index.intValue()));
+			};
 
 			if (oldIndexes.get(0) < newIndexCorrect) {
-				Collections.reverse(draggedServer);
-				draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
-
-				Collections.sort(oldIndexes);
-				Collections.reverse(oldIndexes);
-				oldIndexes.forEach(index -> servers.remove(index.intValue()));
+				reverseAndAdd.run();
+				sortReverseAndRemove.run();
 			}
 			else {
-				Collections.sort(oldIndexes);
-				Collections.reverse(oldIndexes);
-				oldIndexes.forEach(index -> servers.remove(index.intValue()));
-
-				Collections.reverse(draggedServer);
-				draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
+				sortReverseAndRemove.run();
+				reverseAndAdd.run();
 			}
 		}
 	}
@@ -269,12 +271,9 @@ public class SampServerTable extends TableView<SampServer> {
 	/**
 	 * Displays the context menu for server entries.
 	 *
-	 * @param serverList
-	 *            The list of servers that the context menu actions will affect
-	 * @param posX
-	 *            X coordinate
-	 * @param posY
-	 *            Y coodrinate
+	 * @param serverList The list of servers that the context menu actions will affect
+	 * @param posX X coordinate
+	 * @param posY Y coordinate
 	 */
 	private void displayMenu(final List<SampServer> serverList, final double posX, final double posY) {
 		final boolean sizeEqualsOne = serverList.size() == 1;
@@ -295,8 +294,7 @@ public class SampServerTable extends TableView<SampServer> {
 	/**
 	 * Sets the mode, which decides how the table will behave.
 	 *
-	 * @param mode
-	 *            the mode that the {@link SampServerTable} will be used for.
+	 * @param mode the mode that the {@link SampServerTable} will be used for.
 	 */
 	public void setServerTableMode(final SampServerTableMode mode) {
 		tableMode = mode;
@@ -333,8 +331,7 @@ public class SampServerTable extends TableView<SampServer> {
 	/**
 	 * Returns true if this list contains the specified element
 	 *
-	 * @param server
-	 *            the server to search for
+	 * @param server the server to search for
 	 * @return true if the data contains the server
 	 */
 	public boolean contains(final SampServer server) {
@@ -351,8 +348,7 @@ public class SampServerTable extends TableView<SampServer> {
 	/**
 	 * Adds a new {@link SampServer} to the data.
 	 *
-	 * @param newServer
-	 *            the server that will be added
+	 * @param newServer the server that will be added
 	 */
 	public void add(final SampServer newServer) {
 		servers.add(newServer);
@@ -361,8 +357,7 @@ public class SampServerTable extends TableView<SampServer> {
 	/**
 	 * Adds a collection of new {@link SampServer} to the data.
 	 *
-	 * @param newServers
-	 *            the servers that will be added
+	 * @param newServers the servers that will be added
 	 */
 	public void addAll(final Collection<SampServer> newServers) {
 		newServers.forEach(this::add);
