@@ -12,8 +12,8 @@ public final class StringUtility {
 	}
 
 	/**
-	 * Puts <code>http://</code> infront of the url if not it already has
-	 * <code>http://</code> or <code>https://</code> infront of it.
+	 * Puts <code>http://</code> infront of the url if not it already has <code>http://</code> or
+	 * <code>https://</code> infront of it.
 	 *
 	 * @param url the url to fix
 	 * @return the fixed url or the original if there was no need to fix
@@ -30,15 +30,12 @@ public final class StringUtility {
 	 * 'https://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java'>
 	 * this StackOverflow question</a>
 	 * <p>
-	 * Checks if a {@link String} looks like a Number and tries to parse it ito an
-	 * {@link Integer}, if it fails an empty {@link Optional} will be returned
-	 * instead.
+	 * Checks if a {@link String} looks like a Number and tries to parse it ito an {@link Integer},
+	 * if it fails an empty {@link Optional} will be returned instead.
 	 * </p>
 	 *
-	 * @param string
-	 *            the {@link String} that shall be parsed
-	 * @return {@link Optional} containing the {@link Integer} or
-	 *         {@link Optional#empty()}
+	 * @param string the {@link String} that shall be parsed
+	 * @return {@link Optional} containing the {@link Integer} or {@link Optional#empty()}
 	 */
 	public static Optional<Integer> parseInteger(final String string) {
 		if (string == null) {
@@ -70,10 +67,8 @@ public final class StringUtility {
 	/**
 	 * Converts a String to a boolean.
 	 *
-	 * @param toBeConverted
-	 *            the string that has to be converted
-	 * @return true if the string equals <code>true</code> (ignorecase) or
-	 *         <code>1</code>
+	 * @param toBeConverted the string that has to be converted
+	 * @return true if the string equals <code>true</code> (ignorecase) or <code>1</code>
 	 */
 	public static boolean stringToBoolean(final String toBeConverted) {
 		return "true".equalsIgnoreCase(toBeConverted) || "1".equals(toBeConverted);
@@ -93,10 +88,8 @@ public final class StringUtility {
 	 * 1024 PebiByte = 1 ExbiByte
 	 * </pre>
 	 *
-	 * @param bytes
-	 *            that will be converted
-	 * @return a human readable string following the example given in the method
-	 *         description
+	 * @param bytes that will be converted
+	 * @return a human readable string following the example given in the method description
 	 */
 	public static String humanReadableByteCount(final long bytes) {
 		final int unit = 1024;
@@ -112,8 +105,7 @@ public final class StringUtility {
 	/**
 	 * Checks if a {@link String} conforms to the uri format.
 	 *
-	 * @param possibleUrl
-	 *            the {@link String} to check.
+	 * @param possibleUrl the {@link String} to check.
 	 * @return true if it was valid and false otherwise
 	 */
 	public static boolean isValidURL(final String possibleUrl) {

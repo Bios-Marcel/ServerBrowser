@@ -20,8 +20,7 @@ public class OneLineStringProperty extends SimpleStringProperty {
 	}
 
 	/**
-	 * @param initialValue
-	 *            the initial value for this property
+	 * @param initialValue the initial value for this property
 	 */
 	public OneLineStringProperty(final String initialValue) {
 		super(replaceLineBreaks(initialValue));

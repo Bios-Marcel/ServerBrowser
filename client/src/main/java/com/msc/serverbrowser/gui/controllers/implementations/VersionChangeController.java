@@ -45,8 +45,8 @@ public class VersionChangeController implements ViewController {
 	private VBox buttonContainer;
 
 	/**
-	 * Adding all usable InstallationCandidates, but this could probably be made in a more
-	 * desirable way.
+	 * Adding all usable InstallationCandidates, but this could probably be made in a more desirable
+	 * way.
 	 */
 	static {
 		INSTALLATION_CANDIDATES
@@ -147,8 +147,7 @@ public class VersionChangeController implements ViewController {
 	}
 
 	/**
-	 * Decides which buttons will be enabled and what text every button will have,
-	 * depending on if
+	 * Decides which buttons will be enabled and what text every button will have, depending on if
 	 * an installation is going on and what is currently installed.
 	 */
 	private void updateButtonStates() {

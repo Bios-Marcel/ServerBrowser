@@ -15,9 +15,8 @@ import org.junit.jupiter.api.Test;
 public class MathUtilityTest {
 
 	/**
-	 * Tests the {@link MathUtility#limitUpperAndLower(int, int, int)} method for
-	 * correct input (decrease input, increase input and keep input) and illegal
-	 * input.
+	 * Tests the {@link MathUtility#limitUpperAndLower(int, int, int)} method for correct input
+	 * (decrease input, increase input and keep input) and illegal input.
 	 */
 	@Test
 	public void testLimitUpperAndLower() {

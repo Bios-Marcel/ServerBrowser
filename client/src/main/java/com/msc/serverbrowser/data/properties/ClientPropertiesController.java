@@ -21,8 +21,7 @@ public final class ClientPropertiesController {
 	/**
 	 * Returns a properties default as an integer if the datatype is correct.
 	 *
-	 * @param property
-	 *            the property to return its default valeu as an integer
+	 * @param property the property to return its default valeu as an integer
 	 * @return the default of the property as integer
 	 */
 	public static Integer getDefaultAsInt(final Property property) {
@@ -34,8 +33,7 @@ public final class ClientPropertiesController {
 	/**
 	 * Retrieves a value for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
+	 * @param property the key
 	 * @return the value for the given {@link Property}
 	 */
 	public static String getPropertyAsString(final Property property) {
@@ -61,8 +59,7 @@ public final class ClientPropertiesController {
 	/**
 	 * Retrieves a value for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
+	 * @param property the key
 	 * @return the value for the given {@link Property}
 	 */
 	public static Integer getPropertyAsInt(final Property property) {
@@ -76,8 +73,7 @@ public final class ClientPropertiesController {
 	/**
 	 * Retrieves a value for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
+	 * @param property the key
 	 * @return the value for the given {@link Property}
 	 */
 	public static Double getPropertyAsDouble(final Property property) {
@@ -91,8 +87,7 @@ public final class ClientPropertiesController {
 	/**
 	 * Retrieves a value for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
+	 * @param property the key
 	 * @return the value for the given {@link Property}
 	 */
 	public static Boolean getPropertyAsBoolean(final Property property) {
@@ -110,10 +105,8 @@ public final class ClientPropertiesController {
 	/**
 	 * Sets a value for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
-	 * @param value
-	 *            the value that will be set
+	 * @param property the key
+	 * @param value the value that will be set
 	 */
 	private static void setProperty(final Property property, final Object value) {
 		setProperty(property, value, false);
@@ -139,10 +132,8 @@ public final class ClientPropertiesController {
 	/**
 	 * Sets a value as an {@link Double} for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
-	 * @param value
-	 *            the value that will be set
+	 * @param property the key
+	 * @param value the value that will be set
 	 */
 	public static void setProperty(final Property property, final Double value) {
 		nullCheck(value);
@@ -152,10 +143,8 @@ public final class ClientPropertiesController {
 	/**
 	 * Sets a value as an {@link Integer} for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
-	 * @param value
-	 *            the value that will be set
+	 * @param property the key
+	 * @param value the value that will be set
 	 */
 	public static void setProperty(final Property property, final Integer value) {
 		nullCheck(value);
@@ -165,10 +154,8 @@ public final class ClientPropertiesController {
 	/**
 	 * Sets a value as a {@link Boolean} for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
-	 * @param value
-	 *            the value that will be set
+	 * @param property the key
+	 * @param value the value that will be set
 	 */
 	public static void setProperty(final Property property, final Boolean value) {
 		nullCheck(value);
@@ -178,10 +165,8 @@ public final class ClientPropertiesController {
 	/**
 	 * Sets a value as a {@link String} for a specific key from {@link Property}.
 	 *
-	 * @param property
-	 *            the key
-	 * @param value
-	 *            the value that will be set
+	 * @param property the key
+	 * @param value the value that will be set
 	 */
 	public static void setProperty(final Property property, final String value) {
 		setProperty(property, (Object) value);
@@ -196,8 +181,7 @@ public final class ClientPropertiesController {
 	/**
 	 * Restores a property to its hardcoded default value.
 	 *
-	 * @param property
-	 *            the property restopre its default
+	 * @param property the property restopre its default
 	 */
 	public static void restorePropertyToDefault(final Property property) {
 		setProperty(property, property.getDefaultValue(), true);

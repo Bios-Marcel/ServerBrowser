@@ -44,8 +44,7 @@ public final class SQLDatabase {
 	}
 
 	/**
-	 * Establishes the connection and creates the necessary tables if they don't
-	 * exist.
+	 * Establishes the connection and creates the necessary tables if they don't exist.
 	 */
 	private void init() {
 		try {
@@ -93,8 +92,7 @@ public final class SQLDatabase {
 	/**
 	 * Executes a query on the local sqllite db.
 	 *
-	 * @param statement
-	 *            the statement to execute
+	 * @param statement the statement to execute
 	 * @return <code>true</code> if successful and <code>false<code> otherwise
 	 */
 	public boolean execute(final String statement) {
@@ -108,13 +106,11 @@ public final class SQLDatabase {
 	}
 
 	/**
-	 * Executes a query on the local sqllite and returns the results. A
-	 * {@link PreparedStatement} is created by using the given {@link String}.
+	 * Executes a query on the local sqllite and returns the results. A {@link PreparedStatement} is
+	 * created by using the given {@link String}.
 	 *
-	 * @param statement
-	 *            the statement to execute
-	 * @return a {@link Optional} containing a {@link ResultSet} or an empty
-	 *         {@link Optional}.
+	 * @param statement the statement to execute
+	 * @return a {@link Optional} containing a {@link ResultSet} or an empty {@link Optional}.
 	 */
 	public Optional<ResultSet> executeGetResult(final String statement) {
 		try {
@@ -129,10 +125,8 @@ public final class SQLDatabase {
 	/**
 	 * Executes a query on the local sqllite and returns the results.
 	 *
-	 * @param statement
-	 *            the statement to execute
-	 * @return a {@link Optional} containing a {@link ResultSet} or an empty
-	 *         {@link Optional}.
+	 * @param statement the statement to execute
+	 * @return a {@link Optional} containing a {@link ResultSet} or an empty {@link Optional}.
 	 */
 	public Optional<ResultSet> executeGetResult(final PreparedStatement statement) {
 		try {

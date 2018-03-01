@@ -1,8 +1,8 @@
 package com.msc.serverbrowser.data.properties;
 
 /**
- * Holds all existent properties. Do not adjust any of the ids.
- * TODO Think about a way to do one time database migration and cleanup ids
+ * Holds all existent properties. Do not adjust any of the ids. TODO Think about a way to do one
+ * time database migration and cleanup ids
  *
  * @author Marcel
  */

@@ -33,10 +33,8 @@ public final class FavouritesController {
 	/**
 	 * Adds a new server to the favourites and downloads its information.
 	 *
-	 * @param address
-	 *            the address of the server
-	 * @param port
-	 *            the port of the server
+	 * @param address the address of the server
+	 * @param port the port of the server
 	 * @return the server object that was created
 	 */
 	public static SampServer addServerToFavourites(final String address, final Integer port) {
@@ -77,8 +75,7 @@ public final class FavouritesController {
 	/**
 	 * Adds a server to the favourites.
 	 *
-	 * @param server
-	 *            the server to add to the favourites
+	 * @param server the server to add to the favourites
 	 * @return true if the action was a success, otherwise false
 	 */
 	public static boolean addServerToFavourites(final SampServer server) {
@@ -112,8 +109,7 @@ public final class FavouritesController {
 	/**
 	 * Checks whether a server is favourite.
 	 *
-	 * @param server
-	 *            server to check if it is a favourite
+	 * @param server server to check if it is a favourite
 	 * @return true if it is, false otherwise
 	 */
 	public static boolean isFavourite(final SampServer server) {
@@ -123,8 +119,7 @@ public final class FavouritesController {
 	/**
 	 * Updates a servers info(data) in the database.
 	 *
-	 * @param server
-	 *            the server to update
+	 * @param server the server to update
 	 * @return true if the action was a success, otherwise false
 	 */
 	public static boolean updateServerData(final SampServer server) {
@@ -152,8 +147,7 @@ public final class FavouritesController {
 	/**
 	 * Removes a server from favourites.
 	 *
-	 * @param server
-	 *            the server to remove from favourites
+	 * @param server the server to remove from favourites
 	 * @return true if the action was a success, otherwise false
 	 */
 	public static boolean removeServerFromFavourites(final SampServer server) {

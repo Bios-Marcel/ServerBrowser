@@ -50,18 +50,13 @@ class FileUtilityTest {
 	}
 
 	/**
-	 * Tests if a given ZIP archive has the correct content. The test data needs to
-	 * have a
-	 * corresponding <code>*.sha512sum</code> in the same folder with gets used to
-	 * validate the file
+	 * Tests if a given ZIP archive has the correct content. The test data needs to have a
+	 * corresponding <code>*.sha512sum</code> in the same folder with gets used to validate the file
 	 * content survived the zipping without alteration.
 	 *
-	 * @param testDataName
-	 *            Full path to the ZIP under test.
-	 * @throws URISyntaxException
-	 *             if the path is wrong
-	 * @throws IOException
-	 *             if the ZIP archive or its sha512sum file could not be found
+	 * @param testDataName Full path to the ZIP under test.
+	 * @throws URISyntaxException if the path is wrong
+	 * @throws IOException if the ZIP archive or its sha512sum file could not be found
 	 */
 	private void testUnzipWithGivenFileWithSha(final String testDataName) throws URISyntaxException, IOException {
 		final URL testDataZipUrl = getClass().getResource(PATH_TO_TEST_RESSOURCES + testDataName + ".zip");
@@ -98,8 +93,7 @@ class FileUtilityTest {
 	 * Stolen from
 	 * https://stackoverflow.com/questions/332079/in-java-how-do-i-convert-a-byte-array-to-a-string-of-hex-digits-while-keeping-l#332433
 	 *
-	 * @param bytes
-	 *            some byte array
+	 * @param bytes some byte array
 	 * @return lower case hex dump with leading zeros intact
 	 */
 	private static String toHex(final byte[] bytes) {

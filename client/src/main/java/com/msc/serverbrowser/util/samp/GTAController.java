@@ -197,8 +197,11 @@ public final class GTAController {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Shows a dialog prompting the user for a server password.
 	 *
+=======
+>>>>>>> branch 'master' of https://github.com/Bios-Marcel/ServerBrowser/
 	 * @return an {@link Optional} containing either a string (empty or filled) or
 	 *         {@link Optional#empty()}
 	 */

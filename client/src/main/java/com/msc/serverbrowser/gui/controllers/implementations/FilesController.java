@@ -37,8 +37,7 @@ public class FilesController implements ViewController {
 	private final FilesView filesView;
 
 	/**
-	 * @param filesView
-	 *            the view to be used by this controller
+	 * @param filesView the view to be used by this controller
 	 */
 	public FilesController(final FilesView filesView) {
 		this.filesView = filesView;

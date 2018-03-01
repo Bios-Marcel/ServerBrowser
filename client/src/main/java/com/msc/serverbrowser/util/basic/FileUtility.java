@@ -40,13 +40,10 @@ public final class FileUtility {
 	/**
 	 * Downloads a file and saves it to the given location.
 	 *
-	 * @param url
-	 *            the url to download from
-	 * @param outputPath
-	 *            the path where to save the downloaded file
+	 * @param url the url to download from
+	 * @param outputPath the path where to save the downloaded file
 	 * @return the downloaded file
-	 * @throws IOException
-	 *             if an errors occurs while writing the file or opening the stream
+	 * @throws IOException if an errors occurs while writing the file or opening the stream
 	 */
 	public static File downloadFile(final String url, final String outputPath) throws IOException {
 		try (final ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(url).openStream());
@@ -59,12 +56,9 @@ public final class FileUtility {
 	/**
 	 * Copies a file overwriting the target if existent
 	 *
-	 * @param source
-	 *            source file
-	 * @param target
-	 *            target file/location
-	 * @throws IOException
-	 *             if there was an error during the copy action
+	 * @param source source file
+	 * @param target target file/location
+	 * @throws IOException if there was an error during the copy action
 	 */
 	public static void copyOverwrite(final String source, final String target) throws IOException {
 		try (FileInputStream fileInputStream = new FileInputStream(source);
@@ -77,17 +71,13 @@ public final class FileUtility {
 	/**
 	 * Downloads a file and saves it at the given location.
 	 *
-	 * @param url
-	 *            the url to download from
-	 * @param outputPath
-	 *            the path where to save the downloaded file
-	 * @param progressProperty
-	 *            a property that will contain the current download process from 0.0 to 1.0
-	 * @param fileLength
-	 *            length of the file
+	 * @param url the url to download from
+	 * @param outputPath the path where to save the downloaded file
+	 * @param progressProperty a property that will contain the current download process from 0.0 to
+	 *            1.0
+	 * @param fileLength length of the file
 	 * @return the downloaded file
-	 * @throws IOException
-	 *             if an errors occurs while writing the file or opening the stream
+	 * @throws IOException if an errors occurs while writing the file or opening the stream
 	 */
 	public static File downloadFile(final URL url, final String outputPath, final DoubleProperty progressProperty, final double fileLength) throws IOException {
 		try (final InputStream input = url.openStream(); final FileOutputStream fileOutputStream = new FileOutputStream(outputPath);) {
@@ -118,15 +108,12 @@ public final class FileUtility {
 	}
 
 	/**
-	 * Retrieving the size of a file that lies somewhere on the web.
-	 * The file size is retrieved via the http header. It shall be noted, that this method won't
-	 * work in all cases.
+	 * Retrieving the size of a file that lies somewhere on the web. The file size is retrieved via
+	 * the http header. It shall be noted, that this method won't work in all cases.
 	 *
-	 * @param url
-	 *            the files {@link URL}
+	 * @param url the files {@link URL}
 	 * @return the retrieved filesize
-	 * @throws IOException
-	 *             if there was an error during the web request
+	 * @throws IOException if there was an error during the web request
 	 */
 	public static int getOnlineFileSize(final URL url) throws IOException {
 		HttpURLConnection connection = null;
@@ -146,12 +133,9 @@ public final class FileUtility {
 	/**
 	 * Unzips a file, placing its contents in the given output location.
 	 *
-	 * @param zipFilePath
-	 *            input zip file
-	 * @param outputLocation
-	 *            zip file output folder
-	 * @throws IOException
-	 *             if there was an error reading the zip file or writing the unzipped data
+	 * @param zipFilePath input zip file
+	 * @param outputLocation zip file output folder
+	 * @throws IOException if there was an error reading the zip file or writing the unzipped data
 	 */
 	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException {
 		// Open the zip file
@@ -194,10 +178,8 @@ public final class FileUtility {
 	/**
 	 * Validates a {@link File} against a SHA-256 checksum.
 	 *
-	 * @param file
-	 *            the file that has to be validated
-	 * @param sha256Checksum
-	 *            the checksum to validate against
+	 * @param file the file that has to be validated
+	 * @param sha256Checksum the checksum to validate against
 	 * @return true if the file was valid, otherwise false
 	 */
 	public static boolean validateFile(final File file, final String sha256Checksum) {
@@ -212,13 +194,10 @@ public final class FileUtility {
 
 	/**
 	 * Deletes a given {@link File}. In case the file is a directory, it will recursively delete all
-	 * its containments.
-	 * If at any step during the deletion of files an exception is throwing, there won't be any
-	 * rollback, therefore
-	 * all deleted files will be gone.
+	 * its containments. If at any step during the deletion of files an exception is throwing, there
+	 * won't be any rollback, therefore all deleted files will be gone.
 	 *
-	 * @param file
-	 *            the file that is to be deleted
+	 * @param file the file that is to be deleted
 	 * @return true if successful, otherwise false
 	 */
 	public static boolean deleteRecursively(final File file) {

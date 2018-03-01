@@ -46,8 +46,7 @@ public final class UpdateUtility {
 	 * Checks if the currently installed version is the latest.
 	 *
 	 * @return true if it is up to date, otherwise false
-	 * @throws IOException
-	 *             if the latest tag name couldn't be retrieved.
+	 * @throws IOException if the latest tag name couldn't be retrieved.
 	 */
 	public static Boolean isUpToDate() throws IOException {
 		final GHRelease latestRelease = getRelease().get();
@@ -60,8 +59,7 @@ public final class UpdateUtility {
 
 	/**
 	 * @return a {@link GHRelease} for the latest ServerBrowser release
-	 * @throws IOException
-	 *             if there was an error querying GitHub
+	 * @throws IOException if there was an error querying GitHub
 	 */
 	public static Optional<GHRelease> getRelease() throws IOException {
 		final GitHub gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build();
@@ -76,19 +74,14 @@ public final class UpdateUtility {
 	/**
 	 * Compares two version strings to each other.
 	 *
-	 * @param versionOne
-	 *            first version string
-	 * @param versionTwo
-	 *            second version string
+	 * @param versionOne first version string
+	 * @param versionTwo second version string
 	 * @return {@link CompareResult#GREATER} if argument one is greater, {@link CompareResult#LESS}
 	 *         if argument one is less and otherwise {@link CompareResult#EQUAL}
-	 * @throws NullPointerException
-	 *             if any of the parameters is null
-	 * @throws NumberFormatException
-	 *             if any of the parameters contains something besides spaces, dots or integral
-	 *             numbers
-	 * @throws IllegalArgumentException
-	 *             if any of the arguments is empty
+	 * @throws NullPointerException if any of the parameters is null
+	 * @throws NumberFormatException if any of the parameters contains something besides spaces,
+	 *             dots or integral numbers
+	 * @throws IllegalArgumentException if any of the arguments is empty
 	 */
 	public static CompareResult compareVersions(final String versionOne, final String versionTwo)
 			throws NullPointerException, NumberFormatException, IllegalArgumentException {
