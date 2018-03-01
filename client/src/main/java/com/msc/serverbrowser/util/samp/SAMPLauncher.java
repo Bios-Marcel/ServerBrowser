@@ -18,6 +18,7 @@ import com.msc.serverbrowser.data.ServerConfig;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 import com.msc.serverbrowser.logging.Logging;
+import com.msc.serverbrowser.util.ServerUtility;
 import com.msc.serverbrowser.util.basic.OptionalUtility;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
@@ -58,13 +59,18 @@ public class SAMPLauncher {
 		}
 
 		final String gtaPath = gtaPathOptional.get();
-		final Optional<String> ipAddress = OptionalUtility.attempt(() -> InetAddress.getByName(address).getHostAddress());
+		final String ipAddress;
 
-		if (ipAddress.isPresent()) {
-			if (connectInternal(gtaPath, ipAddress.get(), port, serverPassword)) {
-				ServerConfig.setLastTimeJoinedForServer(address, port, Instant.now().toEpochMilli());
-				return true;
-			}
+		if (ServerUtility.isValidIPAddress(address)) {
+			ipAddress = address;
+		}
+		else {
+			ipAddress = OptionalUtility.attempt(() -> InetAddress.getByName(address).getHostAddress()).orElse(address);
+		}
+
+		if (connectInternal(gtaPath, ipAddress, port, serverPassword)) {
+			ServerConfig.setLastTimeJoinedForServer(address, port, Instant.now().toEpochMilli());
+			return true;
 		}
 
 		GTAController.showCantConnectToServerError();
