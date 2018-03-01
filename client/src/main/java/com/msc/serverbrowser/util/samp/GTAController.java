@@ -170,7 +170,7 @@ public final class GTAController {
 			final Optional<String[]> serverInfo = query.getBasicServerInfo();
 
 			if (Objects.isNull(serverPassword) || serverPassword.isEmpty() && serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {
-				final Optional<String> passwordOptional = askForServerPassword();
+				final Optional<String> passwordOptional = promptUserForServerPassword();
 				passwordOptional.ifPresent(password -> SAMPLauncher.connect(address, port, password));
 			}
 			else {
@@ -196,7 +196,11 @@ public final class GTAController {
 		return alert.showAndWait();
 	}
 
-	public static Optional<String> askForServerPassword() {
+	/**
+	 * @return an {@link Optional} containing either a string (empty or filled) or
+	 *         {@link Optional#empty()}
+	 */
+	public static Optional<String> promptUserForServerPassword() {
 		final TextInputDialog dialog = new TextInputDialog();
 		Client.insertAlertOwner(dialog);
 		dialog.setTitle(Client.getString("connectToServer"));

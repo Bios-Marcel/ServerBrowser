@@ -1,5 +1,6 @@
 package com.msc.serverbrowser.gui.components;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -105,7 +106,7 @@ public class SampServerTable extends TableView<SampServer> {
 		});
 
 		connectWithPasswordMenuItem.setOnAction(__ -> {
-			GTAController.askForServerPassword().ifPresent(serverPassword -> {
+			GTAController.promptUserForServerPassword().ifPresent(serverPassword -> {
 				getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), serverPassword));
 			});
 		});
@@ -186,7 +187,7 @@ public class SampServerTable extends TableView<SampServer> {
 
 		final int firstOfOldIndexes = oldIndexes.get(0).intValue();
 		if (newIndexCorrect != firstOfOldIndexes) {
-			final List<SampServer> draggedServer = getSelectionModel().getSelectedItems().stream().collect(Collectors.toList());
+			final List<SampServer> draggedServer = new ArrayList<>(getSelectionModel().getSelectedItems());
 			final Runnable reverseAndAdd = () -> {
 				Collections.reverse(draggedServer);
 				draggedServer.forEach(server -> servers.add(newIndexCorrect, server));
