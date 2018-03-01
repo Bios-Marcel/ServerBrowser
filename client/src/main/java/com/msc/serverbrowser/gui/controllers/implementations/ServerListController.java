@@ -459,8 +459,6 @@ public class ServerListController implements ViewController {
 		});
 
 		final Thread serverInfoUpdateThread = new Thread(() -> {
-			System.out.println("lookup for: " + server.getHostname());
-
 			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort())) {
 				final Optional<String[]> infoOptional = query.getBasicServerInfo();
 				final Optional<Map<String, String>> serverRulesOptional = query.getServersRules();
@@ -483,12 +481,14 @@ public class ServerListController implements ViewController {
 					server.setLagcomp(serverRules.get("lagcomp"));
 					server.setMap(serverRules.get("mapname"));
 
-					final ObservableList<Player> playerList = FXCollections.observableArrayList();
-					query.getBasicPlayerInfo().ifPresent(players -> playerList.addAll(players));
 					final long ping = query.getPing();
+					final ObservableList<Player> playerList = FXCollections.observableArrayList();
+
+					if (activePlayers <= 100) {
+						query.getBasicPlayerInfo().ifPresent(players -> playerList.addAll(players));
+					}
 
 					runIfLookupRunning(server, () -> {
-						System.out.println("Apply data for: " + server.getHostname());
 						applyData(server, playerList, ping);
 					});
 					FavouritesController.updateServerData(server);
@@ -501,7 +501,6 @@ public class ServerListController implements ViewController {
 			}
 			catch (@SuppressWarnings("unused") final IOException exception) {
 				runIfLookupRunning(server, () -> {
-					System.out.println("Applying data for: " + server.getHostname());
 					Platform.runLater(() -> displayOfflineInformations());
 					lookingUpForServer = Optional.empty();
 				});
