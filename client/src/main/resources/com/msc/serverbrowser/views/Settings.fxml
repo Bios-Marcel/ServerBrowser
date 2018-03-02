@@ -123,10 +123,10 @@
 								<HBox spacing="5">
 									<children>
 										<CheckBox fx:id="enableAutomaticUpdatesCheckBox" maxHeight="Infinity" mnemonicParsing="false" text="%automaticUpdates" />
-										<CheckBox fx:id="usePreReleasesCheckBox" maxHeight="Infinity" mnemonicParsing="false" text="%usePreReleases" />
 										<Button fx:id="manualUpdateButton" onAction="#onClickManualUpdate" text="%checkForUpdates" />
 									</children>
 								</HBox>
+								<CheckBox fx:id="usePreReleasesCheckBox" maxHeight="Infinity" mnemonicParsing="false" text="%usePreReleases" />
 							</children>
 						</VBox>
 					</content>

@@ -3,6 +3,8 @@ package com.msc.serverbrowser.data.properties;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -52,8 +54,13 @@ public final class LegacySettingsController {
 	 *         {@link Optional}
 	 */
 	public static Optional<Properties> getLegacyProperties() {
-		final Properties properties = new Properties();
+		if (Files.notExists(Paths.get(PathConstants.SAMP_PATH))) {
+			Logging.error("SA-MP data can't be found.");
+			return Optional.empty();
+		}
+
 		try (FileInputStream input = new FileInputStream(PathConstants.SAMP_CFG)) {
+			final Properties properties = new Properties();
 			properties.load(input);
 			return Optional.of(properties);
 		}
