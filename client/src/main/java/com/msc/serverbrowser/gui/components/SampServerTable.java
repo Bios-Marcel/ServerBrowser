@@ -54,14 +54,15 @@ import javafx.scene.text.Text;
 public class SampServerTable extends TableView<SampServer> {
 	private SampServerTableMode tableMode = SampServerTableMode.FAVOURITES;
 
-	private final MenuItem	addToFavouritesMenuItem			= new MenuItem(Client.getString("addToFavourites"));
-	private final MenuItem	removeFromFavouritesMenuItem	= new MenuItem(Client.getString("removeFromFavourites"));
-	private final MenuItem	visitWebsiteMenuItem			= new MenuItem(Client.getString("visitWebsite"));
-	private final MenuItem	connectMenuItem					= new MenuItem(Client.getString("connectToServer"));
-	private final MenuItem	connectWithPasswordMenuItem		= new MenuItem(Client.getString("connectToServerUsingPassword"));
-	private final MenuItem	copyIpAddressAndPortMenuItem	= new MenuItem(Client.getString("copyIpAddressAndPort"));
+	private final MenuItem			connectMenuItem					= new MenuItem(Client.getString("connectToServer"));
+	private final MenuItem			connectWithPasswordMenuItem		= new MenuItem(Client.getString("connectToServerUsingPassword"));
+	private final SeparatorMenuItem	connectSeparator				= new SeparatorMenuItem();
+	private final MenuItem			addToFavouritesMenuItem			= new MenuItem(Client.getString("addToFavourites"));
+	private final MenuItem			removeFromFavouritesMenuItem	= new MenuItem(Client.getString("removeFromFavourites"));
+	private final MenuItem			copyIpAddressAndPortMenuItem	= new MenuItem(Client.getString("copyIpAddressAndPort"));
+	private final MenuItem			visitWebsiteMenuItem			= new MenuItem(Client.getString("visitWebsite"));
 
-	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, connectWithPasswordMenuItem, new SeparatorMenuItem(), addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
+	private final ContextMenu contextMenu = new ContextMenu(connectMenuItem, connectWithPasswordMenuItem, connectSeparator, addToFavouritesMenuItem, removeFromFavouritesMenuItem, copyIpAddressAndPortMenuItem, visitWebsiteMenuItem);
 
 	private final ObservableList<SampServer> servers = getItems();
 
@@ -283,6 +284,7 @@ public class SampServerTable extends TableView<SampServer> {
 		contextMenu.getItems().get(1).setVisible(sizeEqualsOne); // Separator
 		copyIpAddressAndPortMenuItem.setVisible(sizeEqualsOne);
 		visitWebsiteMenuItem.setVisible(sizeEqualsOne);
+		connectSeparator.setVisible(sizeEqualsOne);
 
 		final boolean favouriteMode = tableMode == SampServerTableMode.FAVOURITES;
 
