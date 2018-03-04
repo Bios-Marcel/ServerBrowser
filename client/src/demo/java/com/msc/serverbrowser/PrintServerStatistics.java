@@ -22,20 +22,22 @@ public final class PrintServerStatistics {
 	}
 
 	/**
-	 * @param args
-	 * @throws IOException
+	 * @param args unused
+	 * @throws IOException if problems occur while querying the samp servers api
 	 */
 	public static void main(final String[] args) throws IOException {
+		final long start = System.currentTimeMillis();
 		final List<SampServer> servers = ServerUtility.fetchServersFromSouthclaws();
-		final int onlineServers = servers.stream().mapToInt(server -> {
+		final long onlineServers = servers.stream().parallel().filter(server -> {
 			try (SampQuery query = new SampQuery(server.getAddress(), server.getPort())) {
-				return query.getBasicPlayerInfo().isPresent() ? 1 : 0;
+				return query.getBasicServerInfo().isPresent();
 			}
-			catch (@SuppressWarnings("unused") SocketException | UnknownHostException e) {
-				return 0;
+			catch (@SuppressWarnings("unused") SocketException | UnknownHostException exception) {
+				return false;
 			}
-		}).sum();
+		}).count();
 
 		System.out.println("Out of " + servers.size() + " only " + onlineServers + " are online/have querying enabled.");
+		System.out.println("Time spent: " + (System.currentTimeMillis() - start));
 	}
 }
