@@ -29,6 +29,7 @@ public class Installer {
 	public static void installViaInstallationCandidate(final InstallationCandidate candidate) {
 		// RetrievePath (includes download if necessary, otherwise cache path)
 		try {
+			Logging.info("Installing " + candidate + ".");
 			final String installer = getInstallerPathAndDownloadIfNecessary(candidate);
 			final String gtaPath = GTAController.getGtaPath().get();
 
@@ -59,6 +60,7 @@ public class Installer {
 			final Optional<String> path = InstallationCandidateCache.getPathForCachedVersion(candidate);
 
 			if (path.isPresent()) {
+				Logging.info("Using cached version for candidate '" + candidate + "'.");
 				return path.get();
 			}
 		}
@@ -66,8 +68,10 @@ public class Installer {
 		if (candidate.isDownload()) {
 			final boolean isExe = candidate.getUrl().endsWith(".exe");
 			final String outputPath = isExe ? PathConstants.TEMP_INSTALLER_EXE : PathConstants.TEMP_INSTALLER_ZIP;
+			Logging.info("Downloading file for candidate '" + candidate + "'.");
 			FileUtility.downloadFile(candidate.getUrl(), outputPath);
 			if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CACHING_DOWNLOADS)) {
+				Logging.info("Adding file for candidate '" + candidate + "' to cache.");
 				InstallationCandidateCache.addCandidateToCache(candidate, outputPath);
 			}
 			return outputPath;

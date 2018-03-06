@@ -109,4 +109,9 @@ public class InstallationCandidate {
 	public String getCheckSum() {
 		return checksum;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

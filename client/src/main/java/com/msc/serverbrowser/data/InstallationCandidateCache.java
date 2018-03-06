@@ -28,13 +28,13 @@ public final class InstallationCandidateCache {
 	 * @return true wenn die Version gecached ist.
 	 */
 	public static boolean isVersionCached(final InstallationCandidate version) {
-		final Optional<String> CachedVersionPath = getPathForCachedVersion(version);
+		final Optional<String> cachedVersionPath = getPathForCachedVersion(version);
 
-		if (CachedVersionPath.isPresent()) {
+		if (!cachedVersionPath.isPresent()) {
 			return false;
 		}
 
-		final File cachedVersion = new File(CachedVersionPath.get());
+		final File cachedVersion = new File(cachedVersionPath.get());
 
 		if (cachedVersion.exists()) {
 			if (FileUtility.validateFile(cachedVersion, version.getCheckSum())) {
