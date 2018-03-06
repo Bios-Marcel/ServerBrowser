@@ -23,7 +23,7 @@ public class UncaughtExceptionHandlerController {
 	 * @param stackTrace the stacktrace of the {@link Exception} which the issue is related to
 	 */
 	public void onOpenGithubIssue(final String errorMessage, final String stackTrace) {
-		final StringBuilder message = new StringBuilder();
+		final StringBuilder message = new StringBuilder(700);
 		final String stacktraceMarkdown = "```" + stackTrace + "```";
 
 		message
@@ -62,8 +62,7 @@ public class UncaughtExceptionHandlerController {
 				.append(System.getProperty("java.vm.name"))
 				.append(" (")
 				.append(System.getProperty("java.runtime.version"))
-				.append(")")
-				.append(" by ")
+				.append(") by ")
 				.append(System.getProperty("java.vm.vendor"))
 				.append(LINE_SEPARATOR);
 
