@@ -12,8 +12,6 @@ import org.mozilla.universalchardet.UniversalDetector;
  * @author Marcel
  */
 public final class Encoding {
-	private static final UniversalDetector DETECTOR = new UniversalDetector(null);
-
 	private Encoding() {
 		// Constructor to prevent instantiation
 	}
@@ -44,15 +42,9 @@ public final class Encoding {
 	 * @return {@link Optional} of the charset or an {@link Optional#empty()}
 	 */
 	public static Optional<String> getEncoding(final byte[] data) {
-		try {
-			DETECTOR.handleData(data, 0, data.length - 1);
-			DETECTOR.dataEnd();
-			final String charset = DETECTOR.getDetectedCharset();
-			DETECTOR.reset();
-			return Optional.ofNullable(charset);
-		}
-		catch (@SuppressWarnings("unused") final NullPointerException exception) {
-			return Optional.empty();
-		}
+		final UniversalDetector charsetDetector = new UniversalDetector();
+		charsetDetector.handleData(data);
+		charsetDetector.dataEnd();
+		return Optional.ofNullable(charsetDetector.getDetectedCharset());
 	}
 }
