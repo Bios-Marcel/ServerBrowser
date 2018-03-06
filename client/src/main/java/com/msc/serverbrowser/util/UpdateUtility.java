@@ -36,7 +36,7 @@ public final class UpdateUtility {
 	 * since in the feature i'll to know this as for having to update the jre aswell.
 	 * </p>
 	 */
-	public static final String VERSION = "8.5.6";
+	public static final String VERSION = "8.5.7";
 
 	private UpdateUtility() {
 		// Constructor to prevent instantiation
