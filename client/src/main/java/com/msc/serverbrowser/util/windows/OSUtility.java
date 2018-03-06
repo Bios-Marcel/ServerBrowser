@@ -37,21 +37,33 @@ public final class OSUtility {
 	 * @param urlAsString website to visit
 	 */
 	public static void browse(final String urlAsString) {
+		try {
+			final String fixedUrl = StringUtility.fixUrlIfNecessary(urlAsString);
+			final URL url = new URL(fixedUrl);
+			browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
+		}
+		catch (final IOException | URISyntaxException exception) {
+			Logging.warn("Couldn't visit website '" + urlAsString + "'", exception);
+		}
+	}
+
+	/**
+	 * Opens a website using the default browser.
+	 *
+	 * @param uri Website which shall be visited
+	 */
+	public static void browse(final URI uri) {
 		if (Desktop.isDesktopSupported()) {
 			/**
 			 * HACK Workaround for Unix, since the Desktop Class seems to freeze the application
 			 * unless the call is threaded.
 			 */
 			new Thread(() -> {
-				final Desktop desktop = Desktop.getDesktop();
-
 				try {
-					final String fixedUrl = StringUtility.fixUrlIfNecessary(urlAsString);
-					final URL url = new URL(fixedUrl);
-					desktop.browse(new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef()));
+					Desktop.getDesktop().browse(uri);
 				}
-				catch (final IOException | URISyntaxException exception) {
-					Logging.warn("Couldn't visit website '" + urlAsString + "'", exception);
+				catch (final IOException exception) {
+					Logging.warn("Couldn't visit website '" + uri + "'", exception);
 				}
 			}).start();
 		}

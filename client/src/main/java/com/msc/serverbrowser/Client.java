@@ -25,6 +25,8 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.constants.PathConstants;
 import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
+import com.msc.serverbrowser.gui.UncaughtExceptionHandlerController;
+import com.msc.serverbrowser.gui.UncaughtExceptionHandlerView;
 import com.msc.serverbrowser.gui.View;
 import com.msc.serverbrowser.gui.controllers.implementations.MainController;
 import com.msc.serverbrowser.gui.controllers.implementations.SettingsController;
@@ -376,7 +378,13 @@ public final class Client extends Application {
 	 */
 	public static void main(final String[] args) throws FileNotFoundException, IOException {
 		createFolderStructure();
-		Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logging.error("Uncaught exception in thread: " + t, e));
+		Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+			Logging.error("Uncaught exception in thread: " + thread, exception);
+			Platform.runLater(() -> {
+				new UncaughtExceptionHandlerView(new UncaughtExceptionHandlerController(), exception).show();
+			});
+		});
+
 		initLanguageFiles();
 		readApplicationArguments(args);
 		Application.launch(args);
