@@ -62,7 +62,9 @@ public final class GTAController {
 		}
 
 		killSAMP();
-		retrieveUsernameFromRegistry().ifPresent(PastUsernames::addPastUsername);
+		retrieveUsernameFromRegistry()
+				.filter(name -> !name.equals(usernameProperty.get()))
+				.ifPresent(PastUsernames::addPastUsername);
 
 		try {
 			WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get());
