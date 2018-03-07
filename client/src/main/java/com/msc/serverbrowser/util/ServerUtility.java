@@ -49,7 +49,7 @@ public final class ServerUtility {
 		try {
 			final URLConnection openConnection = new URL("http://lists.sa-mp.com/" + version + "/servers").openConnection();
 			openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-			try (final BufferedReader in = new BufferedReader(new InputStreamReader(openConnection.getInputStream()))) {
+			try (BufferedReader in = new BufferedReader(new InputStreamReader(openConnection.getInputStream()))) {
 				in.lines().forEach(inputLine -> {
 					final String[] data = inputLine.split(":");
 					final SampServer server = new SampServer(data[0], Integer.parseInt(data[1]));
@@ -146,7 +146,7 @@ public final class ServerUtility {
 
 	/**
 	 * Valdiates an IP-Address against a simple regex. Works only for IPv4.
-	 * 
+	 *
 	 * @param address the address that needs to be validated
 	 * @return true if the IP-Address was valid, otherwise false.
 	 */

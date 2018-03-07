@@ -459,7 +459,7 @@ public class ServerListController implements ViewController {
 		});
 
 		final Thread serverInfoUpdateThread = new Thread(() -> {
-			try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort())) {
+			try (SampQuery query = new SampQuery(server.getAddress(), server.getPort())) {
 				final Optional<String[]> infoOptional = query.getBasicServerInfo();
 				final Optional<Map<String, String>> serverRulesOptional = query.getServersRules();
 

@@ -33,8 +33,8 @@ public class SampServer {
 	private final LongProperty lastJoinProperty = new SimpleLongProperty();
 
 	public SampServer(final String address, final Integer port) {
-		setAddress(address);
-		setPort(port);
+		addressProperty.set(address);
+		portProperty.set(port);
 	}
 
 	public BooleanProperty passwordedProperty() {

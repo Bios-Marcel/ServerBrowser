@@ -91,7 +91,7 @@ public class FilesView {
 	 *
 	 * @param showColorsAsTextCheckBox {@link CheckBox} to adjust the properties for
 	 */
-	public void setupCheckBox(final CheckBox showColorsAsTextCheckBox) {
+	private static void setupCheckBox(final CheckBox showColorsAsTextCheckBox) {
 		showColorsAsTextCheckBox.setAlignment(Pos.CENTER);
 		showColorsAsTextCheckBox.setMaxHeight(Double.MAX_VALUE);
 	}

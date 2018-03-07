@@ -28,21 +28,21 @@ public final class HashingUtility {
 	 * @throws NoSuchAlgorithmException if the used Hashing Algorithm couldn't be found
 	 */
 	public static String generateChecksum(final String file) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
-		try (final InputStream fis = Files.newInputStream(Paths.get(file))) {
+		try (InputStream inputStream = Files.newInputStream(Paths.get(file))) {
 			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 			final byte[] data = new byte[1024];
 
-			for (int read = 0; read != -1; read = fis.read(data)) {
+			for (int read = 0; read != -1; read = inputStream.read(data)) {
 				sha256.update(data, 0, read);
 			}
 
 			final byte[] hashBytes = sha256.digest();
 
-			final StringBuffer sb = new StringBuffer();
+			final StringBuffer buffer = new StringBuffer();
 			for (final byte hashByte : hashBytes) {
-				sb.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));
+				buffer.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));
 			}
-			return sb.toString();
+			return buffer.toString();
 		}
 	}
 }

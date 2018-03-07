@@ -74,6 +74,7 @@ public class SampServerTable extends TableView<SampServer> {
 	 * Contructor; sets the TableRowFactory, the ContextMenu Actions and table settings.
 	 */
 	public SampServerTable() {
+		super();
 		setItems(sortedServers);
 
 		getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

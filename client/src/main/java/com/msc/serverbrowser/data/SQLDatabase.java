@@ -50,7 +50,7 @@ public final class SQLDatabase {
 		try {
 			sqlConnection = DriverManager.getConnection("jdbc:sqlite:" + DB_LOCATION);
 
-			try (final Statement statement = sqlConnection.createStatement()) {
+			try (Statement statement = sqlConnection.createStatement()) {
 				// TODO(MSC) favourites could be merged with serverconfig and use the
 				// servercache
 				final String createTableFavourites = "CREATE TABLE IF NOT EXISTS favourite (hostname TEXT, ip TEXT NOT NULL, lagcomp TEXT, language TEXT, players INTEGER, maxplayers integer, mode TEXT, port INTEGER, version TEXT, website TEXT);";

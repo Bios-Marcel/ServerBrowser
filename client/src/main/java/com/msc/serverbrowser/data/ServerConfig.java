@@ -68,7 +68,7 @@ public final class ServerConfig {
 				+ "?," // Port
 				+ "?," // Username
 				+ "(select lastjoin from serverconfig where ip=? and port=?));"; // lastTimeJoined
-		try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
+		try (PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 			statement.setString(1, ip);
 			statement.setInt(2, port);
 			statement.setString(3, username);
@@ -119,7 +119,7 @@ public final class ServerConfig {
 
 		final List<SampServer> servers = new ArrayList<>();
 		if (resultSetOpt.isPresent()) {
-			try (final ResultSet resultSet = resultSetOpt.get()) {
+			try (ResultSet resultSet = resultSetOpt.get()) {
 				while (resultSet.next()) {
 					final SampServer server = new SampServer(resultSet.getString("ip"), resultSet.getInt("port"));
 					server.setLastJoin(Long.parseLong(resultSet.getString("lastJoin")));
@@ -156,7 +156,7 @@ public final class ServerConfig {
 			final Optional<ResultSet> resultSetOpt = SQLDatabase.getInstance().executeGetResult(statement);
 
 			if (resultSetOpt.isPresent()) {
-				try (final ResultSet resultSet = resultSetOpt.get()) {
+				try (ResultSet resultSet = resultSetOpt.get()) {
 					if (resultSet.next()) {
 						return Optional.of(resultSet.getString(field));
 					}

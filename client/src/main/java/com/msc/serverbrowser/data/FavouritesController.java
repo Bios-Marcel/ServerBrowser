@@ -39,7 +39,7 @@ public final class FavouritesController {
 	 */
 	public static SampServer addServerToFavourites(final String address, final Integer port) {
 		final SampServer server = new SampServer(address, port);
-		try (final SampQuery query = new SampQuery(server.getAddress(), server.getPort()))
+		try (SampQuery query = new SampQuery(address, port))
 
 		{
 			query.getBasicServerInfo().ifPresent(serverInfo -> {
@@ -84,7 +84,7 @@ public final class FavouritesController {
 		}
 		else {
 			final String query = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-			try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
+			try (PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 				statement.setString(1, server.getHostname());
 				statement.setString(2, server.getAddress());
 				statement.setString(3, server.getLagcomp());
@@ -124,7 +124,7 @@ public final class FavouritesController {
 	 */
 	public static boolean updateServerData(final SampServer server) {
 		final String query = "UPDATE favourite SET hostname = ?, lagcomp = ?, language = ?, players = ?, maxplayers = ?, mode = ?, version = ?, website = ? WHERE ip = ? AND port = ?;";
-		try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
+		try (PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 			statement.setString(1, server.getHostname());
 			statement.setString(2, server.getLagcomp());
 			statement.setString(3, server.getLanguage());
@@ -153,7 +153,7 @@ public final class FavouritesController {
 	public static boolean removeServerFromFavourites(final SampServer server) {
 		final String query = "DELETE FROM favourite WHERE ip = ? AND port = ?;";
 
-		try (final PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
+		try (PreparedStatement statement = SQLDatabase.getInstance().createPreparedStatement(query)) {
 
 			statement.setString(1, server.getAddress());
 			statement.setInt(2, server.getPort());

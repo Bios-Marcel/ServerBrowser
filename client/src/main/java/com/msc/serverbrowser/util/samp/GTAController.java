@@ -174,7 +174,7 @@ public final class GTAController {
 	 * @param serverPassword the password to be used for this connection
 	 */
 	public static void tryToConnect(final String address, final Integer port, final String serverPassword) {
-		try (final SampQuery query = new SampQuery(address, port)) {
+		try (SampQuery query = new SampQuery(address, port)) {
 			final Optional<String[]> serverInfo = query.getBasicServerInfo();
 
 			if (Objects.isNull(serverPassword) || serverPassword.isEmpty() && serverInfo.isPresent() && StringUtility.stringToBoolean(serverInfo.get()[0])) {

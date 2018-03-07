@@ -40,7 +40,7 @@ public final class ClientPropertiesController {
 		final String statement = "SELECT value FROM setting WHERE id = " + property.getId() + ";";
 		final Optional<ResultSet> resultSetOptional = SQLDatabase.getInstance().executeGetResult(statement);
 		if (resultSetOptional.isPresent()) {
-			try (final ResultSet resultSet = resultSetOptional.get()) {
+			try (ResultSet resultSet = resultSetOptional.get()) {
 				if (resultSet.next()) {
 					return Optional
 							.ofNullable(resultSet.getString("value"))

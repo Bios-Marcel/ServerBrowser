@@ -47,8 +47,8 @@ public final class FileUtility {
 	 * @throws IOException if an errors occurs while writing the file or opening the stream
 	 */
 	public static File downloadFile(final String url, final String outputPath) throws IOException {
-		try (final ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(url).openStream());
-				final FileOutputStream fileOutputStream = new FileOutputStream(outputPath)) {
+		try (ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(url).openStream());
+				FileOutputStream fileOutputStream = new FileOutputStream(outputPath)) {
 			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 			return new File(outputPath);
 		}
@@ -81,8 +81,7 @@ public final class FileUtility {
 	 * @throws IOException if an errors occurs while writing the file or opening the stream
 	 */
 	public static File downloadFile(final URL url, final String outputPath, final DoubleProperty progressProperty, final double fileLength) throws IOException {
-		try (final InputStream input = url.openStream();
-				final OutputStream fileOutputStream = Files.newOutputStream(Paths.get(outputPath))) {
+		try (InputStream input = url.openStream(); OutputStream fileOutputStream = Files.newOutputStream(Paths.get(outputPath))) {
 			final double currentProgress = (int) progressProperty.get();
 			final byte[] buffer = new byte[10000];
 			while (true) {
@@ -141,7 +140,7 @@ public final class FileUtility {
 	 */
 	public static void unzip(final String zipFilePath, final String outputLocation) throws IOException {
 		// Open the zip file
-		try (final ZipFile zipFile = new ZipFile(zipFilePath)) {
+		try (ZipFile zipFile = new ZipFile(zipFilePath)) {
 			final Enumeration<? extends ZipEntry> enu = zipFile.entries();
 			while (enu.hasMoreElements()) {
 
@@ -160,8 +159,8 @@ public final class FileUtility {
 				}
 
 				// Extract the file
-				try (final InputStream inputStream = zipFile.getInputStream(zipEntry);
-						final OutputStream outputStream = Files.newOutputStream(Paths.get(outputFile.toURI()))) {
+				try (InputStream inputStream = zipFile.getInputStream(zipEntry);
+						OutputStream outputStream = Files.newOutputStream(Paths.get(outputFile.toURI()))) {
 					/*
 					 * The buffer is the max amount of bytes kept in RAM during any given time while
 					 * unzipping. Since most windows disks are aligned to 4096 or 8192, we use a
