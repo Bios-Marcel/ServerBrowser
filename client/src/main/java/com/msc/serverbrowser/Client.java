@@ -57,7 +57,7 @@ import javafx.util.Duration;
  * @since 02.07.2017
  */
 public final class Client extends Application {
-	private static boolean developmentMode = false;
+	private static boolean developmentMode;
 
 	/**
 	 * Application icon that can be used everywhere where necessary.

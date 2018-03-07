@@ -55,7 +55,7 @@ public class UsernameController implements ViewController {
 			 * Making an array copy of the list, because iterating over the ObservableList would
 			 * lead to mistakes.
 			 */
-			final String[] usernames = selectedItems.toArray(new String[selectedItems.size()]);
+			final String[] usernames = selectedItems.toArray(new String[0]);
 
 			showContextMenuForMultipleItems(event.getScreenX(), event.getScreenY(), usernames);
 		}

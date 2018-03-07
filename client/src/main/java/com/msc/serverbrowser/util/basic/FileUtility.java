@@ -3,10 +3,10 @@ package com.msc.serverbrowser.util.basic;
 import static java.io.File.separator;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -14,6 +14,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.List;
@@ -47,7 +48,7 @@ public final class FileUtility {
 	 */
 	public static File downloadFile(final String url, final String outputPath) throws IOException {
 		try (final ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(url).openStream());
-				final FileOutputStream fileOutputStream = new FileOutputStream(outputPath);) {
+				final FileOutputStream fileOutputStream = new FileOutputStream(outputPath)) {
 			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 			return new File(outputPath);
 		}
@@ -61,7 +62,7 @@ public final class FileUtility {
 	 * @throws IOException if there was an error during the copy action
 	 */
 	public static void copyOverwrite(final String source, final String target) throws IOException {
-		try (FileInputStream fileInputStream = new FileInputStream(source);
+		try (InputStream fileInputStream = Files.newInputStream(Paths.get(source));
 				final ReadableByteChannel readableByteChannel = Channels.newChannel(fileInputStream);
 				final FileOutputStream fileOutputStream = new FileOutputStream(target);) {
 			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
@@ -80,7 +81,8 @@ public final class FileUtility {
 	 * @throws IOException if an errors occurs while writing the file or opening the stream
 	 */
 	public static File downloadFile(final URL url, final String outputPath, final DoubleProperty progressProperty, final double fileLength) throws IOException {
-		try (final InputStream input = url.openStream(); final FileOutputStream fileOutputStream = new FileOutputStream(outputPath);) {
+		try (final InputStream input = url.openStream();
+				final OutputStream fileOutputStream = Files.newOutputStream(Paths.get(outputPath))) {
 			final double currentProgress = (int) progressProperty.get();
 			final byte[] buffer = new byte[10000];
 			while (true) {
@@ -159,7 +161,7 @@ public final class FileUtility {
 
 				// Extract the file
 				try (final InputStream inputStream = zipFile.getInputStream(zipEntry);
-						final FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+						final OutputStream outputStream = Files.newOutputStream(Paths.get(outputFile.toURI()))) {
 					/*
 					 * The buffer is the max amount of bytes kept in RAM during any given time while
 					 * unzipping. Since most windows disks are aligned to 4096 or 8192, we use a

@@ -122,8 +122,8 @@ public class SAMPLauncher {
 		arguments.add(port.toString());
 		arguments.add("-n");
 
-		// TODO Solve better
-		arguments.add(GTAController.retrieveUsernameFromRegistry().orElse("CHOOSE_NAME"));
+		// At this point, it should be no problem to ask for the username
+		arguments.add(GTAController.retrieveUsernameFromRegistry().get());
 
 		passwordOptional.ifPresent(password -> {
 			if (!password.isEmpty()) {

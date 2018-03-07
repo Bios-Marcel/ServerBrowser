@@ -1,8 +1,8 @@
 package com.msc.serverbrowser.data.properties;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -59,7 +59,7 @@ public final class LegacySettingsController {
 			return Optional.empty();
 		}
 
-		try (FileInputStream input = new FileInputStream(PathConstants.SAMP_CFG)) {
+		try (InputStream input = Files.newInputStream(Paths.get(PathConstants.SAMP_CFG))) {
 			final Properties properties = new Properties();
 			properties.load(input);
 			return Optional.of(properties);
@@ -76,7 +76,7 @@ public final class LegacySettingsController {
 	 * @param properties the {@link Properties} object to overwrite the legacy properties with
 	 */
 	public static void save(final Properties properties) {
-		try (FileOutputStream output = new FileOutputStream(PathConstants.SAMP_CFG)) {
+		try (OutputStream output = Files.newOutputStream(Paths.get(PathConstants.SAMP_CFG))) {
 			properties.store(output, null);
 		}
 		catch (final IOException exception) {

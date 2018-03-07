@@ -1,8 +1,10 @@
 package com.msc.serverbrowser.util.basic;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -26,7 +28,7 @@ public final class HashingUtility {
 	 * @throws NoSuchAlgorithmException if the used Hashing Algorithm couldn't be found
 	 */
 	public static String generateChecksum(final String file) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
-		try (final FileInputStream fis = new FileInputStream(file)) {
+		try (final InputStream fis = Files.newInputStream(Paths.get(file))) {
 			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 			final byte[] data = new byte[1024];
 
