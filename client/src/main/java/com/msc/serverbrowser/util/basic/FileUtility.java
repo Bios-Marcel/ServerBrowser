@@ -63,8 +63,8 @@ public final class FileUtility {
 	 */
 	public static void copyOverwrite(final String source, final String target) throws IOException {
 		try (InputStream fileInputStream = Files.newInputStream(Paths.get(source));
-				final ReadableByteChannel readableByteChannel = Channels.newChannel(fileInputStream);
-				final FileOutputStream fileOutputStream = new FileOutputStream(target);) {
+				ReadableByteChannel readableByteChannel = Channels.newChannel(fileInputStream);
+				FileOutputStream fileOutputStream = new FileOutputStream(target)) {
 			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 		}
 	}
