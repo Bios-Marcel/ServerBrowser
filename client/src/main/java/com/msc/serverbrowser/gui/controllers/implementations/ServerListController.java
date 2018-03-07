@@ -543,20 +543,21 @@ public class ServerListController implements ViewController {
 				final String websiteToLower = server.getWebsite().toLowerCase();
 				final String websiteFixed = StringUtility.fixUrlIfNecessary(websiteToLower);
 
+				//drop validation since URL constructor does that anyways?
 				if (StringUtility.isValidURL(websiteFixed)) {
 					websiteLink.setUnderline(true);
 					websiteLink.setOnAction(__ -> OSUtility.browse(server.getWebsite()));
 				}
 
-				final boolean noPlayers = playerList.isEmpty();
-				if (noPlayers) {
-					playerTable.setPlaceholder(new Label(SERVER_EMPTY));
-
+				if (playerList.isEmpty()) {
 					if (server.getPlayers() >= 100) {
 						final Label label = new Label(TOO_MUCH_PLAYERS);
 						label.setWrapText(true);
 						label.setAlignment(Pos.CENTER);
 						playerTable.setPlaceholder(label);
+					}
+					else {
+						playerTable.setPlaceholder(new Label(SERVER_EMPTY));
 					}
 				}
 

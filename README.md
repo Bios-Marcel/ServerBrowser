@@ -127,12 +127,13 @@ errorFetchingServers=Couldn't fetch servers
 favourites=Favourites
 pageSize=PageSize
 fetchingServers=Fetching servers, please wait a moment.
+connectToServerUsingPassword=Connect using password
 enterFilterValue=Enter filter value
 lagcomp=lagcomp:
 showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 lastVisit=Last visit
-visitWebsite=Visit Website
+visitWebsite=Visit website
 gtaNotFoundPrompt=Will be automatically detected if left empty
 addToFavourites=Add to favourites
 rememberLastView=Remember last view
@@ -144,6 +145,7 @@ sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-M
 customSampPath=Custom SA-MP Path
 noFavouriteServers=You don't have any favourites.
 directmode=Directmode (Fix chat text drawing problems)
+usePreReleases=Use pre-releases
 tr=Turkish
 activePlayers=Active players: {0}
 showChatlogColors=Show colors
@@ -165,6 +167,7 @@ removeFromFavourites=Remove from favourites
 checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 multicoreUsage=Multicore usage
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
@@ -175,15 +178,15 @@ errorFetchingServers=Couldn't fetch servers
 favourites=Favourites
 fetchingServers=Fetching servers, please wait a moment.
 chatTimestamps=Chat Timestamps
+connectToServerUsingPassword=Connect using password
 enterFilterValue=Enter filter value
 lagcomp=lagcomp:
 showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 lastVisit=Last visit
-visitWebsite=Visit Website
+visitWebsite=Visit website
 gtaNotFoundPrompt=Will be automatically detected if left empty
 addToFavourites=Add to favourites
-ba=Bosnian
 generalSettingsTitle=General
 sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 sampVersion=SA-MP Version {0}
@@ -191,7 +194,7 @@ cantFindGTA=Can't find GTA installation
 ping=Ping:
 sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 noFavouriteServers=You don't have any favourites.
-tr=Turkish
+usePreReleases=Use pre-releases
 informationSettingsTitle=Information
 showChatlogColors=Show colors
 showChatlogColorsAsText=Show colors as text
@@ -214,6 +217,7 @@ removeFromFavourites=Remove from favourites
 checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
@@ -222,13 +226,14 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 errorFetchingServers=Couldn't fetch servers
 favourites=Favourites
 fetchingServers=Fetching servers, please wait a moment.
+connectToServerUsingPassword=Connect using password
 enterFilterValue=Enter filter value
 lagcomp=lagcomp:
 showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 gamemodeTableHeader=Gamemode
 lastVisit=Last visit
-visitWebsite=Visit Website
+visitWebsite=Visit website
 addToFavourites=Add to favourites
 ba=Bosnian
 sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
@@ -239,6 +244,7 @@ sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-M
 map=Map:
 website=Website:
 noFavouriteServers=You don't have any favourites.
+usePreReleases=Use pre-releases
 tr=Turkish
 showChatlogColors=Show colors
 showChatlogColorsAsText=Show colors as text
@@ -260,6 +266,7 @@ removeFromFavourites=Remove from favourites
 checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 serverOffline=Server is offline.
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
@@ -268,12 +275,13 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 errorFetchingServers=Couldn't fetch servers
 favourites=Favourites
+connectToServerUsingPassword=Connect using password
 enterFilterValue=Enter filter value
 lagcomp=lagcomp:
 showTimestamps=Show times if available
 locateGTAManually=Click here to enter your GTA path manually.
 lastVisit=Last visit
-visitWebsite=Visit Website
+visitWebsite=Visit website
 addToFavourites=Add to favourites
 ba=Bosnian
 sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
@@ -281,6 +289,7 @@ cantFindGTA=Can't find GTA installation
 ping=Ping:
 sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 noFavouriteServers=You don't have any favourites.
+usePreReleases=Use pre-releases
 tr=Turkish
 showChatlogColors=Show colors
 showChatlogColorsAsText=Show colors as text
@@ -300,22 +309,25 @@ removeFromFavourites=Remove from favourites
 checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
 #### Polish
 ```
 favourites=Favourites
+connectToServerUsingPassword=Connect using password
 enterFilterValue=Enter filter value
 lagcomp=lagcomp:
 showTimestamps=Show times if available
 lastVisit=Last visit
-visitWebsite=Visit Website
+visitWebsite=Visit website
 addToFavourites=Add to favourites
 ba=Bosnian
 sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 ping=Ping:
 sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
+usePreReleases=Use pre-releases
 tr=Turkish
 showChatlogColors=Show colors
 showChatlogColorsAsText=Show colors as text
@@ -331,39 +343,45 @@ removeUsernamePlural=Remove usernames
 connectToServer=Connect to server
 removeFromFavourites=Remove from favourites
 checkingForUpdates=Checking for updates
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 ```
 
 #### Romanian
 ```
+connectToServerUsingPassword=Connect using password
 lagcomp=lagcomp:
 lastVisit=Last visit
-visitWebsite=Visit Website
+visitWebsite=Visit website
 addToFavourites=Add to favourites
 ba=Bosnian
 generalSettingsTitle=General
 sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 ping=Ping:
 sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
+usePreReleases=Use pre-releases
 showChatlogColorsAsText=Show colors as text
 copyIpAddressAndPort=Copy IP address and port
 restoreLegacySettingsToDefault=Restore SA-MP settings to default
 connectToServer=Connect to server
 removeFromFavourites=Remove from favourites
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 ```
 
 #### Spanish
 ```
 favourites=Favourites
+connectToServerUsingPassword=Connect using password
 enterFilterValue=Enter filter value
 showTimestamps=Show times if available
 lastVisit=Last visit
-visitWebsite=Visit Website
+visitWebsite=Visit website
 addToFavourites=Add to favourites
 ba=Bosnian
 generalSettingsTitle=General
 sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 noFavouriteServers=You don't have any favourites.
+usePreReleases=Use pre-releases
 tr=Turkish
 showChatlogColors=Show colors
 showChatlogColorsAsText=Show colors as text
@@ -383,24 +401,26 @@ removeFromFavourites=Remove from favourites
 checkingForUpdates=Checking for updates
 serverMightBeOfflineConnectAnyways=The server might not be online, do you want to try connecting to it anyways?
 noServerHistory=You haven't joined any servers recently.
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 ```
 
 #### Turkish
 ```
 favourites=Favourites
 pageSize=PageSize
+connectToServerUsingPassword=Connect using password
 enterFilterValue=Enter filter value
 showTimestamps=Show times if available
 gamemodeTableHeader=Gamemode
 lastVisit=Last visit
-visitWebsite=Visit Website
+visitWebsite=Visit website
 addToFavourites=Add to favourites
-ba=Bosnian
 sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
 ping=Ping:
 sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
 fpsLimit=FPS Limit
 website=Website:
+usePreReleases=Use pre-releases
 showChatlogColors=Show colors
 showChatlogColorsAsText=Show colors as text
 copyIpAddressAndPort=Copy IP address and port
@@ -416,21 +436,19 @@ retrieving=Retrieving ...
 connectToServer=Connect to server
 removeFromFavourites=Remove from favourites
 checkingForUpdates=Checking for updates
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 ```
 
 #### Bosnian
 ```
 pageSize=PageSize
+connectToServerUsingPassword=Connect using password
 lagcomp=lagcomp:
 gamemodeTableHeader=Gamemode
-visitWebsite=Visit Website
-addToFavourites=Add to favourites
 ping=Ping:
 fpsLimit=FPS Limit
-showChatlogColorsAsText=Show colors as text
-copyIpAddressAndPort=Copy IP address and port
-connectToServer=Connect to server
-removeFromFavourites=Remove from favourites
+usePreReleases=Use pre-releases
+enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
 ```
 
 ## Build
