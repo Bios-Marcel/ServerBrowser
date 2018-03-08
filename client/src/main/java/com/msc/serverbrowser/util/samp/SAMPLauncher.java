@@ -127,7 +127,7 @@ public class SAMPLauncher {
 
 		passwordOptional.ifPresent(password -> {
 			if (!password.isEmpty()) {
-				arguments.add("z");
+				arguments.add("-z");
 				arguments.add(password);
 			}
 		});
