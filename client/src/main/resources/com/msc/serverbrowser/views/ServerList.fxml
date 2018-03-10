@@ -22,172 +22,168 @@
 <?import javafx.scene.layout.VBox?>
 <?import com.msc.serverbrowser.gui.components.SampServerTable?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ButtonBar?>
-
-
 
 <VBox maxHeight="Infinity" maxWidth="Infinity" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
-	xmlns:fx="http://javafx.com/fxml/1">
-	<children>
-		<HBox spacing="5.0">
-			<children>
-				<TextField fx:id="addressTextField" onAction="#onClickConnect" promptText="%promptEnterValidAddress" HBox.hgrow="ALWAYS" />
-				<Button mnemonicParsing="false" onAction="#onClickConnect" text="%connect" />
-				<Button mnemonicParsing="false" onAction="#onClickAddToFavourites" text="%addToFavourites" />
-			</children>
-		</HBox>
-		<HBox spacing="5.0" fx:id="tableTypeButtonContainer">
-			<fx:define>
-				<ToggleGroup fx:id="tableTypeToggleGroup"/>  
-			</fx:define>
-			<children>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" prefWidth="${tableTypeButtonContainer.width*0.33}" onAction="#toggleFavouritesMode" text="%favourites" maxWidth="Infinity" HBox.hgrow="ALWAYS" selected="true"/>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" prefWidth="${tableTypeButtonContainer.width*0.33}" onAction="#toggleAllMode" text="%all" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-				<RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button" prefWidth="${tableTypeButtonContainer.width*0.33}" onAction="#toggleHistoryMode" text="%history" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-			</children>
-		</HBox>
-		<SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
-			<columns>
-				<TableColumn text="%hostnameTableHeader">
-					<cellValueFactory>
-						<PropertyValueFactory property="hostname" />
-					</cellValueFactory>
-				</TableColumn>
-				<TableColumn fx:id="columnPlayers" text="%playersTableHeader">
-					<cellValueFactory>
-						<PropertyValueFactory property="playersAndMaxPlayers" />
-					</cellValueFactory>
-				</TableColumn>
-				<TableColumn text="%gamemodeTableHeader">
-					<cellValueFactory>
-						<PropertyValueFactory property="mode" />
-					</cellValueFactory>
-				</TableColumn>
-				<TableColumn text="%languageTableHeader">
-					<cellValueFactory>
-						<PropertyValueFactory property="language" />
-					</cellValueFactory>
-				</TableColumn>
-				<TableColumn text="%versionTableHeader">
-					<cellValueFactory>
-						<PropertyValueFactory property="version" />
-					</cellValueFactory>
-				</TableColumn>
-				<TableColumn fx:id="columnLastJoin" visible="false" text="%lastVisit">
-					<cellValueFactory>
-						<PropertyValueFactory property="lastJoin" />
-					</cellValueFactory>
-				</TableColumn>
-			</columns>
-			<columnResizePolicy>
-				<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-			</columnResizePolicy>
-		</SampServerTable>
-		<HBox spacing="5.0">
-			<children>
-				<TableView fx:id="playerTable" maxHeight="Infinity" maxWidth="Infinity" prefHeight="200.0">
-					<columns>
-						<TableColumn text="%playerTableHeader">
-							<cellValueFactory>
-								<PropertyValueFactory property="playerName" />
-							</cellValueFactory>
-						</TableColumn>
-						<TableColumn text="%scoreTableHeader" maxWidth="85.0" minWidth="85.0">
-							<cellValueFactory>
-								<PropertyValueFactory property="playerScore" />
-							</cellValueFactory>
-						</TableColumn>
-					</columns>
-					<columnResizePolicy>
-						<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-					</columnResizePolicy>
-				</TableView>
-				<TitledPane animated="false" focusTraversable="false" collapsible="false" maxHeight="Infinity" maxWidth="Infinity"
-					text="%filterSettings" HBox.hgrow="ALWAYS">
-					<content>
-						<GridPane hgap="10.0" maxHeight="Infinity" vgap="5.0">
-							<columnConstraints>
-								<ColumnConstraints hgrow="NEVER" />
-								<ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="10.0" prefWidth="73.0" />
-							</columnConstraints>
-							<rowConstraints>
-								<RowConstraints />
-								<RowConstraints />
-								<RowConstraints vgrow="ALWAYS" />
-								<RowConstraints vgrow="ALWAYS" />
-								<RowConstraints vgrow="ALWAYS" />
-								<RowConstraints vgrow="ALWAYS" />
-							</rowConstraints>
-							<children>
-								<Label text="%useRegex" />
-								<CheckBox fx:id="regexCheckBox" mnemonicParsing="false" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
-									GridPane.halignment="LEFT" />
-								<Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-								<TextField fx:id="nameFilter" maxWidth="Infinity" onKeyReleased="#onFilterSettingsChange"
-									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-								<TextField fx:id="modeFilter" maxWidth="Infinity" onKeyReleased="#onFilterSettingsChange"
-									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" />
-								<TextField fx:id="languageFilter" maxWidth="Infinity" onKeyReleased="#onFilterSettingsChange"
-									GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" />
-								<ComboBox fx:id="versionFilter" maxWidth="Infinity" onAction="#onFilterSettingsChange" GridPane.columnIndex="1"
-									GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
-									<items>
-										<FXCollections fx:factory="observableArrayList">
-											<String fx:value="" />
-											<String fx:value="0.3.DL" />
-											<String fx:value="0.3.8" />
-											<String fx:value="0.3.7" />
-											<String fx:value="0.3z" />
-											<String fx:value="0.3x" />
-											<String fx:value="0.3e" />
-											<String fx:value="0.3d" />
-											<String fx:value="0.3c" />
-											<String fx:value="0.3a" />
-										</FXCollections>
-									</items>
-								</ComboBox>
-								<Label text="%versionTableHeader" GridPane.rowIndex="5" />
-								<Label text="%hostnameTableHeader" GridPane.rowIndex="2" />
-								<Label text="%gamemodeTableHeader" GridPane.rowIndex="3" />
-								<Label text="%languageTableHeader" GridPane.rowIndex="4" />
-							</children>
-						</GridPane>
-					</content>
-				</TitledPane>
-				<TitledPane animated="false" collapsible="false" maxHeight="Infinity" maxWidth="Infinity" text="%serverInfo"
-					focusTraversable="false">
-					<content>
-						<GridPane hgap="5.0" maxHeight="Infinity" maxWidth="Infinity" vgap="5.0">
-							<columnConstraints>
-								<ColumnConstraints fillWidth="false" hgrow="NEVER" minWidth="-Infinity" />
-								<ColumnConstraints fillWidth="false" hgrow="NEVER" />
-							</columnConstraints>
-							<rowConstraints>
-								<RowConstraints vgrow="ALWAYS" />
-								<RowConstraints vgrow="ALWAYS" />
-								<RowConstraints vgrow="ALWAYS" />
-								<RowConstraints vgrow="ALWAYS" />
-								<RowConstraints vgrow="ALWAYS" />
-								<RowConstraints vgrow="ALWAYS" />
-							</rowConstraints>
-							<children>
-								<Label text="%address" />
-								<TextField fx:id="serverAddress" editable="false" styleClass="copyableLabel" GridPane.columnIndex="1" />
-								<Label text="%lagcomp" GridPane.rowIndex="2" />
-								<Label fx:id="serverLagcomp" text="" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-								<Label text="%ping" GridPane.rowIndex="1" />
-								<Label fx:id="serverPing" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-								<Label text="%password" GridPane.rowIndex="3" />
-								<Label fx:id="serverPassword" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-								<Label text="%map" GridPane.rowIndex="4" />
-								<Label fx:id="mapLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-								<Label text="%website" GridPane.rowIndex="5" />
-								<Hyperlink fx:id="websiteLink" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-							</children>
-						</GridPane>
-					</content>
-				</TitledPane>
-			</children>
-		</HBox>
-	</children>
+      xmlns:fx="http://javafx.com/fxml/1">
+    <HBox spacing="5.0">
+        <TextField fx:id="addressTextField" onAction="#onClickConnect" promptText="%promptEnterValidAddress"
+                   HBox.hgrow="ALWAYS"/>
+        <Button mnemonicParsing="false" onAction="#onClickConnect" text="%connect"/>
+        <Button mnemonicParsing="false" onAction="#onClickAddToFavourites" text="%addToFavourites"/>
+    </HBox>
+    <HBox spacing="5.0" fx:id="tableTypeButtonContainer">
+        <fx:define>
+            <ToggleGroup fx:id="tableTypeToggleGroup"/>
+        </fx:define>
+        <RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button"
+                     prefWidth="${tableTypeButtonContainer.width * 0.33}" onAction="#toggleFavouritesMode"
+                     text="%favourites" maxWidth="Infinity" HBox.hgrow="ALWAYS" selected="true"/>
+        <RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button"
+                     prefWidth="${tableTypeButtonContainer.width * 0.33}" onAction="#toggleAllMode" text="%all"
+                     maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <RadioButton toggleGroup="$tableTypeToggleGroup" styleClass="server-type-switch-button"
+                     prefWidth="${tableTypeButtonContainer.width * 0.33}" onAction="#toggleHistoryMode"
+                     text="%history" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <SampServerTable fx:id="serverTable" maxHeight="Infinity" maxWidth="Infinity" minWidth="-Infinity"
+                     VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="%hostnameTableHeader">
+                <cellValueFactory>
+                    <PropertyValueFactory property="hostname"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="columnPlayers" text="%playersTableHeader">
+                <cellValueFactory>
+                    <PropertyValueFactory property="playersAndMaxPlayers"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="%gamemodeTableHeader">
+                <cellValueFactory>
+                    <PropertyValueFactory property="mode"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="%languageTableHeader">
+                <cellValueFactory>
+                    <PropertyValueFactory property="language"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="%versionTableHeader">
+                <cellValueFactory>
+                    <PropertyValueFactory property="version"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="columnLastJoin" visible="false" text="%lastVisit">
+                <cellValueFactory>
+                    <PropertyValueFactory property="lastJoin"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </SampServerTable>
+    <HBox spacing="5.0">
+        <TableView fx:id="playerTable" maxHeight="Infinity" maxWidth="Infinity" prefHeight="200.0">
+            <columns>
+                <TableColumn text="%playerTableHeader">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="playerName"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="%scoreTableHeader" maxWidth="85.0" minWidth="85.0">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="playerScore"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+        <TitledPane animated="false" focusTraversable="false" collapsible="false" maxHeight="Infinity"
+                    maxWidth="Infinity"
+                    text="%filterSettings" HBox.hgrow="ALWAYS">
+            <GridPane hgap="10.0" maxHeight="Infinity" vgap="5.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER"/>
+                    <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="10.0" prefWidth="73.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints/>
+                    <RowConstraints/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                </rowConstraints>
+                <Label text="%useRegex"/>
+                <CheckBox fx:id="regexCheckBox" mnemonicParsing="false" onAction="#onFilterSettingsChange"
+                          GridPane.columnIndex="1"
+                          GridPane.halignment="LEFT"/>
+                <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1"/>
+                <TextField fx:id="nameFilter" maxWidth="Infinity" onKeyReleased="#onFilterSettingsChange"
+                           GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2"/>
+                <TextField fx:id="modeFilter" maxWidth="Infinity" onKeyReleased="#onFilterSettingsChange"
+                           GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3"/>
+                <TextField fx:id="languageFilter" maxWidth="Infinity"
+                           onKeyReleased="#onFilterSettingsChange"
+                           GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4"/>
+                <ComboBox fx:id="versionFilter" maxWidth="Infinity" onAction="#onFilterSettingsChange"
+                          GridPane.columnIndex="1"
+                          GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value=""/>
+                            <String fx:value="0.3.DL"/>
+                            <String fx:value="0.3.8"/>
+                            <String fx:value="0.3.7"/>
+                            <String fx:value="0.3z"/>
+                            <String fx:value="0.3x"/>
+                            <String fx:value="0.3e"/>
+                            <String fx:value="0.3d"/>
+                            <String fx:value="0.3c"/>
+                            <String fx:value="0.3a"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <Label text="%versionTableHeader" GridPane.rowIndex="5"/>
+                <Label text="%hostnameTableHeader" GridPane.rowIndex="2"/>
+                <Label text="%gamemodeTableHeader" GridPane.rowIndex="3"/>
+                <Label text="%languageTableHeader" GridPane.rowIndex="4"/>
+            </GridPane>
+        </TitledPane>
+        <TitledPane animated="false" collapsible="false" maxHeight="Infinity" maxWidth="Infinity"
+                    text="%serverInfo"
+                    focusTraversable="false">
+            <GridPane hgap="5.0" maxHeight="Infinity" maxWidth="Infinity" vgap="5.0">
+                <columnConstraints>
+                    <ColumnConstraints fillWidth="false" hgrow="NEVER" minWidth="-Infinity"/>
+                    <ColumnConstraints fillWidth="false" hgrow="NEVER"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                </rowConstraints>
+                <Label text="%address"/>
+                <TextField fx:id="serverAddress" editable="false" styleClass="copyableLabel"
+                           GridPane.columnIndex="1"/>
+                <Label text="%lagcomp" GridPane.rowIndex="2"/>
+                <Label fx:id="serverLagcomp" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label text="%ping" GridPane.rowIndex="1"/>
+                <Label fx:id="serverPing" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="%password" GridPane.rowIndex="3"/>
+                <Label fx:id="serverPassword" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Label text="%map" GridPane.rowIndex="4"/>
+                <Label fx:id="mapLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label text="%website" GridPane.rowIndex="5"/>
+                <Hyperlink fx:id="websiteLink" underline="true" GridPane.columnIndex="1"
+                           GridPane.rowIndex="5"/>
+            </GridPane>
+        </TitledPane>
+    </HBox>
 </VBox>
