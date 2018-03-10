@@ -34,7 +34,7 @@ public enum View {
 	private final String							stylesheetPath;
 	private final String							fxmlPath;
 
-	private final static Map<Integer, View> ID_MAPPING = new ConcurrentHashMap<>();
+	private static final Map<Integer, View> ID_MAPPING = new ConcurrentHashMap<>();
 
 	// Create Mapping in order to be able to find an enum value by simply providing
 	// its id.

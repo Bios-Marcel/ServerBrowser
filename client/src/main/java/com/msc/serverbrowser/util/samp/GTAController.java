@@ -42,7 +42,7 @@ public final class GTAController {
 	/**
 	 * Holds the users username.
 	 */
-	public static StringProperty usernameProperty = new SimpleStringProperty(retrieveUsernameFromRegistry().orElse(""));
+	public static final StringProperty usernameProperty = new SimpleStringProperty(retrieveUsernameFromRegistry().orElse(""));
 
 	private GTAController() {
 		// Constructor to prevent instantiation

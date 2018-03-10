@@ -17,7 +17,7 @@ public final class OSUtility {
 	/**
 	 * Preserved os name, since it won't change anyways and reading from a variable is faster.
 	 */
-	private final static String OS = System.getProperty("os.name").toLowerCase();
+	private static final String OS = System.getProperty("os.name").toLowerCase();
 
 	private OSUtility() {
 		// Constructor to prevent instantiation

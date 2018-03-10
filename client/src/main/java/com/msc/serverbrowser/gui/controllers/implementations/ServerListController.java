@@ -78,7 +78,7 @@ public class ServerListController implements ViewController {
 
 	@FXML
 	private TextField					addressTextField;
-	private final static StringProperty	SERVER_ADDRESS_PROPERTY	= new SimpleStringProperty();
+	private static final StringProperty	SERVER_ADDRESS_PROPERTY	= new SimpleStringProperty();
 
 	private final ObjectProperty<Predicate<SampServer>>	userFilterProperty	= new SimpleObjectProperty<>(__ -> true);
 	private final ObjectProperty<Predicate<SampServer>>	dataFilterProperty	= new SimpleObjectProperty<>(__ -> true);
@@ -88,7 +88,7 @@ public class ServerListController implements ViewController {
 	 * This Table contains all available servers / favourite servers, depending on the active view.
 	 */
 	@FXML
-	protected SampServerTable serverTable;
+	private SampServerTable serverTable;
 
 	/**
 	 * Displays the number of active players on all Servers in {@link #serverTable}.
@@ -261,7 +261,7 @@ public class ServerListController implements ViewController {
 	 *
 	 * @param activePlayers the number of active players
 	 */
-	protected void setPlayerCount(final int activePlayers) {
+	private void setPlayerCount(final int activePlayers) {
 		playerCount.setText(MessageFormat.format(Client.getString("activePlayers"), activePlayers));
 	}
 
@@ -368,9 +368,9 @@ public class ServerListController implements ViewController {
 	@FXML
 	private void onFilterSettingsChange() {
 		userFilterProperty.set(server -> {
-			boolean nameFilterApplies;
-			boolean modeFilterApplies;
-			boolean languageFilterApplies;
+			final boolean nameFilterApplies;
+			final boolean modeFilterApplies;
+			final boolean languageFilterApplies;
 			boolean versionFilterApplies = true;
 
 			if (!versionFilter.getSelectionModel().isEmpty()) {
@@ -576,7 +576,7 @@ public class ServerListController implements ViewController {
 	/**
 	 * Updates the {@link Label Labels} at the bottom of the Serverlist view.
 	 */
-	protected void updateGlobalInfo() {
+	private void updateGlobalInfo() {
 		int playersPlaying = 0;
 
 		for (final SampServer server : serverTable.getItems()) {

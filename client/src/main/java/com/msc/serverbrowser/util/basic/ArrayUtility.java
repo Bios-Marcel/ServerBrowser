@@ -67,7 +67,7 @@ public final class ArrayUtility {
 	 * @return the combined byte array
 	 */
 	public static byte[] merge(final byte[] arrayOne, final byte[]... arrays) {
-		final int lengthNew = arrayOne.length + Arrays.asList(arrays).stream().mapToInt(arr -> arr.length).sum();
+		final int lengthNew = arrayOne.length + Arrays.stream(arrays).mapToInt(arr -> arr.length).sum();
 		final byte[] toReturn = new byte[lengthNew];
 
 		System.arraycopy(arrayOne, 0, toReturn, 0, arrayOne.length);

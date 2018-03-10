@@ -84,7 +84,7 @@ public final class UpdateUtility {
 	 * @throws IllegalArgumentException if any of the arguments is empty
 	 */
 	public static CompareResult compareVersions(final String versionOne, final String versionTwo)
-			throws NullPointerException, NumberFormatException, IllegalArgumentException {
+			throws NullPointerException, IllegalArgumentException {
 		// Throw NullPointer if any is null and throw IllegalArgument if any is empty
 		final String trimmedOne = versionOne.trim();
 		final String trimmedTwo = versionTwo.trim();

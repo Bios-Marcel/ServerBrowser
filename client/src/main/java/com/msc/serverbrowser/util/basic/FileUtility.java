@@ -149,7 +149,7 @@ public final class FileUtility {
 				final String name = zipEntry.getName();
 				final File outputFile = new File(outputLocation + separator + name);
 
-				if (name.endsWith("/")) {
+				if (name.charAt(name.length() - 1) == '/') {
 					outputFile.mkdirs();
 					continue;
 				}

@@ -376,7 +376,7 @@ public final class Client extends Application {
 	 * @throws IOException if there was an error while loading language files
 	 * @throws FileNotFoundException if language files don't exist
 	 */
-	public static void main(final String[] args) throws IOException {
+	public static void main(final String[] args) {
 		createFolderStructure();
 		Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
 			Logging.error("Uncaught exception in thread: " + thread, exception);

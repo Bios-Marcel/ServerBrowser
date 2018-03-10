@@ -27,7 +27,7 @@ public final class HashingUtility {
 	 * @throws FileNotFoundException if the file that is to be hashed couldn't be found
 	 * @throws NoSuchAlgorithmException if the used Hashing Algorithm couldn't be found
 	 */
-	public static String generateChecksum(final String file) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
+	public static String generateChecksum(final String file) throws IOException, NoSuchAlgorithmException {
 		try (InputStream inputStream = Files.newInputStream(Paths.get(file))) {
 			final MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 			final byte[] data = new byte[1024];

@@ -181,7 +181,7 @@ public class SettingsController implements ViewController {
 	}
 
 	private void initInformationArea() {
-		String builder = "SA-MP Server Browser" +
+		final String builder = "SA-MP Server Browser" +
 				System.lineSeparator() +
 				System.lineSeparator() +
 				MessageFormat.format(Client.getString("versionInfo"), UpdateUtility.VERSION);
