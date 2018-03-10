@@ -32,7 +32,7 @@ import javafx.stage.Stage;
  * @since 06.03.2018
  */
 public class UncaughtExceptionHandlerView {
-	private static final String	TITLE	= "An error occured during program execution";
+	private static final String	TITLE	= "An error occurred during program execution";
 	private final Parent		root;
 	private Optional<Stage>		stage	= Optional.empty();
 
@@ -96,7 +96,7 @@ public class UncaughtExceptionHandlerView {
 	}
 
 	/**
-	 * Shows the previously initalized View in a new {@link Stage}.
+	 * Shows the previously initialized View in a new {@link Stage}.
 	 */
 	public void show() {
 		final Stage dialogStage = new Stage();

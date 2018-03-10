@@ -83,7 +83,7 @@ public class SAMPLauncher {
 			return true;
 		}
 
-		if (connectUsingExecuteable(gtaPath, address, port, serverPassword)) {
+		if (connectUsingExecutable(gtaPath, address, port, serverPassword)) {
 			return true;
 		}
 
@@ -135,29 +135,28 @@ public class SAMPLauncher {
 		return arguments;
 	}
 
-	private static boolean connectUsingExecuteable(final String gtaPath, final String address, final Integer port, final String password) {
+	private static boolean connectUsingExecutable(final String gtaPath, final String address, final Integer port, final String password) {
 		final String addressAndPort = address + ":" + port.toString();
 
 		try {
-			Logging.info("Connecting using executeable.");
+			Logging.info("Connecting using executable.");
 			final ProcessBuilder builder = new ProcessBuilder(gtaPath + File.separator + "samp.exe ", addressAndPort, password);
 			builder.directory(new File(gtaPath));
 			builder.start();
 			return true;
 		}
 		catch (final IOException exception) {
-			Logging.warn("Error connecting to server " + addressAndPort + " by manually calling the executeable", exception);
+			Logging.warn("Error connecting to server " + addressAndPort + " by manually calling the executable", exception);
 			return false;
 		}
 	}
 
 	/**
-	 * Connects to the given server (IP and Port) using an empty (no) password. Other than
-	 * {@link GTAController#connectToServer(String)} and
-	 * {@link GTAController#connectToServer(String, String)}, this method uses the
+	 * Connects to the given server (IP and Port) using an empty (no) password. This method uses the
 	 * <code>samp://</code> protocol to connect to make the samp launcher connect to the server.
 	 *
-	 * @param ipAndPort the server to connect to
+	 * @param address the address of the server to connect to
+	 * @param port the port on which the SA-MP server runs
 	 * @return true if it was most likely successful
 	 */
 	private static boolean connectUsingWindowsProtocol(final String address, final Integer port) {

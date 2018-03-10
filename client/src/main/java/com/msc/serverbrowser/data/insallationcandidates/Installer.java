@@ -33,7 +33,7 @@ public class Installer {
 			final String installer = getInstallerPathAndDownloadIfNecessary(candidate);
 			final String gtaPath = GTAController.getGtaPath().get();
 
-			// Check wether its an installer or a zip
+			// Check whether its an installer or a zip
 			if (candidate.getUrl().endsWith(".exe")) {
 				runNullSoftInstaller(installer, gtaPath);
 				Logging.info("Ran installer: " + installer);
@@ -66,8 +66,8 @@ public class Installer {
 		}
 
 		if (candidate.isDownload()) {
-			final boolean isExe = candidate.getUrl().endsWith(".exe");
-			final String outputPath = isExe ? PathConstants.TEMP_INSTALLER_EXE : PathConstants.TEMP_INSTALLER_ZIP;
+			final boolean isExecutable = candidate.getUrl().endsWith(".exe");
+			final String outputPath = isExecutable ? PathConstants.TEMP_INSTALLER_EXE : PathConstants.TEMP_INSTALLER_ZIP;
 			Logging.info("Downloading file for candidate '" + candidate + "'.");
 			FileUtility.downloadFile(candidate.getUrl(), outputPath);
 			if (ClientPropertiesController.getPropertyAsBoolean(Property.ALLOW_CACHING_DOWNLOADS)) {

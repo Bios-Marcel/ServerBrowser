@@ -33,7 +33,7 @@ public final class UpdateUtility {
 	 * </p>
 	 * <p>
 	 * In the new version scheme i will include the major version of the compatible jre version,
-	 * since in the feature i'll to know this as for having to update the jre aswell.
+	 * since in the feature i'll to know this as for having to update the jre as well.
 	 * </p>
 	 */
 	public static final String VERSION = "8.5.7";

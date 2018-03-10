@@ -158,27 +158,21 @@ public class ServerListController implements ViewController {
 
 		toggleFavouritesMode();
 
-		columnLastJoin.setCellFactory(factory -> {
-			final TableCell<SampServer, Long> cell = new TableCell<SampServer, Long>() {
-				@Override
-				protected void updateItem(final Long item, final boolean empty) {
-					if (!empty && Objects.nonNull(item)) {
-						final LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(item), ZoneId.systemDefault());
-						final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
-						setText(dateFormat.format(date));
-					}
+		columnLastJoin.setCellFactory(factory -> new TableCell<SampServer, Long>() {
+			@Override
+			protected void updateItem(final Long item, final boolean empty) {
+				if (!empty && Objects.nonNull(item)) {
+					final LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(item), ZoneId.systemDefault());
+					final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
+					setText(dateFormat.format(date));
 				}
-			};
-
-			return cell;
+			}
 		});
 
-		/**
+		/*
 		 * Hack in order to remove the dot of the radiobuttons.
 		 */
-		tableTypeToggleGroup.getToggles().forEach(toggle -> {
-			((Node) toggle).getStyleClass().remove("radio-button");
-		});
+		tableTypeToggleGroup.getToggles().forEach(toggle -> ((Node) toggle).getStyleClass().remove("radio-button"));
 	}
 
 	private void updateFilterProperty() {
@@ -249,7 +243,7 @@ public class ServerListController implements ViewController {
 				Platform.runLater(() -> serverTable.setPlaceholder(new Label(Client.getString("errorFetchingServers"))));
 			}
 
-			Platform.runLater(() -> updateGlobalInfo());
+			Platform.runLater(this::updateGlobalInfo);
 		});
 		serverLookup.start();
 	}
@@ -374,13 +368,13 @@ public class ServerListController implements ViewController {
 	@FXML
 	private void onFilterSettingsChange() {
 		userFilterProperty.set(server -> {
-			boolean nameFilterApplies = true;
-			boolean modeFilterApplies = true;
-			boolean languageFilterApplies = true;
+			boolean nameFilterApplies;
+			boolean modeFilterApplies;
+			boolean languageFilterApplies;
 			boolean versionFilterApplies = true;
 
 			if (!versionFilter.getSelectionModel().isEmpty()) {
-				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toString().toLowerCase();
+				final String versionFilterSetting = versionFilter.getSelectionModel().getSelectedItem().toLowerCase();
 
 				/*
 				 * At this point and time i am assuring that the versio is not null, since in
@@ -488,9 +482,7 @@ public class ServerListController implements ViewController {
 						query.getBasicPlayerInfo().ifPresent(playerList::addAll);
 					}
 
-					runIfLookupRunning(server, () -> {
-						applyData(server, playerList, ping);
-					});
+					runIfLookupRunning(server, () -> applyData(server, playerList, ping));
 					FavouritesController.updateServerData(server);
 
 				}
@@ -501,7 +493,7 @@ public class ServerListController implements ViewController {
 			}
 			catch (@SuppressWarnings("unused") final IOException exception) {
 				runIfLookupRunning(server, () -> {
-					Platform.runLater(() -> displayOfflineInformations());
+					Platform.runLater(this::displayOfflineInformations);
 					lookingUpForServer = Optional.empty();
 				});
 			}
@@ -532,39 +524,37 @@ public class ServerListController implements ViewController {
 	}
 
 	private void applyData(final SampServer server, final ObservableList<Player> playerList, final long ping) {
-		runIfLookupRunning(server, () -> {
-			Platform.runLater(() -> {
-				serverPassword.setText(server.isPassworded() ? Client.getString("yes") : Client.getString("no"));
-				serverPing.setText(String.valueOf(ping));
-				mapLabel.setText(server.getMap());
-				websiteLink.setText(server.getWebsite());
-				playerTable.setItems(playerList);
+		runIfLookupRunning(server, () -> Platform.runLater(() -> {
+			serverPassword.setText(server.isPassworded() ? Client.getString("yes") : Client.getString("no"));
+			serverPing.setText(String.valueOf(ping));
+			mapLabel.setText(server.getMap());
+			websiteLink.setText(server.getWebsite());
+			playerTable.setItems(playerList);
 
-				final String websiteToLower = server.getWebsite().toLowerCase();
-				final String websiteFixed = StringUtility.fixUrlIfNecessary(websiteToLower);
+			final String websiteToLower = server.getWebsite().toLowerCase();
+			final String websiteFixed = StringUtility.fixUrlIfNecessary(websiteToLower);
 
-				// drop validation since URL constructor does that anyways?
-				if (StringUtility.isValidURL(websiteFixed)) {
-					websiteLink.setUnderline(true);
-					websiteLink.setOnAction(__ -> OSUtility.browse(server.getWebsite()));
+			// drop validation since URL constructor does that anyways?
+			if (StringUtility.isValidURL(websiteFixed)) {
+				websiteLink.setUnderline(true);
+				websiteLink.setOnAction(__ -> OSUtility.browse(server.getWebsite()));
+			}
+
+			if (playerList.isEmpty()) {
+				if (server.getPlayers() >= 100) {
+					final Label label = new Label(TOO_MUCH_PLAYERS);
+					label.setWrapText(true);
+					label.setAlignment(Pos.CENTER);
+					playerTable.setPlaceholder(label);
 				}
-
-				if (playerList.isEmpty()) {
-					if (server.getPlayers() >= 100) {
-						final Label label = new Label(TOO_MUCH_PLAYERS);
-						label.setWrapText(true);
-						label.setAlignment(Pos.CENTER);
-						playerTable.setPlaceholder(label);
-					}
-					else {
-						playerTable.setPlaceholder(new Label(SERVER_EMPTY));
-					}
+				else {
+					playerTable.setPlaceholder(new Label(SERVER_EMPTY));
 				}
+			}
 
-				serverLagcomp.setText(server.getLagcomp());
-				updateGlobalInfo();
-			});
-		});
+			serverLagcomp.setText(server.getLagcomp());
+			updateGlobalInfo();
+		}));
 	}
 
 	private void displayOfflineInformations() {
@@ -578,7 +568,7 @@ public class ServerListController implements ViewController {
 		mapLabel.setText(map);
 		serverLagcomp.setText(lagcomp);
 		websiteLink.setText(website);
-		// Not using setVisible because i dont want the items to resize or anything
+		// Not using setVisible because i don't want the items to resize or anything
 		websiteLink.setOnAction(websiteClickHandler);
 		playerTable.setPlaceholder(new Label(playerTablePlaceholder));
 	}

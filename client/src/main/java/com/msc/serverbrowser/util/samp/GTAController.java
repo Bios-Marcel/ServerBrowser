@@ -261,7 +261,7 @@ public final class GTAController {
 	}
 
 	/**
-	 * Displays a notifcation that states, that GTA couldn't be located and links the Settings page.
+	 * Displays a notification that states, that GTA couldn't be located and links the Settings page.
 	 */
 	public static void displayCantLocateGTANotification() {
 		final TrayNotification trayNotification = new TrayNotificationBuilder()

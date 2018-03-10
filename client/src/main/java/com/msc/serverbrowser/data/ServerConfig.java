@@ -140,9 +140,7 @@ public final class ServerConfig {
 	 * @param servers servers to inject their last join date into
 	 */
 	public static void initLastJoinData(final Collection<SampServer> servers) {
-		servers.forEach(server -> {
-			getLastJoinForServer(server.getAddress(), server.getPort()).ifPresent(server::setLastJoin);
-		});
+		servers.forEach(server -> getLastJoinForServer(server.getAddress(), server.getPort()).ifPresent(server::setLastJoin));
 	}
 
 	private static Optional<String> getStringOfField(final String ip, final Integer port, final String field) {

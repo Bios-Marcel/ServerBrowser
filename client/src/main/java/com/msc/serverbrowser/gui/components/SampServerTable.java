@@ -1,7 +1,6 @@
 package com.msc.serverbrowser.gui.components;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -71,7 +70,7 @@ public class SampServerTable extends TableView<SampServer> {
 	private static final DataFormat			OLD_INDEXES_LIST_DATA_FORMAT	= new DataFormat("index");
 
 	/**
-	 * Contructor; sets the TableRowFactory, the ContextMenu Actions and table settings.
+	 * Constructor; sets the TableRowFactory, the ContextMenu Actions and table settings.
 	 */
 	public SampServerTable() {
 		super();
@@ -103,15 +102,9 @@ public class SampServerTable extends TableView<SampServer> {
 	}
 
 	private void setMenuItemDefaultActions() {
-		connectMenuItem.setOnAction(__ -> {
-			getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), ""));
-		});
+		connectMenuItem.setOnAction(__ -> getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), "")));
 
-		connectWithPasswordMenuItem.setOnAction(__ -> {
-			GTAController.promptUserForServerPassword().ifPresent(serverPassword -> {
-				getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), serverPassword));
-			});
-		});
+		connectWithPasswordMenuItem.setOnAction(__ -> GTAController.promptUserForServerPassword().ifPresent(serverPassword -> getFirstIfAnythingSelected().ifPresent(server -> GTAController.tryToConnect(server.getAddress(), server.getPort(), serverPassword))));
 
 		visitWebsiteMenuItem.setOnAction(__ -> getFirstIfAnythingSelected().ifPresent(server -> OSUtility.browse(server.getWebsite())));
 
@@ -150,7 +143,7 @@ public class SampServerTable extends TableView<SampServer> {
 
 	private void initTableRowFactory() {
 
-		setRowFactory(facotry -> {
+		setRowFactory(__ -> {
 			final TableRow<SampServer> row = new TableRow<>();
 
 			row.setOnDragOver(event -> event.acceptTransferModes(TransferMode.MOVE));
@@ -252,7 +245,7 @@ public class SampServerTable extends TableView<SampServer> {
 		}
 		else {
 			// Otherwise we will select the clicked item and open the context menu on it
-			displayMenu(Arrays.asList(row.getItem()), clicked.getScreenX(), clicked.getScreenY());
+			displayMenu(Collections.singletonList(row.getItem()), clicked.getScreenX(), clicked.getScreenY());
 		}
 	}
 

@@ -110,9 +110,7 @@ public class SettingsController implements ViewController {
 	private void initPropertyComponents() {
 		// General Properties
 		sampPathTextField.setText(ClientPropertiesController.getPropertyAsString(Property.SAMP_PATH));
-		sampPathTextField.textProperty().addListener((__, ___, newValue) -> {
-			ClientPropertiesController.setProperty(Property.SAMP_PATH, newValue.trim());
-		});
+		sampPathTextField.textProperty().addListener((__, ___, newValue) -> ClientPropertiesController.setProperty(Property.SAMP_PATH, newValue.trim()));
 
 		setupCheckBox(saveLastViewCheckBox, Property.SAVE_LAST_VIEW);
 
@@ -147,17 +145,15 @@ public class SettingsController implements ViewController {
 
 		// Update Properties
 		setupCheckBox(showChangelogCheckBox, Property.CHANGELOG_ENABLED);
-		setupCheckBox(enableAutomaticUpdatesCheckBox, Property.AUTOMTAIC_UPDATES);
+		setupCheckBox(enableAutomaticUpdatesCheckBox, Property.AUTOMATIC_UPDATES);
 		setupCheckBox(usePreReleasesCheckBox, Property.DOWNLOAD_PRE_RELEASES);
 
 		// Update Properties
 		setupCheckBox(allowCachingDownloadsCheckBox, Property.ALLOW_CACHING_DOWNLOADS);
 
-		// Adding a listener to disable the update button incase an update is ongoing
+		// Adding a listener to disable the update button in case an update is ongoing
 		final BooleanProperty updatingProperty = Client.getInstance().updateOngoingProperty;
-		updatingProperty.addListener((observable, oldVal, newVal) -> {
-			manualUpdateButton.setDisable(newVal);
-		});
+		updatingProperty.addListener((observable, oldVal, newVal) -> manualUpdateButton.setDisable(newVal));
 		manualUpdateButton.setDisable(updatingProperty.get());
 	}
 
@@ -185,12 +181,12 @@ public class SettingsController implements ViewController {
 	}
 
 	private void initInformationArea() {
-		final StringBuilder builder = new StringBuilder(40);
+		String builder = "SA-MP Server Browser" +
+				System.lineSeparator() +
+				System.lineSeparator() +
+				MessageFormat.format(Client.getString("versionInfo"), UpdateUtility.VERSION);
 
-		builder.append("SA-MP Server Browser").append(System.lineSeparator()).append(System.lineSeparator())
-				.append(MessageFormat.format(Client.getString("versionInfo"), UpdateUtility.VERSION));
-
-		informationLabel.setText(builder.toString());
+		informationLabel.setText(builder);
 	}
 
 	private void changeLegacyBooleanSetting(final String key, final Boolean value) {
@@ -283,8 +279,8 @@ public class SettingsController implements ViewController {
 	}
 
 	/**
-	 * Restores all settings to default. Some settings like {@link Property#DEVELOPMENT} and
-	 * {@link Property#SHOW_CHANGELOG} won't be reset, since the user can't change those anyways.
+	 * Restores all settings to default. Some settings like {@link Property#SHOW_CHANGELOG}
+	 * won't be reset, since the user can't change those anyways.
 	 */
 	@FXML
 	private void onClickRestore() {
@@ -305,7 +301,7 @@ public class SettingsController implements ViewController {
 	}
 
 	/**
-	 * Reapplies the current theme and reloads the saettings view.
+	 * Reapplies the current theme and reloads the settings view.
 	 */
 	public void reloadSettingsView() {
 		// Reapply theme, since it might have been changed
@@ -323,7 +319,7 @@ public class SettingsController implements ViewController {
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_GTA);
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CLOSE_SAMP);
 		ClientPropertiesController.restorePropertyToDefault(Property.CHANGELOG_ENABLED);
-		ClientPropertiesController.restorePropertyToDefault(Property.AUTOMTAIC_UPDATES);
+		ClientPropertiesController.restorePropertyToDefault(Property.AUTOMATIC_UPDATES);
 		ClientPropertiesController.restorePropertyToDefault(Property.ALLOW_CACHING_DOWNLOADS);
 		ClientPropertiesController.restorePropertyToDefault(Property.DOWNLOAD_PRE_RELEASES);
 	}

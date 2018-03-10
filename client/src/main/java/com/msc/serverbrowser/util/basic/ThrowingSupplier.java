@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public interface ThrowingSupplier<T> {
 
 	/**
-	 * @return the return value of Type T returned by the given implementatiom
+	 * @return the return value of Type T returned by the given implementation
 	 * @throws Throwable Any exceptions which might be thrown by the implementation
 	 */
 	T get() throws Throwable;

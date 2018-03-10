@@ -31,8 +31,8 @@ public final class OSUtility {
 	}
 
 	/**
-	 * Opens a website using the default browser. It will automatically apply http:// infront of the
-	 * url if not existant already.
+	 * Opens a website using the default browser. It will automatically apply http:// in front of the
+	 * url if not existent already.
 	 *
 	 * @param urlAsString website to visit
 	 */
@@ -54,7 +54,7 @@ public final class OSUtility {
 	 */
 	public static void browse(final URI uri) {
 		if (Desktop.isDesktopSupported()) {
-			/**
+			/*
 			 * HACK Workaround for Unix, since the Desktop Class seems to freeze the application
 			 * unless the call is threaded.
 			 */

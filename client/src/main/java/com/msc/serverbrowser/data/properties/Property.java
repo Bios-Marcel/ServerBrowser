@@ -20,7 +20,7 @@ public enum Property {
 	ALLOW_CLOSE_SAMP(11, false, Boolean.class),
 	CHANGELOG_ENABLED(12, true, Boolean.class),
 	ALLOW_CACHING_DOWNLOADS(15, true, Boolean.class),
-	AUTOMTAIC_UPDATES(16, true, Boolean.class),
+	AUTOMATIC_UPDATES(16, true, Boolean.class),
 	LANGUAGE(17, "en", String.class),
 	CONNECT_ON_DOUBLECLICK(18, true, Boolean.class),
 	DOWNLOAD_PRE_RELEASES(19, false, Boolean.class);
@@ -29,7 +29,7 @@ public enum Property {
 	private final String	defaultValue;
 	private final Class<?>	datatype;
 
-	private <T> Property(final int id, final T defaultValue, final Class<T> datatype) {
+	<T> Property(final int id, final T defaultValue, final Class<T> datatype) {
 		this.id = id;
 		this.defaultValue = defaultValue == null ? null : defaultValue.toString();
 		this.datatype = datatype;

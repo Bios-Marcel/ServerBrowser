@@ -7,7 +7,7 @@ import com.msc.serverbrowser.logging.Logging;
 import com.msc.serverbrowser.util.windows.OSUtility;
 
 /**
- * Viewcontroller for an errr report dialog.
+ * Viewcontroller for an error report dialog.
  *
  * @author Marcel
  * @since 06.03.2018

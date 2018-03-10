@@ -8,5 +8,5 @@ package com.msc.serverbrowser.util;
 public enum CompareResult {
 	LESS,
 	EQUAL,
-	GREATER;
+	GREATER
 }

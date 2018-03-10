@@ -44,7 +44,7 @@ public class VersionChangeController implements ViewController {
 	@FXML
 	private VBox buttonContainer;
 
-	/**
+	/*
 	 * Adding all usable InstallationCandidates, but this could probably be made in a more desirable
 	 * way.
 	 */
@@ -174,7 +174,7 @@ public class VersionChangeController implements ViewController {
 	}
 
 	private void setAllButtonsDisabled(final boolean disabled) {
-		buttons.entrySet().forEach(entry -> entry.getValue().setDisable(disabled));
+		buttons.forEach((key, value) -> value.setDisable(disabled));
 	}
 
 	@Override

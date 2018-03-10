@@ -44,7 +44,7 @@ public enum View {
 		}
 	}
 
-	private View(final int id, final String title, final Class<? extends ViewController> controllerType, final String fxmlPath,
+	View(final int id, final String title, final Class<? extends ViewController> controllerType, final String fxmlPath,
 			final String stylesheetPathCss) {
 		this.id = id;
 		this.title = title;
@@ -82,7 +82,7 @@ public enum View {
 	}
 
 	/**
-	 * @return the path to the FMXL file of this View
+	 * @return the path to the FXML file of this View
 	 */
 	public String getFXMLPath() {
 		return fxmlPath;

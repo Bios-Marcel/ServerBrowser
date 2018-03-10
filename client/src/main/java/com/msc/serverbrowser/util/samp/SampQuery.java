@@ -139,8 +139,8 @@ public class SampQuery implements AutoCloseable {
 	 * Returns an {@link Optional} of a {@link List} of {@link Player} objects, containing all
 	 * players on the server.
 	 *
-	 * @return an {@link Optional} containg a {@link List} of {@link Player Players} or an empty
-	 *         {@link Optional} incase the query failed.
+	 * @return an {@link Optional} containing a {@link List} of {@link Player Players} or an empty
+	 *         {@link Optional} in case the query failed.
 	 */
 	public Optional<List<Player>> getBasicPlayerInfo() {
 		List<Player> players = null;
@@ -209,11 +209,11 @@ public class SampQuery implements AutoCloseable {
 	 * <li>Byte 11+: Data</li>
 	 * </ul>
 	 * <p>
-	 * Because the Data contains multiple informations that we do not care for as of now, we are
+	 * Because the replies contain some irrelevant data that we do not care for as of now, we are
 	 * setting the byte buffers initial position to eleven.
 	 * </p>
 	 *
-	 * @param the byte array to be wrapped
+	 * @param reply the byte array to be wrapped
 	 * @return the {@link ByteBuffer} that wraps the byte array
 	 */
 	private static ByteBuffer wrapReply(final byte[] reply) {
@@ -237,10 +237,10 @@ public class SampQuery implements AutoCloseable {
 
 	private DatagramPacket assemblePacket(final char type) {
 		final StringTokenizer tok = new StringTokenizer(server.getHostAddress(), ".");
-		final StringBuffer packetData = new StringBuffer("SAMP");
+		final StringBuilder packetData = new StringBuilder("SAMP");
 
-		while (tok.hasMoreTokens()) {// The splitted parts of the ip will be parsed into ints and
-										// casted into characters
+		while (tok.hasMoreTokens()) {
+			// The split parts of the ip will be parsed into integers and casted into characters
 			packetData.append((char) Integer.parseInt(tok.nextToken()));
 		}
 
@@ -253,7 +253,7 @@ public class SampQuery implements AutoCloseable {
 
 		if (type == PACKET_MIRROR_CHARACTERS) {
 
-			/**
+			/*
 			 * Applying random bytes for the server to mirror them back. TODO Currently those bytes
 			 * aren't reused to check if the server did everything correctly.
 			 */
@@ -269,9 +269,10 @@ public class SampQuery implements AutoCloseable {
 	}
 
 	/**
-	 * Sends a packet to te server
+	 * Sends a packet to te server. The packet will automatically be assembled, depending
+	 * on thw given packet type.
 	 *
-	 * @param packet that is supposed to be sent
+	 * @param packetType character that defines the packets type
 	 */
 	private boolean send(final char packetType) {
 		try {
@@ -285,7 +286,7 @@ public class SampQuery implements AutoCloseable {
 	}
 
 	/**
-	 * Reseives a package from the server
+	 * Receives a package from the server
 	 *
 	 * @return the package data as a byte array or null on fail
 	 */

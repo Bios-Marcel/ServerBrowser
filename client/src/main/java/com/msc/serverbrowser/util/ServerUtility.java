@@ -3,12 +3,10 @@ package com.msc.serverbrowser.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
@@ -66,9 +64,9 @@ public final class ServerUtility {
 		return servers;
 	}
 
-	private static String readUrl(final String urlString) throws MalformedURLException, IOException {
+	private static String readUrl(final String urlString) throws IOException {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(urlString).openStream()))) {
-			final StringBuffer buffer = new StringBuffer();
+			final StringBuilder buffer = new StringBuilder();
 
 			reader.lines().forEach(buffer::append);
 
@@ -86,15 +84,15 @@ public final class ServerUtility {
 		return fetchFromAPI("http://api.samp.southcla.ws/v2/servers");
 	}
 
-	private static List<SampServer> fetchFromAPI(final String apiAddress) throws MalformedURLException, IOException {
+	private static List<SampServer> fetchFromAPI(final String apiAddress) throws IOException {
 		final List<SampServer> servers = new ArrayList<>();
 
 		// The pages are 1 indexed, so we start at 1 and go up to the given max amount of pages
 		for (int page = 1; page < MAX_PAGES; page++) {
 			final String json = readUrl(apiAddress + "?page=" + page);
 
-			// In case the page equals null, we have already received all data.
-			if (Objects.isNull(json) || "null".equalsIgnoreCase(json)) {
+			// In case the page equals 'null', we have already received all data.
+			if ("null".equalsIgnoreCase(json)) {
 				break;
 			}
 
@@ -145,7 +143,7 @@ public final class ServerUtility {
 	}
 
 	/**
-	 * Valdiates an IP-Address against a simple regex. Works only for IPv4.
+	 * Validates an IP-Address against a simple regex. Works only for IPv4.
 	 *
 	 * @param address the address that needs to be validated
 	 * @return true if the IP-Address was valid, otherwise false.

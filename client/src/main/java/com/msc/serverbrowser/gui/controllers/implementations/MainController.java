@@ -106,9 +106,9 @@ public class MainController implements ViewController {
 	}
 
 	/**
-	 * Sets the text infront of the global {@link ProgressBar} bar.
+	 * Sets the text in front of the global {@link ProgressBar} bar.
 	 *
-	 * @param text the text tht appears infront of the global {@link ProgressBar}
+	 * @param text the text tht appears in front of the global {@link ProgressBar}
 	 */
 	public void setGlobalProgressText(final String text) {
 		mainView.setGlobalProgressBarText(text);
@@ -170,7 +170,7 @@ public class MainController implements ViewController {
 		try {
 			final FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource(view.getFXMLPath()));
-			loader.setResources(Client.getLangaugeResourceBundle());
+			loader.setResources(Client.getLanguageResourceBundle());
 
 			// Creating a new instance of the specified controller, controllers never have
 			// constructor arguments, therefore this is supposedly fine.
@@ -219,6 +219,6 @@ public class MainController implements ViewController {
 	@Override
 	public void onClose() {
 		ClientPropertiesController.setProperty(Property.LAST_VIEW, activeView.getId());
-		Platform.exit(); // Make sure that the application doesnt stay open for some reason
+		Platform.exit(); // Make sure that the application doesn't stay open for some reason
 	}
 }

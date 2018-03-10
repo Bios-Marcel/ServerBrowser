@@ -78,7 +78,7 @@ public final class Client extends Application {
 	private MainController	mainController;
 
 	/**
-	 * RessourceBundle which contains all the localized strings.
+	 * ResourceBundle which contains all the localized strings.
 	 */
 	private static ResourceBundle languageBundle;
 
@@ -104,7 +104,7 @@ public final class Client extends Application {
 			if (new File(PathConstants.SAMPEX_TEMP_JAR).exists()) {
 				finishUpdate();
 			}
-			else if (ClientPropertiesController.getPropertyAsBoolean(Property.AUTOMTAIC_UPDATES)) {
+			else if (ClientPropertiesController.getPropertyAsBoolean(Property.AUTOMATIC_UPDATES)) {
 				checkForUpdates();
 			}
 		}
@@ -244,13 +244,13 @@ public final class Client extends Application {
 					Logging.info("Downloading update.");
 					downloadUpdate();
 					Logging.info("Download of the updated has been finished.");
-					Platform.runLater(() -> displayUpdateNotification());
+					Platform.runLater(Client::displayUpdateNotification);
 				}
 			}
 			catch (final IOException exception) {
 
 				Logging.warn("Couldn't check for newer version.", exception);
-				Platform.runLater(() -> displayCantRetrieveUpdate());
+				Platform.runLater(Client::displayCantRetrieveUpdate);
 			}
 
 			Platform.runLater(() -> {
@@ -376,13 +376,11 @@ public final class Client extends Application {
 	 * @throws IOException if there was an error while loading language files
 	 * @throws FileNotFoundException if language files don't exist
 	 */
-	public static void main(final String[] args) throws FileNotFoundException, IOException {
+	public static void main(final String[] args) throws IOException {
 		createFolderStructure();
 		Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
 			Logging.error("Uncaught exception in thread: " + thread, exception);
-			Platform.runLater(() -> {
-				new UncaughtExceptionHandlerView(new UncaughtExceptionHandlerController(), exception).show();
-			});
+			Platform.runLater(new UncaughtExceptionHandlerView(new UncaughtExceptionHandlerController(), exception)::show);
 		});
 
 		initLanguageFiles();
@@ -391,7 +389,7 @@ public final class Client extends Application {
 	}
 
 	/**
-	 * Reads the ressource bundle for the currently chosen language.
+	 * Reads the resource bundle for the currently chosen language.
 	 */
 	public static void initLanguageFiles() {
 		final Locale locale = new Locale(ClientPropertiesController.getPropertyAsString(Property.LANGUAGE));
@@ -458,9 +456,9 @@ public final class Client extends Application {
 	}
 
 	/**
-	 * @return {@link #languageBundle the resourcebundle containing the currently loaded language}
+	 * @return {@link #languageBundle}
 	 */
-	public static ResourceBundle getLangaugeResourceBundle() {
+public static ResourceBundle getLanguageResourceBundle() {
 		return languageBundle;
 	}
 

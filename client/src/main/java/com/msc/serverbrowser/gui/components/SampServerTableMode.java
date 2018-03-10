@@ -8,5 +8,5 @@ package com.msc.serverbrowser.gui.components;
 public enum SampServerTableMode {
 	FAVOURITES,
 	ALL,
-	HISTORY;
+	HISTORY
 }

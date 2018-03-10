@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -203,7 +204,13 @@ public final class FileUtility {
 	 */
 	public static boolean deleteRecursively(final File file) {
 		if (file.isDirectory()) {
-			for (final File fileOrFolder : file.listFiles()) {
+			final File[] files = file.listFiles();
+
+			if(Objects.isNull(files)) {
+				return false;
+			}
+
+			for (final File fileOrFolder : files) {
 				if (!deleteRecursively(fileOrFolder)) {
 					return false;
 				}
@@ -219,7 +226,7 @@ public final class FileUtility {
 	 * @param path the {@link Path} to read from
 	 * @param charsets the {@link Charset}s to try when reading
 	 * @return A {@link List} of all lines within the file
-	 * @throws IOException if none of the read-attempts was sucessful
+	 * @throws IOException if none of the read-attempts was successful
 	 */
 	public static List<String> readAllLinesTryEncodings(final Path path, final Charset... charsets) throws IOException {
 		for (final Charset charset : charsets) {

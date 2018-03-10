@@ -12,8 +12,8 @@ public final class StringUtility {
 	}
 
 	/**
-	 * Puts <code>http://</code> infront of the url if not it already has <code>http://</code> or
-	 * <code>https://</code> infront of it.
+	 * Puts <code>http://</code> in front of the url if not it already has <code>http://</code> or
+	 * <code>https://</code> in front of it.
 	 *
 	 * @param url the url to fix
 	 * @return the fixed url or the original if there was no need to fix
@@ -76,7 +76,7 @@ public final class StringUtility {
 
 	/**
 	 * <p>
-	 * Converts bytes into a human readable format the follwing way:
+	 * Converts bytes into a human readable format the following way:
 	 * </p>
 	 *
 	 * <pre>

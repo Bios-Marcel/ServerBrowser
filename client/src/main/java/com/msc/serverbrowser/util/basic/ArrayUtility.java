@@ -57,7 +57,7 @@ public final class ArrayUtility {
 	}
 
 	/**
-	 * Concats two or more byte arrays the follwing way:
+	 * Concatenates two or more byte arrays the following way:
 	 * <p>
 	 * <code>arrayOne + arrayTwo + ...</code>
 	 * </p>

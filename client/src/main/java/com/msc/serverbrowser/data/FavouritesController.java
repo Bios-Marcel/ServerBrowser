@@ -210,7 +210,7 @@ public final class FavouritesController {
 			final ByteBuffer buffer = ByteBuffer.wrap(data);
 			buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-			// Skiping trash at the beginning
+			// Skipping trash at the beginning
 			buffer.position(buffer.position() + 8);
 
 			final int serverCount = buffer.getInt();

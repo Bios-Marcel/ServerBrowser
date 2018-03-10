@@ -25,7 +25,7 @@ public final class InstallationCandidateCache {
 	 * Checks if a version is cached.
 	 *
 	 * @param version to check
-	 * @return true wenn die Version gecached ist.
+	 * @return true if the version is cached, otherwise false
 	 */
 	public static boolean isVersionCached(final InstallationCandidate version) {
 		final Optional<String> cachedVersionPath = getPathForCachedVersion(version);
@@ -89,16 +89,9 @@ public final class InstallationCandidateCache {
 	}
 
 	/**
-	 * @return true if the cache is empty, otherwise false
-	 */
-	public static boolean isEmpty() {
-		return new File(PathConstants.CLIENT_CACHE).listFiles().length < 1;
-	}
-
-	/**
 	 * Clears the cache for downloaded SA-MP versions.
 	 *
-	 * @return true if the cache has been cleared sucessfully
+	 * @return true if the cache has been cleared successfully
 	 */
 	public static boolean clearVersionCache() {
 		final File clientCacheFolder = new File(PathConstants.CLIENT_CACHE);

@@ -92,7 +92,7 @@ public class FilesController implements ViewController {
 			return line;
 		}
 
-		final String timeRegex = "\\[(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)\\]";
+		final String timeRegex = "\\[(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)]";
 		if (line.length() >= 10 && line.substring(0, 10).matches(timeRegex)) {
 			return line.replaceFirst(timeRegex, "");
 		}

@@ -8,12 +8,12 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController;
 import com.msc.serverbrowser.data.properties.Property;
 
 /**
- * An Enum containing all useable languages.
+ * An Enum containing all usable languages.
  *
  * @author marcel
  * @since Jan 10, 2018
  */
-@SuppressWarnings("javadoc") // Supressing because i don't want to document the enum values itself
+@SuppressWarnings("javadoc") // Suppressing because i don't want to document the enum values itself
 public enum Language {
 
 	EN("en", "English"),
@@ -48,7 +48,7 @@ public enum Language {
 
 	@Override
 	public String toString() {
-		if (Objects.nonNull(Client.getLangaugeResourceBundle())) {
+		if (Objects.nonNull(Client.getLanguageResourceBundle())) {
 			final String languageName = Client.getString(shortcut);
 
 			if (ClientPropertiesController.getPropertyAsString(Property.LANGUAGE).equalsIgnoreCase(EN.shortcut)) {
@@ -64,8 +64,8 @@ public enum Language {
 	 * Returns a language by matching its shortcut, for example an input of <code>de</code> would
 	 * output the value {@link Language#DE}.
 	 *
-	 * @param shortcut the shortcut to searh for
-	 * @return An {@link Optional} containg the enum value or {@link Optional#empty()}
+	 * @param shortcut the shortcut to search for
+	 * @return An {@link Optional} containing the enum value or {@link Optional#empty()}
 	 */
 	public static Optional<Language> getByShortcut(final String shortcut) {
 		for (final Language lang : Language.values()) {

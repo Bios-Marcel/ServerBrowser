@@ -21,7 +21,7 @@ public final class ClientPropertiesController {
 	/**
 	 * Returns a properties default as an integer if the datatype is correct.
 	 *
-	 * @param property the property to return its default valeu as an integer
+	 * @param property the property to return its default value as an integer
 	 * @return the default of the property as integer
 	 */
 	public static Integer getDefaultAsInt(final Property property) {
@@ -181,7 +181,7 @@ public final class ClientPropertiesController {
 	/**
 	 * Restores a property to its hardcoded default value.
 	 *
-	 * @param property the property restopre its default
+	 * @param property the property restore its default
 	 */
 	public static void restorePropertyToDefault(final Property property) {
 		setProperty(property, property.getDefaultValue(), true);

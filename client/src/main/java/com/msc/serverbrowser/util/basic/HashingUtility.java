@@ -38,7 +38,7 @@ public final class HashingUtility {
 
 			final byte[] hashBytes = sha256.digest();
 
-			final StringBuffer buffer = new StringBuffer();
+			final StringBuilder buffer = new StringBuilder();
 			for (final byte hashByte : hashBytes) {
 				buffer.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));
 			}

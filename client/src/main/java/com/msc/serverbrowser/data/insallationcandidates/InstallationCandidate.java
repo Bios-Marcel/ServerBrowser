@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class InstallationCandidate {
 	/**
-	 * Another checksum which is used to identfy a specific samp.dll, which then tells us which
+	 * Another checksum which is used to identify a specific <code>samp.dll</code>, which then tells us which
 	 * installation candidate it belongs to.
 	 */
 	private final String sampDllChecksum;
@@ -34,7 +34,7 @@ public class InstallationCandidate {
 
 	/**
 	 * <p>
-	 * Determines wether the source for this {@link InstallationCandidate} is on the internet, the
+	 * Determines whether the source for this {@link InstallationCandidate} is on the internet, the
 	 * filesystem or inside of the jar.
 	 * </p>
 	 * <p>
@@ -45,17 +45,17 @@ public class InstallationCandidate {
 	private final boolean download;
 
 	/**
-	 * Determines wether this installation is usermade or one of the default installation
+	 * Determines whether this installation is user-made or one of the default installation
 	 * candidates.
 	 */
 	private final boolean custom;
 
 	/**
-	 * @param sampDllChecksum Checksum used to find out wich version is installe
-	 * @param name The name of the intallation card (Shown in UI)
+	 * @param sampDllChecksum Checksum used to find out which version is installed
+	 * @param name The name of the installation card (Shown in UI)
 	 * @param url The url from where the files are take
-	 * @param custom usermade or default
-	 * @param download true if the ressource lies in the internet
+	 * @param custom user-made or default
+	 * @param download true if the resource lies in the internet
 	 * @param urlTargetChecksum Checksum of files behind url
 	 */
 	public InstallationCandidate(final String sampDllChecksum, final String name, final String url, final boolean custom, final boolean download,
