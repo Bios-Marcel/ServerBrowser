@@ -14,11 +14,11 @@ This application offers a row of tools for the `San Andreas-Multiplayer` mod for
 * Access to a list of currently over 2000 servers
 * Version changer
 * Username history
-* Access to SA-MP Settings via graphical userinterface
-* Access to SA-MP chatlogs (with colors and timestamps)
+* Access to SA-MP Settings via graphical user interface
+* Access to SA-MP chat logs (with colors and timestamps)
 * Server history
 * MORE TO COME ...
-  * Serverspecific usernames
+  * Server-specific usernames
   * Screenshot viewer
 
 ## Donate
@@ -56,7 +56,7 @@ Unlike when using the `launcher.jar` file, the installer **won't require** you t
 
 #### Build all the stuff yourself
 
-Incase you are paranoid and scared that i might have infected the files in the release section, feel free to build the project yourself.
+In case you are paranoid and scared that i might have infected the files in the release section, feel free to build the project yourself.
 For further information on how to build the project, check the [Build Section](https://github.com/Bios-Marcel/ServerBrowser#build) below
 
 ## Troubleshooting
@@ -71,7 +71,7 @@ The second thing you might want to check, is your firewall. Make sure you haven'
 
 In case your client doesn't start anymore, the first thing you should do, is to try and download the [latest version of the client](https://github.com/Bios-Marcel/ServerBrowser/releases/latest).
 
-If downloading the latest version of the client doens't help, try removing your currently installed Java runtime, if you have never installed a Java runtime, deinstall the ServerBrowser using the default Windows uninstalling procedure. After deleting Java and/or the ServerBrowser reinstall it.
+If downloading the latest version of the client doesn't help, try removing your currently installed Java runtime, if you have never installed a Java runtime, uninstall the ServerBrowser using the default Windows uninstalling procedure. After deleting Java and/or the ServerBrowser reinstall it.
 
 ## Pictures
 
@@ -116,7 +116,7 @@ If possible try to escape all characters, since there is currently to UTF-8 supp
 
 ### To be localized
 
-Note: Some of the follwing key-value pairs might already be correct, in that case i don't know it though.
+Note: Some of the following key-value pairs might already be correct, in that case i don't know it though.
 
 #### German
 Done
@@ -457,16 +457,18 @@ This project is managed using [gradle](https://gradle.org).
 
 ### Structure
 
-It is a multi-project consisting of 1 subproject
+The project formerly consisted of 3 subprojects, those were `client`, `server` and `shared`, but since the backend has
+been removed, `shared` and `client` got merged into `client`.
 
 ```
 ServerBrowser			The parent project
 |__ client				The Windows GUI client with which humans interact
 ```
 
-The fact, that this is a multi-project is due to two components that don't exist anymore, this will soon be refactored.
+At some point the project structure might get to see a refactoring, since the multi-project structure isn't necessary
+in this case.
 
-### Building with gradle
+### Building with Gradle
 
 To see which tasks are available, run:
 
@@ -589,7 +591,7 @@ Once you have your passwords setup, these can automatically generated for you wi
 $ ./gradlew jfxGenerateKeyStore
 ```
 
-None of these files should __ever__ be commited to version control !
+None of these files should __ever__ be committed to version control !
 
 ## You need help?
 [Send me an E-Mail](mailto:marceloschr@gmail.com)
