@@ -26,6 +26,11 @@
 **/.project
 **/.prefs
 
+### IntelliJ ###
+**/.idea/
+**/*.iml
+**/out/
+
 # JDT-specific (Eclipse Java Development Tools)		
 **/.classpath
 

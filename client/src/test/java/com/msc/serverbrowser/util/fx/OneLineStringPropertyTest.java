@@ -2,6 +2,7 @@ package com.msc.serverbrowser.util.fx;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import serverbrowser.util.fx.OneLineStringProperty;
 
 /**
  * @author marcel

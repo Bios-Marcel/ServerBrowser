@@ -5,125 +5,137 @@
 */
 
 buildscript {
-	dependencies {
-		classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.2'
-		classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
-	}
-	repositories {
-		jcenter()
-		maven { url 'https://jitpack.io' }
-	}
+    dependencies {
+        classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.2'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.31"
 }
 
 apply plugin: 'application'
 
-mainClassName = "com.msc.serverbrowser.Client"
+mainClassName = "serverbrowser.Client"
 
-repositories
-{
-	maven { url 'https://jitpack.io' }
+sourceSets {
+    main
+    demo {
+        compileClasspath += main.output
+        runtimeClasspath += main.output
+    }
+}
+repositories {
+    maven { url 'https://jitpack.io' }
+    mavenCentral()
 }
 
 dependencies {
-		compile 'com.github.sarxos:windows-registry-util:0.3'
-		compile 'org.xerial:sqlite-jdbc:3.19.3'
-		compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
-		compile 'com.github.Bios-Marcel:TrayNotification:1.3.1.1'
-		compile 'org.kohsuke:github-api:1.89'
-		compile 'com.github.albfernandez:juniversalchardet:2.0.0'
-						
-		//javapacker for native build. This will only be necessary if the userJvmOptions are used
-		//compile files("${System.properties['java.home']}/../lib/packager.jar")
+    compile 'com.github.sarxos:windows-registry-util:0.3'
+    compile 'org.xerial:sqlite-jdbc:3.19.3'
+    compile 'com.eclipsesource.minimal-json:minimal-json:0.9.4'
+    compile 'com.github.Bios-Marcel:TrayNotification:1.3.1.1'
+    compile 'org.kohsuke:github-api:1.89'
+    compile 'com.github.albfernandez:juniversalchardet:2.0.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.31"
+
+    //javapacker for native build. This will only be necessary if the userJvmOptions are used
+    //compile files("${System.properties['java.home']}/../lib/packager.jar")
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
 shadowJar {
-	/*
-	* WARNING! Changes to excludes/includes only seem to take effect after a "clean" with gradle.
-	* I am not sure where the bug lies, but this should not happen with gradle...
-	*/
-	//Excluding binary stuff for unsupported platforms
-	
-	exclude 'org/sqlite/native/Linux/android-arm/**'
-	exclude 'org/sqlite/native/Linux/arm/**'
-	exclude 'org/sqlite/native/Linux/armv6/**'
-	exclude 'org/sqlite/native/Linux/armv7/**'
-	exclude 'org/sqlite/native/Linux/ppc64/**'
-	exclude 'org/sqlite/native/FreeBSD/**'
-	exclude 'org/sqlite/native/Mac/**'
-	//Theoretically, in a distant future, one could kill windows 32bit support...
-	//exclude 'org/sqlite/native/Windows/x86/**'
+    /*
+    * WARNING! Changes to excludes/includes only seem to take effect after a "clean" with gradle.
+    * I am not sure where the bug lies, but this should not happen with gradle...
+    */
+    //Excluding binary stuff for unsupported platforms
 
-	//Linux x86 bit support already killed
-	exclude 'org/sqlite/native/Linux/x86/**'
-	
-	//Trash
-	exclude 'META-INF/maven/**'
-	
-	//Merges all service file under "META-INF/services" to one
-	mergeServiceFiles()
+    exclude 'org/sqlite/native/Linux/android-arm/**'
+    exclude 'org/sqlite/native/Linux/arm/**'
+    exclude 'org/sqlite/native/Linux/armv6/**'
+    exclude 'org/sqlite/native/Linux/armv7/**'
+    exclude 'org/sqlite/native/Linux/ppc64/**'
+    exclude 'org/sqlite/native/FreeBSD/**'
+    exclude 'org/sqlite/native/Mac/**'
+    //Theoretically, in a distant future, one could kill windows 32bit support...
+    //exclude 'org/sqlite/native/Windows/x86/**'
+
+    //Linux x86 bit support already killed
+    exclude 'org/sqlite/native/Linux/x86/**'
+
+    //Trash
+    exclude 'META-INF/maven/**'
+
+    //Merges all service file under "META-INF/services" to one
+    mergeServiceFiles()
 }
 
 apply plugin: 'javafx-gradle-plugin'
 jfx {
     verbose = true
-    
+
     mainClass = mainClassName
     println("$mainClass")
     vendor = projectVendor
-    
+
     // String - setting this for windows-bundlers makes it possible to generate upgradeable installers (using same GUID)
-    identifier = "$projectGroup"+"."+"$rootProject.name"+"."+"$projectVendor"+"."+"$projectVersion"
-    
+    identifier = "$projectGroup" + "." + "$rootProject.name" + "." + "$projectVendor" + "." + "$projectVersion"
+
     nativeReleaseVersion = "$projectVersion"
-    
+
     //bundler = "RPM"
-    
+
     //useful during debugging. but when all bundles are tried, some WILL ALWAYS fail, because EXE can only be built on windows, DEB/RPM on linux and PKG/DMG on OSX.
     //failOnError = true
-    
+
     //TODO
     //icon under linux does not work
     //remove libs from native bundle
     //jvmArgs = ['-Xmx=128m','-Xms=64m'] //this syntax is wrong
     //remove eclipse annotations
     //signing
-    
+
     needShortcut = true
     needMenu = true
-    
+
     bundleArguments = [
-        copyright: "TODO",
-        email: "TODO",
-        category: "Game",
-        "win.menuGroup": "Game",
-        licenseType: 'MPLv2.0',
-        //because windows is "special", it requires "special" file formats for the license...
-        licenseFile: org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'license.rtf' : 'LICENSE'
-    ] 
+            copyright      : "TODO",
+            email          : "TODO",
+            category       : "Game",
+            "win.menuGroup": "Game",
+            licenseType    : 'MPLv2.0',
+            //because windows is "special", it requires "special" file formats for the license...
+            licenseFile    : org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'license.rtf' : 'LICENSE'
+    ]
     // per default the outcome of the gradle "jarTask" will be used, set this to specify otherwise (like proguard-output)
-    alternativePathToJarFile = "$libsDir/$shadowJar.baseName-$shadowJar.version-$shadowJar.classifier"+".jar"
+    alternativePathToJarFile = "$libsDir/$shadowJar.baseName-$shadowJar.version-$shadowJar.classifier" + ".jar"
     copyAdditionalAppResourcesToJar = true
     skipCopyingDependencies = true
     useLibFolderContentForManifestClasspath = true
-    
+
     // this is used for files below "src/main/deploy", e.g. "src/main/deploy/windows/$rootProject.name.ico"
     appName = "SA-MP-ServerBrowser"
     additionalAppResources = 'src/main/additionalFiles'
-    jfxMainAppJarName = "$appName"+".jar"
-    
+    jfxMainAppJarName = "$appName" + ".jar"
+
     //precompiles the CSS to binary. Useful performance gain, if the CSS files are not modified during runtime
     css2bin = true
 
     // gradle jfxGenerateKeyStore
     keyStore = "src/main/deploy/keystore.jks"
-    keyStoreAlias = "$projectVendor"+"-"+"$rootProject.name"
+    keyStoreAlias = "$projectVendor" + "-" + "$rootProject.name"
     // assumes you have a file "local.properties" which does NOT get version controlled!
     keyStorePassword = "$localSecretKeystorePassword"
     keyPassword = "$localSecretKeyPassword"
     keyStoreType = "jks"
     overwriteKeyStore = false
-    
+
     certDomain = "$projectGroup" // required
     certOrgUnit = "$projectVendor" // defaults to "none"
     certOrg = "$projectVendor" // required
@@ -132,3 +144,14 @@ jfx {
 }
 
 jfxJar.dependsOn shadowJar
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

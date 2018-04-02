@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.ResourceBundle;
 
 import org.junit.jupiter.api.Test;
 
-import com.msc.serverbrowser.util.Language;
+import serverbrowser.util.Language;
 
 /**
  * Checks all localization files for completion. There is a separate test for every language in

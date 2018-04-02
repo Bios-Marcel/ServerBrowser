@@ -1,6 +1,5 @@
 package com.msc.serverbrowser.util.basic;
 
-import static com.msc.serverbrowser.util.basic.FileUtility.unzip;
 import static java.nio.file.Files.createTempDirectory;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.readAllBytes;
@@ -23,14 +22,15 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import serverbrowser.util.basic.FileUtility;
 
 /**
  * @author oliver
  * @since 02.07.2017
  */
 class FileUtilityTest {
-	private static final String		PATH_TO_TEST_RESSOURCES	= "/com/msc/serverbrowser/util/basic/";
-	private static MessageDigest	shaDigester;
+	private static final String        PATH_TO_TEST_RESSOURCES = "/com/msc/serverbrowser/util/basic/";
+	private static       MessageDigest shaDigester;
 
 	@BeforeAll
 	public static void createShaEncoder() throws NoSuchAlgorithmException {
@@ -55,8 +55,9 @@ class FileUtilityTest {
 	 * content survived the zipping without alteration.
 	 *
 	 * @param testDataName Full path to the ZIP under test.
+	 *
 	 * @throws URISyntaxException if the path is wrong
-	 * @throws IOException if the ZIP archive or its sha512sum file could not be found
+	 * @throws IOException        if the ZIP archive or its sha512sum file could not be found
 	 */
 	private void testUnzipWithGivenFileWithSha(final String testDataName) throws URISyntaxException, IOException {
 		final URL testDataZipUrl = getClass().getResource(PATH_TO_TEST_RESSOURCES + testDataName + ".zip");
@@ -71,7 +72,7 @@ class FileUtilityTest {
 
 		final Path tempDirectory = createTempDirectory(testDataName);
 
-		unzip(testDataZipPath.toAbsolutePath().toString(), tempDirectory.toString());
+		FileUtility.unzip(testDataZipPath.toAbsolutePath().toString(), tempDirectory.toString());
 
 		final List<String> checksums = readAllLines(testDataShaPath);
 		for (final String line : checksums) {
@@ -94,6 +95,7 @@ class FileUtilityTest {
 	 * https://stackoverflow.com/questions/332079/in-java-how-do-i-convert-a-byte-array-to-a-string-of-hex-digits-while-keeping-l#332433
 	 *
 	 * @param bytes some byte array
+	 *
 	 * @return lower case hex dump with leading zeros intact
 	 */
 	private static String toHex(final byte[] bytes) {

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import serverbrowser.util.basic.ArrayUtility;
 
 /**
  * Tests the {@link ArrayUtility} class.
@@ -19,11 +20,11 @@ public class ArrayUtilityTest {
 	@Test
 	@DisplayName("Test merging three arrays of different length")
 	public void testMerge() {
-		final byte[] arr = { 1, 2, 3 };
-		final byte[] arr2 = { 4, 5, 6, 7 };
-		final byte[] arr3 = { 8, 9 };
+		final byte[] arr = {1, 2, 3};
+		final byte[] arr2 = {4, 5, 6, 7};
+		final byte[] arr3 = {8, 9};
 
-		final byte[] arrMerged = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		final byte[] arrMerged = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 		assertArrayEquals(arrMerged, ArrayUtility.merge(arr, arr2, arr3));
 	}
@@ -32,15 +33,15 @@ public class ArrayUtilityTest {
 	@DisplayName("Test getLongestArray()")
 	public void testGetLongestArray() {
 		// longer by 1
-		final Byte[] arr = { 1, 2, 3 };
-		final Byte[] arr2 = { 4, 5, 6, 7 };
+		final Byte[] arr = {1, 2, 3};
+		final Byte[] arr2 = {4, 5, 6, 7};
 
 		assertEquals(Optional.of(arr2), ArrayUtility.getLongestArray(arr, arr2));
 		assertEquals(Optional.of(arr2), ArrayUtility.getLongestArray(arr2, arr));
 
 		// Same length
-		final Byte[] arr3 = { 1, 2, 3 };
-		final Byte[] arr4 = { 4, 5, 6 };
+		final Byte[] arr3 = {1, 2, 3};
+		final Byte[] arr4 = {4, 5, 6};
 
 		assertEquals(Optional.empty(), ArrayUtility.getLongestArray(arr3, arr4));
 		assertEquals(Optional.empty(), ArrayUtility.getLongestArray(arr4, arr3));
@@ -54,14 +55,14 @@ public class ArrayUtilityTest {
 
 		// one empty
 		final Byte[] arr7 = {};
-		final Byte[] arr8 = { 1 };
+		final Byte[] arr8 = {1};
 
 		assertEquals(Optional.of(arr8), ArrayUtility.getLongestArray(arr7, arr8));
 		assertEquals(Optional.of(arr8), ArrayUtility.getLongestArray(arr8, arr7));
 
 		// one null and one nonempty
 		final Byte[] arr9 = null;
-		final Byte[] arr10 = { 1 };
+		final Byte[] arr10 = {1};
 
 		assertEquals(Optional.of(arr10), ArrayUtility.getLongestArray(arr9, arr10));
 		assertEquals(Optional.of(arr10), ArrayUtility.getLongestArray(arr10, arr9));

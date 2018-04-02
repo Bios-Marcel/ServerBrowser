@@ -2,6 +2,8 @@ package com.msc.serverbrowser.util;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import serverbrowser.util.CompareResult;
+import serverbrowser.util.UpdateUtility;
 
 /**
  * @author Marvin

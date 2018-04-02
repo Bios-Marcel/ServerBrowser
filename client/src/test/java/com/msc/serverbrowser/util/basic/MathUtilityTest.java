@@ -1,21 +1,21 @@
 package com.msc.serverbrowser.util.basic;
 
-import static com.msc.serverbrowser.util.basic.MathUtility.limitUpperAndLower;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static serverbrowser.util.basic.MathUtility.limitUpperAndLower;
 
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests the {@link MathUtility} class.
- * 
+ * Tests the {@link serverbrowser.util.basic.MathUtility} class.
+ *
  * @author marcel
  * @since 26.02.2018
  */
 public class MathUtilityTest {
 
 	/**
-	 * Tests the {@link MathUtility#limitUpperAndLower(int, int, int)} method for correct input
+	 * Tests the {@link serverbrowser.util.basic.MathUtility#limitUpperAndLower(int, int, int)} method for correct input
 	 * (decrease input, increase input and keep input) and illegal input.
 	 */
 	@Test
