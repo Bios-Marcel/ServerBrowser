@@ -14,7 +14,7 @@ object PathConstants {
     private const val MAIN_PACKAGE = "/com/msc/serverbrowser/"
     const val APP_ICON_PATH = MAIN_PACKAGE + "icons/icon.png"
     const val VIEW_PATH = MAIN_PACKAGE + "views/"
-    val STYLESHEET_PATH = VIEW_PATH + "stylesheets/"
+    const val STYLESHEET_PATH = VIEW_PATH + "stylesheets/"
 
     // Application specific Paths
     private val USER_PATH = System.getProperty("user.home") + File.separator

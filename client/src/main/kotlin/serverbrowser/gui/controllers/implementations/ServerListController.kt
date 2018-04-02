@@ -51,11 +51,11 @@ import java.util.regex.PatternSyntaxException
  */
 class ServerListController : ViewController {
 
-    private val RETRIEVING = Client.getString("retrieving")
+    private val retrieving = Client.getString("retrieving")
 
-    private val TOO_MUCH_PLAYERS = Client.getString("tooMuchPlayers")
-    private val SERVER_OFFLINE = Client.getString("serverOffline")
-    private val SERVER_EMPTY = Client.getString("serverEmpty")
+    private val tooMuchPlayers = Client.getString("tooMuchPlayers")
+    private val serverOffline = Client.getString("serverOffline")
+    private val serverEmpty = Client.getString("serverEmpty")
 
     @FXML
     private lateinit var tableTypeToggleGroup: ToggleGroup
@@ -457,7 +457,7 @@ class ServerListController : ViewController {
         playerTable.items.clear()
         serverAddress.text = server.address + ":" + server.port
         websiteLink.isUnderline = false
-        displayServerInfo(RETRIEVING, RETRIEVING, RETRIEVING, RETRIEVING, RETRIEVING, null, RETRIEVING)
+        displayServerInfo(retrieving, retrieving, retrieving, retrieving, retrieving, null, retrieving)
     }
 
     private fun displayNoServerInfo() {
@@ -486,12 +486,12 @@ class ServerListController : ViewController {
 
                 if (playerList.isEmpty()) {
                     if (server.players!! >= 100) {
-                        val label = Label(TOO_MUCH_PLAYERS)
+                        val label = Label(tooMuchPlayers)
                         label.isWrapText = true
                         label.alignment = Pos.CENTER
                         playerTable.setPlaceholder(label)
                     } else {
-                        playerTable.setPlaceholder(Label(SERVER_EMPTY))
+                        playerTable.setPlaceholder(Label(serverEmpty))
                     }
                 }
 
@@ -502,7 +502,7 @@ class ServerListController : ViewController {
     }
 
     private fun displayOfflineInformations() {
-        displayServerInfo(SERVER_OFFLINE, "", "", "", "", null, SERVER_OFFLINE)
+        displayServerInfo(serverOffline, "", "", "", "", null, serverOffline)
     }
 
     private fun displayServerInfo(ping: String, password: String, map: String, lagcomp: String, website: String,

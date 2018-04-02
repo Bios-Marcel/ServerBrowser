@@ -1,7 +1,6 @@
 package serverbrowser.util.basic
 
 import java.util.*
-import java.util.function.Supplier
 
 /**
  * Contains methods for working with [Optional].

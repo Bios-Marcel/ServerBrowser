@@ -23,10 +23,10 @@ import java.util.*
  * @since 02.07.2017
  */
 class VersionChangeController : ViewController {
-    private val INSTALL_TEXT = Client.getString("install")
-    private val INSTALLED_TEXT = Client.getString("installed")
-    private val INSTALLING_TEXT = Client.getString("installing")
-    private val SAMP_VERSION = Client.getString("sampVersion")
+    private val installText = Client.getString("install")
+    private val installedText = Client.getString("installed")
+    private val installingText = Client.getString("installing")
+    private val sampVersion = Client.getString("sampVersion")
     private val buttons = HashMap<InstallationCandidate, Button>()
 
     @FXML
@@ -51,11 +51,11 @@ class VersionChangeController : ViewController {
 
             versionContainer.styleClass.add("installEntry")
 
-            val title = Label(MessageFormat.format(SAMP_VERSION, candidate.name))
+            val title = Label(MessageFormat.format(sampVersion, candidate.name))
             title.styleClass.add("installLabel")
             title.maxWidth = java.lang.Double.MAX_VALUE
 
-            val installButton = Button(INSTALL_TEXT)
+            val installButton = Button(installText)
             installButton.setOnAction { installSamp(installButton, candidate) }
             installButton.styleClass.add("installButton")
             buttons[candidate] = installButton
@@ -84,7 +84,7 @@ class VersionChangeController : ViewController {
 
             if (!installedVersion.isPresent || installedVersion.get() != toInstall) {
                 setAllButtonsDisabled(true)
-                button.text = INSTALLING_TEXT
+                button.text = installingText
 
                 GTAController.killGTA()
                 GTAController.killSAMP()
@@ -114,13 +114,13 @@ class VersionChangeController : ViewController {
         for ((buttonVersion, button) in buttons) {
 
             if (installedVersion.isPresent && installedVersion.get() === buttonVersion) {
-                button.text = INSTALLED_TEXT
+                button.text = installedText
                 button.isDisable = true
             } else if (ongoingInstallation && buttonVersion === currentlyInstalling.get()) {
-                button.text = INSTALLING_TEXT
+                button.text = installingText
                 button.isDisable = true
             } else {
-                button.text = INSTALL_TEXT
+                button.text = installText
                 button.isDisable = ongoingInstallation
             }
         }

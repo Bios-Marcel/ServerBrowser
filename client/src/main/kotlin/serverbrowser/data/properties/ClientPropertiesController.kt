@@ -7,11 +7,19 @@ import java.sql.SQLException
 import java.util.*
 
 /**
+ * Singleton object for retrieving and setting the applications properties.
+ *
  * @author Marcel
  * @since 17.09.2017
  */
 object ClientPropertiesController {
 
+    /**
+     * Retrieves a property, if the property-type is not supported, the [default value][Property.defaultValue] will be returned.
+     *
+     * @param property the requested [Property]
+     * @return the value of the requested [Property] or its [default value][Property.defaultValue]
+     */
     fun <T> getProperty(property: Property<T>): T {
         return when (property.defaultValue) {
             is String -> getPropertyAsString(property)
@@ -22,6 +30,12 @@ object ClientPropertiesController {
         } as T
     }
 
+    /**
+     * Returns the [default value][Property.defaultValue] of a given [Property].
+     *
+     * @param property the given [Property]
+     * @return the [default value][Property.defaultValue] of the given [Property]
+     */
     fun <T> getDefaultProperty(property: Property<T>) = property.defaultValue
 
     /**
@@ -50,6 +64,12 @@ object ClientPropertiesController {
 
     }
 
+    /**
+     * Saves a new value in the given [Property].
+     *
+     * @param property the [Property] of which the value shall be set
+     * @param value the value which will be saved
+     */
     fun <T> setProperty(property: Property<T>, value: T) {
         val query = "INSERT OR REPLACE INTO setting (id, value) VALUES(?, ?);"
         try {
