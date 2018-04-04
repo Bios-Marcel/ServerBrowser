@@ -1,5 +1,15 @@
 package com.msc.serverbrowser.gui.controllers.implementations
 
+import com.msc.serverbrowser.Client
+import com.msc.serverbrowser.data.properties.ClientPropertiesController
+import com.msc.serverbrowser.data.properties.LastViewProperty
+import com.msc.serverbrowser.data.properties.SaveLastViewProperty
+import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
+import com.msc.serverbrowser.gui.View
+import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
+import com.msc.serverbrowser.gui.views.FilesView
+import com.msc.serverbrowser.gui.views.MainView
+import com.msc.serverbrowser.logging.Logging
 import javafx.application.Platform
 import javafx.beans.property.DoubleProperty
 import javafx.event.EventHandler
@@ -11,30 +21,19 @@ import javafx.scene.control.ProgressBar
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.text.Font
-import com.msc.serverbrowser.Client
-import com.msc.serverbrowser.data.properties.ClientPropertiesController
-import com.msc.serverbrowser.data.properties.LastViewProperty
-import com.msc.serverbrowser.data.properties.SaveLastViewProperty
-import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
-import com.msc.serverbrowser.gui.View
-import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
-import com.msc.serverbrowser.gui.views.FilesView
-import com.msc.serverbrowser.gui.views.MainView
-import com.msc.serverbrowser.logging.Logging
 import java.io.IOException
-import java.util.*
+import java.util.Objects
+import java.util.Optional
 
 /**
  * Main [ViewController] for this application.
  *
  * @author Marcel
  * @since 10.01.2018
+ *
+ * @property mainView the view to be used by this controller
  */
-class MainController
-/**
- * @param mainView the view to be used by this controller
- */
-(private val mainView: MainView) : ViewController {
+class MainController(val mainView: MainView) : ViewController {
     /**
      * @return the current view
      */

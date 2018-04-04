@@ -1,9 +1,13 @@
 package com.msc.serverbrowser.gui
 
 import com.msc.serverbrowser.constants.PathConstants
-import com.msc.serverbrowser.gui.controllers.implementations.*
+import com.msc.serverbrowser.gui.controllers.implementations.FilesController
+import com.msc.serverbrowser.gui.controllers.implementations.ServerListController
+import com.msc.serverbrowser.gui.controllers.implementations.SettingsController
+import com.msc.serverbrowser.gui.controllers.implementations.UsernameController
+import com.msc.serverbrowser.gui.controllers.implementations.VersionChangeController
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
-import java.util.*
+import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 
 /**

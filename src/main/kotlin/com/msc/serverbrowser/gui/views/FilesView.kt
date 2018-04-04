@@ -1,5 +1,6 @@
 package com.msc.serverbrowser.gui.views
 
+import com.msc.serverbrowser.Client
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
@@ -7,13 +8,17 @@ import javafx.beans.property.StringProperty
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.geometry.Pos
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.ButtonBar
+import javafx.scene.control.CheckBox
+import javafx.scene.control.Tab
+import javafx.scene.control.TabPane
 import javafx.scene.control.TabPane.TabClosingPolicy
+import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.scene.web.WebView
-import com.msc.serverbrowser.Client
 
 /**
  * View for interacting with SA-MP files.

@@ -1,5 +1,11 @@
 package com.msc.serverbrowser.gui.controllers.implementations
 
+import com.msc.serverbrowser.Client
+import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate
+import com.msc.serverbrowser.data.insallationcandidates.Installer
+import com.msc.serverbrowser.gui.View
+import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
+import com.msc.serverbrowser.util.samp.GTAController
 import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -10,14 +16,9 @@ import javafx.scene.control.Separator
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
-import com.msc.serverbrowser.Client
-import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate
-import com.msc.serverbrowser.data.insallationcandidates.Installer
-import com.msc.serverbrowser.gui.View
-import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
-import com.msc.serverbrowser.util.samp.GTAController
 import java.text.MessageFormat
-import java.util.*
+import java.util.HashMap
+import java.util.Optional
 
 /**
  * @since 02.07.2017

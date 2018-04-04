@@ -3,7 +3,7 @@ package com.msc.serverbrowser.data
 import com.msc.serverbrowser.logging.Logging
 import java.sql.SQLException
 import java.text.MessageFormat
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Contains methods for adding and removing past usernames.

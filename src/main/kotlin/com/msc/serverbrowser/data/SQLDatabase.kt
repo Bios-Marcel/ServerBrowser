@@ -3,8 +3,12 @@ package com.msc.serverbrowser.data
 import com.msc.serverbrowser.constants.PathConstants
 import com.msc.serverbrowser.logging.Logging
 import java.io.File
-import java.sql.*
-import java.util.*
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
+import java.util.Optional
 
 /**
  * Class for accessing the local SQL Lite database.

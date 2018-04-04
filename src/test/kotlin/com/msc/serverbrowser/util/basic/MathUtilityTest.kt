@@ -1,9 +1,8 @@
 package com.msc.serverbrowser.util.basic
 
+import com.msc.serverbrowser.util.basic.MathUtility.limitUpperAndLower
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
-import com.msc.serverbrowser.util.basic.MathUtility.limitUpperAndLower
-
 import org.junit.jupiter.api.Test
 
 /**

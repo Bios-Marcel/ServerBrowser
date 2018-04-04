@@ -1,13 +1,5 @@
 package com.msc.serverbrowser.gui.components
 
-import javafx.beans.property.ObjectProperty
-import javafx.collections.ObservableList
-import javafx.collections.transformation.FilteredList
-import javafx.collections.transformation.SortedList
-import javafx.scene.control.*
-import javafx.scene.control.Alert.AlertType
-import javafx.scene.input.*
-import javafx.scene.text.Text
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.FavouritesController
 import com.msc.serverbrowser.data.entites.SampServer
@@ -15,8 +7,32 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.ConnectOnDoubleClickProperty
 import com.msc.serverbrowser.util.samp.GTAController
 import com.msc.serverbrowser.util.windows.OSUtility
-
-import java.util.*
+import javafx.beans.property.ObjectProperty
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
+import javafx.collections.transformation.FilteredList
+import javafx.collections.transformation.SortedList
+import javafx.scene.control.Alert
+import javafx.scene.control.Alert.AlertType
+import javafx.scene.control.ButtonType
+import javafx.scene.control.ContextMenu
+import javafx.scene.control.MenuItem
+import javafx.scene.control.SelectionMode
+import javafx.scene.control.SeparatorMenuItem
+import javafx.scene.control.TableRow
+import javafx.scene.control.TableView
+import javafx.scene.input.Clipboard
+import javafx.scene.input.ClipboardContent
+import javafx.scene.input.DataFormat
+import javafx.scene.input.DragEvent
+import javafx.scene.input.KeyCode
+import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
+import javafx.scene.input.TransferMode
+import javafx.scene.text.Text
+import java.util.Collections
+import java.util.Optional
+import java.util.StringJoiner
 import java.util.function.Predicate
 import java.util.stream.Collectors
 
@@ -47,7 +63,8 @@ class SampServerTable : TableView<SampServer>() {
     /**
      * @return the [ObservableList] list that contains all data and is mutable
      */
-    private val filteredServers = FilteredList(items)
+    val servers: ObservableList<SampServer> = FXCollections.observableArrayList<SampServer>()
+    private val filteredServers = FilteredList(servers)
     private val sortedServers = SortedList(filteredServers)
 
     private val firstIfAnythingSelected: Optional<SampServer>
@@ -116,7 +133,7 @@ class SampServerTable : TableView<SampServer>() {
             if (buttonType == ButtonType.YES) {
                 val serverList = selectionModel.selectedItems
                 serverList.forEach { FavouritesController.removeServerFromFavourites(it) }
-                items.removeAll(serverList)
+                servers.removeAll(serverList)
             }
         }
     }
@@ -135,7 +152,7 @@ class SampServerTable : TableView<SampServer>() {
                 // A row has been clicked, so we want to hide the previous context menu
                 tableContextMenu.hide()
 
-                if (Objects.nonNull(row.item)) {
+                if (row.item != null) {
                     // If there is an item in this row, we want to proceed further
                     handleClick(row, clicked)
                 } else {
@@ -151,8 +168,8 @@ class SampServerTable : TableView<SampServer>() {
     private fun onRowDragDropped(row: TableRow<SampServer>, event: DragEvent) {
         val dragBoard = event.dragboard
         val oldIndexes = dragBoard.getContent(OLD_INDEXES_LIST_DATA_FORMAT) as List<Int>
-        val newIndex = items.indexOf(row.item)
-        val newIndexCorrect = if (newIndex == -1) items.size else newIndex
+        val newIndex = servers.indexOf(row.item)
+        val newIndexCorrect = if (newIndex == -1) servers.size else newIndex
 
         if (oldIndexes.contains(newIndexCorrect)) {
             return
@@ -163,12 +180,12 @@ class SampServerTable : TableView<SampServer>() {
             val draggedServer = ArrayList(selectionModel.selectedItems)
             val reverseAndAdd = {
                 draggedServer.reverse()
-                draggedServer.forEach { server -> items.add(newIndexCorrect, server) }
+                draggedServer.forEach { server -> servers.add(newIndexCorrect, server) }
             }
             val sortReverseAndRemove = {
                 Collections.sort(oldIndexes)
                 Collections.reverse(oldIndexes)
-                oldIndexes.forEach { index -> items.removeAt(index) }
+                oldIndexes.forEach { index -> servers.removeAt(index) }
             }
 
             if (oldIndexes[0] < newIndexCorrect) {
@@ -184,14 +201,14 @@ class SampServerTable : TableView<SampServer>() {
     private fun onRowDragDetected(row: TableRow<SampServer>, event: MouseEvent) {
         val selectedServers = selectionModel.selectedItems
         val rowServer = row.item
-        if (items.size <= 1 || selectedServers.isEmpty() || !selectedServers.contains(rowServer)) {
+        if (servers.size <= 1 || selectedServers.isEmpty() || !selectedServers.contains(rowServer)) {
             return
         }
 
         val clipboardContent = ClipboardContent()
 
         val selectedServerIndices = selectionModel.selectedItems.stream()
-                .map<Int>({ items.indexOf(it) })
+                .map<Int>({ servers.indexOf(it) })
                 .collect(Collectors.toList())
         clipboardContent[OLD_INDEXES_LIST_DATA_FORMAT] = selectedServerIndices
 
@@ -225,8 +242,8 @@ class SampServerTable : TableView<SampServer>() {
     }
 
     private fun handleLeftClick(row: TableRow<SampServer>) {
-        val lastLeftClickTime = row.userData as Long
-        val wasDoubleClick = Objects.nonNull(lastLeftClickTime) && System.currentTimeMillis() - lastLeftClickTime < 300
+        val lastLeftClickTime = row.userData as Long?
+        val wasDoubleClick = lastLeftClickTime != null && System.currentTimeMillis() - lastLeftClickTime < 300
         val onlyOneSelectedItem = selectionModel.selectedItems.size == 1
 
         if (wasDoubleClick && onlyOneSelectedItem) {
@@ -292,14 +309,14 @@ class SampServerTable : TableView<SampServer>() {
      * @return true if the data contains the server
      */
     operator fun contains(server: SampServer): Boolean {
-        return items.contains(server)
+        return servers.contains(server)
     }
 
     /**
      * Deletes all currently contained servers.
      */
     fun clear() {
-        items.clear()
+        servers.clear()
     }
 
     /**
@@ -308,7 +325,7 @@ class SampServerTable : TableView<SampServer>() {
      * @param newServer the server that will be added
      */
     fun add(newServer: SampServer) {
-        items.add(newServer)
+        servers.add(newServer)
     }
 
     /**

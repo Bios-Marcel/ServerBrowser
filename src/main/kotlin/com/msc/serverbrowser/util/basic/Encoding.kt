@@ -4,7 +4,7 @@ import org.mozilla.universalchardet.UniversalDetector
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
-import java.util.*
+import java.util.Optional
 
 /**
  * Contains utility methods for encoding and decoding strings.

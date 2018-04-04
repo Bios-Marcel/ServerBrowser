@@ -1,6 +1,6 @@
 package com.msc.serverbrowser.util.basic
 
-import java.util.*
+import java.util.Optional
 
 /**
  * @author Marcel

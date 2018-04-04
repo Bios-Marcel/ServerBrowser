@@ -3,15 +3,13 @@ package com.msc.serverbrowser
 import com.msc.serverbrowser.util.Language
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.fail
-
+import org.junit.jupiter.api.Test
 import java.io.IOException
 import java.net.URISyntaxException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.Locale
 import java.util.ResourceBundle
-
-import org.junit.jupiter.api.Test
 
 /**
  * Checks all localization files for completion. There is a separate test for every language in

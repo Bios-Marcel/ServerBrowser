@@ -5,7 +5,8 @@ import com.msc.serverbrowser.logging.Logging
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.*
+import java.util.Optional
+import java.util.Properties
 
 /**
  * Contains convenient methods for interacting with the SA-MP legacy settings.

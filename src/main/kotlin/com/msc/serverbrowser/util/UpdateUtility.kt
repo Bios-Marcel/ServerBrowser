@@ -1,13 +1,13 @@
 package com.msc.serverbrowser.util
 
-import org.kohsuke.github.GHRelease
-import org.kohsuke.github.GitHubBuilder
-import org.kohsuke.github.RateLimitHandler
 import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.DownloadPreReleasesProperty
 import com.msc.serverbrowser.util.basic.ArrayUtility
+import org.kohsuke.github.GHRelease
+import org.kohsuke.github.GitHubBuilder
+import org.kohsuke.github.RateLimitHandler
 import java.io.IOException
-import java.util.*
+import java.util.Optional
 import java.util.stream.IntStream
 
 /**

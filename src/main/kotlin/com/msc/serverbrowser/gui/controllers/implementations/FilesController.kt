@@ -3,7 +3,6 @@ package com.msc.serverbrowser.gui.controllers.implementations
 import com.github.plushaze.traynotification.animations.Animations
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
-import javafx.event.EventHandler
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.constants.PathConstants
 import com.msc.serverbrowser.data.properties.ClientPropertiesController
@@ -13,8 +12,9 @@ import com.msc.serverbrowser.gui.views.FilesView
 import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.basic.FileUtility
 import com.msc.serverbrowser.util.basic.StringUtility
+import javafx.event.EventHandler
 import java.io.IOException
-import java.nio.charset.StandardCharsets.*
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.function.Predicate
@@ -63,7 +63,7 @@ class FilesController
             val path = Paths.get(PathConstants.SAMP_CHATLOG)
             val filterProperty = filesView.lineFilterProperty.valueSafe.toLowerCase()
 
-            FileUtility.readAllLinesTryEncodings(path, ISO_8859_1, UTF_8, US_ASCII)
+            FileUtility.readAllLinesTryEncodings(path, StandardCharsets.ISO_8859_1, StandardCharsets.UTF_8, StandardCharsets.US_ASCII)
                     .stream()
                     .filter(Predicate<String> { it.isEmpty() }.negate())
                     .filter { line -> line.toLowerCase().contains(filterProperty) }

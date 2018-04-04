@@ -3,19 +3,14 @@ package com.msc.serverbrowser
 import com.github.plushaze.traynotification.animations.Animations
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
-import javafx.application.Application
-import javafx.application.Platform
-import javafx.beans.property.BooleanProperty
-import javafx.beans.property.SimpleBooleanProperty
-import javafx.scene.Node
-import javafx.scene.Scene
-import javafx.scene.control.Dialog
-import javafx.scene.control.TextField
-import javafx.scene.image.Image
-import javafx.stage.Stage
-import javafx.util.Duration
 import com.msc.serverbrowser.constants.PathConstants
-import com.msc.serverbrowser.data.properties.*
+import com.msc.serverbrowser.data.properties.AutomaticUpdatesProperty
+import com.msc.serverbrowser.data.properties.ChangelogEnabledProperty
+import com.msc.serverbrowser.data.properties.ClientPropertiesController
+import com.msc.serverbrowser.data.properties.LanguageProperty
+import com.msc.serverbrowser.data.properties.MaximizedProperty
+import com.msc.serverbrowser.data.properties.ShowChangelogProperty
+import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
 import com.msc.serverbrowser.gui.UncaughtExceptionHandlerController
 import com.msc.serverbrowser.gui.UncaughtExceptionHandlerView
 import com.msc.serverbrowser.gui.View
@@ -27,6 +22,17 @@ import com.msc.serverbrowser.util.UpdateUtility
 import com.msc.serverbrowser.util.basic.ArrayUtility
 import com.msc.serverbrowser.util.basic.FileUtility
 import com.msc.serverbrowser.util.windows.OSUtility
+import javafx.application.Application
+import javafx.application.Platform
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.scene.Node
+import javafx.scene.Scene
+import javafx.scene.control.Dialog
+import javafx.scene.control.TextField
+import javafx.scene.image.Image
+import javafx.stage.Stage
+import javafx.util.Duration
 import java.awt.Desktop
 import java.io.File
 import java.io.FileNotFoundException
@@ -36,7 +42,10 @@ import java.net.URISyntaxException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.*
+import java.util.Locale
+import java.util.MissingResourceException
+import java.util.Objects
+import java.util.ResourceBundle
 
 /**
  * This is the main class of the client.
@@ -46,7 +55,7 @@ import java.util.*
  */
 class Client : Application() {
     private var stage: Stage? = null
-    private var mainController: MainController? = null
+    private val mainController: MainController = MainController(MainView())
 
     /**
      * This property that indicates if an update check / isDownload progress is ongoing.
@@ -54,10 +63,10 @@ class Client : Application() {
     val updateOngoingProperty: BooleanProperty = SimpleBooleanProperty(false)
 
     /**
-     * @return an [Optional] of the current [SettingsController].
+     * @return current [SettingsController] or null.
      */
     val settingsController: SettingsController?
-        get() = mainController!!.settingsController
+        get() = mainController.settingsController
 
     override fun start(primaryStage: Stage) {
         instance = this
@@ -73,11 +82,9 @@ class Client : Application() {
         }
     }
 
-    private fun loadUIAndGetController(): MainController? {
-        val mainView = MainView()
-        mainController = MainController(mainView)
-        mainController!!.initialize()
-        val scene = Scene(mainView.rootPane)
+    private fun loadUIAndGetController(): MainController {
+        mainController.initialize()
+        val scene = Scene(mainController.mainView.rootPane)
         stage!!.scene = scene
 
         applyTheme()
@@ -121,7 +128,7 @@ class Client : Application() {
         primaryStage.isMaximized = ClientPropertiesController.getProperty(MaximizedProperty)
 
         primaryStage.setOnCloseRequest {
-            controller!!.onClose()
+            controller.onClose()
             ClientPropertiesController.setProperty(MaximizedProperty, primaryStage.isMaximized)
         }
 
@@ -159,8 +166,8 @@ class Client : Application() {
             return
         }
 
-        mainController!!.progressProperty().set(0.0)
-        mainController!!.setGlobalProgressText(Client.getString("checkingForUpdates"))
+        mainController.progressProperty().set(0.0)
+        mainController.setGlobalProgressText(Client.getString("checkingForUpdates"))
 
         Thread {
             updateOngoingProperty.set(true)
@@ -169,8 +176,8 @@ class Client : Application() {
                     Logging.info("Client is up to date.")
                 } else {
                     Platform.runLater {
-                        mainController!!.progressProperty().set(0.1)
-                        mainController!!.setGlobalProgressText(Client.getString("downloadingUpdate"))
+                        mainController.progressProperty().set(0.1)
+                        mainController.setGlobalProgressText(Client.getString("downloadingUpdate"))
                     }
                     Logging.info("Downloading update.")
                     downloadUpdate()
@@ -184,8 +191,8 @@ class Client : Application() {
             }
 
             Platform.runLater {
-                mainController!!.setGlobalProgressText("")
-                mainController!!.progressProperty().set(0.0)
+                mainController.setGlobalProgressText("")
+                mainController.progressProperty().set(0.0)
             }
             updateOngoingProperty.set(false)
         }.start()
@@ -197,7 +204,7 @@ class Client : Application() {
      * @param nodes the node that will be added
      */
     fun addItemsToBottomBar(vararg nodes: Node) {
-        mainController!!.addItemsToBottomBar(*nodes)
+        mainController.addItemsToBottomBar(*nodes)
     }
 
     /**
@@ -211,7 +218,7 @@ class Client : Application() {
                 val release = releaseOptional.get()
                 val updateUrl = release.assets[0].browserDownloadUrl
                 val url = URI(updateUrl)
-                FileUtility.downloadFile(url.toURL(), PathConstants.SAMPEX_TEMP_JAR, mainController!!
+                FileUtility.downloadFile(url.toURL(), PathConstants.SAMPEX_TEMP_JAR, mainController
                         .progressProperty(), release.assets[0].size.toInt().toDouble())
             }
         } catch (exception: IOException) {
@@ -237,7 +244,7 @@ class Client : Application() {
      * @param view the view to be loaded
      */
     fun loadView(view: View) {
-        mainController!!.loadView(view)
+        mainController.loadView(view)
     }
 
     /**
@@ -246,8 +253,8 @@ class Client : Application() {
      * @param view the view to reload
      */
     fun reloadViewIfLoaded(view: View) {
-        if (mainController!!.activeView == view) {
-            mainController!!.reloadView()
+        if (mainController.activeView == view) {
+            mainController.reloadView()
         }
     }
 
@@ -256,10 +263,10 @@ class Client : Application() {
      * contains the SA-MP / GTA path.
      */
     fun selectSampPathTextField() {
-        if (mainController!!.activeView != View.SETTINGS) {
+        if (mainController.activeView != View.SETTINGS) {
             loadView(View.SETTINGS)
         }
-        mainController!!.settingsController?.selectSampPathTextField()
+        mainController.settingsController?.selectSampPathTextField()
     }
 
     companion object {

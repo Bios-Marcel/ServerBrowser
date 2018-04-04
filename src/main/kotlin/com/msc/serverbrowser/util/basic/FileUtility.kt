@@ -1,8 +1,8 @@
 package com.msc.serverbrowser.util.basic
 
+import com.msc.serverbrowser.logging.Logging
 import javafx.application.Platform
 import javafx.beans.property.DoubleProperty
-import com.msc.serverbrowser.logging.Logging
 import java.io.File
 import java.io.File.separator
 import java.io.FileOutputStream
@@ -15,7 +15,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.security.NoSuchAlgorithmException
-import java.util.*
 import java.util.zip.ZipFile
 
 /**
@@ -198,13 +197,9 @@ object FileUtility {
      */
     fun deleteRecursively(file: File): Boolean {
         if (file.isDirectory) {
-            val files = file.listFiles()
+            val files = file.listFiles() ?: return false
 
-            if (Objects.isNull(files)) {
-                return false
-            }
-
-            for (fileOrFolder in files!!) {
+            for (fileOrFolder in files) {
                 if (!deleteRecursively(fileOrFolder)) {
                     return false
                 }

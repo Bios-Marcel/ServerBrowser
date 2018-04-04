@@ -4,11 +4,16 @@ import com.msc.serverbrowser.data.entites.Player
 import com.msc.serverbrowser.util.basic.Encoding
 
 import java.io.IOException
-import java.net.*
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
+import java.net.SocketException
+import java.net.UnknownHostException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.charset.StandardCharsets
-import java.util.*
+import java.util.Optional
+import java.util.StringTokenizer
 import java.util.concurrent.ThreadLocalRandom
 import java.util.stream.IntStream
 
@@ -169,9 +174,7 @@ class SampQuery
         send(PACKET_MIRROR_CHARACTERS)
         val reply = receiveBytes()
         // Removed the checks if the reply was valid, i think its not even necessary
-        if (Objects.isNull(reply)) {
-            throw SocketException("Couldn't connect to Server")
-        }
+        reply ?: throw SocketException("Couldn't connect to Server")
     }
 
     @Throws(SocketException::class)

@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.sql.SQLException
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Contains static methods for setting and retrieving favourite servers

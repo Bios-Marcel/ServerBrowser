@@ -1,8 +1,14 @@
 package com.msc.serverbrowser.data.entites
 
-import javafx.beans.property.*
 import com.msc.serverbrowser.util.fx.OneLineStringProperty
-import java.util.*
+import javafx.beans.property.BooleanProperty
+import javafx.beans.property.IntegerProperty
+import javafx.beans.property.LongProperty
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleLongProperty
+import javafx.beans.property.StringProperty
+import java.util.Objects
 
 class SampServer(address: String, port: Int) {
     private val passwordedProperty = SimpleBooleanProperty()

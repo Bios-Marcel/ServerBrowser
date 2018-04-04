@@ -1,12 +1,7 @@
 package com.msc.serverbrowser.util.basic
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Assertions.assertTrue
-
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import com.msc.serverbrowser.util.basic.StringUtility
 
 /**
  * @author Marcel

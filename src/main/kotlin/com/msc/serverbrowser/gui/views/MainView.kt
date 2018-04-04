@@ -1,16 +1,22 @@
 package com.msc.serverbrowser.gui.views
 
+import com.msc.serverbrowser.Client
+import com.msc.serverbrowser.gui.View
+import com.msc.serverbrowser.util.windows.OSUtility
 import javafx.beans.property.DoubleProperty
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.Node
-import javafx.scene.control.*
+import javafx.scene.control.Hyperlink
+import javafx.scene.control.Label
+import javafx.scene.control.ProgressBar
+import javafx.scene.control.ScrollPane
+import javafx.scene.control.ToggleButton
+import javafx.scene.control.ToggleGroup
+import javafx.scene.control.Tooltip
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
-import com.msc.serverbrowser.Client
-import com.msc.serverbrowser.gui.View
-import com.msc.serverbrowser.util.windows.OSUtility
 
 /**
  * Class containing the component hierarchy for the main view.

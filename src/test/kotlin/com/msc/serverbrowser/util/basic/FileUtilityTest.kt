@@ -1,33 +1,22 @@
 package com.msc.serverbrowser.util.basic
 
-import java.nio.file.Files.createTempDirectory
-import java.nio.file.Files.exists
-import java.nio.file.Files.readAllBytes
-import java.nio.file.Files.readAllLines
-import java.nio.file.Paths.get
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
-
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import java.io.IOException
 import java.math.BigInteger
 import java.net.URISyntaxException
-import java.net.URL
-import java.nio.file.Path
+import java.nio.file.Files.*
+import java.nio.file.Paths.get
 import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
-import com.msc.serverbrowser.util.basic.FileUtility
 
 /**
  * @author oliver
  * @since 02.07.2017
  */
 internal class FileUtilityTest {
+    private val PATH_TO_TEST_RESSOURCES = "/com/msc/serverbrowser/util/basic/"
+    private val shaDigester: MessageDigest = MessageDigest.getInstance("SHA-512")
 
     @Test
     @DisplayName("Given a zipped file, when __unzip__ is called, then it should be correctly decompressed.")
@@ -80,32 +69,21 @@ internal class FileUtilityTest {
 
             assertTrue(exists(pathToUnzippedFile), "The unzipped file does not exist where expected: $pathToUnzippedFile.")
 
-            val shaOfUnzipped = toHex(shaDigester!!.digest(readAllBytes(pathToUnzippedFile)))
+            val shaOfUnzipped = toHex(shaDigester.digest(readAllBytes(pathToUnzippedFile)))
             assertEquals(sha512, shaOfUnzipped)
         }
     }
 
-    companion object {
-        private val PATH_TO_TEST_RESSOURCES = "/com/msc/serverbrowser/util/basic/"
-        private var shaDigester: MessageDigest? = null
-
-        @BeforeAll
-        @Throws(NoSuchAlgorithmException::class)
-        fun createShaEncoder() {
-            shaDigester = MessageDigest.getInstance("SHA-512")
-        }
-
-        /**
-         * Stolen from
-         * https://stackoverflow.com/questions/332079/in-java-how-do-i-convert-a-byte-array-to-a-string-of-hex-digits-while-keeping-l#332433
-         *
-         * @param bytes some byte array
-         *
-         * @return lower case hex dump with leading zeros intact
-         */
-        private fun toHex(bytes: ByteArray): String {
-            val bigInteger = BigInteger(1, bytes)
-            return String.format("%0" + (bytes.size shl 1) + "x", bigInteger)
-        }
+    /**
+     * Stolen from
+     * https://stackoverflow.com/questions/332079/in-java-how-do-i-convert-a-byte-array-to-a-string-of-hex-digits-while-keeping-l#332433
+     *
+     * @param bytes some byte array
+     *
+     * @return lower case hex dump with leading zeros intact
+     */
+    private fun toHex(bytes: ByteArray): String {
+        val bigInteger = BigInteger(1, bytes)
+        return String.format("%0" + (bytes.size shl 1) + "x", bigInteger)
     }
 }

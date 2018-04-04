@@ -4,7 +4,7 @@ import com.msc.serverbrowser.data.SQLDatabase
 import com.msc.serverbrowser.logging.Logging
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.util.*
+import java.util.Objects
 
 /**
  * Singleton object for retrieving and setting the applications properties.

@@ -3,7 +3,8 @@ package com.msc.serverbrowser.util
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.LanguageProperty
-import java.util.*
+import java.util.Objects
+import java.util.Optional
 
 /**
  * An Enum containing all usable languages.

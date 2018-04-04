@@ -3,22 +3,43 @@ package com.msc.serverbrowser.gui.controllers.implementations
 import com.github.plushaze.traynotification.animations.Animations
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
-import javafx.application.Platform
-import javafx.beans.InvalidationListener
-import javafx.fxml.FXML
-import javafx.scene.control.*
-import javafx.scene.control.Alert.AlertType
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.InstallationCandidateCache
-import com.msc.serverbrowser.data.properties.*
+import com.msc.serverbrowser.data.properties.AllowCachingDownloadsProperty
+import com.msc.serverbrowser.data.properties.AllowCloseGtaProperty
+import com.msc.serverbrowser.data.properties.AllowCloseSampProperty
+import com.msc.serverbrowser.data.properties.AskForNameOnConnectProperty
+import com.msc.serverbrowser.data.properties.AutomaticUpdatesProperty
+import com.msc.serverbrowser.data.properties.ChangelogEnabledProperty
+import com.msc.serverbrowser.data.properties.ClientPropertiesController
+import com.msc.serverbrowser.data.properties.DownloadPreReleasesProperty
+import com.msc.serverbrowser.data.properties.LanguageProperty
+import com.msc.serverbrowser.data.properties.LastViewProperty
+import com.msc.serverbrowser.data.properties.LegacySettingsController
+import com.msc.serverbrowser.data.properties.Property
+import com.msc.serverbrowser.data.properties.SampPathProperty
+import com.msc.serverbrowser.data.properties.SaveLastViewProperty
+import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
 import com.msc.serverbrowser.gui.View
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
 import com.msc.serverbrowser.util.Language
 import com.msc.serverbrowser.util.UpdateUtility
 import com.msc.serverbrowser.util.basic.MathUtility
 import com.msc.serverbrowser.util.basic.StringUtility
+import javafx.application.Platform
+import javafx.beans.InvalidationListener
+import javafx.fxml.FXML
+import javafx.scene.control.Alert
+import javafx.scene.control.Alert.AlertType
+import javafx.scene.control.Button
+import javafx.scene.control.ButtonType
+import javafx.scene.control.CheckBox
+import javafx.scene.control.ComboBox
+import javafx.scene.control.Label
+import javafx.scene.control.Spinner
+import javafx.scene.control.TextField
 import java.text.MessageFormat
-import java.util.*
+import java.util.Properties
 
 /**
  * Defines the behaviour of the settings view and manages setting bindings.
@@ -265,7 +286,7 @@ class SettingsController : ViewController {
     }
 
     /**
-     * Restores all settings to default. Some settings like [ShowChangelogProperty]
+     * Restores all settings to default. Some settings like [com.msc.serverbrowser.data.properties.ShowChangelogProperty]
      * won't be reset, since the user can't change those anyways.
      */
     @FXML

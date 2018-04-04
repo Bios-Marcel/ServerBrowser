@@ -3,22 +3,6 @@ package com.msc.serverbrowser.gui.controllers.implementations
 import com.github.plushaze.traynotification.animations.Animations
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
-import javafx.application.Platform
-import javafx.beans.InvalidationListener
-import javafx.beans.property.SimpleObjectProperty
-import javafx.beans.property.SimpleStringProperty
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
-import javafx.event.ActionEvent
-import javafx.event.EventHandler
-import javafx.fxml.FXML
-import javafx.geometry.Pos
-import javafx.scene.Node
-import javafx.scene.control.*
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
-import javafx.scene.text.TextAlignment
-import javafx.util.Pair
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.FavouritesController
 import com.msc.serverbrowser.data.ServerConfig
@@ -33,13 +17,38 @@ import com.msc.serverbrowser.util.basic.StringUtility
 import com.msc.serverbrowser.util.samp.GTAController
 import com.msc.serverbrowser.util.samp.SampQuery
 import com.msc.serverbrowser.util.windows.OSUtility
+import javafx.application.Platform
+import javafx.beans.InvalidationListener
+import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
+import javafx.event.ActionEvent
+import javafx.event.EventHandler
+import javafx.fxml.FXML
+import javafx.geometry.Pos
+import javafx.scene.Node
+import javafx.scene.control.CheckBox
+import javafx.scene.control.ComboBox
+import javafx.scene.control.Hyperlink
+import javafx.scene.control.Label
+import javafx.scene.control.TableCell
+import javafx.scene.control.TableColumn
+import javafx.scene.control.TableView
+import javafx.scene.control.TextField
+import javafx.scene.control.ToggleGroup
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
+import javafx.scene.text.TextAlignment
+import javafx.util.Pair
 import java.io.IOException
 import java.text.MessageFormat
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Objects
+import java.util.Optional
 import java.util.function.Predicate
 import java.util.regex.PatternSyntaxException
 
@@ -159,8 +168,8 @@ class ServerListController : ViewController {
         columnLastJoin.setCellFactory {
             object : TableCell<SampServer, Long>() {
                 override fun updateItem(item: Long?, empty: Boolean) {
-                    if (!empty && Objects.nonNull(item)) {
-                        val date = LocalDateTime.ofInstant(Instant.ofEpochMilli(item!!), ZoneId.systemDefault())
+                    if (empty.not() && item != null) {
+                        val date = LocalDateTime.ofInstant(Instant.ofEpochMilli(item), ZoneId.systemDefault())
                         val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")
                         text = dateFormat.format(date)
                     }

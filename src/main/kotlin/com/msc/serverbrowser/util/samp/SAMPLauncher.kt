@@ -8,7 +8,6 @@ import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.ServerUtility
 import com.msc.serverbrowser.util.windows.OSUtility
 import java.awt.Desktop
-import java.awt.Desktop.Action
 import java.io.File
 import java.io.IOException
 import java.net.InetAddress
@@ -16,7 +15,9 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.net.UnknownHostException
 import java.time.Instant
-import java.util.*
+import java.util.ArrayList
+import java.util.Objects
+import java.util.Optional
 
 /**
  * This classes purpose is solely to launch GTA and connect to a server.
@@ -43,7 +44,7 @@ object SAMPLauncher {
      * @param serverPassword password to be used for connect to the server
      * @return true if the connection was successful, otherwise false
      */
-    fun connect(address: String, port: Int?, serverPassword: String): Boolean {
+    fun connect(address: String, port: Int, serverPassword: String): Boolean {
         if (ClientPropertiesController.getProperty(AllowCloseGtaProperty)) {
             GTAController.killGTA()
         }
@@ -76,13 +77,13 @@ object SAMPLauncher {
         return false
     }
 
-    private fun connectInternal(gtaPath: String, address: String, port: Int?, serverPassword: String): Boolean {
+    private fun connectInternal(gtaPath: String, address: String, port: Int, serverPassword: String): Boolean {
 
         if (connectUsingDLLInjection(gtaPath, address, port, serverPassword)) {
             return true
         }
 
-        if (connectUsingExecutable(gtaPath, address, port!!, serverPassword)) {
+        if (connectUsingExecutable(gtaPath, address, port, serverPassword)) {
             return true
         }
 
@@ -94,9 +95,9 @@ object SAMPLauncher {
         return false
     }
 
-    private fun connectUsingDLLInjection(gtaPath: String, address: String, port: Int?, serverPassword: String): Boolean {
+    private fun connectUsingDLLInjection(gtaPath: String, address: String, port: Int, serverPassword: String): Boolean {
         val builder = ProcessBuilder()
-        val arguments = buildLaunchingArguments(address, port!!, Optional.ofNullable(serverPassword))
+        val arguments = buildLaunchingArguments(address, port, Optional.ofNullable(serverPassword))
         builder.command(arguments)
         builder.directory(File(gtaPath))
 
@@ -157,7 +158,7 @@ object SAMPLauncher {
      * @param port the port on which the SA-MP server runs
      * @return true if it was most likely successful
      */
-    private fun connectUsingWindowsProtocol(address: String, port: Int?): Boolean {
+    private fun connectUsingWindowsProtocol(address: String, port: Int): Boolean {
         if (!OSUtility.isWindows) {
             return false
         }
@@ -166,8 +167,8 @@ object SAMPLauncher {
             Logging.info("Connecting using protocol.")
             val desktop = Desktop.getDesktop()
 
-            if (desktop.isSupported(Action.BROWSE)) {
-                val addressAndPort = address + ":" + port!!.toString()
+            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                val addressAndPort = address + ":" + port.toString()
                 desktop.browse(URI("samp://$addressAndPort"))
                 return true
             }

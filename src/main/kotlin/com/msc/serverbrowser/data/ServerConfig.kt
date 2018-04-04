@@ -3,7 +3,8 @@ package com.msc.serverbrowser.data
 import com.msc.serverbrowser.data.entites.SampServer
 import com.msc.serverbrowser.logging.Logging
 import java.sql.SQLException
-import java.util.*
+import java.util.ArrayList
+import java.util.Optional
 
 /**
  * Allows controller over server specific settings. TODO(MSC) I could still improve the setter
@@ -27,7 +28,7 @@ private constructor()// Constructor to prevent instantiation.
      * @param username the username to be set
      * @return true if the action was a success, otherwise false
      */
-    fun setUsernameForServer(ip: String, port: Int?, username: String): Boolean {
+    fun setUsernameForServer(ip: String, port: Int, username: String): Boolean {
         val query = ("INSERT OR REPLACE INTO serverconfig (ip, port, username, lastJoin ) values (" + "?," // IP
 
                 + "?," // Port
@@ -38,7 +39,7 @@ private constructor()// Constructor to prevent instantiation.
         try {
             SQLDatabase.createPreparedStatement(query).use { statement ->
                 statement.setString(1, ip)
-                statement.setInt(2, port!!)
+                statement.setInt(2, port)
                 statement.setString(3, username)
                 statement.setString(4, ip)
                 statement.setInt(5, port)
@@ -60,7 +61,7 @@ private constructor()// Constructor to prevent instantiation.
      * @param port server port
      * @return An [Optional] containing the to be used username or empty
      */
-    fun getUsernameForServer(ip: String, port: Int?): Optional<String> {
+    fun getUsernameForServer(ip: String, port: Int): Optional<String> {
         return getStringOfField(ip, port, "username")
     }
 
@@ -74,7 +75,7 @@ private constructor()// Constructor to prevent instantiation.
          * @param lastTimeJoined lastTimeJoined
          * @return true if the action was a success, otherwise false
          */
-        fun setLastTimeJoinedForServer(ip: String, port: Int?, lastTimeJoined: Long): Boolean {
+        fun setLastTimeJoinedForServer(ip: String, port: Int, lastTimeJoined: Long): Boolean {
             val query = ("INSERT OR REPLACE INTO serverconfig (ip, port, username, lastJoin ) values (" + "?," // IP
 
                     + "?," // Port
@@ -85,7 +86,7 @@ private constructor()// Constructor to prevent instantiation.
             try {
                 SQLDatabase.createPreparedStatement(query).use { statement ->
                     statement.setString(1, ip)
-                    statement.setInt(2, port!!)
+                    statement.setInt(2, port)
                     statement.setString(3, ip)
                     statement.setInt(4, port)
                     statement.setLong(5, lastTimeJoined)
@@ -107,7 +108,7 @@ private constructor()// Constructor to prevent instantiation.
          * @param port server port
          * @return An [Optional] containing the to be used username or empty
          */
-        private fun getLastJoinForServer(ip: String, port: Int?): Optional<Long> {
+        private fun getLastJoinForServer(ip: String, port: Int): Optional<Long> {
             return getStringOfField(ip, port, "lastJoin").map({ it.toLong() })
         }
 
@@ -150,14 +151,14 @@ private constructor()// Constructor to prevent instantiation.
             servers.forEach { server -> getLastJoinForServer(server.address, server.port).ifPresent({ server.lastJoin = it }) }
         }
 
-        private fun getStringOfField(ip: String, port: Int?, field: String): Optional<String> {
+        private fun getStringOfField(ip: String, port: Int, field: String): Optional<String> {
             val query = "SELECT $field FROM serverconfig WHERE ip=? and port=? AND $field IS NOT NULL;"
 
             try {
                 SQLDatabase.createPreparedStatement(query).use { statement ->
 
                     statement.setString(1, ip)
-                    statement.setInt(2, port!!)
+                    statement.setInt(2, port)
 
                     val resultSetOpt = SQLDatabase.executeGetResult(statement)
 

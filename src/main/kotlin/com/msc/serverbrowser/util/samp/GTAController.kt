@@ -6,12 +6,6 @@ import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.github.sarxos.winreg.HKey
 import com.github.sarxos.winreg.RegistryException
 import com.github.sarxos.winreg.WindowsRegistry
-import javafx.beans.property.SimpleStringProperty
-import javafx.beans.property.StringProperty
-import javafx.scene.control.Alert
-import javafx.scene.control.Alert.AlertType
-import javafx.scene.control.ButtonType
-import javafx.scene.control.TextInputDialog
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.PastUsernames
 import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate
@@ -23,10 +17,17 @@ import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.basic.HashingUtility
 import com.msc.serverbrowser.util.basic.StringUtility
 import com.msc.serverbrowser.util.windows.OSUtility
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
+import javafx.scene.control.Alert
+import javafx.scene.control.Alert.AlertType
+import javafx.scene.control.ButtonType
+import javafx.scene.control.TextInputDialog
 import java.io.File
 import java.io.IOException
 import java.security.NoSuchAlgorithmException
-import java.util.*
+import java.util.Objects
+import java.util.Optional
 
 /**
  * Contains utility methods for interacting with native samp stuff.
@@ -166,9 +167,9 @@ object GTAController {
      * @param port server port
      * @param serverPassword the password to be used for this connection
      */
-    fun tryToConnect(address: String, port: Int?, serverPassword: String) {
+    fun tryToConnect(address: String, port: Int, serverPassword: String) {
         try {
-            SampQuery(address, port!!).use { query ->
+            SampQuery(address, port).use { query ->
                 val serverInfo = query.basicServerInfo
 
                 if (Objects.isNull(serverPassword) || serverPassword.isEmpty() && serverInfo.isPresent && StringUtility.stringToBoolean(serverInfo.get()[0])) {
