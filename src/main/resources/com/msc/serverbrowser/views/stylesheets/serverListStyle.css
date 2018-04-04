@@ -1,0 +1,14 @@
+.server-type-switch-button 
+{
+	-fx-alignment: CENTER;
+	-fx-border: 0.0;
+	-fx-border-radius: 0.0;
+	-fx-background-color: -menu-color;
+	-fx-background-radius: 0.0;
+	-fx-min-height: 2em;
+}
+
+.server-type-switch-button:selected
+{
+	-fx-background-color: -menu-color-selected;
+}

@@ -4,61 +4,194 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
+    ext.kotlin_version = '1.2.31'
     dependencies {
+        classpath 'de.dynamicfiles.projects.gradle.plugins:javafx-gradle-plugin:8.8.+'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.+'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
-        classpath group: 'com.layer', name: 'gradle-git-repo-plugin', version: '2.0.2'
+        classpath 'com.layer:gradle-git-repo-plugin:2.0.+'
     }
 }
 
-/*
-* The most basic setting which apply to ALL projects (including the root) go here:
-*/
-allprojects{
-	apply plugin: 'eclipse'
-	apply plugin: 'java'
-	
-	group = projectGroup
-	version = projectVersion
+group = projectGroup
+version = projectVersion
 
-	repositories {
-		jcenter()
-	}
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+mainClassName = "com.msc.serverbrowser.Client"
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
-/*
-* Shared dependencies between ALL subprojects go in here:
-*/
-subprojects {
-	apply plugin: 'org.junit.platform.gradle.plugin'
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
+}
 
-	dependencies {
-		testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0-M4")
-   		testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M4")
-	}
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+    test.kotlin.srcDirs += 'src/test/kotlin'
+    demo.kotlin.srcDirs += 'src/demo/kotlin'
+    demo.compileClasspath += main.output
+    demo.compileClasspath += main.compileClasspath
+}
+
+dependencies {
+    compile 'com.github.sarxos:windows-registry-util:0.3'
+    compile 'org.xerial:sqlite-jdbc:3.19.+'
+    compile 'com.eclipsesource.minimal-json:minimal-json:0.9.+'
+    compile 'com.github.Bios-Marcel:TrayNotification:1.3.1.1'
+    compile 'org.kohsuke:github-api:1.89'
+    compile 'com.github.albfernandez:juniversalchardet:2.0.+'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    //javapacker for native build. This will only be necessary if the userJvmOptions are used
+    //compile files("${System.properties['java.home']}/../lib/packager.jar")
+
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0-M4")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M4")
 }
 
 /*
 * Provide a fixed version of gradle for people building this project.
 */
 task wrapper(type: Wrapper) {
-	gradleVersion = gradleWrapperVersion
+    gradleVersion = gradleWrapperVersion
 }
 
 /*
 * Load private and secret properties!
 */
 def localProps = project.rootProject.file('local.properties')
-if (localProps.exists())
-{
-	Properties properties = new Properties()
-	properties.load(localProps.newDataInputStream())
-	ext.localSecretKeystorePassword = properties.getProperty('localSecretKeystorePassword')
-	ext.localSecretKeyPassword = properties.getProperty('localSecretKeyPassword')
+if (localProps.exists()) {
+    Properties properties = new Properties()
+    properties.load(localProps.newDataInputStream())
+    ext.localSecretKeystorePassword = properties.getProperty('localSecretKeystorePassword')
+    ext.localSecretKeyPassword = properties.getProperty('localSecretKeyPassword')
+} else {
+    //for the travis build we set the secrets via environment variables, because these can be encrypted with travis api
+    ext.localSecretKeystorePassword = System.getenv("KEYSTORE_PW")
+    ext.localSecretKeyPassword = System.getenv("KEY_PW")
 }
-else
-{
-	//for the travis build we set the secrets via enviraonment variables, because these can be encrypted with travis api
-	ext.localSecretKeystorePassword = System.getenv("KEYSTORE_PW")
-	ext.localSecretKeyPassword = System.getenv("KEY_PW")
+
+
+apply plugin: 'com.github.johnrengelman.shadow'
+shadowJar {
+    /*
+    * WARNING! Changes to excludes/includes only seem to take effect after a "clean" with gradle.
+    * I am not sure where the bug lies, but this should not happen with gradle...
+    */
+    //Excluding binary stuff for unsupported platforms
+
+    exclude 'org/sqlite/native/Linux/android-arm/**'
+    exclude 'org/sqlite/native/Linux/arm/**'
+    exclude 'org/sqlite/native/Linux/armv6/**'
+    exclude 'org/sqlite/native/Linux/armv7/**'
+    exclude 'org/sqlite/native/Linux/ppc64/**'
+    exclude 'org/sqlite/native/FreeBSD/**'
+    exclude 'org/sqlite/native/Mac/**'
+    //Theoretically, in a distant future, one could kill windows 32bit support...
+    //exclude 'org/sqlite/native/Windows/x86/**'
+
+    //Linux x86 bit support already killed
+    exclude 'org/sqlite/native/Linux/x86/**'
+
+    //Trash
+    exclude 'META-INF/maven/**'
+
+    //Merges all service file under "META-INF/services" to one
+    mergeServiceFiles()
 }
+
+/*
+* The 'javafx-gradle-plugin' can generate executable JARs, exe, deb, RPM and DMG files.
+* Shadow generates a fat JAR.
+* Proguard is an optimizer.
+*/
+apply plugin: 'javafx-gradle-plugin'
+jfx {
+    verbose = true
+
+    mainClass = mainClassName
+    println("$mainClass")
+    vendor = projectVendor
+
+    // String - setting this for windows-bundlers makes it possible to generate upgradeable installers (using same GUID)
+    identifier = "$projectGroup" + "." + "$rootProject.name" + "." + "$projectVendor" + "." + "$projectVersion"
+
+    nativeReleaseVersion = "$projectVersion"
+
+    //bundler = "RPM"
+
+    //useful during debugging. but when all bundles are tried, some WILL ALWAYS fail, because EXE can only be built on windows, DEB/RPM on linux and PKG/DMG on OSX.
+    //failOnError = true
+
+    //TODO
+    //icon under linux does not work
+    //remove libs from native bundle
+    //jvmArgs = ['-Xmx=128m','-Xms=64m'] //this syntax is wrong
+    //remove eclipse annotations
+    //signing
+
+    needShortcut = true
+    needMenu = true
+
+    bundleArguments = [
+            copyright      : "TODO",
+            email          : "TODO",
+            category       : "Game",
+            "win.menuGroup": "Game",
+            licenseType    : 'MPLv2.0',
+            //because windows is "special", it requires "special" file formats for the license...
+            licenseFile    : org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'license.rtf' : 'LICENSE'
+    ]
+    // per default the outcome of the gradle "jarTask" will be used, set this to specify otherwise (like proguard-output)
+    alternativePathToJarFile = "$libsDir/$shadowJar.baseName-$shadowJar.version-$shadowJar.classifier" + ".jar"
+    copyAdditionalAppResourcesToJar = true
+    skipCopyingDependencies = true
+    useLibFolderContentForManifestClasspath = true
+
+    // this is used for files below "src/main/deploy", e.g. "src/main/deploy/windows/$rootProject.name.ico"
+    appName = "SA-MP-ServerBrowser"
+    additionalAppResources = 'src/main/additionalFiles'
+    jfxMainAppJarName = "$appName" + ".jar"
+
+    //precompiles the CSS to binary. Useful performance gain, if the CSS files are not modified during runtime
+    css2bin = true
+
+    // gradle jfxGenerateKeyStore
+    keyStore = "src/main/deploy/keystore.jks"
+    keyStoreAlias = "$projectVendor" + "-" + "$rootProject.name"
+    // assumes you have a file "local.properties" which does NOT get version controlled!
+    keyStorePassword = "$localSecretKeystorePassword"
+    keyPassword = "$localSecretKeyPassword"
+    keyStoreType = "jks"
+    overwriteKeyStore = false
+
+    certDomain = "$projectGroup" // required
+    certOrgUnit = "$projectVendor" // defaults to "none"
+    certOrg = "$projectVendor" // required
+    certState = "Lower Saxony" // required
+    certCountry = "Germany" // required
+}
+
+jfxJar.dependsOn shadowJar

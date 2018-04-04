@@ -1,0 +1,366 @@
+/*
+ * This section contains general style.
+ */
+
+*
+{
+	-component-background-color: #121212;
+	-component-background-color-selected: #404040;
+	-border-color: derive(-component-background-color-selected , -20.0%);
+	-menu-color: derive( -component-background-color, -10.0%);
+	-menu-color-selected: -component-background-color-selected;
+	-mark-color: #D5C9C9;
+	-scroll-bar-arrow-and-thumb-color: -component-background-color-selected;
+	
+	-special-button-color: #9239ad;
+	
+    -fx-text-fill: #CCCCCC;
+    -fx-background-color: #212121;
+    -component-inner-color: #212121;
+	-fx-focus-color: #D5C9C9;
+	
+	-fx-background-insets: 0.0;
+}
+
+*:selected
+{
+    -fx-background-color: -component-background-color-selected;
+}
+
+.scroll-bar .track-background, .scroll-bar .track
+{
+	-fx-background-color: -component-inner-color;
+}
+
+.bottom-bar
+{
+	-fx-border-color: -border-color;
+}
+
+.progress-bar
+{
+	-fx-border-color: -border-color;	
+}
+
+.bar
+{
+	-fx-background-color: #8BD38B;
+}
+
+.overline
+{
+	-fx-border-color: white;
+	-fx-border-width: 1.0 0.0 0.0 0.0;
+}
+
+/**
+ * Focus styles
+ */
+
+.combo-box:focused, .text-field:focused, .check-box:focused > .box, .table-view:focused, .spinner:focused, .text-area:focused, .button:focused
+{
+	-fx-border-color: -fx-focus-color !important;
+}
+
+.button:focused
+{
+	-fx-padding: 3.0;
+}
+/**
+ * Container that contains the elements of the specific view
+ */
+
+.viewContent
+{
+	-fx-padding: 5.0;	
+}
+
+/**
+ * General Component settings
+ */
+
+.text-field, .combo-box, .titled-pane
+{
+	-fx-border-width: 1.0;
+	-fx-border-color: -border-color;
+}
+
+/**
+ * TextField
+ */
+ 
+.text-field
+{
+	-fx-padding: 3.0;	
+}
+
+/**
+ * TextArea
+ */
+ 
+.text-area
+{
+	-fx-border-width: 1.0;
+	-fx-border-color: -border-color;
+}
+
+
+/**
+ * ComboBox
+ */
+
+.combo-box > .cell:selected {
+    -fx-background-color: inherit;
+}
+
+.combo-box .arrow-button
+{
+	-fx-padding: 3.0 8.0 3.0 8.0;
+}
+
+.combo-box .list-cell
+{
+	-fx-padding: 3.0;
+}
+
+/**
+ * List
+ */
+
+.list-view .list-cell:hover
+{
+	-fx-background-color: -component-background-color-selected;
+}
+
+.list-view .list-cell:empty
+{
+	-fx-background-color: inherit;
+}
+
+/**
+ * Separator
+ */
+ 
+.separator .line
+{
+	-fx-border-color: -border-color;
+}
+
+/**
+ * Titled Pane
+ */
+
+.titled-pane .content
+{
+	-fx-border-width: 0.0;
+}
+
+.titled-pane .arrow
+{
+	-fx-background-color: -mark-color;
+}
+
+.titled-pane .title
+{
+	-fx-border-color: -border-color;
+	-fx-border-width: 0.0 0.0 1.0 0.0;
+}
+
+.titled-pane:collapsed .title
+{
+	-fx-border-width: 0.0;
+}
+
+/**
+ * Buttons
+ */
+
+.button
+{
+    -fx-padding: 4.0;
+    -fx-background-color: -component-background-color;
+}
+
+.button:armed
+{
+    -fx-background-color: -component-background-color-selected;	
+}
+
+.toggle-button
+{
+    -fx-padding: 5.0;
+    -fx-background-color: -component-background-color;
+}
+
+/**
+ * Context Menus
+ */
+ 
+.menu-item:hover, .menu-item:hover > .label
+{
+	-fx-background-color: -component-background-color-selected;
+}
+
+
+
+/*
+ * Tables
+ */
+
+.table-view .column-header-background .nested-column-header
+{
+	-fx-border-color: -border-color;
+	-fx-border-width: 0.0 0.0 1.0 0.0;
+}
+
+.table-view .arrow
+{
+	-fx-background-color: -mark-color;
+}
+
+.column-header
+{
+	-fx-padding: 3.0;
+	-fx-border-width: 0.0 1.0 0.0 1.0;
+	-fx-border-insets: 0.0 -1.0 0.0 -1.0;
+	-fx-border-color: -border-color;
+}
+
+.table-view
+{
+	-fx-border-color: -border-color; 	
+	-fx-border-width: 1.0;
+}
+
+.table-view .placeholder
+{
+	-fx-padding: 15.0;
+}
+
+.table-row-cell
+{
+	-fx-table-cell-border-color: -border-color;
+}
+
+.table-row-cell:selected .table-cell
+{
+   -fx-background-color: -component-background-color-selected;
+}
+
+.table-view .show-hide-columns-button
+{
+	-fx-border-width: 0.0 0.0 1.0 1.0;
+	-fx-border-color: -border-color;
+}
+.table-view .show-hide-columns-button .show-hide-column-image
+{
+	-fx-background-color: -mark-color;
+}
+
+/**
+ * Tabs
+ */
+
+.tab .headers-region
+{
+	-fx-min-size: Infinity;
+}
+
+.tab
+{
+	-fx-background-color: -component-inner-color;
+	-fx-border-width: 1.0 1.0 0.0 1.0;
+	-fx-border-color: -border-color;
+}
+
+.tab:selected .tab-container
+{
+	-fx-background-color: transparent;
+}
+
+.tab:selected, .tab:selected .tab-label
+{
+	-fx-background-color: -component-background-color-selected;
+	/*-fx-border-width: 1.0;
+	-fx-border-color: white;*/
+}
+
+.tab-pane .tab-content-area
+{	
+	-fx-border-color: -border-color;
+}
+
+.tab .tab-container .focus-indicator
+{
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+}
+
+/**
+ * CheckBoxes
+ */
+ 
+.check-box .box
+{
+	-fx-border-color: -border-color;
+	-fx-padding: 1.0;
+}
+
+.check-box:selected
+{
+	-fx-background-insets: 10000.0; /* HACK(MSC) Fix visible background bug when selected */
+}
+
+.check-box:selected .box
+{
+	-fx-background-color: #8BD38B;
+}
+
+.check-box:selected .mark
+{
+	-fx-background-color: transparent;
+}
+
+/**
+ * Tab Pane (Menu)
+ */
+
+.tabPane
+{
+	-fx-background-color: -menu-color;
+}
+
+.MenuItem:hover
+{
+	-fx-background-color: -component-background-color-selected;
+}
+.MenuItem:selected
+{
+	-fx-background-color: -component-background-color-selected;
+}
+
+/**
+ * Spinner
+ */
+ 
+.spinner
+{
+    -fx-border-color: -border-color;
+
+}
+
+.spinner .increment-arrow-button, .spinner .decrement-arrow-button
+{
+    -fx-background-color: -component-background-color-selected;
+    -fx-padding: 3.0 5.0 3.0 5.0;
+}
+
+.spinner .increment-arrow, .spinner .decrement-arrow
+{
+    -fx-background-color: -mark-color;
+}
+
+.spinner .text-input
+{
+    -fx-border-width: 0.0;
+}

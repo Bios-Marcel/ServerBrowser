@@ -1,0 +1,81 @@
+*
+{
+	-special-button-color: #639BE0;
+	-mark-color: #538ED7;
+	-menu-color: #538ED7;
+	-menu-color-selected: #1F5FAE;
+	-scroll-bar-arrow-and-thumb-color: -mark-color;
+}
+
+.overline
+{
+	-fx-border-color: black;
+	-fx-border-width: 1.0 0.0 0.0 0.0;
+}
+
+.scroll-bar .track-background, .scroll-bar .track
+{
+	-fx-background-color: rgb(244,244,244);
+}
+
+.tabPane
+{
+	-fx-background-color: -menu-color;
+}
+
+/**
+ * Container that contains the elements of the specific view
+ */
+
+.viewContent
+{
+	-fx-padding: 5.0;	
+}
+
+/**
+ * TabPane
+ */
+ 
+ .tab-header-background
+ {
+ 	-fx-background-color: transparent;
+ }
+
+
+.tab-pane .tab-content-area
+{	
+	-fx-border-color: lightgray;
+}
+
+/*
+ * menu 
+ */
+
+.MenuItem
+{
+	-fx-background-color: -menu-color;
+}
+
+.MenuItem:selected
+{
+	-fx-background-color: #1F5FAE;
+}
+
+
+/**
+ * Bottom bar
+ */
+
+.bottom-bar
+{
+	-fx-border-color: lightgray;
+}
+
+/**
+ * Special
+ */
+
+.beta-sign
+{
+	-fx-text-fill: white;
+}

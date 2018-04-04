@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/8.0.111"
+			xmlns:fx="http://javafx.com/fxml/1">
+	<VBox maxHeight="Infinity" maxWidth="Infinity" spacing="5" xmlns="http://javafx.com/javafx/8.0.111"
+		  xmlns:fx="http://javafx.com/fxml/1">
+		<TitledPane text="%informationSettingsTitle">
+			<Label fx:id="informationLabel" maxHeight="Infinity" maxWidth="Infinity"/>
+		</TitledPane>
+		<TitledPane text="%generalSettingsTitle">
+			<VBox spacing="5.0">
+				<HBox spacing="5.0">
+					<Label maxHeight="Infinity" text="%customSampPath"/>
+					<TextField fx:id="sampPathTextField" maxWidth="Infinity"
+							   promptText="%gtaNotFoundPrompt" HBox.hgrow="ALWAYS"/>
+				</HBox>
+				<HBox spacing="5.0">
+					<Label maxHeight="Infinity" text="%language"/>
+					<ComboBox fx:id="languageComboBox" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+				</HBox>
+				<CheckBox fx:id="saveLastViewCheckBox" mnemonicParsing="false" text="%rememberLastView"/>
+			</VBox>
+		</TitledPane>
+		<!-- TODO(MSC) Invisible since this isn't implemented yet> <TitledPane text="Connection"> <content> <VBox> <children> <CheckBox fx:id="askForUsernameOnConnectCheckBox"
+    mnemonicParsing="false" text="Always ask for Username when connecting to a server" /> </children> </VBox> </content> </TitledPane -->
+		<TitledPane text="%sampSettingsTitle">
+			<VBox spacing="5.0">
+				<GridPane hgap="5.0" vgap="5.0">
+					<columnConstraints>
+						<ColumnConstraints hgrow="NEVER"/>
+						<ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity"/>
+					</columnConstraints>
+					<rowConstraints>
+						<RowConstraints vgrow="SOMETIMES"/>
+						<RowConstraints vgrow="SOMETIMES"/>
+					</rowConstraints>
+					<Label maxHeight="Infinity" text="%fpsLimit"/>
+					<Label maxHeight="Infinity" text="%pageSize" GridPane.rowIndex="1"/>
+					<Spinner fx:id="fpsLimitSpinner" maxWidth="70.0" GridPane.columnIndex="1"
+							 editable="true">
+						<valueFactory>
+							<SpinnerValueFactory.IntegerSpinnerValueFactory max="90" min="20"/>
+						</valueFactory>
+					</Spinner>
+					<Spinner fx:id="pageSizeSpinner" maxWidth="70.0" GridPane.columnIndex="1"
+							 GridPane.rowIndex="1" editable="true">
+						<valueFactory>
+							<SpinnerValueFactory.IntegerSpinnerValueFactory max="20" min="10"/>
+						</valueFactory>
+					</Spinner>
+				</GridPane>
+				<CheckBox fx:id="audioproxyCheckBox" mnemonicParsing="false" text="%audioProxyUse"/>
+				<CheckBox fx:id="timestampsCheckBox" mnemonicParsing="false" text="%chatTimestamps"/>
+				<CheckBox fx:id="multicoreCheckbox" mnemonicParsing="false" text="%multicoreUsage"/>
+				<CheckBox fx:id="audioMsgCheckBox" mnemonicParsing="false" text="%displayAudioStreamMsg"/>
+				<CheckBox fx:id="headMoveCheckBox" mnemonicParsing="false" text="%enableHeadMovement"/>
+				<CheckBox fx:id="imeCheckBox" mnemonicParsing="false" text="%inputMethodText"/>
+				<CheckBox fx:id="directModeCheckBox" mnemonicParsing="false" text="%directmode"/>
+				<CheckBox fx:id="nameTagStatusCheckBox" mnemonicParsing="false" text="%showAfkSymbols"/>
+				<HBox alignment="CENTER_RIGHT">
+					<Button onAction="#restoreLegacySettings" text="%restoreDefaults"/>
+				</HBox>
+			</VBox>
+		</TitledPane>
+		<TitledPane text="%appearanceSettingTitle">
+			<VBox>
+				<CheckBox fx:id="darkThemeCheckBox" mnemonicParsing="false" text="%useDarkTheme"/>
+			</VBox>
+		</TitledPane>
+		<TitledPane text="%permissionSettingTitle">
+			<VBox spacing="5.0">
+				<CheckBox fx:id="allowCloseSampCheckBox" mnemonicParsing="false" text="%allowShutdownSamp"/>
+				<CheckBox fx:id="allowCloseGtaCheckBox" mnemonicParsing="false" text="%allowShutdownGta"/>
+			</VBox>
+		</TitledPane>
+		<TitledPane text="%updatesSettingTitle">
+			<VBox spacing="5.0">
+				<CheckBox fx:id="showChangelogCheckBox" mnemonicParsing="false"
+						  text="%showChangelogAfterUpdate"/>
+				<HBox spacing="5">
+					<CheckBox fx:id="enableAutomaticUpdatesCheckBox" maxHeight="Infinity"
+							  mnemonicParsing="false" text="%automaticUpdates"/>
+					<Button fx:id="manualUpdateButton" onAction="#onClickManualUpdate"
+							text="%checkForUpdates"/>
+				</HBox>
+				<CheckBox fx:id="usePreReleasesCheckBox" maxHeight="Infinity" mnemonicParsing="false"
+						  text="%usePreReleases"/>
+			</VBox>
+		</TitledPane>
+		<TitledPane text="%downloadSettingTitle">
+			<VBox spacing="5.0">
+				<HBox spacing="5.0">
+					<CheckBox fx:id="allowCachingDownloadsCheckBox" maxHeight="Infinity"
+							  maxWidth="Infinity"
+							  mnemonicParsing="false" text="%allowCachingSampVersions"
+							  HBox.hgrow="ALWAYS"/>
+					<Button mnemonicParsing="false" onAction="#onClickClearDownloadCache"
+							text="%clearCache"/>
+				</HBox>
+			</VBox>
+		</TitledPane>
+		<Button alignment="CENTER_RIGHT" onAction="#onClickRestore" text="%restoreDefaults"/>
+	</VBox>
+</ScrollPane>
