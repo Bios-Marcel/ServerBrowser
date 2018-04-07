@@ -58,7 +58,7 @@ import java.util.regex.PatternSyntaxException
  * @author Marcel
  * @since 02.07.2017
  */
-class ServerListController : ViewController {
+class ServerListController(val client: Client) : ViewController {
 
     private val retrieving = Client.getString("retrieving")
 
@@ -142,13 +142,15 @@ class ServerListController : ViewController {
         }
 
     override fun initialize() {
+        serverTable.client = client
+
         playerCount = Label()
         serverCount = Label()
 
         setPlayerCount(0)
         setServerCount(0)
 
-        Client.instance!!.addItemsToBottomBar(playerCount, serverCount)
+        client.addItemsToBottomBar(playerCount, serverCount)
 
         setupInfoLabel(playerCount)
         setupInfoLabel(serverCount)
@@ -327,12 +329,11 @@ class ServerListController : ViewController {
 
     @FXML
     private fun onClickConnect() {
-
         val address = ipAndPort
 
         address.ifPresent { data ->
             if (ServerUtility.isPortValid(data.value)) {
-                GTAController.tryToConnect(data.key, Integer.parseInt(data.value), "")
+                GTAController.tryToConnect(client, data.key, Integer.parseInt(data.value), "")
             } else {
                 GTAController.showCantConnectToServerError()
             }

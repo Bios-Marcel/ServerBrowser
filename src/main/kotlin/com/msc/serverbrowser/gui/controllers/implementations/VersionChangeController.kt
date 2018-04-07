@@ -23,7 +23,7 @@ import java.util.Optional
 /**
  * @since 02.07.2017
  */
-class VersionChangeController : ViewController {
+class VersionChangeController(val client: Client) : ViewController {
     private val installText = Client.getString("install")
     private val installedText = Client.getString("installed")
     private val installingText = Client.getString("installing")
@@ -100,7 +100,7 @@ class VersionChangeController : ViewController {
                 }.start()
             }
         } else {
-            Client.instance!!.selectSampPathTextField()
+            client.selectSampPathTextField()
         }
     }
 
@@ -135,8 +135,12 @@ class VersionChangeController : ViewController {
         // Do nothing
     }
 
-    companion object {
+    private fun finishInstalling() {
+        currentlyInstalling = Optional.empty()
+        Platform.runLater { client.reloadViewIfLoaded(View.VERSION_CHANGER) }
+    }
 
+    companion object {
         private var currentlyInstalling = Optional.empty<InstallationCandidate>()
 
         /**
@@ -144,10 +148,8 @@ class VersionChangeController : ViewController {
          */
         val INSTALLATION_CANDIDATES: ObservableList<InstallationCandidate> = FXCollections.observableArrayList<InstallationCandidate>()
 
-        /*
-	 * Adding all usable InstallationCandidates, but this could probably be made in a more desirable
-	 * way.
-	 */
+        //Adding all usable InstallationCandidates
+        //TODO but this could probably be made in a more desirable way
         init {
             INSTALLATION_CANDIDATES
                     .add(InstallationCandidate("BCCDB297464BD382625635BE25585DF07A8FA6668BC0015650708E3EB4FFCD4B", "0.3.DL R1", "http://forum.sa-mp.com/files/03DL/sa-mp-0.3.DL-R1-install.exe", false, true, "FDDBEF743914D6A4A8D9B9895F219864BBB238A447BF36B8A8D652E303D78ACB"))
@@ -167,11 +169,6 @@ class VersionChangeController : ViewController {
                     .add(InstallationCandidate("6A584102E655202871D2158B2659C5B5581AB48ECFB21D330861484AE0CB3043", "0.3c R3", "http://files.sa-mp.com/sa-mp-0.3c-R3-install.exe", false, true, "8CCD7A22B3BF24F00EC32F55AE28CA8F50C48B03504C98BD4FAC3EF661163B4C"))
             INSTALLATION_CANDIDATES
                     .add(InstallationCandidate("23901473FB98F9781B68913F907F3B7A88D9D96BBF686CC65AD1505E400BE942", "0.3a", "http://files.sa-mp.com/sa-mp-0.3a-install.exe", false, true, "690FFF2E9433FF36788BF4F4EA9D8C601EB42471FD1210FE1E0CFFC4F54D7D9D"))
-        }
-
-        private fun finishInstalling() {
-            currentlyInstalling = Optional.empty()
-            Platform.runLater { Client.instance!!.reloadViewIfLoaded(View.VERSION_CHANGER) }
         }
     }
 }

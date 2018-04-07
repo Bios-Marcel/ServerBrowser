@@ -23,6 +23,7 @@ import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType
 import javafx.scene.control.ButtonType
 import javafx.scene.control.TextInputDialog
+import javafx.stage.Window
 import java.io.File
 import java.io.IOException
 import java.security.NoSuchAlgorithmException
@@ -116,11 +117,11 @@ object GTAController {
     /**
      * Writes the actual username (from registry) into the past usernames list and sets the new name
      */
-    fun applyUsername() {
+    fun applyUsername(ownerWindow: Window) {
         if (!OSUtility.isWindows) {
             // TODO Localize
             val alert = Alert(AlertType.ERROR, "The feature you are trying to use is not available on your operating system.", ButtonType.OK)
-            Client.insertAlertOwner(alert)
+            alert.initOwner(ownerWindow)
             alert.title = "Apply username"
             alert.showAndWait()
             return
@@ -167,32 +168,32 @@ object GTAController {
      * @param port server port
      * @param serverPassword the password to be used for this connection
      */
-    fun tryToConnect(address: String, port: Int, serverPassword: String) {
+    fun tryToConnect(client: Client, address: String, port: Int, serverPassword: String) {
         try {
             SampQuery(address, port).use { query ->
                 val serverInfo = query.basicServerInfo
 
                 if (Objects.isNull(serverPassword) || serverPassword.isEmpty() && serverInfo.isPresent && StringUtility.stringToBoolean(serverInfo.get()[0])) {
-                    val passwordOptional = promptUserForServerPassword()
-                    passwordOptional.ifPresent { password -> SAMPLauncher.connect(address, port, password) }
+                    val passwordOptional = promptUserForServerPassword(client.stage!!)
+                    passwordOptional.ifPresent { password -> SAMPLauncher.connect(client, address, port, password) }
                 } else {
-                    SAMPLauncher.connect(address, port, serverPassword)
+                    SAMPLauncher.connect(client, address, port, serverPassword)
                 }
             }
         } catch (exception: IOException) {
             Logging.warn("Couldn't connect to server.", exception)
 
-            if (askUserIfHeWantsToConnectAnyways()) {
-                SAMPLauncher.connect(address, port, serverPassword)
+            if (askUserIfHeWantsToConnectAnyways(client.stage!!)) {
+                SAMPLauncher.connect(client, address, port, serverPassword)
             }
         }
 
     }
 
-    private fun askUserIfHeWantsToConnectAnyways(): Boolean {
+    private fun askUserIfHeWantsToConnectAnyways(ownerWindow: Window): Boolean {
         val alert = Alert(AlertType.CONFIRMATION, Client.getString("serverMightBeOfflineConnectAnyways"), ButtonType.YES, ButtonType.NO)
         alert.title = Client.getString("connectingToServer")
-        Client.insertAlertOwner(alert)
+        alert.initOwner(ownerWindow)
         return alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES
     }
 
@@ -202,9 +203,9 @@ object GTAController {
      * @return an [Optional] containing either a string (empty or filled) or
      * [Optional.empty]
      */
-    fun promptUserForServerPassword(): Optional<String> {
+    fun promptUserForServerPassword(ownerWindow: Window): Optional<String> {
         val dialog = TextInputDialog()
-        Client.insertAlertOwner(dialog)
+        dialog.initOwner(ownerWindow)
         dialog.title = Client.getString("connectToServer")
         dialog.headerText = Client.getString("enterServerPasswordMessage")
 
@@ -258,7 +259,7 @@ object GTAController {
     /**
      * Displays a notification that states, that GTA couldn't be located and links the Settings page.
      */
-    fun displayCantLocateGTANotification() {
+    fun displayCantLocateGTANotification(client: Client) {
         val trayNotification = TrayNotificationBuilder()
                 .type(NotificationTypeImplementations.ERROR)
                 .title(Client.getString("cantFindGTA"))
@@ -266,10 +267,9 @@ object GTAController {
                 .animation(Animations.POPUP).build()
 
         trayNotification.setOnMouseClicked { _ ->
-            val clientInstance = Client.instance
-            clientInstance!!.loadView(View.SETTINGS)
-            clientInstance.settingsController?.selectSampPathTextField()
+            client.loadView(View.SETTINGS)
+            client.settingsController?.selectSampPathTextField()
         }
         trayNotification.showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME)
     }
-}// Constructor to prevent instantiation
+}

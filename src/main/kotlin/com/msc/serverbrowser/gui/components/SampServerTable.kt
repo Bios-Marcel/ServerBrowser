@@ -5,6 +5,7 @@ import com.msc.serverbrowser.data.FavouritesController
 import com.msc.serverbrowser.data.entites.SampServer
 import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.ConnectOnDoubleClickProperty
+import com.msc.serverbrowser.getWindow
 import com.msc.serverbrowser.util.samp.GTAController
 import com.msc.serverbrowser.util.windows.OSUtility
 import javafx.beans.property.ObjectProperty
@@ -67,6 +68,7 @@ class SampServerTable : TableView<SampServer>() {
     private val filteredServers = FilteredList(servers)
     private val sortedServers = SortedList(filteredServers)
 
+    var client: Client? = null
     private val firstIfAnythingSelected: Optional<SampServer>
         get() {
             val selectedServers = selectionModel.selectedItems
@@ -95,15 +97,25 @@ class SampServerTable : TableView<SampServer>() {
                 deleteSelectedFavourites()
             }
         }
-
     }
 
     private fun setMenuItemDefaultActions() {
-        connectMenuItem.setOnAction { _ -> firstIfAnythingSelected.ifPresent { server -> GTAController.tryToConnect(server.address, server.port, "") } }
-
-        connectWithPasswordMenuItem.setOnAction { _ -> GTAController.promptUserForServerPassword().ifPresent { serverPassword -> firstIfAnythingSelected.ifPresent { server -> GTAController.tryToConnect(server.address, server.port, serverPassword) } } }
-
+        connectMenuItem.setOnAction { _ ->
+            firstIfAnythingSelected.ifPresent { server ->
+                println(server)
+            GTAController.tryToConnect(client!!, server.address, server.port, "")
+            }
+        }
         visitWebsiteMenuItem.setOnAction { _ -> firstIfAnythingSelected.ifPresent { server -> OSUtility.browse(server.website!!) } }
+        connectWithPasswordMenuItem.setOnAction { _ ->
+            println(firstIfAnythingSelected)
+            GTAController.promptUserForServerPassword(getWindow())
+                    .ifPresent { serverPassword ->
+                        firstIfAnythingSelected.ifPresent { server ->
+                            GTAController.tryToConnect(client!!, server.address, server.port, serverPassword)
+                        }
+                    }
+        }
 
         addToFavouritesMenuItem.setOnAction { _ ->
             val serverList = selectionModel.selectedItems
@@ -111,7 +123,6 @@ class SampServerTable : TableView<SampServer>() {
         }
 
         removeFromFavouritesMenuItem.setOnAction { _ -> deleteSelectedFavourites() }
-
         copyIpAddressAndPortMenuItem.setOnAction { _ ->
             val serverOptional = firstIfAnythingSelected
 
@@ -125,7 +136,7 @@ class SampServerTable : TableView<SampServer>() {
 
     private fun deleteSelectedFavourites() {
         val alert = Alert(AlertType.CONFIRMATION, Client.getString("sureYouWantToDeleteFavourites"), ButtonType.YES, ButtonType.NO)
-        Client.insertAlertOwner(alert)
+        alert.initOwner(getWindow())
         alert.title = Client.getString("deleteFavourites")
         val result = alert.showAndWait()
 
@@ -241,6 +252,8 @@ class SampServerTable : TableView<SampServer>() {
         }
     }
 
+    var onServerDoubleClickHandler: (SampServer) -> Unit = {}
+
     private fun handleLeftClick(row: TableRow<SampServer>) {
         val lastLeftClickTime = row.userData as Long?
         val wasDoubleClick = lastLeftClickTime != null && System.currentTimeMillis() - lastLeftClickTime < 300
@@ -248,7 +261,8 @@ class SampServerTable : TableView<SampServer>() {
 
         if (wasDoubleClick && onlyOneSelectedItem) {
             if (ClientPropertiesController.getProperty(ConnectOnDoubleClickProperty)) {
-                firstIfAnythingSelected.ifPresent { server -> GTAController.tryToConnect(server.address, server.port, "") }
+                firstIfAnythingSelected.ifPresent(onServerDoubleClickHandler)
+                firstIfAnythingSelected.ifPresent { server -> GTAController.tryToConnect(client!!, server.address, server.port, "") }
             }
         } else {
             row.setUserData(java.lang.Long.valueOf(System.currentTimeMillis()))

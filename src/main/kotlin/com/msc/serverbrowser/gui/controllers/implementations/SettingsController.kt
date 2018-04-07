@@ -46,7 +46,7 @@ import java.util.Properties
  *
  * @author Marcel
  */
-class SettingsController : ViewController {
+class SettingsController(val client: Client) : ViewController {
     // Information
     @FXML
     private lateinit var informationLabel: Label
@@ -128,7 +128,7 @@ class SettingsController : ViewController {
         languageComboBox.selectionModel.selectedItemProperty().addListener { _, _, newVal ->
             ClientPropertiesController.setProperty(LanguageProperty, newVal.shortcut)
 //            Client.initLanguageFiles() TODO
-            Client.instance!!.reloadViewIfLoaded(View.SETTINGS)
+            client.reloadViewIfLoaded(View.SETTINGS)
         }
 
         // Connection Properties
@@ -142,7 +142,7 @@ class SettingsController : ViewController {
             ClientPropertiesController.setProperty(SaveLastViewProperty, true)
             ClientPropertiesController.setProperty(LastViewProperty, View.SETTINGS.id)
 
-            Client.instance!!.applyTheme()
+            client.applyTheme()
 
             ClientPropertiesController.setProperty(SaveLastViewProperty, saveLastViewOld)
         })
@@ -160,7 +160,7 @@ class SettingsController : ViewController {
         setupCheckBox(allowCachingDownloadsCheckBox, AllowCachingDownloadsProperty)
 
         // Adding a listener to disable the update button in case an update is ongoing
-        val updatingProperty = Client.instance!!.updateOngoingProperty
+        val updatingProperty = client.updateOngoingProperty
         updatingProperty.addListener { _, _, newVal -> manualUpdateButton.isDisable = newVal!! }
         manualUpdateButton.isDisable = updatingProperty.get()
     }
@@ -260,7 +260,7 @@ class SettingsController : ViewController {
 
     @FXML
     private fun onClickManualUpdate() {
-        Client.instance!!.checkForUpdates()
+        client.checkForUpdates()
     }
 
     @FXML
@@ -293,7 +293,7 @@ class SettingsController : ViewController {
     private fun onClickRestore() {
         val alert = Alert(AlertType.CONFIRMATION, Client.getString("sureYouWantToRestoreSettings"), ButtonType.YES, ButtonType.NO)
         alert.title = Client.getString("restoreSettingsToDefault")
-        Client.insertAlertOwner(alert)
+        alert.initOwner(getStage())
 
         val result = alert.showAndWait()
 
@@ -312,9 +312,9 @@ class SettingsController : ViewController {
      */
     private fun reloadSettingsView() {
         // Reapply theme, since it might have been changed
-        Client.instance!!.applyTheme()
+        client.applyTheme()
         // Assure the view that the displays the correct data.
-        Client.instance!!.reloadViewIfLoaded(View.SETTINGS)
+        client.reloadViewIfLoaded(View.SETTINGS)
     }
 
     private fun restoreApplicationSettings() {
@@ -341,7 +341,7 @@ class SettingsController : ViewController {
     private fun restoreLegacySettings(alertTest: String): Boolean {
         val alert = Alert(AlertType.CONFIRMATION, alertTest, ButtonType.YES, ButtonType.NO)
         alert.title = Client.getString("restoreLegacySettingsToDefault")
-        Client.insertAlertOwner(alert)
+        alert.initOwner(getStage())
 
         val result = alert.showAndWait()
 
@@ -351,6 +351,8 @@ class SettingsController : ViewController {
         }
         return false
     }
+
+    private fun getStage() = informationLabel.scene.window
 
     /**
      * Selects the [TextField] which contains the SA-MP / GTA path.

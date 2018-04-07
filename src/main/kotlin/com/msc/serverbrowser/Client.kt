@@ -28,7 +28,6 @@ import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.Node
 import javafx.scene.Scene
-import javafx.scene.control.Dialog
 import javafx.scene.control.TextField
 import javafx.scene.image.Image
 import javafx.stage.Stage
@@ -54,8 +53,8 @@ import java.util.ResourceBundle
  * @since 02.07.2017
  */
 class Client : Application() {
-    private var stage: Stage? = null
-    private val mainController: MainController = MainController(MainView())
+    var stage: Stage? = null
+    private val mainController: MainController = MainController(this, MainView())
 
     /**
      * This property that indicates if an update check / isDownload progress is ongoing.
@@ -69,7 +68,6 @@ class Client : Application() {
         get() = mainController.settingsController
 
     override fun start(primaryStage: Stage) {
-        instance = this
         loadUI(primaryStage)
 
         // Only update if not in development mode
@@ -291,12 +289,6 @@ class Client : Application() {
         val DEFAULT_TRAY_DISMISS_TIME: Duration = Duration.seconds(10.0)
 
         /**
-         * @return the clients singleton instance
-         */
-        var instance: Client? = null
-            private set
-
-        /**
          * ResourceBundle which contains all the localized strings.
          */
         /**
@@ -304,15 +296,6 @@ class Client : Application() {
          */
         var languageResourceBundle: ResourceBundle? = null
             private set
-
-        /**
-         * Sets the current [Client] stage as the clients owner.
-         *
-         * @param alert the alert to set the owner in
-         */
-        fun insertAlertOwner(alert: Dialog<*>) {
-            alert.initOwner(instance!!.stage)
-        }
 
         /**
          * Creates files and folders that are necessary for the application to run properly and migrates

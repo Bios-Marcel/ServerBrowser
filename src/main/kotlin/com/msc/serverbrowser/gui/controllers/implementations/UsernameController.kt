@@ -84,7 +84,7 @@ class UsernameController : ViewController {
 
     @FXML
     private fun applyUsername() {
-        GTAController.applyUsername()
+        GTAController.applyUsername(usernameTextField.scene.window)
         nameList.items = FXCollections.observableArrayList<String>(PastUsernames.pastUsernames)
     }
 

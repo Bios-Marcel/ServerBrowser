@@ -1,5 +1,6 @@
 package com.msc.serverbrowser.util.samp
 
+import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.constants.PathConstants
 import com.msc.serverbrowser.data.ServerConfig
 import com.msc.serverbrowser.data.properties.AllowCloseGtaProperty
@@ -44,7 +45,7 @@ object SAMPLauncher {
      * @param serverPassword password to be used for connect to the server
      * @return true if the connection was successful, otherwise false
      */
-    fun connect(address: String, port: Int, serverPassword: String): Boolean {
+    fun connect(client: Client, address: String, port: Int, serverPassword: String): Boolean {
         if (ClientPropertiesController.getProperty(AllowCloseGtaProperty)) {
             GTAController.killGTA()
         }
@@ -52,7 +53,7 @@ object SAMPLauncher {
         val gtaPathOptional = GTAController.gtaPath
 
         if (gtaPathOptional.isPresent.not()) {
-            GTAController.displayCantLocateGTANotification()
+            GTAController.displayCantLocateGTANotification(client)
             return false
         }
 

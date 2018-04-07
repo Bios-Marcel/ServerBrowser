@@ -22,7 +22,6 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.text.Font
 import java.io.IOException
-import java.util.Objects
 import java.util.Optional
 
 /**
@@ -33,7 +32,9 @@ import java.util.Optional
  *
  * @property mainView the view to be used by this controller
  */
-class MainController(val mainView: MainView) : ViewController {
+class MainController(val client: Client, val mainView: MainView) : ViewController {
+
+
     /**
      * @return the current view
      */
@@ -65,8 +66,8 @@ class MainController(val mainView: MainView) : ViewController {
             if (event.isControlDown && event.code == KeyCode.D) {
                 val currentValue = ClientPropertiesController.getProperty(UseDarkThemeProperty)
                 ClientPropertiesController.setProperty(UseDarkThemeProperty, !currentValue)
-                Client.instance!!.applyTheme()
-                Client.instance!!.reloadViewIfLoaded(activeView!!)
+                client.applyTheme()
+                client.reloadViewIfLoaded(activeView!!)
             }
         }
     }
@@ -86,7 +87,6 @@ class MainController(val mainView: MainView) : ViewController {
         } else {
             loadView(View.valueOf(ClientPropertiesController.getDefaultProperty(LastViewProperty)).get())
         }
-
     }
 
     private fun registerBottomBarHyperlinks() {
@@ -146,20 +146,19 @@ class MainController(val mainView: MainView) : ViewController {
      *
      * @param view the view to be loaded
      */
-    fun loadView(view: View?) {
-
-        if (Objects.nonNull(activeSubViewController)) {
+    fun loadView(view: View) {
+        if (activeSubViewController != null) {
             activeSubViewController!!.onClose()
         }
 
         mainView.removeNodesFromBottomBar()
 
-        val loadedNode: Parent
-
-        if (view == View.FILES) {
-            loadedNode = loadFilesView()
-        } else {
-            loadedNode = loadFXML(view!!)
+        val loadedNode = when (view) {
+            View.FILES -> loadFilesView()
+            View.SERVERS -> loadServersView()
+            View.SETTINGS -> loadSettingsView()
+            View.USERNAME_CHANGER -> loadUsernameView()
+            View.VERSION_CHANGER -> loadVersionChangerView()
         }
 
         initViewData(view, loadedNode)
@@ -172,7 +171,15 @@ class MainController(val mainView: MainView) : ViewController {
         return filesView.rootPane
     }
 
-    private fun loadFXML(view: View): Parent {
+    private fun loadSettingsView() = loadFXML(SettingsController(client), View.SETTINGS)
+
+    private fun loadServersView() = loadFXML(ServerListController(client), View.SERVERS)
+
+    private fun loadUsernameView() = loadFXML(UsernameController(), View.USERNAME_CHANGER)
+
+    private fun loadVersionChangerView() = loadFXML(VersionChangeController(client), View.VERSION_CHANGER)
+
+    private fun loadFXML(controller: ViewController, view: View): Parent {
         try {
             val loader = FXMLLoader()
             loader.location = javaClass.getResource(view.fxmlPath)
@@ -180,8 +187,8 @@ class MainController(val mainView: MainView) : ViewController {
 
             // Creating a new instance of the specified controller, controllers never have
             // constructor arguments, therefore this is supposedly fine.
-            activeSubViewController = view.controllerType.newInstance()
-            loader.setController(activeSubViewController)
+            activeSubViewController = controller
+            loader.setController(controller)
             return loader.load()
         } catch (exception: IOException) {
             Logging.error("Couldn't load view.", exception)
@@ -198,14 +205,14 @@ class MainController(val mainView: MainView) : ViewController {
         loadedNode.stylesheets.setAll(view.stylesheetPath)
         mainView.selectMenuItemForView(view)
         mainView.setActiveViewNode(loadedNode)
-        Client.instance!!.setTitle(Client.APPLICATION_NAME + " - " + view.title)
+        client.setTitle(Client.APPLICATION_NAME + " - " + view.title)
     }
 
     /**
      * Reloads the current view.
      */
     fun reloadView() {
-        loadView(activeView)
+        loadView(activeView!!)
     }
 
     override fun onClose() {

@@ -5,6 +5,7 @@ import javafx.application.Platform
 import javafx.beans.property.DoubleProperty
 import java.io.File
 import java.io.File.separator
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -219,6 +220,10 @@ object FileUtility {
      */
     @Throws(IOException::class)
     fun readAllLinesTryEncodings(path: Path, vararg charsets: Charset): List<String> {
+        if(!Files.exists(path)) {
+            throw FileNotFoundException("The file at $path doesn't exist.")
+        }
+
         for (charset in charsets) {
             try {
                 return Files.readAllLines(path, charset)

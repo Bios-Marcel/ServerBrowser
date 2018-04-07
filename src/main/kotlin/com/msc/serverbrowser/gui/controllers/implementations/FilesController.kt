@@ -13,6 +13,7 @@ import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.basic.FileUtility
 import com.msc.serverbrowser.util.basic.StringUtility
 import javafx.event.EventHandler
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -34,7 +35,6 @@ class FilesController
 (private val filesView: FilesView) : ViewController {
 
     init {
-
         filesView.setLoadChatLogsButtonAction(EventHandler { loadChatLog() })
         filesView.setClearChatLogsButtonAction(EventHandler { clearChatLog() })
 
@@ -48,7 +48,6 @@ class FilesController
     }
 
     private fun loadChatLog() {
-
         val darkThemeInUse = ClientPropertiesController.getProperty(UseDarkThemeProperty)
         val gray = "#333131"
         val white = "#FFFFFF"
@@ -72,6 +71,8 @@ class FilesController
                     .map { this.processSampColorCodes(it) }
                     .map { line -> "$line<br/>" }
                     .forEach({ newContent.append(it) })
+        } catch (exception: FileNotFoundException) {
+            Logging.info("Chatlog file doesn't exist.")
         } catch (exception: IOException) {
             Logging.error("Error loading chatlog.", exception)
         }
@@ -126,7 +127,7 @@ class FilesController
 
         try {
             Files.deleteIfExists(Paths.get(PathConstants.SAMP_CHATLOG))
-            filesView.setChatLogTextAreaContent("")
+            loadChatLog()
         } catch (exception: IOException) {
             TrayNotificationBuilder()
                     .type(NotificationTypeImplementations.ERROR)
