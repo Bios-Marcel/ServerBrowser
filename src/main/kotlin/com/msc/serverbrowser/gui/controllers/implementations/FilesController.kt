@@ -27,12 +27,10 @@ import java.util.regex.Pattern
  *
  * @author Marcel
  * @since 08.07.2017
+ *
+ * @property filesView the view to be used by this controller
  */
-class FilesController
-/**
- * @param filesView the view to be used by this controller
- */
-(private val filesView: FilesView) : ViewController {
+class FilesController(private val filesView: FilesView) : ViewController {
 
     init {
         filesView.setLoadChatLogsButtonAction(EventHandler { loadChatLog() })
@@ -41,7 +39,6 @@ class FilesController
         filesView.showColorsProperty.addListener { _ -> loadChatLog() }
         filesView.showColorsAsTextProperty.addListener { _ -> loadChatLog() }
         filesView.showTimesIfAvailableProperty.addListener { _ -> loadChatLog() }
-
         filesView.lineFilterProperty.addListener { _ -> loadChatLog() }
 
         loadChatLog()
@@ -89,7 +86,6 @@ class FilesController
         return if (line.length >= 10 && line.substring(0, 10).matches(timeRegex.toRegex())) {
             line.replaceFirst(timeRegex.toRegex(), "")
         } else line
-
     }
 
     private fun processSampColorCodes(line: String): String {

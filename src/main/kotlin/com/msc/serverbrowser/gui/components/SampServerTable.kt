@@ -44,7 +44,7 @@ import java.util.stream.Collectors
  * @author Marcel
  * @since 23.09.2017
  */
-class SampServerTable : TableView<SampServer>() {
+class SampServerTable(val client: Client) : TableView<SampServer>() {
     /**
      * @return [.tableMode]
      */
@@ -68,7 +68,6 @@ class SampServerTable : TableView<SampServer>() {
     private val filteredServers = FilteredList(servers)
     private val sortedServers = SortedList(filteredServers)
 
-    var client: Client? = null
     private val firstIfAnythingSelected: Optional<SampServer>
         get() {
             val selectedServers = selectionModel.selectedItems
@@ -103,7 +102,7 @@ class SampServerTable : TableView<SampServer>() {
         connectMenuItem.setOnAction { _ ->
             firstIfAnythingSelected.ifPresent { server ->
                 println(server)
-            GTAController.tryToConnect(client!!, server.address, server.port, "")
+            GTAController.tryToConnect(client, server.address, server.port, "")
             }
         }
         visitWebsiteMenuItem.setOnAction { _ -> firstIfAnythingSelected.ifPresent { server -> OSUtility.browse(server.website!!) } }
@@ -112,7 +111,7 @@ class SampServerTable : TableView<SampServer>() {
             GTAController.promptUserForServerPassword(getWindow())
                     .ifPresent { serverPassword ->
                         firstIfAnythingSelected.ifPresent { server ->
-                            GTAController.tryToConnect(client!!, server.address, server.port, serverPassword)
+                            GTAController.tryToConnect(client, server.address, server.port, serverPassword)
                         }
                     }
         }
@@ -262,7 +261,7 @@ class SampServerTable : TableView<SampServer>() {
         if (wasDoubleClick && onlyOneSelectedItem) {
             if (ClientPropertiesController.getProperty(ConnectOnDoubleClickProperty)) {
                 firstIfAnythingSelected.ifPresent(onServerDoubleClickHandler)
-                firstIfAnythingSelected.ifPresent { server -> GTAController.tryToConnect(client!!, server.address, server.port, "") }
+                firstIfAnythingSelected.ifPresent { server -> GTAController.tryToConnect(client, server.address, server.port, "") }
             }
         } else {
             row.setUserData(java.lang.Long.valueOf(System.currentTimeMillis()))

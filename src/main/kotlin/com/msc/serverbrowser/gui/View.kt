@@ -1,12 +1,6 @@
 package com.msc.serverbrowser.gui
 
 import com.msc.serverbrowser.constants.PathConstants
-import com.msc.serverbrowser.gui.controllers.implementations.FilesController
-import com.msc.serverbrowser.gui.controllers.implementations.ServerListController
-import com.msc.serverbrowser.gui.controllers.implementations.SettingsController
-import com.msc.serverbrowser.gui.controllers.implementations.UsernameController
-import com.msc.serverbrowser.gui.controllers.implementations.VersionChangeController
-import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
 import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 
@@ -25,10 +19,6 @@ enum class View(
          */
         val title: String,
         /**
-         * @return the [ViewController] Type to be used for this View
-         */
-        val controllerType: Class<out ViewController>,
-        /**
          * @return the path to the FXML file of this View
          */
         val fxmlPath: String,
@@ -36,11 +26,11 @@ enum class View(
          * @return the path to the css stylesheet of this View
          */
         val stylesheetPath: String) {
-    SERVERS(1, "Servers", ServerListController::class.java, PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH + "serverListStyle.css"),
-    USERNAME_CHANGER(2, "Username Changer", UsernameController::class.java, PathConstants.VIEW_PATH + "Username.fxml", PathConstants.STYLESHEET_PATH + "usernameStyle.css"),
-    VERSION_CHANGER(3, "Version Changer", VersionChangeController::class.java, PathConstants.VIEW_PATH + "Version.fxml", PathConstants.STYLESHEET_PATH + "versionStyle.css"),
-    SETTINGS(4, "Settings", SettingsController::class.java, PathConstants.VIEW_PATH + "Settings.fxml", PathConstants.STYLESHEET_PATH + "settingsStyle.css"),
-    FILES(5, "Files", FilesController::class.java, PathConstants.VIEW_PATH + "Files.fxml", PathConstants.STYLESHEET_PATH + "filesStyle.css");
+    SERVERS(1, "Servers", PathConstants.VIEW_PATH + "ServerList.fxml", PathConstants.STYLESHEET_PATH + "serverListStyle.css"),
+    USERNAME_CHANGER(2, "Username Changer", PathConstants.VIEW_PATH + "Username.fxml", PathConstants.STYLESHEET_PATH + "usernameStyle.css"),
+    VERSION_CHANGER(3, "Version Changer", PathConstants.VIEW_PATH + "Version.fxml", PathConstants.STYLESHEET_PATH + "versionStyle.css"),
+    SETTINGS(4, "Settings", PathConstants.VIEW_PATH + "Settings.fxml", PathConstants.STYLESHEET_PATH + "settingsStyle.css"),
+    FILES(5, "Files", PathConstants.VIEW_PATH + "Files.fxml", PathConstants.STYLESHEET_PATH + "filesStyle.css");
 
 
     companion object {

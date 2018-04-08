@@ -35,7 +35,7 @@ import javafx.scene.web.WebView
  */
 class FilesView {
     /**
-     * @return [.rootPane]
+     * Root-container of this view.
      */
     val rootPane: TabPane
 

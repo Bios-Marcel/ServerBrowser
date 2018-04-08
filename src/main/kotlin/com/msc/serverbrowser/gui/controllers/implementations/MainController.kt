@@ -9,6 +9,7 @@ import com.msc.serverbrowser.gui.View
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
 import com.msc.serverbrowser.gui.views.FilesView
 import com.msc.serverbrowser.gui.views.MainView
+import com.msc.serverbrowser.gui.views.ServerView
 import com.msc.serverbrowser.logging.Logging
 import javafx.application.Platform
 import javafx.beans.property.DoubleProperty
@@ -173,7 +174,13 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
 
     private fun loadSettingsView() = loadFXML(SettingsController(client), View.SETTINGS)
 
-    private fun loadServersView() = loadFXML(ServerListController(client), View.SERVERS)
+    private fun loadServersView(): Parent {
+        val serverView = ServerView(client)
+        val serverListController = ServerListController(client, serverView)
+        serverListController.initialize()
+        activeSubViewController = serverListController
+        return serverView.rootPane
+    }
 
     private fun loadUsernameView() = loadFXML(UsernameController(), View.USERNAME_CHANGER)
 

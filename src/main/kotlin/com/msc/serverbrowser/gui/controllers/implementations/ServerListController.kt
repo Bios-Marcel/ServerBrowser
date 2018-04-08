@@ -8,9 +8,9 @@ import com.msc.serverbrowser.data.FavouritesController
 import com.msc.serverbrowser.data.ServerConfig
 import com.msc.serverbrowser.data.entites.Player
 import com.msc.serverbrowser.data.entites.SampServer
-import com.msc.serverbrowser.gui.components.SampServerTable
 import com.msc.serverbrowser.gui.components.SampServerTableMode
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
+import com.msc.serverbrowser.gui.views.ServerView
 import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.ServerUtility
 import com.msc.serverbrowser.util.basic.StringUtility
@@ -28,25 +28,13 @@ import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.geometry.Pos
 import javafx.scene.Node
-import javafx.scene.control.CheckBox
-import javafx.scene.control.ComboBox
-import javafx.scene.control.Hyperlink
 import javafx.scene.control.Label
-import javafx.scene.control.TableCell
-import javafx.scene.control.TableColumn
-import javafx.scene.control.TableView
-import javafx.scene.control.TextField
-import javafx.scene.control.ToggleGroup
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import javafx.util.Pair
 import java.io.IOException
 import java.text.MessageFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Objects
 import java.util.Optional
 import java.util.function.Predicate
@@ -58,7 +46,7 @@ import java.util.regex.PatternSyntaxException
  * @author Marcel
  * @since 02.07.2017
  */
-class ServerListController(val client: Client) : ViewController {
+class ServerListController(private val client: Client, private val view: ServerView) : ViewController {
 
     private val retrieving = Client.getString("retrieving")
 
@@ -66,21 +54,9 @@ class ServerListController(val client: Client) : ViewController {
     private val serverOffline = Client.getString("serverOffline")
     private val serverEmpty = Client.getString("serverEmpty")
 
-    @FXML
-    private lateinit var tableTypeToggleGroup: ToggleGroup
-
-    @FXML
-    private lateinit var addressTextField: TextField
-
     private val userFilterProperty = SimpleObjectProperty<Predicate<SampServer>>(Predicate { true })
     private val dataFilterProperty = SimpleObjectProperty<Predicate<SampServer>>(Predicate { true })
     private val filterProperty = SimpleObjectProperty<Predicate<SampServer>>(Predicate { true })
-
-    /**
-     * This Table contains all available servers / favourite servers, depending on the active view.
-     */
-    @FXML
-    private lateinit var serverTable: SampServerTable
 
     /**
      * Displays the number of active players on all Servers in [.serverTable].
@@ -91,46 +67,14 @@ class ServerListController(val client: Client) : ViewController {
      */
     private var serverCount: Label = Label()
 
-    @FXML
-    private lateinit var serverAddress: TextField
-    @FXML
-    private lateinit var serverLagcomp: Label
-    @FXML
-    private lateinit var serverPing: Label
-    @FXML
-    private lateinit var serverPassword: Label
-    @FXML
-    private lateinit var mapLabel: Label
-    @FXML
-    private lateinit var websiteLink: Hyperlink
-
-    @FXML
-    private lateinit var playerTable: TableView<Player>
-
-    @FXML
-    private lateinit var columnPlayers: TableColumn<SampServer, String>
-    @FXML
-    private lateinit var columnLastJoin: TableColumn<SampServer, Long>
-
-    @FXML
-    private lateinit var regexCheckBox: CheckBox
-    @FXML
-    private lateinit var nameFilter: TextField
-    @FXML
-    private lateinit var modeFilter: TextField
-    @FXML
-    private lateinit var languageFilter: TextField
-    @FXML
-    private lateinit var versionFilter: ComboBox<String>
-
     private var lookingUpForServer = Optional.empty<SampServer>()
 
     private val ipAndPort: Optional<Pair<String, String>>
         get() {
-            val address = addressTextField.text
+            val address = view.addressTextField.text
 
             if (Objects.nonNull(address) && !address.isEmpty()) {
-                val ipAndPort = addressTextField.text.split("[:]".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                val ipAndPort = view.addressTextField.text.split("[:]".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                 if (ipAndPort.size == 1) {
                     return Optional.of(Pair(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT.toString()))
                 } else if (ipAndPort.size == 2) {
@@ -142,8 +86,6 @@ class ServerListController(val client: Client) : ViewController {
         }
 
     override fun initialize() {
-        serverTable.client = client
-
         playerCount = Label()
         serverCount = Label()
 
@@ -158,31 +100,35 @@ class ServerListController(val client: Client) : ViewController {
         userFilterProperty.addListener { _ -> updateFilterProperty() }
         dataFilterProperty.addListener { _ -> updateFilterProperty() }
 
-        serverTable.predicateProperty().bind(filterProperty)
-        serverTable.sortedListComparatorProperty().bind(serverTable.comparatorProperty())
-        addressTextField.textProperty().bindBidirectional(SERVER_ADDRESS_PROPERTY)
+        view.serverTable.predicateProperty().bind(filterProperty)
+        view.serverTable.sortedListComparatorProperty().bind(view.serverTable.comparatorProperty())
+        view.addressTextField.textProperty().bindBidirectional(SERVER_ADDRESS_PROPERTY)
+
+        view.regexCheckBox.setOnAction { onFilterSettingsChange() }
+        view.nameFilterTextField.setOnKeyReleased { onFilterSettingsChange() }
+        view.gamemodeFilterTextField.setOnKeyReleased { onFilterSettingsChange() }
+        view.languageFilterTextField.setOnKeyReleased { onFilterSettingsChange() }
+        view.versionFilterComboBox.setOnAction { onFilterSettingsChange() }
 
         setPlayerComparator()
         addServerUpdateListener()
 
         toggleFavouritesMode()
 
-        columnLastJoin.setCellFactory {
-            object : TableCell<SampServer, Long>() {
-                override fun updateItem(item: Long?, empty: Boolean) {
-                    if (empty.not() && item != null) {
-                        val date = LocalDateTime.ofInstant(Instant.ofEpochMilli(item), ZoneId.systemDefault())
-                        val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")
-                        text = dateFormat.format(date)
-                    }
-                }
-            }
+        with(view) {
+            addressTextField.setOnAction { onClickConnect() }
+            connectButton.setOnAction { onClickConnect() }
+            addToFavouritesButton.setOnAction { onClickAddToFavourites() }
+
+            favouriteButton.setOnAction { toggleFavouritesMode() }
+            allButton.setOnAction { toggleAllMode() }
+            historyButton.setOnAction { toggleHistoryMode() }
         }
 
         /*
 		 * Hack in order to remove the dot of the radiobuttons.
 		 */
-        tableTypeToggleGroup.toggles.forEach { toggle -> (toggle as Node).styleClass.remove("radio-button") }
+        view.tableTypeToggleGroup.toggles.forEach { toggle -> (toggle as Node).styleClass.remove("radio-button") }
     }
 
     private fun updateFilterProperty() {
@@ -206,33 +152,33 @@ class ServerListController(val client: Client) : ViewController {
 
     private fun toggleMode(mode: SampServerTableMode) {
         killServerLookupThreads()
-        serverTable.setServerTableMode(mode)
-        serverTable.selectionModel.clearSelection()
+        view.serverTable.setServerTableMode(mode)
+        view.serverTable.selectionModel.clearSelection()
         displayNoServerInfo()
-        serverTable.clear()
+        view.serverTable.clear()
 
         when (mode) {
             SampServerTableMode.ALL -> {
-                columnLastJoin.isVisible = false
-                serverTable.placeholder = Label(Client.getString("fetchingServers"))
+                view.lastJoinTableColumn.isVisible = false
+                view.serverTable.placeholder = Label(Client.getString("fetchingServers"))
                 fillTableWithOnlineServerList()
             }
             SampServerTableMode.FAVOURITES -> {
-                columnLastJoin.isVisible = false
-                serverTable.placeholder = Label(Client.getString("noFavouriteServers"))
-                serverTable.addAll(FavouritesController.favourites)
-                ServerConfig.initLastJoinData(serverTable.items)
+                view.lastJoinTableColumn.isVisible = false
+                view.serverTable.placeholder = Label(Client.getString("noFavouriteServers"))
+                view.serverTable.addAll(FavouritesController.favourites)
+                ServerConfig.initLastJoinData(view.serverTable.items)
             }
             SampServerTableMode.HISTORY -> {
-                serverTable.placeholder = Label(Client.getString("noServerHistory"))
-                columnLastJoin.isVisible = true
+                view.serverTable.placeholder = Label(Client.getString("noServerHistory"))
+                view.lastJoinTableColumn.isVisible = true
                 val servers = ServerConfig.lastJoinedServers
                 servers.forEach({ server -> updateServerInfo(server, false) })
-                serverTable.addAll(servers)
+                view.serverTable.addAll(servers)
             }
         }
 
-        serverTable.refresh()
+        view.serverTable.refresh()
         updateGlobalInfo()
     }
 
@@ -241,15 +187,15 @@ class ServerListController(val client: Client) : ViewController {
             try {
                 val serversToAdd = ServerUtility.fetchServersFromSouthclaws()
                 ServerConfig.initLastJoinData(serversToAdd)
-                if (Objects.nonNull(serverLookup) && !serverLookup!!.isInterrupted && serverTable.tableMode == SampServerTableMode.ALL) {
+                if (Objects.nonNull(serverLookup) && !serverLookup!!.isInterrupted && view.serverTable.tableMode == SampServerTableMode.ALL) {
                     Platform.runLater {
-                        serverTable.addAll(serversToAdd)
-                        serverTable.refresh()
+                        view.serverTable.addAll(serversToAdd)
+                        view.serverTable.refresh()
                     }
                 }
             } catch (exception: IOException) {
                 Logging.error("Couldn't retrieve data from announce api.", exception)
-                Platform.runLater { serverTable.placeholder = Label(Client.getString("errorFetchingServers")) }
+                Platform.runLater { view.serverTable.placeholder = Label(Client.getString("errorFetchingServers")) }
             }
 
             Platform.runLater { this.updateGlobalInfo() }
@@ -276,7 +222,7 @@ class ServerListController(val client: Client) : ViewController {
     }
 
     private fun setPlayerComparator() {
-        columnPlayers.setComparator { stringOne, stringTwo ->
+        view.playersTableColumn.setComparator { stringOne, stringTwo ->
             val maxPlayersRemovalRegex = "/.*"
             val playersOne = Integer.parseInt(stringOne.replace(maxPlayersRemovalRegex.toRegex(), ""))
             val playersTwo = Integer.parseInt(stringTwo.replace(maxPlayersRemovalRegex.toRegex(), ""))
@@ -286,11 +232,11 @@ class ServerListController(val client: Client) : ViewController {
     }
 
     private fun addServerUpdateListener() {
-        serverTable.selectionModel.selectedIndices.addListener(InvalidationListener {
+        view.serverTable.selectionModel.selectedIndices.addListener(InvalidationListener {
             killServerLookupThreads()
 
-            if (serverTable.selectionModel.selectedIndices.size == 1) {
-                val selectedServer = serverTable.selectionModel.selectedItem
+            if (view.serverTable.selectionModel.selectedIndices.size == 1) {
+                val selectedServer = view.serverTable.selectionModel.selectedItem
                 if (Objects.nonNull(selectedServer)) {
                     updateServerInfo(selectedServer)
                 }
@@ -322,8 +268,8 @@ class ServerListController(val client: Client) : ViewController {
 
     private fun addServerToFavourites(ip: String, port: Int) {
         val newServer = FavouritesController.addServerToFavourites(ip, port)
-        if (!serverTable.contains(newServer)) {
-            serverTable.add(newServer)
+        if (!view.serverTable.contains(newServer)) {
+            view.serverTable.add(newServer)
         }
     }
 
@@ -348,8 +294,8 @@ class ServerListController(val client: Client) : ViewController {
             val languageFilterApplies: Boolean
             var versionFilterApplies = true
 
-            if (!versionFilter.selectionModel.isEmpty) {
-                val versionFilterSetting = versionFilter.selectionModel.selectedItem.toLowerCase()
+            if (!view.versionFilterComboBox.selectionModel.isEmpty) {
+                val versionFilterSetting = view.versionFilterComboBox.selectionModel.selectedItem.toLowerCase()
 
                 /*
 				 * At this point and time i am assuring that the versio is not null, since in
@@ -360,15 +306,15 @@ class ServerListController(val client: Client) : ViewController {
                 versionFilterApplies = serverVersion.toLowerCase().contains(versionFilterSetting)
             }
 
-            val nameFilterSetting = nameFilter.text.toLowerCase()
-            val modeFilterSetting = modeFilter.text.toLowerCase()
-            val languageFilterSetting = languageFilter.text.toLowerCase()
+            val nameFilterSetting = view.nameFilterTextField.text.toLowerCase()
+            val modeFilterSetting = view.gamemodeFilterTextField.text.toLowerCase()
+            val languageFilterSetting = view.languageFilterTextField.text.toLowerCase()
 
             val hostname = server.hostname.toLowerCase()
             val mode = server.mode.toLowerCase()
             val language = server.language.toLowerCase()
 
-            if (regexCheckBox.isSelected) {
+            if (view.regexCheckBox.isSelected) {
                 nameFilterApplies = regexFilter(hostname, nameFilterSetting)
                 modeFilterApplies = regexFilter(mode, modeFilterSetting)
                 languageFilterApplies = regexFilter(language, languageFilterSetting)
@@ -464,34 +410,34 @@ class ServerListController(val client: Client) : ViewController {
     }
 
     private fun setVisibleDetailsToRetrieving(server: SampServer) {
-        playerTable.items.clear()
-        serverAddress.text = server.address + ":" + server.port
-        websiteLink.isUnderline = false
+        view.playerTable.items.clear()
+        view.serverAddressTextField.text = server.address + ":" + server.port
+        view.serverWebsiteLink.isUnderline = false
         displayServerInfo(retrieving, retrieving, retrieving, retrieving, retrieving, null, retrieving)
     }
 
     private fun displayNoServerInfo() {
-        playerTable.items.clear()
-        serverAddress.text = ""
+        view.playerTable.items.clear()
+        view.serverAddressTextField.text = ""
         displayServerInfo("", "", "", "", "", null, "")
     }
 
     private fun applyData(server: SampServer, playerList: ObservableList<Player>, ping: Long) {
         runIfLookupRunning(server, Runnable {
             Platform.runLater {
-                serverPassword.text = if (server.isPassworded) Client.getString("yes") else Client.getString("no")
-                serverPing.text = ping.toString()
-                mapLabel.text = server.map
-                websiteLink.text = server.website
-                playerTable.items = playerList
+                view.serverPasswordLabel.text = if (server.isPassworded) Client.getString("yes") else Client.getString("no")
+                view.serverPingLabel.text = ping.toString()
+                view.serverMapLabel.text = server.map
+                view.serverWebsiteLink.text = server.website
+                view.playerTable.items = playerList
 
                 val websiteToLower = server.website!!.toLowerCase()
                 val websiteFixed = StringUtility.fixUrlIfNecessary(websiteToLower)
 
                 // drop validation since URL constructor does that anyways?
                 if (StringUtility.isValidURL(websiteFixed)) {
-                    websiteLink.isUnderline = true
-                    websiteLink.setOnAction { OSUtility.browse(server.website!!) }
+                    view.serverWebsiteLink.isUnderline = true
+                    view.serverWebsiteLink.setOnAction { OSUtility.browse(server.website!!) }
                 }
 
                 if (playerList.isEmpty()) {
@@ -499,13 +445,13 @@ class ServerListController(val client: Client) : ViewController {
                         val label = Label(tooMuchPlayers)
                         label.isWrapText = true
                         label.alignment = Pos.CENTER
-                        playerTable.setPlaceholder(label)
+                        view.playerTable.setPlaceholder(label)
                     } else {
-                        playerTable.setPlaceholder(Label(serverEmpty))
+                        view.playerTable.setPlaceholder(Label(serverEmpty))
                     }
                 }
 
-                serverLagcomp.text = server.lagcomp
+                view.serverLagcompLabel.text = server.lagcomp
                 updateGlobalInfo()
             }
         })
@@ -517,14 +463,14 @@ class ServerListController(val client: Client) : ViewController {
 
     private fun displayServerInfo(ping: String, password: String, map: String, lagcomp: String, website: String,
                                   websiteClickHandler: EventHandler<ActionEvent>?, playerTablePlaceholder: String) {
-        serverPing.text = ping
-        serverPassword.text = password
-        mapLabel.text = map
-        serverLagcomp.text = lagcomp
-        websiteLink.text = website
+        view.serverPingLabel.text = ping
+        view.serverPasswordLabel.text = password
+        view.serverMapLabel.text = map
+        view.serverLagcompLabel.text = lagcomp
+        view.serverWebsiteLink.text = website
         // Not using setVisible because i don't want the items to resize or anything
-        websiteLink.onAction = websiteClickHandler
-        playerTable.placeholder = Label(playerTablePlaceholder)
+        view.serverWebsiteLink.onAction = websiteClickHandler
+        view.playerTable.placeholder = Label(playerTablePlaceholder)
     }
 
     /**
@@ -533,11 +479,11 @@ class ServerListController(val client: Client) : ViewController {
     private fun updateGlobalInfo() {
         var playersPlaying = 0
 
-        for (server in serverTable.items) {
+        for (server in view.serverTable.items) {
             playersPlaying += server.players!!
         }
 
-        setServerCount(serverTable.items.size)
+        setServerCount(view.serverTable.items.size)
         setPlayerCount(playersPlaying)
     }
 

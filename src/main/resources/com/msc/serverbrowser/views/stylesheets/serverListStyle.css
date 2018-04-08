@@ -6,6 +6,7 @@
 	-fx-background-color: -menu-color;
 	-fx-background-radius: 0.0;
 	-fx-min-height: 2em;
+	-fx-max-width: Infinity;
 }
 
 .server-type-switch-button:selected
