@@ -45,4 +45,4 @@ object HashingUtility {
             return buffer.toString()
         }
     }
-}// Constructor to prevent instantiation
+}

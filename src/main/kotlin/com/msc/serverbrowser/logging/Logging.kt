@@ -15,29 +15,19 @@ import java.util.logging.SimpleFormatter
  * @since 06.07.2017
  */
 object Logging {
-    /**
-     * The Loggers Singleton instance.
-     */
-    private var instance: Logger? = null
+    private val instance: Logger = Logger.getAnonymousLogger()
 
     init {
-        init()
-    }
-
-    private fun init() {
-        instance = Logger.getAnonymousLogger()
-        instance!!.level = Level.INFO
+        instance.level = Level.INFO
         try {
-            val filehandler = FileHandler(PathConstants.SAMPEX_LOG, true)
-            val formatter = SimpleFormatter()
-            filehandler.formatter = formatter
-            instance!!.addHandler(filehandler)
+            val fileHandler = FileHandler(PathConstants.SAMPEX_LOG, true)
+            fileHandler.formatter = SimpleFormatter()
+            instance.addHandler(fileHandler)
         } catch (exception: SecurityException) {
-            instance!!.log(Level.SEVERE, "Couldn't configure logger properly", exception)
+            instance.log(Level.SEVERE, "Couldn't configure logger properly", exception)
         } catch (exception: IOException) {
-            instance!!.log(Level.SEVERE, "Couldn't configure logger properly", exception)
+            instance.log(Level.SEVERE, "Couldn't configure logger properly", exception)
         }
-
     }
 
     /**
@@ -48,7 +38,7 @@ object Logging {
      * @param throwable Throwable associated with log message.
      */
     private fun log(logLevel: Level, message: String, throwable: Throwable) {
-        instance!!.log(logLevel, message, throwable)
+        instance.log(logLevel, message, throwable)
     }
 
     /**
@@ -58,7 +48,7 @@ object Logging {
      * @param message The string message (or a key in the message catalog)
      */
     private fun log(logLevel: Level, message: String) {
-        instance!!.log(logLevel, message)
+        instance.log(logLevel, message)
     }
 
     /**
@@ -106,4 +96,4 @@ object Logging {
     fun error(message: String, throwable: Throwable) {
         log(Level.SEVERE, message, throwable)
     }
-}// Constructor to prevent instantiation
+}

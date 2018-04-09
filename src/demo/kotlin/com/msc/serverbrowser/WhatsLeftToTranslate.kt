@@ -1,8 +1,9 @@
 package com.msc.serverbrowser
 
 import com.msc.serverbrowser.util.Language
-import com.msc.serverbrowser.util.basic.ArrayUtility
-import java.util.*
+import java.util.Arrays
+import java.util.Locale
+import java.util.ResourceBundle
 
 /**
  * Prints all keys that are awaiting translation.
@@ -10,7 +11,7 @@ import java.util.*
  * @param args unused
  */
 fun main(args: Array<String>) {
-    val forSampForums = ArrayUtility.contains(args, "sampforums")
+    val forSampForums = args.contains("sampforums")
     val englishLanguage = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", Locale(Language.EN.shortcut))
 
     Arrays.stream(Language.values())

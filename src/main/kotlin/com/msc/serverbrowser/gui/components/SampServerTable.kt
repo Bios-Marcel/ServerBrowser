@@ -102,13 +102,13 @@ class SampServerTable(val client: Client) : TableView<SampServer>() {
         connectMenuItem.setOnAction { _ ->
             firstIfAnythingSelected.ifPresent { server ->
                 println(server)
-            GTAController.tryToConnect(client, server.address, server.port, "")
+                GTAController.tryToConnect(client, server.address, server.port, "")
             }
         }
         visitWebsiteMenuItem.setOnAction { _ -> firstIfAnythingSelected.ifPresent { server -> OSUtility.browse(server.website!!) } }
         connectWithPasswordMenuItem.setOnAction { _ ->
             println(firstIfAnythingSelected)
-            GTAController.promptUserForServerPassword(getWindow())
+            GTAController.promptUserForServerPassword(client)
                     .ifPresent { serverPassword ->
                         firstIfAnythingSelected.ifPresent { server ->
                             GTAController.tryToConnect(client, server.address, server.port, serverPassword)
@@ -251,8 +251,6 @@ class SampServerTable(val client: Client) : TableView<SampServer>() {
         }
     }
 
-    var onServerDoubleClickHandler: (SampServer) -> Unit = {}
-
     private fun handleLeftClick(row: TableRow<SampServer>) {
         val lastLeftClickTime = row.userData as Long?
         val wasDoubleClick = lastLeftClickTime != null && System.currentTimeMillis() - lastLeftClickTime < 300
@@ -260,7 +258,6 @@ class SampServerTable(val client: Client) : TableView<SampServer>() {
 
         if (wasDoubleClick && onlyOneSelectedItem) {
             if (ClientPropertiesController.getProperty(ConnectOnDoubleClickProperty)) {
-                firstIfAnythingSelected.ifPresent(onServerDoubleClickHandler)
                 firstIfAnythingSelected.ifPresent { server -> GTAController.tryToConnect(client, server.address, server.port, "") }
             }
         } else {

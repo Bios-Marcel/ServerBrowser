@@ -44,4 +44,4 @@ object Encoding {
         charsetDetector.dataEnd()
         return Optional.ofNullable(charsetDetector.detectedCharset)
     }
-}// Constructor to prevent instantiation
+}

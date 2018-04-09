@@ -19,7 +19,7 @@ import javafx.scene.input.MouseEvent
  *
  * @author Marcel
  */
-class UsernameController : ViewController {
+class UsernameController: ViewController {
     @FXML
     private lateinit var usernameTextField: TextField
 

@@ -174,7 +174,7 @@ object GTAController {
                 val serverInfo = query.basicServerInfo
 
                 if (Objects.isNull(serverPassword) || serverPassword.isEmpty() && serverInfo.isPresent && StringUtility.stringToBoolean(serverInfo.get()[0])) {
-                    val passwordOptional = promptUserForServerPassword(client.stage!!)
+                    val passwordOptional = promptUserForServerPassword(client)
                     passwordOptional.ifPresent { password -> SAMPLauncher.connect(client, address, port, password) }
                 } else {
                     SAMPLauncher.connect(client, address, port, serverPassword)
@@ -183,17 +183,17 @@ object GTAController {
         } catch (exception: IOException) {
             Logging.warn("Couldn't connect to server.", exception)
 
-            if (askUserIfHeWantsToConnectAnyways(client.stage!!)) {
+            if (askUserIfHeWantsToConnectAnyways(client)) {
                 SAMPLauncher.connect(client, address, port, serverPassword)
             }
         }
 
     }
 
-    private fun askUserIfHeWantsToConnectAnyways(ownerWindow: Window): Boolean {
+    private fun askUserIfHeWantsToConnectAnyways(client: Client): Boolean {
         val alert = Alert(AlertType.CONFIRMATION, Client.getString("serverMightBeOfflineConnectAnyways"), ButtonType.YES, ButtonType.NO)
         alert.title = Client.getString("connectingToServer")
-        alert.initOwner(ownerWindow)
+        alert.initOwner(client.stage!!)
         return alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES
     }
 
@@ -203,9 +203,9 @@ object GTAController {
      * @return an [Optional] containing either a string (empty or filled) or
      * [Optional.empty]
      */
-    fun promptUserForServerPassword(ownerWindow: Window): Optional<String> {
+    fun promptUserForServerPassword(client: Client): Optional<String> {
         val dialog = TextInputDialog()
-        dialog.initOwner(ownerWindow)
+        dialog.initOwner(client.stage!!)
         dialog.title = Client.getString("connectToServer")
         dialog.headerText = Client.getString("enterServerPasswordMessage")
 

@@ -3,7 +3,6 @@ package com.msc.serverbrowser.util
 import com.eclipsesource.json.Json
 import com.msc.serverbrowser.data.entites.SampServer
 import com.msc.serverbrowser.logging.Logging
-import com.msc.serverbrowser.util.basic.StringUtility
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -122,7 +121,7 @@ object ServerUtility {
      * @return true if it is an integer and between 0 and 65535
      */
     fun isPortValid(portAsString: String): Boolean {
-        val portNumber = StringUtility.parseInteger(portAsString) ?: -1
+        val portNumber = portAsString.toIntOrNull() ?: -1
         return isPortValid(portNumber)
     }
 
@@ -146,4 +145,4 @@ object ServerUtility {
         return address
                 .matches("(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)".toRegex())
     }
-}// Constructor to prevent instantiation
+}

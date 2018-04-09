@@ -22,4 +22,4 @@ object MathUtility {
 
         return Math.max(Math.min(upperLimit, number), lowerLimit)
     }
-}// Private constructor to prevent instantiation
+}

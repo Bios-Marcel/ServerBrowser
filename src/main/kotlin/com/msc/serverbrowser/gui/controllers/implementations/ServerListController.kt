@@ -187,7 +187,7 @@ class ServerListController(private val client: Client, private val view: ServerV
             try {
                 val serversToAdd = ServerUtility.fetchServersFromSouthclaws()
                 ServerConfig.initLastJoinData(serversToAdd)
-                if (Objects.nonNull(serverLookup) && !serverLookup!!.isInterrupted && view.serverTable.tableMode == SampServerTableMode.ALL) {
+                if (serverLookup != null && !serverLookup!!.isInterrupted && view.serverTable.tableMode == SampServerTableMode.ALL) {
                     Platform.runLater {
                         view.serverTable.addAll(serversToAdd)
                         view.serverTable.refresh()

@@ -247,4 +247,4 @@ object FavouritesController {
         }
 
     }
-}// Constructor to prevent instantiation
+}

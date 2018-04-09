@@ -33,7 +33,7 @@ import javafx.scene.web.WebView
  * @author Marcel
  * @since 14.01.2018
  */
-class FilesView {
+class FilesView{
     /**
      * Root-container of this view.
      */

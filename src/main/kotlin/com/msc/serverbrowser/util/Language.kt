@@ -3,7 +3,6 @@ package com.msc.serverbrowser.util
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.LanguageProperty
-import java.util.Objects
 import java.util.Optional
 
 /**
@@ -12,7 +11,6 @@ import java.util.Optional
  * @author marcel
  * @since Jan 10, 2018
  */
-// Suppressing because i don't want to document the enum values itself
 enum class Language(
         /**
          * The shortcut used to identify the language, for example
@@ -35,13 +33,11 @@ enum class Language(
     BA("ba", "Bosnian");
 
     override fun toString(): String {
-        if (Objects.nonNull(Client.languageResourceBundle)) {
-            val languageName = Client.getString(shortcut)
+        val languageName = Client.getString(shortcut)
 
-            return if (ClientPropertiesController.getProperty(LanguageProperty).equals(EN.shortcut, ignoreCase = true)) {
-                languageName
-            } else "$languageName ($defaultName)"
-        }
+        return if (ClientPropertiesController.getProperty(LanguageProperty).equals(EN.shortcut, ignoreCase = true)) {
+            languageName
+        } else "$languageName ($defaultName)"
 
         return defaultName
     }

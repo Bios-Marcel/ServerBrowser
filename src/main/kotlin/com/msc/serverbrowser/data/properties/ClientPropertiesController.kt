@@ -2,7 +2,6 @@ package com.msc.serverbrowser.data.properties
 
 import com.msc.serverbrowser.data.SQLDatabase
 import com.msc.serverbrowser.logging.Logging
-import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.Objects
 
@@ -46,12 +45,12 @@ object ClientPropertiesController {
      */
     private fun <T> getPropertyAsString(property: Property<T>): String {
         val statement = "SELECT value FROM setting WHERE id = " + property.id + ";"
-        val resultSetOptional = SQLDatabase.executeGetResult(statement)
-        if (resultSetOptional != null) {
+        val resultSet = SQLDatabase.executeGetResult(statement)
+        if (resultSet != null) {
             try {
-                resultSetOptional.use { resultSet: ResultSet ->
-                    if (resultSet.next()) {
-                        return resultSet.getString("value") ?: property.defaultValue.toString()
+                resultSet.use {
+                    if (it.next()) {
+                        return it.getString("value") ?: property.defaultValue.toString()
                     }
                 }
             } catch (exception: SQLException) {

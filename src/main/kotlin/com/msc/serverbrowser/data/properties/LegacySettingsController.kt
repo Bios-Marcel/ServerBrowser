@@ -96,4 +96,4 @@ object LegacySettingsController {
 
         save(properties)
     }
-}// Constructor to prevent instantiation
+}

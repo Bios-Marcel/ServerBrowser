@@ -19,7 +19,6 @@ import com.msc.serverbrowser.gui.controllers.implementations.SettingsController
 import com.msc.serverbrowser.gui.views.MainView
 import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.UpdateUtility
-import com.msc.serverbrowser.util.basic.ArrayUtility
 import com.msc.serverbrowser.util.basic.FileUtility
 import com.msc.serverbrowser.util.windows.OSUtility
 import javafx.application.Application
@@ -71,7 +70,7 @@ class Client : Application() {
         loadUI(primaryStage)
 
         // Only update if not in development mode
-        if (!Client.isDevelopmentModeActivated) {
+        if (!isDevelopmentModeActivated) {
             if (File(PathConstants.SAMPEX_TEMP_JAR).exists()) {
                 finishUpdate()
             } else if (ClientPropertiesController.getProperty(AutomaticUpdatesProperty)) {
@@ -140,8 +139,8 @@ class Client : Application() {
 
             val trayNotification = TrayNotificationBuilder()
                     .type(NotificationTypeImplementations.INFORMATION)
-                    .title(Client.getString("updated"))
-                    .message(Client.getString("clickForChangelog"))
+                    .title(getString("updated"))
+                    .message(getString("clickForChangelog"))
                     .animation(Animations.SLIDE).build()
 
             trayNotification.setOnMouseClicked {
@@ -165,7 +164,7 @@ class Client : Application() {
         }
 
         mainController.progressProperty().set(0.0)
-        mainController.setGlobalProgressText(Client.getString("checkingForUpdates"))
+        mainController.setGlobalProgressText(getString("checkingForUpdates"))
 
         Thread {
             updateOngoingProperty.set(true)
@@ -175,7 +174,7 @@ class Client : Application() {
                 } else {
                     Platform.runLater {
                         mainController.progressProperty().set(0.1)
-                        mainController.setGlobalProgressText(Client.getString("downloadingUpdate"))
+                        mainController.setGlobalProgressText(getString("downloadingUpdate"))
                     }
                     Logging.info("Downloading update.")
                     downloadUpdate()
@@ -267,13 +266,86 @@ class Client : Application() {
         mainController.settingsController?.selectSampPathTextField()
     }
 
-    companion object {
-        /**
-         * @return true if the development mode is activated, otherwise false
-         */
-        var isDevelopmentModeActivated: Boolean = false
-            private set
+    private fun displayUpdateNotification() {
+        val trayNotification = TrayNotificationBuilder().title(getString("updateInstalled"))
+                .message(getString("clickToRestart"))
+                .animation(Animations.SLIDE).build()
 
+        trayNotification.setOnMouseClicked {
+            trayNotification.dismiss()
+            finishUpdate()
+        }
+        trayNotification.showAndWait()
+    }
+
+    private fun displayCantRetrieveUpdate() {
+        val trayNotification = TrayNotificationBuilder().message(getString("couldntRetrieveUpdate"))
+                .animation(Animations.POPUP)
+                .type(NotificationTypeImplementations.ERROR).title(getString("updating")).build()
+
+        trayNotification.setOnMouseClicked { clicked ->
+            OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest")
+            trayNotification.dismiss()
+        }
+
+        trayNotification.showAndWait()
+    }
+
+    private fun finishUpdate() {
+        try {
+            FileUtility.copyOverwrite(PathConstants.SAMPEX_TEMP_JAR, PathConstants.OWN_JAR.path)
+            ClientPropertiesController.setProperty(ShowChangelogProperty, true)
+            Files.delete(Paths.get(PathConstants.SAMPEX_TEMP_JAR))
+            selfRestart()
+        } catch (exception: IOException) {
+            Logging.error("Failed to update.", exception)
+            val notification = TrayNotificationBuilder().title(getString("applyingUpdate"))
+                    .message(getString("couldntApplyUpdate"))
+                    .type(NotificationTypeImplementations.ERROR).build()
+
+            notification.setOnMouseClicked {
+                try {
+                    Desktop.getDesktop().open(File(PathConstants.SAMPEX_LOG))
+                } catch (couldntOpenlogfile: IOException) {
+                    Logging.warn("Error opening logfile.", couldntOpenlogfile)
+                }
+            }
+
+        }
+
+    }
+
+    /**
+     *
+     *
+     * TODO BROKEN WHEN STARTED WITH INSTALLER.
+     *
+     * Restarts the application.
+     */
+    private fun selfRestart() {
+        if (!PathConstants.OWN_JAR.name.endsWith(".jar")) {
+            // The application wasn't run with a jar file, but in an ide.
+            return
+        }
+
+        val javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
+        val command = ArrayList<String>()
+
+        command.add(javaBin)
+        command.add("-jar")
+        command.add(PathConstants.OWN_JAR.path)
+
+        try {
+            val builder = ProcessBuilder(command)
+            builder.start()
+            Platform.exit()
+        } catch (exception: IOException) {
+            Logging.error("Couldn't selfrestart.", exception)
+        }
+
+    }
+
+    companion object {
         /**
          * Application icon that can be used everywhere where necessary.
          */
@@ -289,13 +361,40 @@ class Client : Application() {
         val DEFAULT_TRAY_DISMISS_TIME: Duration = Duration.seconds(10.0)
 
         /**
+         * @return true if the development mode is activated, otherwise false
+         */
+        var isDevelopmentModeActivated: Boolean = false
+            private set
+
+        /**
          * ResourceBundle which contains all the localized strings.
          */
+        var languageResourceBundle: ResourceBundle
+
+        init {
+            val locale = Locale(ClientPropertiesController.getProperty(LanguageProperty))
+            languageResourceBundle = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale)
+        }
+
         /**
-         * @return [.languageBundle]
+         * Programs entry point, it also does specific things when passed specific arguments.
+         *
+         * @param args evaluated by [.readApplicationArguments]
+         * @throws IOException if there was an error while loading language files
+         * @throws FileNotFoundException if language files don't exist
          */
-        var languageResourceBundle: ResourceBundle? = null
-            private set
+        @JvmStatic
+        fun main(args: Array<String>) {
+            createFolderStructure()
+            Thread.setDefaultUncaughtExceptionHandler { thread, exception ->
+                Logging.error("Uncaught exception in thread: $thread", exception)
+                Platform.runLater { UncaughtExceptionHandlerView(UncaughtExceptionHandlerController(), exception).show() }
+            }
+
+            readApplicationArguments(args)
+
+            Application.launch(Client::class.java, *args)
+        }
 
         /**
          * Creates files and folders that are necessary for the application to run properly and migrates
@@ -316,115 +415,8 @@ class Client : Application() {
             clientCacheFolder.mkdirs()
         }
 
-        private fun displayUpdateNotification() {
-            val trayNotification = TrayNotificationBuilder().title(Client.getString("updateInstalled"))
-                    .message(Client.getString("clickToRestart"))
-                    .animation(Animations.SLIDE).build()
-
-            trayNotification.setOnMouseClicked {
-                trayNotification.dismiss()
-                finishUpdate()
-            }
-            trayNotification.showAndWait()
-        }
-
-        private fun displayCantRetrieveUpdate() {
-            val trayNotification = TrayNotificationBuilder().message(Client.getString("couldntRetrieveUpdate"))
-                    .animation(Animations.POPUP)
-                    .type(NotificationTypeImplementations.ERROR).title(Client.getString("updating")).build()
-
-            trayNotification.setOnMouseClicked { clicked ->
-                OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest")
-                trayNotification.dismiss()
-            }
-
-            trayNotification.showAndWait()
-        }
-
-        private fun finishUpdate() {
-            try {
-                FileUtility.copyOverwrite(PathConstants.SAMPEX_TEMP_JAR, PathConstants.OWN_JAR.path)
-                ClientPropertiesController.setProperty(ShowChangelogProperty, true)
-                Files.delete(Paths.get(PathConstants.SAMPEX_TEMP_JAR))
-                selfRestart()
-            } catch (exception: IOException) {
-                Logging.error("Failed to update.", exception)
-                val notification = TrayNotificationBuilder().title(Client.getString("applyingUpdate"))
-                        .message(Client.getString("couldntApplyUpdate"))
-                        .type(NotificationTypeImplementations.ERROR).build()
-
-                notification.setOnMouseClicked {
-                    try {
-                        Desktop.getDesktop().open(File(PathConstants.SAMPEX_LOG))
-                    } catch (couldntOpenlogfile: IOException) {
-                        Logging.warn("Error opening logfile.", couldntOpenlogfile)
-                    }
-                }
-
-            }
-
-        }
-
-        /**
-         *
-         *
-         * TODO BROKEN WHEN STARTED WITH INSTALLER.
-         *
-         * Restarts the application.
-         */
-        private fun selfRestart() {
-            if (!PathConstants.OWN_JAR.name.endsWith(".jar")) {
-                // The application wasn't run with a jar file, but in an ide.
-                return
-            }
-
-            val javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
-            val command = ArrayList<String>()
-
-            command.add(javaBin)
-            command.add("-jar")
-            command.add(PathConstants.OWN_JAR.path)
-
-            try {
-                val builder = ProcessBuilder(command)
-                builder.start()
-                Platform.exit()
-            } catch (exception: IOException) {
-                Logging.error("Couldn't selfrestart.", exception)
-            }
-
-        }
-
-        /**
-         * Programs entry point, it also does specific things when passed specific arguments.
-         *
-         * @param args evaluated by [.readApplicationArguments]
-         * @throws IOException if there was an error while loading language files
-         * @throws FileNotFoundException if language files don't exist
-         */
-        @JvmStatic
-        fun main(args: Array<String>) {
-            createFolderStructure()
-            Thread.setDefaultUncaughtExceptionHandler { thread, exception ->
-                Logging.error("Uncaught exception in thread: $thread", exception)
-                Platform.runLater { UncaughtExceptionHandlerView(UncaughtExceptionHandlerController(), exception).show() }
-            }
-
-            initLanguageFiles()
-            readApplicationArguments(args)
-            Application.launch(Client::class.java, *args)
-        }
-
-        /**
-         * Reads the resource bundle for the currently chosen language.
-         */
-        private fun initLanguageFiles() {
-            val locale = Locale(ClientPropertiesController.getProperty(LanguageProperty))
-            languageResourceBundle = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale)
-        }
-
         private fun readApplicationArguments(args: Array<String>) {
-            isDevelopmentModeActivated = ArrayUtility.contains(args, "-d")
+            isDevelopmentModeActivated = args.contains("-d")
         }
 
         /**
@@ -433,7 +425,7 @@ class Client : Application() {
          */
         fun getString(key: String): String {
             return try {
-                languageResourceBundle!!.getString(key)
+                languageResourceBundle.getString(key)
             } catch (e: MissingResourceException) {
                 "Invalid key"
             }

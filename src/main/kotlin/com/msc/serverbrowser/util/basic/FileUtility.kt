@@ -235,4 +235,4 @@ object FileUtility {
 
         throw IOException("Couldn't load file $path using any of the given encodings.")
     }
-}// Constructor to prevent instantiation
+}

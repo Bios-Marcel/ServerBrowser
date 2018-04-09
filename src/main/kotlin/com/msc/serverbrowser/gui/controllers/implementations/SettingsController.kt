@@ -127,7 +127,7 @@ class SettingsController(val client: Client) : ViewController {
         languageComboBox.selectionModel.select(toSelectLanguage)
         languageComboBox.selectionModel.selectedItemProperty().addListener { _, _, newVal ->
             ClientPropertiesController.setProperty(LanguageProperty, newVal.shortcut)
-//            Client.initLanguageFiles() TODO
+//            client.initLanguageFiles() TODO
             client.reloadViewIfLoaded(View.SETTINGS)
         }
 

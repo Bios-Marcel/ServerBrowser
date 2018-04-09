@@ -35,4 +35,4 @@ object PathConstants {
     val SAMP_USERDATA = "$SAMP_PATH\\USERDATA.DAT"
     val TEMP_INSTALLER_ZIP = SAMPEX_PATH + File.separator + "tempInstaller.zip"
     val TEMP_INSTALLER_EXE = SAMPEX_PATH + File.separator + "tempInstaller.exe"
-}// Constructor to prevent instantiation
+}

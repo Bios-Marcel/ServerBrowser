@@ -93,4 +93,4 @@ object InstallationCandidateCache {
         }
         return deletionSuccessful
     }
-}// Constructor to prevent instantiation
+}

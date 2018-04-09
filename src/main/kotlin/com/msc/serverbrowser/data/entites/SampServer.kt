@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.StringProperty
-import java.util.Objects
 
 class SampServer(address: String, port: Int) {
     private val passwordedProperty = SimpleBooleanProperty()
@@ -157,12 +156,12 @@ class SampServer(address: String, port: Int) {
     }
 
     override fun equals(`object`: Any?): Boolean {
-        if (Objects.isNull(`object`) || `object`!!.javaClass != SampServer::class.java) {
+        if (`object` == null || `object`.javaClass != SampServer::class.java) {
             return false
         }
 
-        val compare = `object` as SampServer?
-        return compare === this || address == compare!!.address && port == compare.port
+        val compare = `object` as SampServer
+        return compare === this || address == compare.address && port == compare.port
     }
 
     override fun hashCode(): Int {

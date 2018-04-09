@@ -1,7 +1,5 @@
 package com.msc.serverbrowser.util.basic
 
-import java.util.Optional
-
 /**
  * @author Marcel
  * @since 19.09.2017
@@ -24,50 +22,6 @@ object StringUtility {
             return "http://$url"
         }
         return url
-    }
-
-    /**
-     * Stolen and edited from [
- * this StackOverflow question](https://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java)
-     *
-     *
-     * Checks if a [String] looks like a Number and tries to parse it ito an [Integer],
-     * if it fails an empty [Optional] will be returned instead.
-     *
-     *
-     * @param string the [String] that shall be parsed
-     * @return [Optional] containing the [Integer] or [Optional.empty]
-     */
-    fun parseInteger(string: String?): Int? {
-        if (string == null) {
-            return null
-        }
-        val length = string.length
-        if (length == 0) {
-            return null
-        }
-
-        var i = 0
-        if (string[0] == '-') {
-            if (length == 1) {
-                return null
-            }
-            i = 1
-        }
-
-        while (i < length) {
-            val c = string[i]
-            if (c < '0' || c > '9') {
-                return null
-            }
-            i++
-        }
-
-        return try {
-            Integer.parseInt(string)
-        } catch (e: NumberFormatException) {
-            null
-        }
     }
 
     /**
@@ -128,4 +82,4 @@ object StringUtility {
     fun escapeHTML(html: String): String {
         return html.replace("\"", "&quot").replace("&", "&amp").replace("<", "&lt").replace("<", "&gt")
     }
-}// Constructor to prevent instantiation
+}

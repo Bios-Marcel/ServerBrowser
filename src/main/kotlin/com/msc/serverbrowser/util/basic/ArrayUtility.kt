@@ -1,7 +1,6 @@
 package com.msc.serverbrowser.util.basic
 
 import java.util.Arrays
-import java.util.Objects
 import java.util.Optional
 
 /**
@@ -21,9 +20,8 @@ object ArrayUtility {
     @JvmStatic
     @Throws(NullPointerException::class)
     fun <T> getLongestArray(arrayOne: Array<T>?, arrayTwo: Array<T>?): Optional<Array<T>> {
-        if (arrayOne == null || arrayTwo == null) {
-            return OptionalUtility.firstNonNullOrEmpty(arrayOne, arrayTwo)
-        }
+        arrayOne ?: return Optional.ofNullable(arrayTwo)
+        arrayTwo ?: return Optional.ofNullable(arrayOne)
 
         if (arrayOne.size > arrayTwo.size) {
             return Optional.of(arrayOne)
@@ -32,27 +30,6 @@ object ArrayUtility {
         }
 
         return Optional.empty()
-    }
-
-    /**
-     * Checks if the array contains the given item.
-     *
-     * @param array the array to search in for
-     * @param searchFor the item to search for
-     * @return true if the array contains the item, otherwise false
-     */
-    @JvmStatic
-    fun <T> contains(array: Array<T>, searchFor: T): Boolean {
-        if (Objects.isNull(array) || array.isEmpty()) {
-            return false
-        }
-
-        for (`object` in array) {
-            if (`object` == searchFor) {
-                return true
-            }
-        }
-        return false
     }
 
     /**
@@ -81,4 +58,4 @@ object ArrayUtility {
 
         return toReturn
     }
-}// Constructor to prevent instantiation
+}

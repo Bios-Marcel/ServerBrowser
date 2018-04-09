@@ -56,4 +56,4 @@ object PastUsernames {
         statement = MessageFormat.format(statement, username)
         SQLDatabase.execute(statement)
     }
-}// Constructor to prevent instantiation
+}
