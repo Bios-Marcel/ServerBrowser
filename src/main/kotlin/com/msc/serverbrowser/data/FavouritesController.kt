@@ -75,7 +75,7 @@ object FavouritesController {
                 })
 
                 query.serversRules.ifPresent({ rules ->
-                    server.website = rules["weburl"]
+                    server.website = rules["weburl"]!!
                     server.version = rules["version"]!!
                 })
             }
@@ -245,6 +245,5 @@ object FavouritesController {
             Logging.warn("Error loading legacy favourites.", exception)
             return legacyFavourites
         }
-
     }
 }

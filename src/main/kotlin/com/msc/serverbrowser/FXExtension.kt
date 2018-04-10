@@ -1,6 +1,6 @@
 package com.msc.serverbrowser
 
-import javafx.scene.control.Control
+import javafx.scene.layout.Region
 import javafx.stage.Window
 
-fun Control.getWindow(): Window = this.scene.window
+fun Region.getWindow(): Window = this.scene.window

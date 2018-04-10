@@ -105,7 +105,7 @@ class SampServerTable(val client: Client) : TableView<SampServer>() {
                 GTAController.tryToConnect(client, server.address, server.port, "")
             }
         }
-        visitWebsiteMenuItem.setOnAction { _ -> firstIfAnythingSelected.ifPresent { server -> OSUtility.browse(server.website!!) } }
+        visitWebsiteMenuItem.setOnAction { _ -> firstIfAnythingSelected.ifPresent { server -> OSUtility.browse(server.website) } }
         connectWithPasswordMenuItem.setOnAction { _ ->
             println(firstIfAnythingSelected)
             GTAController.promptUserForServerPassword(client)

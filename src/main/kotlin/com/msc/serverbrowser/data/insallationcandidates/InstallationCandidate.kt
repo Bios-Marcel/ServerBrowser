@@ -13,4 +13,5 @@ package com.msc.serverbrowser.data.insallationcandidates
  * @property isDownload true if the resource lies in the internet
  * @property urlTargetChecksum Checksum of files behind url
  */
-data class InstallationCandidate(val sampDllChecksum: String, val name: String, val url: String, private val isCustom: Boolean, val isDownload: Boolean, val urlTargetChecksum: String)
+data class InstallationCandidate(val sampDllChecksum: String, val name: String, val url: String,
+                                 private val isCustom: Boolean, val isDownload: Boolean, val urlTargetChecksum: String)

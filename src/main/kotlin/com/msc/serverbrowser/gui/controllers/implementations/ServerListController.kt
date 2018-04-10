@@ -369,7 +369,7 @@ class ServerListController(private val client: Client, private val view: ServerV
                         server.hostname = info[3]!!
                         server.mode = info[4]!!
                         server.language = info[5]!!
-                        server.website = serverRules["weburl"]
+                        server.website = serverRules["weburl"]!!
                         server.version = serverRules["version"]!!
                         server.lagcomp = serverRules["lagcomp"]!!
                         server.map = serverRules["mapname"]!!
@@ -431,13 +431,13 @@ class ServerListController(private val client: Client, private val view: ServerV
                 view.serverWebsiteLink.text = server.website
                 view.playerTable.items = playerList
 
-                val websiteToLower = server.website!!.toLowerCase()
+                val websiteToLower = server.website.toLowerCase()
                 val websiteFixed = StringUtility.fixUrlIfNecessary(websiteToLower)
 
                 // drop validation since URL constructor does that anyways?
                 if (StringUtility.isValidURL(websiteFixed)) {
                     view.serverWebsiteLink.isUnderline = true
-                    view.serverWebsiteLink.setOnAction { OSUtility.browse(server.website!!) }
+                    view.serverWebsiteLink.setOnAction { OSUtility.browse(server.website) }
                 }
 
                 if (playerList.isEmpty()) {

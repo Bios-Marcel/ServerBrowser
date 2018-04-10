@@ -42,7 +42,6 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.util.Locale
 import java.util.MissingResourceException
-import java.util.Objects
 import java.util.ResourceBundle
 
 /**
@@ -79,12 +78,11 @@ class Client : Application() {
         }
     }
 
-    private fun loadUIAndGetController(): MainController {
-        mainController.initialize()
+    private fun loadUIAndGetController(stage: Stage): MainController {
         val scene = Scene(mainController.mainView.rootPane)
-        stage!!.scene = scene
+        stage.scene = scene
 
-        applyTheme()
+        applyTheme(scene)
         return mainController
     }
 
@@ -92,10 +90,7 @@ class Client : Application() {
      * Deletes the scenes current stylesheets and applies either the dark theme or the default
      * theme.
      */
-    fun applyTheme() {
-        // Retrieving the current scene, assuring it ain't null.
-        val scene = Objects.requireNonNull(stage!!.scene)
-
+    fun applyTheme(scene: Scene) {
         scene.stylesheets.clear()
         scene.stylesheets.add(PathConstants.STYLESHEET_PATH + "mainStyleGeneral.css")
 
@@ -116,7 +111,7 @@ class Client : Application() {
     private fun loadUI(primaryStage: Stage) {
         stage = primaryStage
 
-        val controller = loadUIAndGetController()
+        val controller = loadUIAndGetController(primaryStage)
 
         TrayNotificationBuilder.setDefaultOwner(stage)
 
@@ -224,15 +219,6 @@ class Client : Application() {
             Logging.error("Couldn't retrieve update.", exception)
         }
 
-    }
-
-    /**
-     * Sets the Applications title.
-     *
-     * @param title the title to set
-     */
-    fun setTitle(title: String) {
-        stage!!.title = title
     }
 
     /**

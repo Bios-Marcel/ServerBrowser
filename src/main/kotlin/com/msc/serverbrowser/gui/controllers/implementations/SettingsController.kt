@@ -142,7 +142,7 @@ class SettingsController(val client: Client) : ViewController {
             ClientPropertiesController.setProperty(SaveLastViewProperty, true)
             ClientPropertiesController.setProperty(LastViewProperty, View.SETTINGS.id)
 
-            client.applyTheme()
+            client.applyTheme(sampPathTextField.scene)
 
             ClientPropertiesController.setProperty(SaveLastViewProperty, saveLastViewOld)
         })
@@ -312,7 +312,7 @@ class SettingsController(val client: Client) : ViewController {
      */
     private fun reloadSettingsView() {
         // Reapply theme, since it might have been changed
-        client.applyTheme()
+        client.applyTheme(sampPathTextField.scene)
         // Assure the view that the displays the correct data.
         client.reloadViewIfLoaded(View.SETTINGS)
     }

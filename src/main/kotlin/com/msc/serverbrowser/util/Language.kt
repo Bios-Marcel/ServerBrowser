@@ -17,7 +17,7 @@ enum class Language(
          * `de` would stand for `german`.
          *
          * @return the shortcut of this [Language]
-        `` */
+        `*/
         val shortcut: String, private val defaultName: String) {
 
     EN("en", "English"),
@@ -38,12 +38,9 @@ enum class Language(
         return if (ClientPropertiesController.getProperty(LanguageProperty).equals(EN.shortcut, ignoreCase = true)) {
             languageName
         } else "$languageName ($defaultName)"
-
-        return defaultName
     }
 
     companion object {
-
         /**
          * Returns a language by matching its shortcut, for example an input of `de` would
          * output the value [Language.DE].

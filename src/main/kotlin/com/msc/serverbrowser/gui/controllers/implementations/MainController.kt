@@ -5,6 +5,7 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.LastViewProperty
 import com.msc.serverbrowser.data.properties.SaveLastViewProperty
 import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
+import com.msc.serverbrowser.getWindow
 import com.msc.serverbrowser.gui.View
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
 import com.msc.serverbrowser.gui.views.FilesView
@@ -22,8 +23,8 @@ import javafx.scene.control.ProgressBar
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.text.Font
+import javafx.stage.Stage
 import java.io.IOException
-import java.util.Optional
 
 /**
  * Main [ViewController] for this application.
@@ -35,20 +36,18 @@ import java.util.Optional
  */
 class MainController(val client: Client, val mainView: MainView) : ViewController {
 
-
     /**
      * @return the current view
      */
-    var activeView: View? = null
+    var activeView: View
         private set
 
     private var activeSubViewController: ViewController? = null
 
     /**
-     * Returns an [Optional] of the current [ViewController] and tries casting it into
-     * [SettingsController].
+     * Returns the current [activeSubViewController]
      *
-     * @return [Optional] of [.activeSubViewController] or empty
+     * @return [activeSubViewController]
      */
     val settingsController: SettingsController?
         get() = activeSubViewController as? SettingsController
@@ -60,6 +59,13 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         if (Client.isDevelopmentModeActivated) {
             registerDevShortcuts()
         }
+
+        activeView = if (ClientPropertiesController.getProperty(SaveLastViewProperty)) {
+            val view = View.valueOf(ClientPropertiesController.getProperty(LastViewProperty)).orElse(View.SERVERS)
+            loadView(view)
+        } else {
+            loadView(View.valueOf(ClientPropertiesController.getDefaultProperty(LastViewProperty)).get())
+        }
     }
 
     private fun registerDevShortcuts() {
@@ -67,8 +73,8 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
             if (event.isControlDown && event.code == KeyCode.D) {
                 val currentValue = ClientPropertiesController.getProperty(UseDarkThemeProperty)
                 ClientPropertiesController.setProperty(UseDarkThemeProperty, !currentValue)
-                client.applyTheme()
-                client.reloadViewIfLoaded(activeView!!)
+                client.applyTheme(mainView.rootPane.scene)
+                client.reloadViewIfLoaded(activeView)
             }
         }
     }
@@ -79,15 +85,6 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         mainView.setMenuItemVersionAction(EventHandler { onVersionMenuItemClicked() })
         mainView.setMenuItemFilesAction(EventHandler { onFilesMenuItemClicked() })
         mainView.setMenuItemSettingsAction(EventHandler { onSettingsMenuItemClicked() })
-    }
-
-    override fun initialize() {
-        if (ClientPropertiesController.getProperty(SaveLastViewProperty)) {
-            val view = View.valueOf(ClientPropertiesController.getProperty(LastViewProperty)).orElse(View.SERVERS)
-            loadView(view)
-        } else {
-            loadView(View.valueOf(ClientPropertiesController.getDefaultProperty(LastViewProperty)).get())
-        }
     }
 
     private fun registerBottomBarHyperlinks() {
@@ -123,23 +120,23 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
     }
 
     private fun onServersMenuItemClicked() {
-        loadView(View.SERVERS)
+        activeView = loadView(View.SERVERS)
     }
 
     private fun onUsernameMenuItemClicked() {
-        loadView(View.USERNAME_CHANGER)
+        activeView = loadView(View.USERNAME_CHANGER)
     }
 
     private fun onVersionMenuItemClicked() {
-        loadView(View.VERSION_CHANGER)
+        activeView = loadView(View.VERSION_CHANGER)
     }
 
     private fun onFilesMenuItemClicked() {
-        loadView(View.FILES)
+        activeView = loadView(View.FILES)
     }
 
     private fun onSettingsMenuItemClicked() {
-        loadView(View.SETTINGS)
+        activeView = loadView(View.SETTINGS)
     }
 
     /**
@@ -147,7 +144,7 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
      *
      * @param view the view to be loaded
      */
-    fun loadView(view: View) {
+    fun loadView(view: View): View {
         if (activeSubViewController != null) {
             activeSubViewController!!.onClose()
         }
@@ -163,7 +160,7 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         }
 
         initViewData(view, loadedNode)
-        activeView = view
+        return view
     }
 
     private fun loadFilesView(): Parent {
@@ -212,18 +209,21 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         loadedNode.stylesheets.setAll(view.stylesheetPath)
         mainView.selectMenuItemForView(view)
         mainView.setActiveViewNode(loadedNode)
-        client.setTitle(Client.APPLICATION_NAME + " - " + view.title)
+        val mainWindow = mainView.rootPane.getWindow()
+        if (mainWindow is Stage){
+            mainWindow.title = (Client.APPLICATION_NAME + " - " + view.title)
+        }
     }
 
     /**
      * Reloads the current view.
      */
     fun reloadView() {
-        loadView(activeView!!)
+        loadView(activeView)
     }
 
     override fun onClose() {
-        ClientPropertiesController.setProperty(LastViewProperty, activeView!!.id)
+        ClientPropertiesController.setProperty(LastViewProperty, activeView.id)
         Platform.exit() // Make sure that the application doesn't stay open for some reason
     }
 }

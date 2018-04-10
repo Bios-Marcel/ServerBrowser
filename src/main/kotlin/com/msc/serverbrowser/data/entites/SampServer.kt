@@ -74,9 +74,9 @@ class SampServer(address: String, port: Int) {
         get() = versionProperty.get()
         set(version) = versionProperty.set(version)
 
-    var website: String?
+    var website: String
         get() = websiteProperty.get()
-        set(website) = websiteProperty.set(website!!)
+        set(website) = websiteProperty.set(website)
 
     var map: String
         get() = mapProperty.get()
@@ -155,12 +155,12 @@ class SampServer(address: String, port: Int) {
         return "$address:$port"
     }
 
-    override fun equals(`object`: Any?): Boolean {
-        if (`object` == null || `object`.javaClass != SampServer::class.java) {
+    override fun equals(any: Any?): Boolean {
+        if (any == null || any.javaClass != SampServer::class.java) {
             return false
         }
 
-        val compare = `object` as SampServer
+        val compare = any as SampServer
         return compare === this || address == compare.address && port == compare.port
     }
 
