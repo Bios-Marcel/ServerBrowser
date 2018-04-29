@@ -314,37 +314,7 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
 #### Polish
-```
-favourites=Favourites
-connectToServerUsingPassword=Connect using password
-enterFilterValue=Enter filter value
-lagcomp=lagcomp:
-showTimestamps=Show times if available
-lastVisit=Last visit
-visitWebsite=Visit website
-addToFavourites=Add to favourites
-ba=Bosnian
-sureYouWantToRestoreLegacySettingsAswell=Do you also, in addition to the application settings, want to reset the SA-MP settings?
-ping=Ping:
-sureYouWantToRestoreLegacySettings=Are you sure, that you want to reset the SA-MP settings?
-usePreReleases=Use pre-releases
-tr=Turkish
-showChatlogColors=Show colors
-showChatlogColorsAsText=Show colors as text
-copyIpAddressAndPort=Copy IP address and port
-donate=Donate
-applyUsername=Apply username
-all=All
-removeUsernameSingular=Remove username
-downloadingUpdate=Downloading update
-history=History
-restoreLegacySettingsToDefault=Restore SA-MP settings to default
-removeUsernamePlural=Remove usernames
-connectToServer=Connect to server
-removeFromFavourites=Remove from favourites
-checkingForUpdates=Checking for updates
-enterServerPasswordMessage=Enter the servers password (Leave empty if you think there is none).
-```
+Done
 
 #### Romanian
 ```
