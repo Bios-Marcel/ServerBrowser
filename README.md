@@ -314,9 +314,7 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
 #### Polish
-```
-All OK
-```
+Done
 
 #### Romanian
 ```
