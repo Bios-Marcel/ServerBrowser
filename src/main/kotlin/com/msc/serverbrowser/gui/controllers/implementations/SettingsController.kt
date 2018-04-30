@@ -28,6 +28,7 @@ import com.msc.serverbrowser.util.basic.MathUtility
 import com.msc.serverbrowser.util.basic.StringUtility
 import javafx.application.Platform
 import javafx.beans.InvalidationListener
+import javafx.beans.value.ChangeListener
 import javafx.fxml.FXML
 import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType
@@ -137,7 +138,7 @@ class SettingsController(val client: Client) : ViewController {
 
         // Appearance Properties
         setupCheckBox(darkThemeCheckBox, UseDarkThemeProperty)
-        darkThemeCheckBox.selectedProperty().addListener(InvalidationListener {
+        darkThemeCheckBox.selectedProperty().addListener {_, _, newVal ->
             val saveLastViewOld = ClientPropertiesController.getProperty(SaveLastViewProperty)
             ClientPropertiesController.setProperty(SaveLastViewProperty, true)
             ClientPropertiesController.setProperty(LastViewProperty, View.SETTINGS.id)
@@ -145,7 +146,7 @@ class SettingsController(val client: Client) : ViewController {
             client.applyTheme(sampPathTextField.scene)
 
             ClientPropertiesController.setProperty(SaveLastViewProperty, saveLastViewOld)
-        })
+        }
 
         // Permission Properties
         setupCheckBox(allowCloseSampCheckBox, AllowCloseSampProperty)
@@ -160,9 +161,8 @@ class SettingsController(val client: Client) : ViewController {
         setupCheckBox(allowCachingDownloadsCheckBox, AllowCachingDownloadsProperty)
 
         // Adding a listener to disable the update button in case an update is ongoing
-        val updatingProperty = client.updateOngoingProperty
-        updatingProperty.addListener { _, _, newVal -> manualUpdateButton.isDisable = newVal!! }
-        manualUpdateButton.isDisable = updatingProperty.get()
+        client.updateOngoingProperty.addListener { _, _, newVal -> manualUpdateButton.isDisable = newVal!! }
+        manualUpdateButton.isDisable = client.updateOngoingProperty.get()
     }
 
     private fun configureSampLegacyPropertyComponents() {

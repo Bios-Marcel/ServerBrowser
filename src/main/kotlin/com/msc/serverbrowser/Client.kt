@@ -52,18 +52,23 @@ import java.util.ResourceBundle
  */
 class Client : Application() {
     var stage: Stage? = null
-    private val mainController: MainController = MainController(this, MainView())
+    private val mainController: MainController;
 
     /**
      * This property that indicates if an update check / isDownload progress is ongoing.
      */
-    val updateOngoingProperty: BooleanProperty = SimpleBooleanProperty(false)
+    val updateOngoingProperty: BooleanProperty
 
     /**
      * @return current [SettingsController] or null.
      */
     val settingsController: SettingsController?
         get() = mainController.settingsController
+
+    init {
+        updateOngoingProperty = SimpleBooleanProperty(false)
+        mainController = MainController(this, MainView())
+    }
 
     override fun start(primaryStage: Stage) {
         loadUI(primaryStage)
