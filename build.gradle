@@ -13,9 +13,6 @@ buildscript {
     }
 }
 
-group = projectGroup
-version = projectVersion
-
 apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'kotlin'
@@ -73,6 +70,7 @@ task wrapper(type: Wrapper) {
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
+
 shadowJar {
     baseName = 'launcher'
     classifier = null
@@ -90,7 +88,6 @@ shadowJar {
     exclude 'org/sqlite/native/Linux/armv7/**'
     exclude 'org/sqlite/native/Linux/ppc64/**'
     exclude 'org/sqlite/native/Linux/x86/**'
-    exclude 'org/sqlite/native/Linux/x86_64/**'
     exclude 'org/sqlite/native/FreeBSD/**'
     exclude 'org/sqlite/native/Mac/**'
 
