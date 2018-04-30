@@ -46,7 +46,7 @@ import java.util.regex.PatternSyntaxException
  * @author Marcel
  * @since 02.07.2017
  */
-class ServerListController(private val client: Client, private val view: ServerView) : ViewController {
+class ServerListController(private val client: Client, private val mainController: MainController, private val view: ServerView) : ViewController {
 
     private val retrieving = Client.getString("retrieving")
 
@@ -92,7 +92,7 @@ class ServerListController(private val client: Client, private val view: ServerV
         setPlayerCount(0)
         setServerCount(0)
 
-        client.addItemsToBottomBar(playerCount, serverCount)
+        mainController.addItemsToBottomBar(playerCount, serverCount)
 
         setupInfoLabel(playerCount)
         setupInfoLabel(serverCount)

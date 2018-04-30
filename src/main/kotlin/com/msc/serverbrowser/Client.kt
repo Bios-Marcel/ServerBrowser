@@ -67,6 +67,7 @@ class Client : Application() {
 
     override fun start(primaryStage: Stage) {
         loadUI(primaryStage)
+        primaryStage.titleProperty().bind(mainController.titleProperty)
 
         // Only update if not in development mode
         if (!isDevelopmentModeActivated) {
@@ -188,15 +189,6 @@ class Client : Application() {
             }
             updateOngoingProperty.set(false)
         }.start()
-    }
-
-    /**
-     * Adds nodes to the Clients bottom bar.
-     *
-     * @param nodes the node that will be added
-     */
-    fun addItemsToBottomBar(vararg nodes: Node) {
-        mainController.addItemsToBottomBar(*nodes)
     }
 
     /**
@@ -358,6 +350,7 @@ class Client : Application() {
         var languageResourceBundle: ResourceBundle
 
         init {
+            createFolderStructure()
             val locale = Locale(ClientPropertiesController.getProperty(LanguageProperty))
             languageResourceBundle = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale)
         }
@@ -371,7 +364,6 @@ class Client : Application() {
          */
         @JvmStatic
         fun main(args: Array<String>) {
-            createFolderStructure()
             Thread.setDefaultUncaughtExceptionHandler { thread, exception ->
                 Logging.error("Uncaught exception in thread: $thread", exception)
                 Platform.runLater { UncaughtExceptionHandlerView(UncaughtExceptionHandlerController(), exception).show() }

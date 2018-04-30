@@ -106,7 +106,7 @@ object SAMPLauncher {
             builder.start()
             return true
         } catch (exception: Exception) {
-            Logging.warn("Error using sampcmd.exe", exception)
+            Logging.warn("Error using sampcmd .exe", exception)
         }
 
         return false

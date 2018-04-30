@@ -49,10 +49,11 @@ Overall, you have 3 options:
 
 The latest `launcher.jar` is available under https://github.com/Bios-Marcel/ServerBrowser/releases/latest , but it will **require** you to have Java 8 or later installed, i strongly suggest installing **Java 9**, since future versions of this project will use **Java 9**.
 
-#### Downloading the latest Installer
+#### Downloading the latest Installer (NOT SUPPORTED ANYMORE)
 
-The latest installer is also available under https://github.com/Bios-Marcel/ServerBrowser/releases/latest
+The latest installer is also available under https://github.com/Bios-Marcel/ServerBrowser/releases/tag/8.5.7
 Unlike when using the `launcher.jar` file, the installer **won't require** you to download anything other than the installer itself.
+The installer isn't supported after version 8.5.7 anymore.
 
 #### Build all the stuff yourself
 
@@ -97,7 +98,7 @@ There is a light and a dark theme, here are screenshots including both themes:
 
 ![Settings Light](https://i.imgur.com/CVds2Od.png)
 
-## Documentation
+## Documentation (Outdated)
 
 Javadoc is available under: (https://bios-marcel.github.io/ServerBrowser-Doc/overview-summary.html)
 
@@ -425,19 +426,6 @@ enterServerPasswordMessage=Enter the servers password (Leave empty if you think 
 
 This project is managed using [gradle](https://gradle.org).
 
-### Structure
-
-The project formerly consisted of 3 subprojects, those were `client`, `server` and `shared`, but since the backend has
-been removed, `shared` and `client` got merged into `client`.
-
-```
-ServerBrowser			The parent project
-|__ client				The Windows GUI client with which humans interact
-```
-
-At some point the project structure might get to see a refactoring, since the multi-project structure isn't necessary
-in this case.
-
 ### Building with Gradle
 
 To see which tasks are available, run:
@@ -467,16 +455,15 @@ $ cd client
 $ ../gradlew run
 ```
 
-Or run it from the parent project by prefixing the task with the subprojects name and a ":" (colon).
-
-``` shell
-$ ./gradlew client:run
-```
-
 Assemble and test the build outputs. You will find the results in the __build__ folder of __client__.
 
 ``` shell
 $ ./gradlew build
+```
+
+In order to build a runnable `.jar` file, run:
+``` shell
+$ ./gradlew shadowJar
 ```
 
 ### Syncing gradle with Eclipse
@@ -492,76 +479,6 @@ $ ./gradlew eclipseClean eclipse
 ```
 
 Eclipse will instantly reload the fresh project settings files.
-
-### Pipeline
-
-__ServerBrowser__ utilizes advanced build techniques in order to assemble and optimize the output. The goal is to build the smallest possible 'self-contained' executable for Windows for the client.
-
-__self-contained__ in this context means the JVM is bundled with the output.
-
-In order to achieve this the following 2 step process is used:
-
-1. Put all build outputs into a single JAR (fat JAR), including (transitive) dependencies.
-2. Bundle the optimized JAR with a JVM and build a native container around them (exe/deb).
-
-These steps map to these tools:
-
-1. [Gradle Shadow Plugin](http://imperceptiblethoughts.com/shadow/#introduction)
-2. [javapackager](https://github.com/FibreFoX/javafx-gradle-plugin) + [JavaFX-Gradle-Plugin](https://github.com/FibreFoX/javafx-gradle-plugin)
-
-Our build scripts are largely glue around those tools.
-
-### Building the native output
-
-``` shell
-$ ./gradlew jfxNative
-```
-
-This will generate an installable artifact in `client/build/jfx/native`. Depending on which platform you are building from, an EXE is generated on Windows, DEB/RPM on Linux and PKG/DMG on OSX.
-
-We support Windows and Linux and in order to be able to generate an installer, some dependencies need to be installed.
-
-#### Windows
-
-- Inno Setup 5 or later
-
-#### Linux (rpm)
-
-- RPMBuild
-
-#### Linux (deb)
-
-- Debian packaging tools
-
-### Javapackager
-
-The underlying technology for building native installer bundles is `javapackager`.
-Learn more about it here:
-
-- https://docs.oracle.com/javase/8/docs/technotes/guides/deploy/self-contained-packaging.html
-- https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javapackager.html
-- https://docs.oracle.com/javase/8/docs/technotes/tools/unix/javapackager.html
-
-### Realising a signed build
-
-Our builds are cryptographically signed. In order to build with signing enabled you need to setup 2 things.
-
-* A `local.properties` file:
-
-```
-localSecretKeystorePassword = "choose super secret pw"
-localSecretKeyPassword = "choose super secret pw yet again!"
-```
-
-* A keystore and private key
-
-Once you have your passwords setup, these can automatically generated for you with:
-
-``` shell
-$ ./gradlew jfxGenerateKeyStore
-```
-
-None of these files should __ever__ be committed to version control !
 
 ## You need help?
 [Send me an E-Mail](mailto:marceloschr@gmail.com)

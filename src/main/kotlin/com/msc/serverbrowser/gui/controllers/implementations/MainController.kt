@@ -14,6 +14,8 @@ import com.msc.serverbrowser.gui.views.ServerView
 import com.msc.serverbrowser.logging.Logging
 import javafx.application.Platform
 import javafx.beans.property.DoubleProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.beans.property.StringProperty
 import javafx.event.EventHandler
 import javafx.fxml.FXMLLoader
 import javafx.scene.Node
@@ -44,6 +46,8 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
 
     private var activeSubViewController: ViewController? = null
 
+    val titleProperty: StringProperty
+
     /**
      * Returns the current [activeSubViewController]
      *
@@ -53,6 +57,8 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         get() = activeSubViewController as? SettingsController
 
     init {
+        titleProperty = SimpleStringProperty((Client.APPLICATION_NAME))
+
         Font.loadFont(MainController::class.java.getResource("/com/msc/serverbrowser/fonts/FontAwesome.otf").toExternalForm(), 12.0)
         configureMenuItems()
         registerBottomBarHyperlinks()
@@ -173,7 +179,7 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
 
     private fun loadServersView(): Parent {
         val serverView = ServerView(client)
-        val serverListController = ServerListController(client, serverView)
+        val serverListController = ServerListController(client, this, serverView)
         serverListController.initialize()
         activeSubViewController = serverListController
         return serverView.rootPane
@@ -209,10 +215,7 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         loadedNode.stylesheets.setAll(view.stylesheetPath)
         mainView.selectMenuItemForView(view)
         mainView.setActiveViewNode(loadedNode)
-        val mainWindow = mainView.rootPane.getWindow()
-        if (mainWindow is Stage){
-            mainWindow.title = (Client.APPLICATION_NAME + " - " + view.title)
-        }
+        titleProperty.value = (Client.APPLICATION_NAME + " - " + view.title)
     }
 
     /**

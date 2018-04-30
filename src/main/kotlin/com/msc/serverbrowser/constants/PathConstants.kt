@@ -24,6 +24,8 @@ object PathConstants {
     private val CACHE = SAMPEX_PATH + File.separator + "cache"
     val CLIENT_CACHE = CACHE + File.separator + "clientversions"
     val SAMP_CMD = SAMPEX_PATH + File.separator + "sampcmd.exe"
+    val TEMP_INSTALLER_ZIP = SAMPEX_PATH + File.separator + "tempInstaller.zip"
+    val TEMP_INSTALLER_EXE = SAMPEX_PATH + File.separator + "tempInstaller.exe"
 
     // GTA / SAMP specific Paths
     private val GTA_USER_FILES = (FileSystemView.getFileSystemView().defaultDirectory.path + File.separator
@@ -33,6 +35,4 @@ object PathConstants {
     val SAMP_CFG = SAMP_PATH + File.separator + "sa-mp.cfg"
     val SAMP_CHATLOG = "$SAMP_PATH\\chatlog.txt"
     val SAMP_USERDATA = "$SAMP_PATH\\USERDATA.DAT"
-    val TEMP_INSTALLER_ZIP = SAMPEX_PATH + File.separator + "tempInstaller.zip"
-    val TEMP_INSTALLER_EXE = SAMPEX_PATH + File.separator + "tempInstaller.exe"
 }
