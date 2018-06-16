@@ -50,7 +50,6 @@ sourceSets {
 }
 
 dependencies {
-    compile 'com.github.sarxos:windows-registry-util:0.3'
     compile 'org.xerial:sqlite-jdbc:3.19.+'
     compile 'com.eclipsesource.minimal-json:minimal-json:0.9.+'
     compile 'com.github.Bios-Marcel:TrayNotification:1.3.1.1'

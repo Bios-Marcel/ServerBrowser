@@ -3,9 +3,6 @@ package com.msc.serverbrowser.util.samp
 import com.github.plushaze.traynotification.animations.Animations
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
-import com.github.sarxos.winreg.HKey
-import com.github.sarxos.winreg.RegistryException
-import com.github.sarxos.winreg.WindowsRegistry
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.PastUsernames
 import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate
@@ -17,6 +14,7 @@ import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.basic.HashingUtility
 import com.msc.serverbrowser.util.basic.StringUtility
 import com.msc.serverbrowser.util.windows.OSUtility
+import com.msc.serverbrowser.util.windows.Registry
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.scene.control.Alert
@@ -66,18 +64,11 @@ object GTAController {
      */
     private val gtaPathFromRegistry: Optional<String>
         get() {
-            //TODO implement for linux
-            if (OSUtility.isWindows.not()) {
+            //TODO Currently doesn't work on linux, since it returns "C:/..." instead of "/home/user/wineprefix/..."
+            if(!OSUtility.isWindows.not()) {
                 return Optional.empty()
             }
-
-            try {
-                return Optional.ofNullable(WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", ""))
-            } catch (exception: RegistryException) {
-                Logging.warn("Couldn't retrieve GTA path.", exception)
-                return Optional.empty()
-            }
-
+            return Registry.readString("HKCU\\Software\\SAMP", "gta_sa_exe").map { it.replace("gta_sa.exe", "") }
         }
 
     /**
@@ -120,7 +111,7 @@ object GTAController {
     fun applyUsername() {
 
         //TODO Implement for linux
-        if(OSUtility.isWindows) {
+        if (OSUtility.isWindows) {
             killSAMP()
         }
 
@@ -128,17 +119,7 @@ object GTAController {
                 .filter { name -> name != usernameProperty.get() }
                 .ifPresent({ PastUsernames.addPastUsername(it) })
 
-        if(OSUtility.isWindows) {
-            try {
-                WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get())
-            } catch (exception: RegistryException) {
-                Logging.warn("Couldn't set username.", exception)
-            }
-        } else {
-            val arguments = listOf("wine", "reg", "add", "HKCU\\Software\\SAMP", "/v", "PlayerName", "/d", usernameProperty.get(), "/f")
-            ProcessBuilder(arguments).start()
-        }
-
+        Registry.writeString("HKCU\\Software\\SAMP", "PlayerName", usernameProperty.get())
     }
 
     // TODO Think of a better solution
@@ -147,28 +128,7 @@ object GTAController {
      *
      * @return Username or "404 name not found"
      */
-    internal fun retrieveUsernameFromRegistry(): Optional<String> {
-        if (!OSUtility.isWindows) {
-            val arguments = listOf("wine", "reg", "query", "HKCU\\Software\\SAMP", "/v", "PlayerName")
-            val start: Process = ProcessBuilder(arguments).start()
-
-            val name = start.inputStream
-                    .bufferedReader()
-                    .use { it.readLines() }
-                    .last { it.isNotBlank() }
-                    .substringAfter("REG_SZ")
-                    .trim()
-            return Optional.of(name)
-        }
-
-        try {
-            return Optional.ofNullable(WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName"))
-        } catch (exception: RegistryException) {
-            Logging.warn("Couldn't retrieve Username from registry.", exception)
-            return Optional.empty()
-        }
-
-    }
+    internal fun retrieveUsernameFromRegistry() = Registry.readString("HKCU\\Software\\SAMP", "PlayerName")
 
     /**
      * Connects to a server, depending on if it is passworded, the user will be asked to enter a
