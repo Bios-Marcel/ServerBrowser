@@ -177,7 +177,6 @@ class MainView {
             View.VERSION_CHANGER -> menuItemVersion.isSelected = true
             View.FILES -> menuItemFiles.isSelected = true
             View.SETTINGS -> menuItemSettings.isSelected = true
-            else -> throw IllegalArgumentException("This View hasn't been implemented or is invalid: $view")
         }
     }
 

@@ -128,7 +128,7 @@ class VersionChangeController(val client: Client) : ViewController {
     }
 
     private fun setAllButtonsDisabled(disabled: Boolean) {
-        buttons.forEach { key, value -> value.isDisable = disabled }
+        buttons.forEach { _, value -> value.isDisable = disabled }
     }
 
     override fun onClose() {

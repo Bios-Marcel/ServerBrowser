@@ -25,7 +25,6 @@ import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.control.TextField
 import javafx.scene.image.Image
@@ -52,7 +51,7 @@ import java.util.ResourceBundle
  */
 class Client : Application() {
     var stage: Stage? = null
-    private val mainController: MainController;
+    private val mainController: MainController
 
     /**
      * This property that indicates if an update check / isDownload progress is ongoing.
@@ -266,7 +265,7 @@ class Client : Application() {
                 .animation(Animations.POPUP)
                 .type(NotificationTypeImplementations.ERROR).title(getString("updating")).build()
 
-        trayNotification.setOnMouseClicked { clicked ->
+        trayNotification.setOnMouseClicked { _ ->
             OSUtility.browse("https://github.com/Bios-Marcel/ServerBrowser/releases/latest")
             trayNotification.dismiss()
         }

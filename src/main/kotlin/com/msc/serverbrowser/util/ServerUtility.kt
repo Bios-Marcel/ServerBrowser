@@ -73,7 +73,7 @@ object ServerUtility {
     @JvmStatic
     @Throws(IOException::class)
     fun fetchServersFromSouthclaws(): List<SampServer> {
-        return fetchFromAPI("http://api.samp.southcla.ws/v2/servers")
+        return fetchFromAPI("https://api.samp-servers.net/v2/servers")
     }
 
     @Throws(IOException::class)

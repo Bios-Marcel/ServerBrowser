@@ -101,7 +101,6 @@ class SampServerTable(val client: Client) : TableView<SampServer>() {
     private fun setMenuItemDefaultActions() {
         connectMenuItem.setOnAction { _ ->
             firstIfAnythingSelected.ifPresent { server ->
-                println(server)
                 GTAController.tryToConnect(client, server.address, server.port, "")
             }
         }
@@ -177,7 +176,7 @@ class SampServerTable(val client: Client) : TableView<SampServer>() {
 
     private fun onRowDragDropped(row: TableRow<SampServer>, event: DragEvent) {
         val dragBoard = event.dragboard
-        val oldIndexes = dragBoard.getContent(OLD_INDEXES_LIST_DATA_FORMAT) as List<Int>
+        val oldIndexes = dragBoard.getContent(OLD_INDEXES_LIST_DATA_FORMAT) as MutableList<Int>
         val newIndex = servers.indexOf(row.item)
         val newIndexCorrect = if (newIndex == -1) servers.size else newIndex
 
@@ -193,8 +192,8 @@ class SampServerTable(val client: Client) : TableView<SampServer>() {
                 draggedServer.forEach { server -> servers.add(newIndexCorrect, server) }
             }
             val sortReverseAndRemove = {
-                Collections.sort(oldIndexes)
-                Collections.reverse(oldIndexes)
+                oldIndexes.sort()
+                oldIndexes.reverse()
                 oldIndexes.forEach { index -> servers.removeAt(index) }
             }
 

@@ -155,12 +155,12 @@ class SampServer(address: String, port: Int) {
         return "$address:$port"
     }
 
-    override fun equals(any: Any?): Boolean {
-        if (any == null || any.javaClass != SampServer::class.java) {
+    override fun equals(other: Any?): Boolean {
+        if (other == null || other.javaClass != SampServer::class.java) {
             return false
         }
 
-        val compare = any as SampServer
+        val compare = other as SampServer
         return compare === this || address == compare.address && port == compare.port
     }
 

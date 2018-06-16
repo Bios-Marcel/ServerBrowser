@@ -23,7 +23,6 @@ import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType
 import javafx.scene.control.ButtonType
 import javafx.scene.control.TextInputDialog
-import javafx.stage.Window
 import java.io.File
 import java.io.IOException
 import java.security.NoSuchAlgorithmException
@@ -48,10 +47,6 @@ object GTAController {
      */
     val gtaPath: Optional<String>
         get() {
-            if (!OSUtility.isWindows) {
-                return Optional.empty()
-            }
-
             val path = gtaPathFromRegistry
             if (path.isPresent) {
                 return path
@@ -71,6 +66,11 @@ object GTAController {
      */
     private val gtaPathFromRegistry: Optional<String>
         get() {
+            //TODO implement for linux
+            if (OSUtility.isWindows.not()) {
+                return Optional.empty()
+            }
+
             try {
                 return Optional.ofNullable(WindowsRegistry.getInstance().readString(HKey.HKCU, "SOFTWARE\\SAMP", "gta_sa_exe").replace("gta_sa.exe", ""))
             } catch (exception: RegistryException) {
@@ -117,25 +117,26 @@ object GTAController {
     /**
      * Writes the actual username (from registry) into the past usernames list and sets the new name
      */
-    fun applyUsername(ownerWindow: Window) {
-        if (!OSUtility.isWindows) {
-            // TODO Localize
-            val alert = Alert(AlertType.ERROR, "The feature you are trying to use is not available on your operating system.", ButtonType.OK)
-            alert.initOwner(ownerWindow)
-            alert.title = "Apply username"
-            alert.showAndWait()
-            return
+    fun applyUsername() {
+
+        //TODO Implement for linux
+        if(OSUtility.isWindows) {
+            killSAMP()
         }
 
-        killSAMP()
         retrieveUsernameFromRegistry()
                 .filter { name -> name != usernameProperty.get() }
                 .ifPresent({ PastUsernames.addPastUsername(it) })
 
-        try {
-            WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get())
-        } catch (exception: RegistryException) {
-            Logging.warn("Couldn't set username.", exception)
+        if(OSUtility.isWindows) {
+            try {
+                WindowsRegistry.getInstance().writeStringValue(HKey.HKCU, "SOFTWARE\\SAMP", "PlayerName", usernameProperty.get())
+            } catch (exception: RegistryException) {
+                Logging.warn("Couldn't set username.", exception)
+            }
+        } else {
+            val arguments = listOf("wine", "reg", "add", "HKCU\\Software\\SAMP", "/v", "PlayerName", "/d", usernameProperty.get(), "/f")
+            ProcessBuilder(arguments).start()
         }
 
     }
@@ -148,7 +149,16 @@ object GTAController {
      */
     internal fun retrieveUsernameFromRegistry(): Optional<String> {
         if (!OSUtility.isWindows) {
-            return Optional.empty()
+            val arguments = listOf("wine", "reg", "query", "HKCU\\Software\\SAMP", "/v", "PlayerName")
+            val start: Process = ProcessBuilder(arguments).start()
+
+            val name = start.inputStream
+                    .bufferedReader()
+                    .use { it.readLines() }
+                    .last { it.isNotBlank() }
+                    .substringAfter("REG_SZ")
+                    .trim()
+            return Optional.of(name)
         }
 
         try {

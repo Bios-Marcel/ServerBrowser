@@ -106,7 +106,7 @@ object SAMPLauncher {
             builder.start()
             return true
         } catch (exception: Exception) {
-            Logging.warn("Error using sampcmd .exe", exception)
+            Logging.warn("Error using sampcmd.exe", exception)
         }
 
         return false
@@ -114,6 +114,9 @@ object SAMPLauncher {
 
     private fun buildLaunchingArguments(address: String, port: Int, passwordOptional: Optional<String>): List<String> {
         val arguments = ArrayList<String>()
+        if (OSUtility.isWindows.not()) {
+            arguments.add("wine")
+        }
         arguments.add(PathConstants.SAMP_CMD)
         arguments.add("-c")
         arguments.add("-h")
@@ -140,7 +143,14 @@ object SAMPLauncher {
 
         try {
             Logging.info("Connecting using executable.")
-            val builder = ProcessBuilder(gtaPath + File.separator + "samp.exe ", addressAndPort, password)
+            val arguments: MutableList<String> = mutableListOf()
+            if (OSUtility.isWindows.not()) {
+                arguments.add("wine")
+            }
+            arguments.add(gtaPath + "samp.exe ")
+            arguments.add(addressAndPort)
+            arguments.add(password)
+            val builder = ProcessBuilder(arguments)
             builder.directory(File(gtaPath))
             builder.start()
             return true
@@ -160,6 +170,7 @@ object SAMPLauncher {
      * @return true if it was most likely successful
      */
     private fun connectUsingWindowsProtocol(address: String, port: Int): Boolean {
+        //TODO Try implementing for linux
         if (!OSUtility.isWindows) {
             return false
         }
