@@ -80,7 +80,7 @@ class VersionChangeController(val client: Client) : ViewController {
      * @param toInstall [InstallationCandidate] which will be installed
      */
     private fun installSamp(button: Button, toInstall: InstallationCandidate) {
-        if (GTAController.gtaPath.isPresent) {
+        if (GTAController.gtaPath != null) {
             val installedVersion = GTAController.installedVersion
 
             if (!installedVersion.isPresent || installedVersion.get() != toInstall) {

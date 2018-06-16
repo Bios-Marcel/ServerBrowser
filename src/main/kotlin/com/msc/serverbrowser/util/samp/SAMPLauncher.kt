@@ -50,14 +50,13 @@ object SAMPLauncher {
             GTAController.killGTA()
         }
 
-        val gtaPathOptional = GTAController.gtaPath
+        val gtaPath = GTAController.gtaPath
 
-        if (gtaPathOptional.isPresent.not()) {
+        if (gtaPath == null) {
             GTAController.displayCantLocateGTANotification(client)
             return false
         }
 
-        val gtaPath = gtaPathOptional.get()
         val ipAddress =
                 if (ServerUtility.isValidIPAddress(address)) {
                     address
@@ -126,7 +125,7 @@ object SAMPLauncher {
         arguments.add("-n")
 
         // At this point, it should be no problem to ask for the username
-        arguments.add(GTAController.retrieveUsernameFromRegistry().get())
+        arguments.add(GTAController.retrieveUsernameFromRegistry()!!)
 
         passwordOptional.ifPresent { password ->
             if (!password.isEmpty()) {

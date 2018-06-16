@@ -7,6 +7,7 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.basic.FileUtility
 import com.msc.serverbrowser.util.samp.GTAController
+import com.msc.serverbrowser.util.windows.OSUtility
 
 import java.io.IOException
 import java.nio.file.Files
@@ -30,7 +31,7 @@ object Installer {
         try {
             Logging.info("Installing $candidate.")
             val installer = getInstallerPathAndDownloadIfNecessary(candidate)
-            val gtaPath = GTAController.gtaPath.get()
+            val gtaPath = GTAController.gtaPath!!
 
             // Check whether its an installer or a zip
             if (candidate.url.endsWith(".exe")) {
@@ -85,7 +86,11 @@ object Installer {
             // cmd /c allows elevation of the command instead of retrieving an error
             // /S starts a silent installation
             // /D specifies the installation target folder
-            val installerProcess = Runtime.getRuntime().exec("cmd /c $installerPath /S /D=$gtaPath")
+            var command = "cmd /c $installerPath /S /D=$gtaPath"
+            if(OSUtility.isWindows.not()) {
+                command = "wine $command"
+            }
+            val installerProcess = Runtime.getRuntime().exec(command)
             // Waiting until the installer has finished, in order to be able to give proper GUI
             // responses.
             installerProcess.waitFor()

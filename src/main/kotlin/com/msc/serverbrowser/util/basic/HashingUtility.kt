@@ -15,6 +15,8 @@ import kotlin.experimental.and
  */
 object HashingUtility {
 
+    private const val HEX_CHARS = "0123456789ABCDEF"
+
     /**
      * Gets a files SHA-256 Checksum.
      *
@@ -26,23 +28,17 @@ object HashingUtility {
      */
     @Throws(IOException::class, NoSuchAlgorithmException::class)
     fun generateChecksum(file: String): String {
-        Files.newInputStream(Paths.get(file)).use { inputStream ->
-            val sha256 = MessageDigest.getInstance("SHA-256")
-            val data = ByteArray(1024)
+        val bytes = MessageDigest
+                .getInstance("SHA-256")
+                .digest(Files.readAllBytes(Paths.get(file)))
+        val result = StringBuilder(bytes.size * 2)
 
-            var read = 0
-            while (read != -1) {
-                sha256.update(data, 0, read)
-                read = inputStream.read(data)
-            }
-
-            val hashBytes = sha256.digest()
-
-            val buffer = StringBuilder()
-            for (hashByte in hashBytes) {
-                buffer.append(Integer.toString((hashByte and 0xff.toByte()) + 0x100, 16).substring(1))
-            }
-            return buffer.toString()
+        bytes.forEach {
+            val i = it.toInt()
+            result.append(HEX_CHARS[i shr 4 and 0x0f])
+            result.append(HEX_CHARS[i and 0x0f])
         }
+
+        return result.toString()
     }
 }

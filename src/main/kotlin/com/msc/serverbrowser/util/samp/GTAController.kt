@@ -13,6 +13,7 @@ import com.msc.serverbrowser.gui.controllers.implementations.VersionChangeContro
 import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.basic.HashingUtility
 import com.msc.serverbrowser.util.basic.StringUtility
+import com.msc.serverbrowser.util.unix.WineUtility
 import com.msc.serverbrowser.util.windows.OSUtility
 import com.msc.serverbrowser.util.windows.Registry
 import javafx.beans.property.SimpleStringProperty
@@ -36,25 +37,26 @@ object GTAController {
     /**
      * Holds the users username.
      */
-    val usernameProperty: StringProperty = SimpleStringProperty(retrieveUsernameFromRegistry().orElse(""))
+    val usernameProperty: StringProperty = SimpleStringProperty(retrieveUsernameFromRegistry() ?: "")
 
     /**
      * Returns the GTA path.
      *
      * @return [Optional] of GTA path or an empty [Optional] if GTA couldn't be found
      */
-    val gtaPath: Optional<String>
+    val gtaPath: String?
         get() {
-            val path = gtaPathFromRegistry
-            if (path.isPresent) {
-                return path
+            val savedProperty = ClientPropertiesController.getProperty(SampPathProperty)
+
+            if (savedProperty.isNotBlank()) {
+                return if (savedProperty.endsWith(File.separator)) {
+                    savedProperty
+                } else {
+                    savedProperty + File.separator
+                }
             }
 
-            val property = ClientPropertiesController.getProperty(SampPathProperty)
-            return if (Objects.isNull(property) || property.isEmpty()) {
-                Optional.empty()
-            } else Optional.of(if (property.endsWith(File.separator)) property else property + File.separator)
-
+            return gtaPathFromRegistry
         }
 
     /**
@@ -62,13 +64,21 @@ object GTAController {
      *
      * @return String of the GTA Path or null.
      */
-    private val gtaPathFromRegistry: Optional<String>
+    private val gtaPathFromRegistry: String?
         get() {
-            //TODO Currently doesn't work on linux, since it returns "C:/..." instead of "/home/user/wineprefix/..."
-            if(!OSUtility.isWindows.not()) {
-                return Optional.empty()
+            val retrievedPath = Registry
+                    .readString("HKCU\\Software\\SAMP", "gta_sa_exe")
+                    ?.replace("gta_sa.exe", "")
+
+            if (OSUtility.isWindows) {
+                return retrievedPath
             }
-            return Registry.readString("HKCU\\Software\\SAMP", "gta_sa_exe").map { it.replace("gta_sa.exe", "") }
+
+            if (retrievedPath != null) {
+                return WineUtility.convertPath(retrievedPath)
+            }
+
+            return retrievedPath
         }
 
     /**
@@ -77,24 +87,20 @@ object GTAController {
      *
      * @return [Optional] of installed versions version number or an [Optional.empty]
      */
-    // GTA couldn't be found
-    // samp.dll doesn't exist, even though GTA is installed at this point.
+    // GTA couldn't be found samp.dll doesn't exist, even though GTA is installed at this point.
     val installedVersion: Optional<InstallationCandidate>
         get() {
-            val path = gtaPath
-            if (!path.isPresent) {
-                return Optional.empty()
-            }
+            val path = gtaPath ?: return Optional.empty()
 
-            val file = File(path.get() + "samp.dll")
+            val file = File(path + "samp.dll")
             if (!file.exists()) {
                 return Optional.empty()
             }
 
             try {
-                val hashsum = HashingUtility.generateChecksum(file.toString())
+                val hashSum = HashingUtility.generateChecksum(file.toString())
                 return VersionChangeController.INSTALLATION_CANDIDATES.stream()
-                        .filter { candidate -> candidate.sampDllChecksum.equals(hashsum, ignoreCase = true) }
+                        .filter { candidate -> candidate.sampDllChecksum.equals(hashSum, ignoreCase = true) }
                         .findFirst()
             } catch (exception: NoSuchAlgorithmException) {
                 Logging.error("Error hashing installed samp.dll", exception)
@@ -116,8 +122,8 @@ object GTAController {
         }
 
         retrieveUsernameFromRegistry()
-                .filter { name -> name != usernameProperty.get() }
-                .ifPresent({ PastUsernames.addPastUsername(it) })
+                .takeIf { it != usernameProperty.get() }
+                ?.apply(PastUsernames::addPastUsername)
 
         Registry.writeString("HKCU\\Software\\SAMP", "PlayerName", usernameProperty.get())
     }

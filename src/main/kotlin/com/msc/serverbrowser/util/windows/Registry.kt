@@ -1,9 +1,7 @@
 package com.msc.serverbrowser.util.windows
 
-import java.util.*
-
 object Registry {
-    fun readString(path: String, key: String): Optional<String> {
+    fun readString(path: String, key: String): String? {
         val arguments = mutableListOf("reg", "query", path, "/v", key)
 
         if (OSUtility.isWindows.not()) {
@@ -12,13 +10,12 @@ object Registry {
 
         val start: Process = ProcessBuilder(arguments).start()
 
-        val name = start.inputStream
+        return start.inputStream
                 .bufferedReader()
                 .use { it.readLines() }
-                .last { it.isNotBlank() }
-                .substringAfter("REG_SZ")
-                .trim()
-        return Optional.of(name)
+                .lastOrNull { it.isNotBlank() }
+                ?.substringAfter("REG_SZ")
+                ?.trim()
     }
 
     fun writeString(path: String, key: String, value: String) {
