@@ -14,7 +14,7 @@ object Registry {
                 .bufferedReader()
                 .use { it.readLines() }
                 .lastOrNull { it.isNotBlank() }
-                ?.substringAfter("REG_SZ")
+                ?.substringAfter("SZ")
                 ?.trim()
     }
 

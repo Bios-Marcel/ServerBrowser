@@ -31,14 +31,11 @@ object SAMPLauncher {
     /**
      * Tries connecting to a SA-MP server.
      *
-     *
      * Also does:
      *
      *  * kill GTA process
      *  * Check if GTA can be found and display an error otherwise
      *  * use multiple methods for connecting, in case the best one doesn't work
-     *
-     *
      *
      * @param address the IP-address / domain for the server
      * @param port the port for the server

@@ -1,5 +1,7 @@
 package com.msc.serverbrowser.constants
 
+import com.msc.serverbrowser.util.unix.WineUtility
+import com.msc.serverbrowser.util.windows.OSUtility
 import java.io.File
 import javax.swing.filechooser.FileSystemView
 
@@ -28,11 +30,14 @@ object PathConstants {
     val TEMP_INSTALLER_EXE = SAMPEX_PATH + File.separator + "tempInstaller.exe"
 
     // GTA / SAMP specific Paths
-    private val GTA_USER_FILES = (FileSystemView.getFileSystemView().defaultDirectory.path + File.separator
-            + "GTA San Andreas User Files")
+    private val GTA_USER_FILES: String = if (OSUtility.isWindows) {
+        FileSystemView.getFileSystemView().defaultDirectory.path
+    } else {
+        WineUtility.documentsPath
+    } + File.separator + "GTA San Andreas User Files"
     val SAMP_PATH = GTA_USER_FILES + File.separator + "SAMP"
     val SAMP_SCREENS = SAMP_PATH + File.separator + "//screens"
     val SAMP_CFG = SAMP_PATH + File.separator + "sa-mp.cfg"
-    val SAMP_CHATLOG = "$SAMP_PATH\\chatlog.txt"
-    val SAMP_USERDATA = "$SAMP_PATH\\USERDATA.DAT"
+    val SAMP_CHATLOG = "$SAMP_PATH${File.separator}chatlog.txt"
+    val SAMP_USERDATA = "$SAMP_PATH${File.separator}USERDATA.DAT"
 }
