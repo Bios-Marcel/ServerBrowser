@@ -30,7 +30,7 @@ object PathConstants {
     val TEMP_INSTALLER_EXE = SAMPEX_PATH + File.separator + "tempInstaller.exe"
 
     // GTA / SAMP specific Paths
-    private val GTA_USER_FILES: String = if (OSUtility.isWindows) {
+    private val GTA_USER_FILES: String? = if (OSUtility.isWindows) {
         FileSystemView.getFileSystemView().defaultDirectory.path
     } else {
         WineUtility.documentsPath

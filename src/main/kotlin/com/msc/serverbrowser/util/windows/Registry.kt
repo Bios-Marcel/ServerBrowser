@@ -1,16 +1,18 @@
 package com.msc.serverbrowser.util.windows
 
+import com.msc.serverbrowser.util.unix.WineUtility
+
 object Registry {
     fun readString(path: String, key: String): String? {
         val arguments = mutableListOf("reg", "query", path, "/v", key)
 
-        if (OSUtility.isWindows.not()) {
-            arguments.add(0, "wine")
+        val process = if (OSUtility.isWindows) {
+            ProcessBuilder(arguments).start()
+        } else {
+            WineUtility.createWineRunner(arguments).start()
         }
 
-        val start: Process = ProcessBuilder(arguments).start()
-
-        return start.inputStream
+        return process.inputStream
                 .bufferedReader()
                 .use { it.readLines() }
                 .lastOrNull { it.isNotBlank() }
@@ -19,12 +21,13 @@ object Registry {
     }
 
     fun writeString(path: String, key: String, value: String) {
-        val arguments = mutableListOf("reg", "add", path, "/v", key, "/d", value, "/f")
+        val arguments = listOf("reg", "add", path, "/v", key, "/d", value, "/f")
 
-        if (OSUtility.isWindows.not()) {
-            arguments.add(0, "wine")
+        if (OSUtility.isWindows) {
+            ProcessBuilder(arguments).start()
+        } else {
+            WineUtility.createWineRunner(arguments)
         }
 
-        ProcessBuilder(arguments).start()
     }
 }

@@ -5,39 +5,19 @@ import com.github.plushaze.traynotification.notification.NotificationTypeImpleme
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.InstallationCandidateCache
-import com.msc.serverbrowser.data.properties.AllowCachingDownloadsProperty
-import com.msc.serverbrowser.data.properties.AllowCloseGtaProperty
-import com.msc.serverbrowser.data.properties.AllowCloseSampProperty
-import com.msc.serverbrowser.data.properties.AskForNameOnConnectProperty
-import com.msc.serverbrowser.data.properties.AutomaticUpdatesProperty
-import com.msc.serverbrowser.data.properties.ChangelogEnabledProperty
-import com.msc.serverbrowser.data.properties.ClientPropertiesController
-import com.msc.serverbrowser.data.properties.DownloadPreReleasesProperty
-import com.msc.serverbrowser.data.properties.LanguageProperty
-import com.msc.serverbrowser.data.properties.LastViewProperty
-import com.msc.serverbrowser.data.properties.LegacySettingsController
-import com.msc.serverbrowser.data.properties.Property
-import com.msc.serverbrowser.data.properties.SampPathProperty
-import com.msc.serverbrowser.data.properties.SaveLastViewProperty
-import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
+import com.msc.serverbrowser.data.properties.*
 import com.msc.serverbrowser.gui.View
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
 import com.msc.serverbrowser.util.Language
 import com.msc.serverbrowser.util.UpdateUtility
 import com.msc.serverbrowser.util.basic.MathUtility
 import com.msc.serverbrowser.util.basic.StringUtility
+import com.msc.serverbrowser.util.windows.OSUtility
 import javafx.application.Platform
 import javafx.beans.InvalidationListener
 import javafx.fxml.FXML
-import javafx.scene.control.Alert
+import javafx.scene.control.*
 import javafx.scene.control.Alert.AlertType
-import javafx.scene.control.Button
-import javafx.scene.control.ButtonType
-import javafx.scene.control.CheckBox
-import javafx.scene.control.ComboBox
-import javafx.scene.control.Label
-import javafx.scene.control.Spinner
-import javafx.scene.control.TextField
 import java.text.MessageFormat
 import java.util.Properties
 
@@ -58,6 +38,16 @@ class SettingsController(val client: Client) : ViewController {
     private lateinit var saveLastViewCheckBox: CheckBox
     @FXML
     private lateinit var languageComboBox: ComboBox<Language>
+
+    // Linux compatibility settings
+    @FXML
+    private lateinit var linuxCompatPane: TitledPane
+    @FXML
+    private lateinit var wineBinaryTextField: TextField
+    @FXML
+    private lateinit var winePrefixTextField: TextField
+
+
 
     // Appearance Settings
     @FXML
@@ -91,10 +81,6 @@ class SettingsController(val client: Client) : ViewController {
     @FXML
     private lateinit var nameTagStatusCheckBox: CheckBox
 
-    // TODO(MSC) Connection Settings SERIOUSLY TODO TODO
-    // @FXML
-    // private CheckBox askForUsernameOnConnectCheckBox;
-
     // Update Settings
     @FXML
     private lateinit var showChangelogCheckBox: CheckBox
@@ -113,12 +99,14 @@ class SettingsController(val client: Client) : ViewController {
         initInformationArea()
         initPropertyComponents()
         configureSampLegacyPropertyComponents()
+
+        linuxCompatPane.isVisible = OSUtility.isWindows.not()
     }
 
     private fun initPropertyComponents() {
         // General Properties
         sampPathTextField.text = ClientPropertiesController.getProperty(SampPathProperty)
-        sampPathTextField.textProperty().addListener { _, _, newValue -> ClientPropertiesController.setProperty(SampPathProperty, newValue.trim { it <= ' ' }) }
+        sampPathTextField.textProperty().addListener { _, _, newValue -> ClientPropertiesController.setProperty(SampPathProperty, newValue.trim()) }
 
         setupCheckBox(saveLastViewCheckBox, SaveLastViewProperty)
 
@@ -127,13 +115,17 @@ class SettingsController(val client: Client) : ViewController {
         languageComboBox.selectionModel.select(toSelectLanguage)
         languageComboBox.selectionModel.selectedItemProperty().addListener { _, _, newVal ->
             ClientPropertiesController.setProperty(LanguageProperty, newVal.shortcut)
-//            client.initLanguageFiles() TODO
+            // client.initLanguageFiles() TODO
             client.reloadViewIfLoaded(View.SETTINGS)
         }
 
-        // Connection Properties
-        // setupCheckBox(askForUsernameOnConnectCheckBox,
-        // Property.ASK_FOR_NAME_ON_CONNECT);
+        // Linux compatibility properties
+        wineBinaryTextField.text = ClientPropertiesController.getProperty(WineBinaryProperty)
+        wineBinaryTextField.textProperty().addListener { _, _, newValue -> ClientPropertiesController.setProperty(WineBinaryProperty, newValue.trim()) }
+
+        winePrefixTextField.text = ClientPropertiesController.getProperty(WinePrefixProperty)
+        winePrefixTextField.textProperty().addListener { _, _, newValue -> ClientPropertiesController.setProperty(WinePrefixProperty, newValue.trim()) }
+
 
         // Appearance Properties
         setupCheckBox(darkThemeCheckBox, UseDarkThemeProperty)
@@ -328,6 +320,8 @@ class SettingsController(val client: Client) : ViewController {
         ClientPropertiesController.restorePropertyToDefault(AutomaticUpdatesProperty)
         ClientPropertiesController.restorePropertyToDefault(AllowCachingDownloadsProperty)
         ClientPropertiesController.restorePropertyToDefault(DownloadPreReleasesProperty)
+        ClientPropertiesController.restorePropertyToDefault(WinePrefixProperty)
+        ClientPropertiesController.restorePropertyToDefault(WineBinaryProperty)
     }
 
     @FXML

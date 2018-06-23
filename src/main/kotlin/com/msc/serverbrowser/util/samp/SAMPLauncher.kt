@@ -7,6 +7,7 @@ import com.msc.serverbrowser.data.properties.AllowCloseGtaProperty
 import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.ServerUtility
+import com.msc.serverbrowser.util.unix.WineUtility
 import com.msc.serverbrowser.util.windows.OSUtility
 import java.awt.Desktop
 import java.io.File
@@ -93,9 +94,13 @@ object SAMPLauncher {
     }
 
     private fun connectUsingDLLInjection(gtaPath: String, address: String, port: Int, serverPassword: String): Boolean {
-        val builder = ProcessBuilder()
         val arguments = buildLaunchingArguments(address, port, Optional.ofNullable(serverPassword))
-        builder.command(arguments)
+        val builder = if (OSUtility.isWindows) {
+            ProcessBuilder(arguments)
+        } else {
+            WineUtility.createWineRunner(arguments)
+        }
+
         builder.directory(File(gtaPath))
 
         try {
@@ -109,10 +114,8 @@ object SAMPLauncher {
     }
 
     private fun buildLaunchingArguments(address: String, port: Int, passwordOptional: Optional<String>): List<String> {
-        val arguments = ArrayList<String>()
-        if (OSUtility.isWindows.not()) {
-            arguments.add("wine")
-        }
+        val arguments = mutableListOf<String>()
+
         arguments.add(PathConstants.SAMP_CMD)
         arguments.add("-c")
         arguments.add("-h")
@@ -139,14 +142,18 @@ object SAMPLauncher {
 
         try {
             Logging.info("Connecting using executable.")
-            val arguments: MutableList<String> = mutableListOf()
-            if (OSUtility.isWindows.not()) {
-                arguments.add("wine")
-            }
+            val arguments = mutableListOf<String>()
+
             arguments.add(gtaPath + "samp.exe ")
             arguments.add(addressAndPort)
             arguments.add(password)
-            val builder = ProcessBuilder(arguments)
+
+            val builder = if (OSUtility.isWindows) {
+                ProcessBuilder(arguments)
+            } else {
+                WineUtility.createWineRunner(arguments)
+            }
+
             builder.directory(File(gtaPath))
             builder.start()
             return true

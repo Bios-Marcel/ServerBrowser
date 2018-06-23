@@ -1,8 +1,9 @@
 package com.msc.serverbrowser.data.properties
 
 /**
- * Holds all existent properties. Do not adjust any of the ids. TODO Think about a way to do one
- * time database migration and cleanup ids
+ * Holds all existent properties. Do not adjust any of the ids.
+ *
+ * TODO Think about a way to do one time database migration and cleanup ids
  *
  * @author Marcel
  * @property id an integer that is used to identify the property
@@ -25,3 +26,5 @@ object AutomaticUpdatesProperty : Property<Boolean>(16, true)
 object LanguageProperty : Property<String>(17, "en")
 object ConnectOnDoubleClickProperty : Property<Boolean>(18, true)
 object DownloadPreReleasesProperty : Property<Boolean>(19, false)
+object WineBinaryProperty : Property<String>(20, "")
+object WinePrefixProperty : Property<String>(21, "")

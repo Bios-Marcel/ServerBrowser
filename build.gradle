@@ -4,7 +4,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
 
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.2.50'
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.+'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -14,7 +14,6 @@ buildscript {
 }
 
 apply plugin: 'application'
-apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'eclipse'
@@ -42,8 +41,6 @@ repositories {
 }
 
 sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
-    test.kotlin.srcDirs += 'src/test/kotlin'
     demo.kotlin.srcDirs += 'src/demo/kotlin'
     demo.compileClasspath += main.output
     demo.compileClasspath += main.compileClasspath
@@ -88,8 +85,7 @@ shadowJar {
     exclude 'org/sqlite/native/Linux/ppc64/**'
     exclude 'org/sqlite/native/Linux/x86/**'
     exclude 'org/sqlite/native/FreeBSD/**'
-    exclude 'org/sqlite/native/Mac/**'
-
+    
     //If you are still using 32-bit ... fuck you ;)
     exclude 'org/sqlite/native/Windows/x86/**'
 
