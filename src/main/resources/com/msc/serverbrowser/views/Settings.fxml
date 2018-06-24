@@ -35,11 +35,11 @@
                 </rowConstraints>
                 <Label maxHeight="Infinity" text="%customWineBinary"
                        GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <TextField fx:id="wineBinaryTextField" maxWidth="Infinity" promptText="%gtaNotFoundPrompt"
+                <TextField fx:id="wineBinaryTextField" maxWidth="Infinity" promptText="%defaultWineBinaryWillBeUsed"
                            GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                 <Label maxHeight="Infinity" text="%customWinePrefix"
                        GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <TextField fx:id="winePrefixTextField" maxWidth="Infinity" promptText="%gtaNotFoundPrompt"
+                <TextField fx:id="winePrefixTextField" maxWidth="Infinity" promptText="%defaultWinePrefixWillBeUsed"
                            GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </GridPane>
         </TitledPane>
