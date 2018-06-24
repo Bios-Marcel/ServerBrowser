@@ -34,7 +34,7 @@ object UpdateUtility {
      * since in the feature i'll to know this as for having to update the jre as well.
      *
      */
-    const val VERSION = "8.6.0"
+    const val VERSION = "8.6.1"
 
     /**
      * Checks if the currently installed version is the latest.
