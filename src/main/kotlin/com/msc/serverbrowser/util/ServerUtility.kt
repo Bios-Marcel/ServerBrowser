@@ -38,13 +38,13 @@ object ServerUtility {
             val openConnection = URL("http://lists.sa-mp.com/$version/servers").openConnection()
             openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0")
             BufferedReader(InputStreamReader(openConnection.getInputStream())).use { `in` ->
-                `in`.lines().forEach({ inputLine ->
+                `in`.lines().forEach { inputLine ->
                     val data = inputLine.split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                     val server = SampServer(data[0], Integer.parseInt(data[1]))
                     if (!servers.contains(server)) {
                         servers.add(server)
                     }
-                })
+                }
             }
         } catch (exception: IOException) {
             Logging.error("Error retrieving servers from masterlist.", exception)
@@ -99,6 +99,7 @@ object ServerUtility {
 
                 server.players = jsonServerData.getInt("pc", 0)
                 server.maxPlayers = jsonServerData.getInt("pm", 0)
+                server.isPassworded = jsonServerData.getBoolean("pa", false)
                 server.mode = jsonServerData.getString("gm", UNKNOWN)
                 server.hostname = jsonServerData.getString("hn", UNKNOWN)
                 server.language = jsonServerData.getString("la", UNKNOWN)

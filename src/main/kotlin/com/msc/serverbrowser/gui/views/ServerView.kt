@@ -4,6 +4,7 @@ import com.msc.serverbrowser.Client
 import com.msc.serverbrowser.data.entites.Player
 import com.msc.serverbrowser.data.entites.SampServer
 import com.msc.serverbrowser.gui.components.SampServerTable
+import javafx.collections.FXCollections
 import javafx.geometry.Orientation
 import javafx.scene.control.Button
 import javafx.scene.control.CheckBox
@@ -18,6 +19,7 @@ import javafx.scene.control.TableView
 import javafx.scene.control.TextField
 import javafx.scene.control.TitledPane
 import javafx.scene.control.ToggleGroup
+import javafx.scene.control.cell.CheckBoxTableCell
 import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
@@ -111,6 +113,13 @@ class ServerView(client: Client) {
         serverTable = SampServerTable(client)
         serverTable.maxHeight = Double.MAX_VALUE
 
+        val passwordedTableColumn = TableColumn<SampServer, Boolean>("\uf023")
+        passwordedTableColumn.prefWidth = 35.0
+        passwordedTableColumn.minWidth = 35.0
+        passwordedTableColumn.maxWidth = 35.0
+
+        passwordedTableColumn.style = "-fx-font-family: FontAwesome"
+
         val hostnameTableColumn = TableColumn<SampServer, String>(Client.getString("hostnameTableHeader"))
         playersTableColumn = TableColumn(Client.getString("playersTableHeader"))
         val gamemodeTableColumn = TableColumn<SampServer, String>(Client.getString("gamemodeTableHeader"))
@@ -118,6 +127,22 @@ class ServerView(client: Client) {
         val versionTableColum = TableColumn<SampServer, String>(Client.getString("versionTableHeader"))
         lastJoinTableColumn = TableColumn(Client.getString("columnLastJoin"))
 
+        passwordedTableColumn.cellValueFactory = PropertyValueFactory<SampServer, Boolean>("passworded")
+        passwordedTableColumn.setCellFactory {
+            object : TableCell<SampServer, Boolean>() {
+                init {
+                    style = "-fx-font-family: FontAwesome; -fx-alignment:center"
+                }
+
+                override fun updateItem(item: Boolean?, empty: Boolean) {
+                    text = if (empty.not() && item != null && item) {
+                        "\uf023"
+                    } else {
+                        ""
+                    }
+                }
+            }
+        }
         hostnameTableColumn.cellValueFactory = PropertyValueFactory<SampServer, String>("hostname")
         playersTableColumn.cellValueFactory = PropertyValueFactory<SampServer, String>("playersAndMaxPlayers")
         gamemodeTableColumn.cellValueFactory = PropertyValueFactory<SampServer, String>("mode")
@@ -136,7 +161,7 @@ class ServerView(client: Client) {
             }
         }
 
-        serverTable.columns.addAll(hostnameTableColumn, playersTableColumn, gamemodeTableColumn, languageTableColumn, versionTableColum, lastJoinTableColumn)
+        serverTable.columns.addAll(passwordedTableColumn, hostnameTableColumn, playersTableColumn, gamemodeTableColumn, languageTableColumn, versionTableColum, lastJoinTableColumn)
         serverTable.columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
 
         /**
@@ -168,6 +193,7 @@ class ServerView(client: Client) {
         gamemodeFilterTextField = TextField()
         languageFilterTextField = TextField()
         versionFilterComboBox = ComboBox()
+        versionFilterComboBox.items = FXCollections.observableArrayList("", "0.3a", "0.3c", "0.3d", "0.3e", "0.3x", "0.3z", "0.3.7", "0.3.8", "0.3.DL")
 
         val filterPanelContent = GridPane()
         with(filterPanelContent) {
