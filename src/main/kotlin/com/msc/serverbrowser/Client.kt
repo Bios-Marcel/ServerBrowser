@@ -350,12 +350,19 @@ class Client : Application() {
 
         /**
          * ResourceBundle which contains all the localized strings.
+         *
+         * Using `lateinit`, since a method is used to avoid code duplication.
          */
-        var languageResourceBundle: ResourceBundle
+        lateinit var languageResourceBundle: ResourceBundle
 
         init {
             createFolderStructure()
+            applyCurrentLanguage()
+        }
+
+        fun applyCurrentLanguage() {
             val locale = Locale(ClientPropertiesController.getProperty(LanguageProperty))
+            Locale.setDefault(locale)
             languageResourceBundle = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale)
         }
 
