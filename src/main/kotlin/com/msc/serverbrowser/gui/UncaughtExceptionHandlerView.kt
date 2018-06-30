@@ -67,9 +67,11 @@ class UncaughtExceptionHandlerView
         whatDoHeader.font = Font.font(whatDoHeader.font.family, FontWeight.BOLD, 12.0)
         whatDoHeader.maxHeight = java.lang.Double.MAX_VALUE
 
+        val trimmedStackTrace = trimStackTrace(stackTrace.text)
+
         val whatDo = Hyperlink("Create an issue on Github.")
         whatDo.isUnderline = true
-        whatDo.setOnAction { controller.onOpenGithubIssue(message.text, stackTrace.text) }
+        whatDo.setOnAction { controller.onOpenGithubIssue(message.text ?: "Empty", trimmedStackTrace) }
 
         val information = VBox(5.0, messageHeader, message, whatDoHeader, whatDo, stackTraceHeader, stackTrace)
         information.padding = Insets(0.0, 30.0, 0.0, 35.0)
@@ -91,6 +93,18 @@ class UncaughtExceptionHandlerView
 
         root = VBox(5.0, content, buttonBar)
         VBox.setVgrow(content, Priority.ALWAYS)
+    }
+
+    /**
+     * Reduces the stacktrace size, but keeps all application specific class paths.
+     */
+    private fun trimStackTrace(stackTrace: String): String {
+        return stackTrace
+                //Remove everything that isn't part of my classpath
+                .replace("at (?!com\\.msc).*?([A-Z])".toRegex(), "$1")
+                //There will obviously be no non-java / kotlin files
+                .replace(".java", "")
+                .replace(".kt", "")
     }
 
     /**

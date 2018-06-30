@@ -23,7 +23,7 @@ class UncaughtExceptionHandlerController {
      */
     fun onOpenGithubIssue(errorMessage: String, stackTrace: String) {
         val message = StringBuilder(700)
-        val stacktraceMarkdown = "```$stackTrace```"
+        val stacktraceMarkdown = "```\n$stackTrace```"
 
         message
                 .append("<!--")
