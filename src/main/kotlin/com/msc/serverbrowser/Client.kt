@@ -73,14 +73,7 @@ class Client : Application() {
         loadUI(primaryStage)
         primaryStage.titleProperty().bind(mainController.titleProperty)
 
-        // Only update if not in development mode
-        if (!isDevelopmentModeActivated) {
-            if (File(PathConstants.SAMPEX_TEMP_JAR).exists()) {
-                finishUpdate()
-            } else if (ClientPropertiesController.getProperty(AutomaticUpdatesProperty)) {
-                checkForUpdates()
-            }
-        }
+        checkForUpdates()
     }
 
     private fun loadUIAndGetController(stage: Stage): MainController {
@@ -158,41 +151,55 @@ class Client : Application() {
     fun checkForUpdates() {
         Logging.info("Checking for updates.")
 
+        // Only update if not in development mode
+        if (isDevelopmentModeActivated) {
+            return
+        }
+
         if (updateOngoingProperty.get()) {
             // If an update is ongoing already, then we won't start another.
             return
         }
 
-        mainController.progressProperty().set(0.0)
-        mainController.setGlobalProgressText(getString("checkingForUpdates"))
+        if (ClientPropertiesController.getProperty(AutomaticUpdatesProperty)) {
+            mainController.progressProperty().set(0.0)
+            mainController.setGlobalProgressText(getString("checkingForUpdates"))
 
-        Thread {
-            updateOngoingProperty.set(true)
-            try {
-                if (UpdateUtility.isUpToDate) {
-                    Logging.info("Client is up to date.")
-                } else {
-                    Platform.runLater {
-                        mainController.progressProperty().set(0.1)
-                        mainController.setGlobalProgressText(getString("downloadingUpdate"))
+            Thread {
+                updateOngoingProperty.set(true)
+
+                try {
+                    if (UpdateUtility.isUpToDate) {
+                        //If the client think that it isn't up to date, we won't download an update nor use an already downloaded one.
+                        Logging.info("Client is up to date.")
+                    } else {
+                        Logging.info("An update is available.")
+                        //If there is already a launcher update on this client, we apply that first.
+                        if (File(PathConstants.SAMPEX_TEMP_JAR).exists()) {
+                            finishUpdate()
+                        } else {
+                            Platform.runLater {
+                                mainController.progressProperty().set(0.1)
+                                mainController.setGlobalProgressText(getString("downloadingUpdate"))
+                            }
+                            Logging.info("Downloading update.")
+                            downloadUpdate()
+                            Logging.info("Download of the updated has been finished.")
+                            Platform.runLater { displayUpdateNotification() }
+                        }
                     }
-                    Logging.info("Downloading update.")
-                    downloadUpdate()
-                    Logging.info("Download of the updated has been finished.")
-                    Platform.runLater { displayUpdateNotification() }
+                } catch (exception: IOException) {
+                    Logging.warn("Couldn't check for newer version.", exception)
+                    Platform.runLater { displayCantRetrieveUpdate() }
                 }
-            } catch (exception: IOException) {
 
-                Logging.warn("Couldn't check for newer version.", exception)
-                Platform.runLater { displayCantRetrieveUpdate() }
-            }
-
-            Platform.runLater {
-                mainController.setGlobalProgressText("")
-                mainController.progressProperty().set(0.0)
-            }
-            updateOngoingProperty.set(false)
-        }.start()
+                Platform.runLater {
+                    mainController.setGlobalProgressText("")
+                    mainController.progressProperty().set(0.0)
+                }
+                updateOngoingProperty.set(false)
+            }.start()
+        }
     }
 
     /**
@@ -275,6 +282,7 @@ class Client : Application() {
 
     private fun finishUpdate() {
         try {
+            Logging.info("Applying update")
             FileUtility.copyOverwrite(PathConstants.SAMPEX_TEMP_JAR, PathConstants.OWN_JAR.path)
             ClientPropertiesController.setProperty(ShowChangelogProperty, true)
             Files.delete(Paths.get(PathConstants.SAMPEX_TEMP_JAR))
