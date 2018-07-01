@@ -18,53 +18,60 @@ import java.util.stream.IntStream
  */
 object UpdateUtility {
     /**
-     *
-     *
      * The current version of this application.
-     *
-     *
      *
      * For the record: the old version scheme was X.X.X, increasing the first only when gigantic
      * changes where made, the second when new features where added and such and the last one when
      * minor changes to the ui, language or whatever where made.
      *
-     *
-     *
      * In the new version scheme i will include the major version of the compatible jre version,
      * since in the feature i'll to know this as for having to update the jre as well.
-     *
      */
     const val VERSION = "8.6.1"
 
+    /** Username/Repository on GitHub. */
+    private const val TARGET_REPOSITORY_FOR_UPDATES = "Bios-Marcel/ServerBrowser"
+
     /**
-     * Checks if the currently installed version is the latest.
+     * Retrieves the the latest applicable version from GitHub.
      *
-     * @return true if it is up to date, otherwise false
+     * Depending on the clients settings, the result might or might not be a prerelease.
+     *
      * @throws IOException if the latest tag name couldn't be retrieved.
      */
-    val isUpToDate: Boolean
-        @Throws(IOException::class)
-        get() {
-            val latestRelease = release.get()
-            return if (latestRelease.isPrerelease && !ClientPropertiesController.getProperty(DownloadPreReleasesProperty)) {
-                true
-            } else compareVersions(VERSION, latestRelease.tagName) != CompareResult.LESS
-
-        }
+    @Throws(IOException::class)
+    private fun getLatestAvailableRelease(): GHRelease? {
+        val usePreReleases = ClientPropertiesController.getProperty(DownloadPreReleasesProperty)
+        val gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build()
+        val repository = gitHub.getRepository(TARGET_REPOSITORY_FOR_UPDATES)
+        return repository
+                .listReleases()
+                .asList()
+                .stream()
+                //Get all non preReleases and preReleases only if those are supposed to be used
+                .filter { it.isPrerelease.not() || it.isPrerelease == usePreReleases }
+                //We only want the latest one
+                .findFirst()
+                //If nothing could be found, there is no version available and therefore no update
+                .orElse(null)
+    }
 
     /**
-     * @return a [GHRelease] for the latest ServerBrowser release
+     * Returns the latest availableUpdateRelease.
+     *
+     * @return a [GHRelease] for the latest ServerBrowser update or `null`
      * @throws IOException if there was an error querying GitHub
      */
-    val release: Optional<GHRelease>
+    val availableUpdateRelease: GHRelease?
         @Throws(IOException::class)
         get() {
-            val gitHub = GitHubBuilder.fromEnvironment().withRateLimitHandler(RateLimitHandler.FAIL).build()
-            val repository = gitHub.getRepository("Bios-Marcel/ServerBrowser")
-            val releases = repository.listReleases().asList()
-            return if (!releases.isEmpty()) {
-                Optional.ofNullable(releases[0])
-            } else Optional.empty()
+            val latestAvailableRelease = getLatestAvailableRelease() ?: return null
+
+            if (compareVersions(latestAvailableRelease.tagName, VERSION) == CompareResult.GREATER) {
+                return latestAvailableRelease
+            }
+
+            return null
         }
 
     /**
@@ -94,8 +101,8 @@ object UpdateUtility {
         }
 
         // Split Versions into their subversions;
-        val versionOneParts = trimmedOne.split("[.]".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
-        val versionTwoParts = trimmedTwo.split("[.]".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+        val versionOneParts = trimmedOne.split("[.]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val versionTwoParts = trimmedTwo.split("[.]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         // Do first comparison
         val longest = Integer.max(versionOneParts.size, versionTwoParts.size)

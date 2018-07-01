@@ -30,6 +30,7 @@ import javafx.scene.control.TextField
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import javafx.util.Duration
+import org.kohsuke.github.GHRelease
 import java.awt.Desktop
 import java.io.File
 import java.io.FileNotFoundException
@@ -169,11 +170,13 @@ class Client : Application() {
                 updateOngoingProperty.set(true)
 
                 try {
-                    if (UpdateUtility.isUpToDate) {
+                    val availableUpdateRelease = UpdateUtility.availableUpdateRelease
+                    if (availableUpdateRelease == null) {
                         //If the client think that it isn't up to date, we won't download an update nor use an already downloaded one.
                         Logging.info("Client is up to date.")
                     } else {
                         Logging.info("An update is available.")
+
                         //If there is already a launcher update on this client, we apply that first.
                         if (File(PathConstants.SAMPEX_TEMP_JAR).exists()) {
                             finishUpdate()
@@ -182,22 +185,24 @@ class Client : Application() {
                                 mainController.progressProperty().set(0.1)
                                 mainController.setGlobalProgressText(getString("downloadingUpdate"))
                             }
-                            Logging.info("Downloading update.")
-                            downloadUpdate()
-                            Logging.info("Download of the updated has been finished.")
+
+                            downloadUpdateFromRelease(availableUpdateRelease)
                             Platform.runLater { displayUpdateNotification() }
                         }
                     }
                 } catch (exception: IOException) {
                     Logging.warn("Couldn't check for newer version.", exception)
                     Platform.runLater { displayCantRetrieveUpdate() }
+                } finally {
+                    //Those steps have to be performed in finally, since we never want the text or the progress to stay
+                    //no matter if the update was successful or not.
+                    Platform.runLater {
+                        mainController.setGlobalProgressText("")
+                        mainController.progressProperty().set(0.0)
+                    }
+                    updateOngoingProperty.set(false)
                 }
 
-                Platform.runLater {
-                    mainController.setGlobalProgressText("")
-                    mainController.progressProperty().set(0.0)
-                }
-                updateOngoingProperty.set(false)
             }.start()
         }
     }
@@ -205,17 +210,14 @@ class Client : Application() {
     /**
      * Downloads the latest version and restarts the client.
      */
-    private fun downloadUpdate() {
+    private fun downloadUpdateFromRelease(release: GHRelease) {
         try {
-            val releaseOptional = UpdateUtility.release
-
-            if (releaseOptional.isPresent) {
-                val release = releaseOptional.get()
-                val updateUrl = release.assets[0].browserDownloadUrl
-                val url = URI(updateUrl)
-                FileUtility.downloadFile(url.toURL(), PathConstants.SAMPEX_TEMP_JAR, mainController
-                        .progressProperty(), release.assets[0].size.toInt().toDouble())
-            }
+            Logging.info("Downloading update (Version: ${release.tagName}).")
+            val updateUrl = release.assets[0].browserDownloadUrl
+            val url = URI(updateUrl)
+            FileUtility.downloadFile(url.toURL(), PathConstants.SAMPEX_TEMP_JAR, mainController
+                    .progressProperty(), release.assets[0].size.toInt().toDouble())
+            Logging.info("Download of the updated has been finished.")
         } catch (exception: IOException) {
             Logging.error("Couldn't retrieve update.", exception)
         } catch (exception: URISyntaxException) {
