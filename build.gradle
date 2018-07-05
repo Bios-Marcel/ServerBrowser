@@ -49,7 +49,8 @@ sourceSets {
 
 dependencies {
     //Used for registering global keyboard listeners in order to enable custom keybindings
-    compile 'com.1stleg:jnativehook:2.1.+'
+    demoCompile 'com.1stleg:jnativehook:2.1.+'
+
     //Used for sotrage of settings and so on (user data)
     compile 'org.xerial:sqlite-jdbc:3.19.+'
     //Used to deserialize the replies i get from sa-mp servers api
