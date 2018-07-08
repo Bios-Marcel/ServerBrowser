@@ -6,8 +6,11 @@ import com.msc.serverbrowser.util.basic.ArrayUtility
 import org.kohsuke.github.GHRelease
 import org.kohsuke.github.GitHubBuilder
 import org.kohsuke.github.RateLimitHandler
+import java.io.FileInputStream
 import java.io.IOException
-import java.util.Optional
+import java.net.URL
+import java.nio.file.Files
+import java.util.*
 import java.util.stream.IntStream
 
 /**
@@ -27,10 +30,20 @@ object UpdateUtility {
      * In the new version scheme i will include the major version of the compatible jre version,
      * since in the feature i'll to know this as for having to update the jre as well.
      */
-    const val VERSION = "8.6.2"
+    val VERSION = readVersionNumber()
 
     /** Username/Repository on GitHub. */
     private const val TARGET_REPOSITORY_FOR_UPDATES = "Bios-Marcel/ServerBrowser"
+
+    fun readVersionNumber(): String {
+        val versionFile = UpdateUtility::class.java.getResourceAsStream("/com/msc/serverbrowser/version.properties")
+        val properties = Properties()
+        versionFile.use {
+            properties.load(it)
+        }
+
+        return properties.getProperty("version", "0.0.1")
+    }
 
     /**
      * Retrieves the the latest applicable version from GitHub.
