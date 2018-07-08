@@ -23,6 +23,7 @@ deploy:
   api_key:
     secure: r8rAoVlyhotvLI/3mqCRJoIzBtOmHQOU21NP0KZtc+sa77orttoWj7d3GyxOATqxf7LOZHtTKBzjmHEbL0mhBm+EoE3hIUh5u0imo4C07C27Lz7RDpDQkvk0xBEe41PlzeIyjqwiCMGDvKz9GlBs+JzZ+GVZJgW+dossQRCaakd0tlS0xR1SFvGapi/ukUW+pUOggwvQ55FRYGuSZy3+2YK/BGCnEK7AmUVUM9LFdKh5dZT7XzXzs+q1bHfS4GEjNRqqsyn+k5DSPhOgrsh+WQ5OB8Q7Za+t8WFa0nfyDhREubQLgHb2119nUZFrvZ/Ag4piBw9YV7D9KV6Lrdcjmfd1x5g2YXT7C017CNLgzHZPkS5hEK4rhl7N7OcNSitVCKJGXHwbL+gta9QGl+vsVB84Safra3EdQKwi9PQFqwALj1owcqnEAhKxpCs7fHwz599rzdnh4iB/i8ehc/Eoxk176e1JM61bwk3TvDgDV1FTObC3naA63X3Rqt37FzUonN8n+a3b7A6R8zmcbl/xo8/AGR1pJjfpeWJsTpJUKYyYwjO2oZ9FifYCPHc67p+pD6NMGaRb888yuX6RZ9rxA9xKMjgPwkSMkgVVf6TCwO7A2EpzqkwPhp7xjCVBUabDLNFkga3gtfMd3CQj9hRSoOpRHos+FJzixO9B2jNiBdY=
   file: "/build/libs/launcher.jar"
+  skip_cleanup: true
   on:
     repo: Bios-Marcel/ServerBrowser
     branch: master
