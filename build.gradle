@@ -1,7 +1,6 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url 'https://jitpack.io' }
     }
 
     ext.kotlin_version = '1.2.51'
@@ -9,18 +8,22 @@ buildscript {
         //Used to build a shadow jar (contains all its dependencies, putting aside the jre)
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.+'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
         classpath 'com.layer:gradle-git-repo-plugin:2.0.+'
     }
 }
 
 apply plugin: 'application'
 apply plugin: 'kotlin'
-apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 mainClassName = 'com.msc.serverbrowser.Client'
+
+sourceSets {
+    demo.kotlin.srcDirs += 'src/demo/kotlin'
+    demo.compileClasspath += main.output
+    demo.compileClasspath += main.compileClasspath
+}
 
 compileKotlin {
     kotlinOptions {
@@ -49,12 +52,6 @@ repositories {
     }
 }
 
-sourceSets {
-    demo.kotlin.srcDirs += 'src/demo/kotlin'
-    demo.compileClasspath += main.output
-    demo.compileClasspath += main.compileClasspath
-}
-
 dependencies {
     //Used for registering global keyboard listeners in order to enable custom keybindings
     demoCompile 'com.1stleg:jnativehook:2.1.+'
@@ -71,8 +68,13 @@ dependencies {
     compile 'com.github.albfernandez:juniversalchardet:2.0.+'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0-M4'
-    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.0-M4'
+    //Dependencies for testing
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.2.0")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.2.0")
+}
+
+test {
+    useJUnitPlatform()
 }
 
 /*

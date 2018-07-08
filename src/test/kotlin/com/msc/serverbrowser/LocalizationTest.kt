@@ -138,9 +138,9 @@ class LocalizationTest {
             val keysInResourceBundle = langProperties.keySet().size.toLong()
             assertEquals(numberOfKeysInFile, keysInResourceBundle, "The file contains $numberOfKeysInFile keys, but the ResourceBundle contains only $keysInResourceBundle.")
         } catch (exception: IOException) {
-            fail(exception)
+            fail<Nothing>(exception)
         } catch (exception: URISyntaxException) {
-            fail(exception)
+            fail<Nothing>(exception)
         }
 
     }
