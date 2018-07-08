@@ -26,7 +26,16 @@ compileKotlin {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    //Overwriting the launchers version number, to assure its correct in the deployed build
+    File propsFile = new File('src/main/resources/com/msc/serverbrowser/version.properties')
+    Properties props = new Properties()
+    props.load(propsFile.newDataInputStream())
+
+    props.setProperty('version', projectVersion)
+    props.store(propsFile.newWriter(), "Do not change manually, only change gradle.properties")
 }
+
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = '1.8'
@@ -77,14 +86,6 @@ wrapper {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
-    //Overwriting the launchers version number, to assure its correct in the deployed build
-    File propsFile = new File('src/main/resources/com/msc/serverbrowser/version.properties')
-    Properties props = new Properties()
-    props.load(propsFile.newDataInputStream())
-
-    props.setProperty('version', projectVersion)
-    props.store(propsFile.newWriter(), "Do not change manually, only change gradle.properties")
-
     baseName = 'launcher'
     //Those are `null` since we only want baseName.jar as our filename.
     version = null
