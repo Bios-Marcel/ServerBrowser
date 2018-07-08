@@ -18,7 +18,8 @@ env:
 after_success:
   # Tag release with current verson set in gradle.properties
   - test $TRAVIS_BRANCH = "master" &&
-    git tag `sed -n 's/^projectVersion = //p' gradle.properties`
+    git tag `sed -n 's/^projectVersion = //p' gradle.properties` &&
+    git push
 deploy:
   provider: releases
   api_key:
