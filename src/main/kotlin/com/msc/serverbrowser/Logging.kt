@@ -1,4 +1,4 @@
-package com.msc.serverbrowser.logging
+package com.msc.serverbrowser
 
 import com.msc.serverbrowser.constants.PathConstants
 
@@ -14,7 +14,7 @@ import java.util.logging.SimpleFormatter
  * @author Marcel
  * @since 06.07.2017
  */
-object Logging {
+private object Logging {
     private val instance: Logger = Logger.getAnonymousLogger()
 
     init {
@@ -37,7 +37,7 @@ object Logging {
      * @param message The string message (or a key in the message catalog)
      * @param throwable Throwable associated with log message.
      */
-    private fun log(logLevel: Level, message: String, throwable: Throwable) {
+    fun log(logLevel: Level, message: String, throwable: Throwable) {
         instance.log(logLevel, message, throwable)
     }
 
@@ -47,53 +47,52 @@ object Logging {
      * @param logLevel One of the message level identifiers, e.g., SEVERE
      * @param message The string message (or a key in the message catalog)
      */
-    private fun log(logLevel: Level, message: String) {
+    fun log(logLevel: Level, message: String) {
         instance.log(logLevel, message)
     }
+}
 
-    /**
-     * @param message The string message (or a key in the message catalog)
-     */
-    @JvmStatic
-    fun info(message: String) {
-        log(Level.INFO, message)
-    }
+/**
+ * @param message The string message (or a key in the message catalog)
+ */
+fun info(message: String) {
+    Logging.log(Level.INFO, message)
+}
 
-    /**
-     * @param message The string message (or a key in the message catalog)
-     * @param throwable the [Throwable] which has caused this logging action
-     */
-    fun info(message: String, throwable: Throwable) {
-        log(Level.INFO, message, throwable)
-    }
+/**
+ * @param message The string message (or a key in the message catalog)
+ * @param throwable the [Throwable] which has caused this logging action
+ */
+fun info(message: String, throwable: Throwable) {
+    Logging.log(Level.INFO, message, throwable)
+}
 
-    /**
-     * @param message The string message (or a key in the message catalog)
-     */
-    fun warn(message: String) {
-        log(Level.WARNING, message)
-    }
+/**
+ * @param message The string message (or a key in the message catalog)
+ */
+fun warn(message: String) {
+    Logging.log(Level.WARNING, message)
+}
 
-    /**
-     * @param message The string message (or a key in the message catalog)
-     * @param throwable the [Throwable] which has caused this logging action
-     */
-    fun warn(message: String, throwable: Throwable) {
-        log(Level.WARNING, message, throwable)
-    }
+/**
+ * @param message The string message (or a key in the message catalog)
+ * @param throwable the [Throwable] which has caused this logging action
+ */
+fun warn(message: String, throwable: Throwable) {
+    Logging.log(Level.WARNING, message, throwable)
+}
 
-    /**
-     * @param message The string message (or a key in the message catalog)
-     */
-    fun error(message: String) {
-        log(Level.SEVERE, message)
-    }
+/**
+ * @param message The string message (or a key in the message catalog)
+ */
+fun severe(message: String) {
+    Logging.log(Level.SEVERE, message)
+}
 
-    /**
-     * @param message The string message (or a key in the message catalog)
-     * @param throwable the [Throwable] which has caused this logging action
-     */
-    fun error(message: String, throwable: Throwable) {
-        log(Level.SEVERE, message, throwable)
-    }
+/**
+ * @param message The string message (or a key in the message catalog)
+ * @param throwable the [Throwable] which has caused this logging action
+ */
+fun severe(message: String, throwable: Throwable) {
+    Logging.log(Level.SEVERE, message, throwable)
 }

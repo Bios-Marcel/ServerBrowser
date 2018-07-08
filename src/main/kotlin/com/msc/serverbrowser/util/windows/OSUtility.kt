@@ -1,7 +1,7 @@
 package com.msc.serverbrowser.util.windows
 
-import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.basic.StringUtility
+import com.msc.serverbrowser.warn
 import java.awt.Desktop
 import java.io.IOException
 import java.net.URI
@@ -36,9 +36,9 @@ object OSUtility {
             val url = URL(fixedUrl)
             browse(URI(url.protocol, url.userInfo, url.host, url.port, url.path, url.query, url.ref))
         } catch (exception: IOException) {
-            Logging.warn("Couldn't visit website '$urlAsString'", exception)
+            warn("Couldn't visit website '$urlAsString'", exception)
         } catch (exception: URISyntaxException) {
-            Logging.warn("Couldn't visit website '$urlAsString'", exception)
+            warn("Couldn't visit website '$urlAsString'", exception)
         }
 
     }
@@ -58,7 +58,7 @@ object OSUtility {
                 try {
                     Desktop.getDesktop().browse(uri)
                 } catch (exception: IOException) {
-                    Logging.warn("Couldn't visit website '$uri'", exception)
+                    warn("Couldn't visit website '$uri'", exception)
                 }
             }.start()
         }

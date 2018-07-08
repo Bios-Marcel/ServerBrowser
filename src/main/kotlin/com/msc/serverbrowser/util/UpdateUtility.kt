@@ -60,7 +60,7 @@ object UpdateUtility {
      * Returns the latest availableUpdateRelease.
      *
      * @return a [GHRelease] for the latest ServerBrowser update or `null`
-     * @throws IOException if there was an error querying GitHub
+     * @throws IOException if there was an severe querying GitHub
      */
     val availableUpdateRelease: GHRelease?
         @Throws(IOException::class)

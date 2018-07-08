@@ -36,6 +36,7 @@ class MainView {
     private val menuItemVersion: ToggleButton
     private val menuItemFiles: ToggleButton
     private val menuItemSettings: ToggleButton
+    private val menuItemKeyBinder: ToggleButton
 
     private val contentScrollPane: ScrollPane
 
@@ -71,9 +72,11 @@ class MainView {
         menuItemFiles.styleClass.add(menuItemStyleClass)
         menuItemSettings = ToggleButton("\uf013")
         menuItemSettings.styleClass.add(menuItemStyleClass)
+        menuItemKeyBinder = ToggleButton("\uf11c")
+        menuItemKeyBinder.styleClass.add(menuItemStyleClass)
 
-        menuItemToggleGroup.toggles.addAll(menuItemServers, menuItemUser, menuItemVersion, menuItemFiles, menuItemSettings)
-        menuContainer.children.addAll(menuItemServers, menuItemUser, menuItemVersion, menuItemFiles, menuItemSettings)
+        menuItemToggleGroup.toggles.addAll(menuItemServers, menuItemUser, menuItemVersion, menuItemFiles, menuItemSettings, menuItemKeyBinder)
+        menuContainer.children.addAll(menuItemServers, menuItemUser, menuItemVersion, menuItemFiles, menuItemSettings/*, menuItemKeyBinder*/)
 
         val menuScrollPane = ScrollPane(menuContainer)
         menuScrollPane.isFitToHeight = true
@@ -228,6 +231,16 @@ class MainView {
      */
     fun setMenuItemSettingsAction(handler: EventHandler<ActionEvent>) {
         menuItemSettings.onAction = handler
+    }
+
+    /**
+     * Sets the [EventHandler] to handle all [ActionEvent]s on the
+     * [.menuItemKeyBinder].
+     *
+     * @param handler [EventHandler] to be set
+     */
+    fun setMenuItemKeyBinderAction(handler: EventHandler<ActionEvent>) {
+        menuItemKeyBinder.onAction = handler
     }
 
     /**

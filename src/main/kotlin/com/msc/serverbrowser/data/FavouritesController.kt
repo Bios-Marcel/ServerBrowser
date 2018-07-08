@@ -2,8 +2,10 @@ package com.msc.serverbrowser.data
 
 import com.msc.serverbrowser.constants.PathConstants
 import com.msc.serverbrowser.data.entites.SampServer
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.info
+import com.msc.serverbrowser.severe
 import com.msc.serverbrowser.util.samp.SampQuery
+import com.msc.serverbrowser.warn
 import java.io.IOException
 import java.net.SocketException
 import java.net.UnknownHostException
@@ -48,7 +50,7 @@ object FavouritesController {
                         servers.add(server)
                     }
                 } catch (exception: SQLException) {
-                    Logging.error("Error while retrieving favourites", exception)
+                    severe("Error while retrieving favourites", exception)
                 }
             }
 
@@ -80,7 +82,7 @@ object FavouritesController {
                 })
             }
         } catch (exception: SocketException) {
-            Logging.warn("Error updating server information.", exception)
+            warn("Error updating server information.", exception)
             server.hostname = UNKNOWN
             server.language = UNKNOWN
             server.mode = UNKNOWN
@@ -90,7 +92,7 @@ object FavouritesController {
             server.players = 0
             server.maxPlayers = 0
         } catch (exception: UnknownHostException) {
-            Logging.warn("Error updating server information.", exception)
+            warn("Error updating server information.", exception)
             server.hostname = UNKNOWN
             server.language = UNKNOWN
             server.mode = UNKNOWN
@@ -101,7 +103,7 @@ object FavouritesController {
             server.maxPlayers = 0
         }
 
-        Logging.info("Adding server to favourites: $server")
+        info("Adding server to favourites: $server")
         addServerToFavourites(server)
         return server
     }
@@ -114,7 +116,7 @@ object FavouritesController {
      */
     fun addServerToFavourites(server: SampServer): Boolean {
         if (isFavourite(server)) {
-            Logging.info("Server wasn't added, because it already is a favourite.")
+            info("Server wasn't added, because it already is a favourite.")
         } else {
             val query = "INSERT INTO favourite(hostname, ip, lagcomp, language, players, maxplayers, mode, port, version, website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
             try {
@@ -133,7 +135,7 @@ object FavouritesController {
                     return statement.execute()
                 }
             } catch (exception: SQLException) {
-                Logging.error("Error while adding server to favourites.", exception)
+                severe("Error while adding server to favourites.", exception)
             }
 
         }
@@ -175,7 +177,7 @@ object FavouritesController {
                 return statement.execute()
             }
         } catch (exception: SQLException) {
-            Logging.error("Error while updaing server in favourites.", exception)
+            severe("Error while updaing server in favourites.", exception)
             return false
         }
 
@@ -199,7 +201,7 @@ object FavouritesController {
                 return statement.execute()
             }
         } catch (exception: SQLException) {
-            Logging.error("Error while deleting server from favourites.", exception)
+            severe("Error while deleting server from favourites.", exception)
             return false
         }
 
@@ -242,7 +244,7 @@ object FavouritesController {
 
             return legacyFavourites
         } catch (exception: IOException) {
-            Logging.warn("Error loading legacy favourites.", exception)
+            warn("Error loading legacy favourites.", exception)
             return legacyFavourites
         }
     }

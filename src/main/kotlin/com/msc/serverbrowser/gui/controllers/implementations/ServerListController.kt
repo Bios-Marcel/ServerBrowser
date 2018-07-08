@@ -11,7 +11,7 @@ import com.msc.serverbrowser.data.entites.SampServer
 import com.msc.serverbrowser.gui.components.SampServerTableMode
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
 import com.msc.serverbrowser.gui.views.ServerView
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import com.msc.serverbrowser.util.ServerUtility
 import com.msc.serverbrowser.util.basic.StringUtility
 import com.msc.serverbrowser.util.samp.GTAController
@@ -194,7 +194,7 @@ class ServerListController(private val client: Client, private val mainControlle
                     }
                 }
             } catch (exception: IOException) {
-                Logging.error("Couldn't retrieve data from announce api.", exception)
+                severe("Couldn't retrieve data from announce api.", exception)
                 Platform.runLater { view.serverTable.placeholder = Label(Client.getString("errorFetchingServers")) }
             }
 

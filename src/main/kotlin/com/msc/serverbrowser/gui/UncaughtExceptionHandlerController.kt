@@ -1,13 +1,13 @@
 package com.msc.serverbrowser.gui
 
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import com.msc.serverbrowser.util.windows.OSUtility
 
 import java.net.URI
 import java.net.URISyntaxException
 
 /**
- * Viewcontroller for an error report dialog.
+ * Viewcontroller for an severe report dialog.
  *
  * @author Marcel
  * @since 06.03.2018
@@ -18,7 +18,7 @@ class UncaughtExceptionHandlerController {
      * Opens the webbrowser with the new issue Github-page and an already given issue title and
      * issue body, which already contains information about the exception, th os and the jvm.
      *
-     * @param errorMessage the error message which is also used as issue title
+     * @param errorMessage the severe message which is also used as issue title
      * @param stackTrace the stacktrace of the [Exception] which the issue is related to
      */
     fun onOpenGithubIssue(errorMessage: String, stackTrace: String) {
@@ -38,7 +38,7 @@ class UncaughtExceptionHandlerController {
                 .append(LINE_SEPARATOR)
                 .append("# Description of the Problem")
                 .append(LINE_SEPARATOR)
-                .append("PLEASE FILL IN - What have you done to cause the error?")
+                .append("PLEASE FILL IN - What have you done to cause the severe?")
                 .append(LINE_SEPARATOR)
                 .append("## Error message")
                 .append(LINE_SEPARATOR)
@@ -70,7 +70,7 @@ class UncaughtExceptionHandlerController {
             val uri = URI("https", "github.com", "/Bios-Marcel/ServerBrowser/issues/new", fragment, "")
             OSUtility.browse(uri)
         } catch (exception: URISyntaxException) {
-            Logging.error("Error reporting error", exception)
+            severe("Error reporting severe", exception)
         }
 
     }

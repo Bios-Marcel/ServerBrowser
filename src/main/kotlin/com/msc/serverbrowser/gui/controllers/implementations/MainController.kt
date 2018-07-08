@@ -5,13 +5,12 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.LastViewProperty
 import com.msc.serverbrowser.data.properties.SaveLastViewProperty
 import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
-import com.msc.serverbrowser.getWindow
 import com.msc.serverbrowser.gui.View
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
 import com.msc.serverbrowser.gui.views.FilesView
 import com.msc.serverbrowser.gui.views.MainView
 import com.msc.serverbrowser.gui.views.ServerView
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import javafx.application.Platform
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleStringProperty
@@ -24,8 +23,8 @@ import javafx.scene.control.Label
 import javafx.scene.control.ProgressBar
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import javafx.scene.layout.GridPane
 import javafx.scene.text.Font
-import javafx.stage.Stage
 import java.io.IOException
 
 /**
@@ -91,6 +90,7 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         mainView.setMenuItemVersionAction(EventHandler { onVersionMenuItemClicked() })
         mainView.setMenuItemFilesAction(EventHandler { onFilesMenuItemClicked() })
         mainView.setMenuItemSettingsAction(EventHandler { onSettingsMenuItemClicked() })
+        mainView.setMenuItemKeyBinderAction(EventHandler { onKeyBinderMenuItemClicked() })
     }
 
     private fun registerBottomBarHyperlinks() {
@@ -145,6 +145,10 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         activeView = loadView(View.SETTINGS)
     }
 
+    private fun onKeyBinderMenuItemClicked() {
+        activeView = loadView(View.KEY_BINDER)
+    }
+
     /**
      * Loads a specific view.
      *
@@ -163,6 +167,7 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
             View.SETTINGS -> loadSettingsView()
             View.USERNAME_CHANGER -> loadUsernameView()
             View.VERSION_CHANGER -> loadVersionChangerView()
+            View.KEY_BINDER -> loadKeyBinderView()
         }
 
         initViewData(view, loadedNode)
@@ -185,6 +190,16 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
         return serverView.rootPane
     }
 
+    private fun loadKeyBinderView(): Parent {
+/*        val keyBinderView = KeyBinderView()
+        val keyBinderController = KeyBinderController(keyBinderView)
+        keyBinderController.initialize()
+        activeSubViewController = keyBinderController
+        return keyBinderController.rootPane*/
+        return GridPane()
+
+    }
+
     private fun loadUsernameView() = loadFXML(UsernameController(), View.USERNAME_CHANGER)
 
     private fun loadVersionChangerView() = loadFXML(VersionChangeController(client), View.VERSION_CHANGER)
@@ -201,11 +216,11 @@ class MainController(val client: Client, val mainView: MainView) : ViewControlle
             loader.setController(controller)
             return loader.load()
         } catch (exception: IOException) {
-            Logging.error("Couldn't load view.", exception)
+            severe("Couldn't load view.", exception)
         } catch (exception: InstantiationException) {
-            Logging.error("Couldn't load view.", exception)
+            severe("Couldn't load view.", exception)
         } catch (exception: IllegalAccessException) {
-            Logging.error("Couldn't load view.", exception)
+            severe("Couldn't load view.", exception)
         }
 
         return Label("Error loading view.")

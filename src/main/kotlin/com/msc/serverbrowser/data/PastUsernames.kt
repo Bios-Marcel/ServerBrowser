@@ -1,6 +1,6 @@
 package com.msc.serverbrowser.data
 
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import java.sql.SQLException
 import java.text.MessageFormat
 import java.util.ArrayList
@@ -26,7 +26,7 @@ object PastUsernames {
                         usernames.add(resultSet.getString("username"))
                     }
                 } catch (exception: SQLException) {
-                    Logging.error("Error while retrieving past usernames", exception)
+                    severe("Error while retrieving past usernames", exception)
                 }
             }
 

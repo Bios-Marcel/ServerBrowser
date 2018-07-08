@@ -1,6 +1,6 @@
 package com.msc.serverbrowser.util.basic
 
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.warn
 import javafx.application.Platform
 import javafx.beans.property.DoubleProperty
 import java.io.File
@@ -50,7 +50,7 @@ object FileUtility {
      *
      * @param source source file
      * @param target target file/location
-     * @throws IOException if there was an error during the copy action
+     * @throws IOException if there was an severe during the copy action
      */
     @Throws(IOException::class)
     fun copyOverwrite(source: String, target: String) {
@@ -105,7 +105,7 @@ object FileUtility {
      *
      * @param url the files [URL]
      * @return the retrieved filesize
-     * @throws IOException if there was an error during the web request
+     * @throws IOException if there was an severe during the web request
      */
     @Throws(IOException::class)
     fun getOnlineFileSize(url: URL): Int {
@@ -127,7 +127,7 @@ object FileUtility {
      *
      * @param zipFilePath input zip file
      * @param outputLocation zip file output folder
-     * @throws IOException if there was an error reading the zip file or writing the unzipped data
+     * @throws IOException if there was an severe reading the zip file or writing the unzipped data
      */
     @JvmStatic
     @Throws(IOException::class)
@@ -179,10 +179,10 @@ object FileUtility {
         try {
             return HashingUtility.generateChecksum(file.absolutePath).equals(sha256Checksum, ignoreCase = true)
         } catch (exception: NoSuchAlgorithmException) {
-            Logging.warn("File invalid: " + file.absolutePath, exception)
+            warn("File invalid: " + file.absolutePath, exception)
             return false
         } catch (exception: IOException) {
-            Logging.warn("File invalid: " + file.absolutePath, exception)
+            warn("File invalid: " + file.absolutePath, exception)
             return false
         }
 
@@ -228,7 +228,7 @@ object FileUtility {
             try {
                 return Files.readAllLines(path, charset)
             } catch (exception: IOException) {
-                Logging.warn("Error loading $path with encoding $charset")
+                warn("Error loading $path with encoding $charset")
             }
 
         }

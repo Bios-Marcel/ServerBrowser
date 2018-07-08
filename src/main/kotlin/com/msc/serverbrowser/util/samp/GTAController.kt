@@ -10,12 +10,13 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.SampPathProperty
 import com.msc.serverbrowser.gui.View
 import com.msc.serverbrowser.gui.controllers.implementations.VersionChangeController
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import com.msc.serverbrowser.util.basic.HashingUtility
 import com.msc.serverbrowser.util.basic.StringUtility
 import com.msc.serverbrowser.util.unix.WineUtility
 import com.msc.serverbrowser.util.windows.OSUtility
 import com.msc.serverbrowser.util.windows.Registry
+import com.msc.serverbrowser.warn
 import javafx.beans.property.SimpleStringProperty
 import javafx.beans.property.StringProperty
 import javafx.scene.control.Alert
@@ -40,9 +41,9 @@ object GTAController {
     val usernameProperty: StringProperty = SimpleStringProperty(retrieveUsernameFromRegistry() ?: "")
 
     /**
-     * Returns the GTA path.
+     * Returns the path to GTA, eventually the path will be resolved if the current OS is not Windows.
      *
-     * @return [Optional] of GTA path or an empty [Optional] if GTA couldn't be found
+     * If a custom path has been set, that will be returned instead.
      */
     val gtaPath: String?
         get() {
@@ -60,15 +61,35 @@ object GTAController {
         }
 
     /**
-     * Should only be used if necessary.
+     * Returns the path to GTA without resolving it with `winepath`, no matter which OS the client runs on.
      *
-     * @return String of the GTA Path or null.
+     * If a custom path has been set, that will be returned instead.
      */
-    private val gtaPathFromRegistry: String?
+    val windowsStyleGtaPath: String?
         get() {
-            val retrievedPath = Registry
+            val savedProperty = ClientPropertiesController.getProperty(SampPathProperty)
+
+            if (savedProperty.isNotBlank()) {
+                return if (savedProperty.endsWith(File.separator)) {
+                    savedProperty
+                } else {
+                    savedProperty + File.separator
+                }
+            }
+
+            return windowsGtaPathFromRegistry
+        }
+
+    private val windowsGtaPathFromRegistry: String?
+        get() {
+            return Registry
                     .readString("HKCU\\Software\\SAMP", "gta_sa_exe")
                     ?.replace("gta_sa.exe", "")
+        }
+
+    private val gtaPathFromRegistry: String?
+        get() {
+            val retrievedPath = windowsGtaPathFromRegistry
 
             if (OSUtility.isWindows) {
                 return retrievedPath
@@ -93,7 +114,7 @@ object GTAController {
             val path = gtaPath ?: return Optional.empty()
 
             val file = File(path + "samp.dll")
-            if (!file.exists()) {
+            if (file.exists().not()) {
                 return Optional.empty()
             }
 
@@ -103,9 +124,9 @@ object GTAController {
                         .filter { candidate -> candidate.sampDllChecksum.equals(hashSum, ignoreCase = true) }
                         .findFirst()
             } catch (exception: NoSuchAlgorithmException) {
-                Logging.error("Error hashing installed samp.dll", exception)
+                severe("Error hashing installed samp.dll", exception)
             } catch (exception: IOException) {
-                Logging.error("Error hashing installed samp.dll", exception)
+                severe("Error hashing installed samp.dll", exception)
             }
 
             return Optional.empty()
@@ -157,7 +178,7 @@ object GTAController {
                 }
             }
         } catch (exception: IOException) {
-            Logging.warn("Couldn't connect to server.", exception)
+            warn("Couldn't connect to server.", exception)
 
             if (askUserIfHeWantsToConnectAnyways(client)) {
                 SAMPLauncher.connect(client, address, port, serverPassword)
@@ -227,7 +248,7 @@ object GTAController {
         try {
             Runtime.getRuntime().exec("taskkill /F /IM $processName")
         } catch (exception: IOException) {
-            Logging.error("Couldn't kill $processName", exception)
+            severe("Couldn't kill $processName", exception)
         }
 
     }

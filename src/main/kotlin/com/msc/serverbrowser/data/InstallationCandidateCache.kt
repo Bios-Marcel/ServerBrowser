@@ -2,8 +2,8 @@ package com.msc.serverbrowser.data
 
 import com.msc.serverbrowser.constants.PathConstants
 import com.msc.serverbrowser.data.insallationcandidates.InstallationCandidate
-import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.basic.FileUtility
+import com.msc.serverbrowser.warn
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -74,7 +74,7 @@ object InstallationCandidateCache {
                 return true
             }
         } catch (exception: IOException) {
-            Logging.warn("Error caching version.", exception)
+            warn("Error caching version.", exception)
         }
 
         return false

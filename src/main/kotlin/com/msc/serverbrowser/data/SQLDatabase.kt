@@ -1,7 +1,7 @@
 package com.msc.serverbrowser.data
 
 import com.msc.serverbrowser.constants.PathConstants
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
@@ -56,7 +56,7 @@ object SQLDatabase {
                 statement.execute(createTableSettings)
             }
         } catch (exception: SQLException) {
-            Logging.error("Error while initializing local Database connection.", exception)
+            severe("Error while initializing local Database connection.", exception)
         }
 
     }
@@ -64,7 +64,7 @@ object SQLDatabase {
     /**
      * @param query the query to be used for the [PreparedStatement]
      * @return a [PreparedStatement] using the given query
-     * @throws SQLException if a database access error occurs or this method is called on a closed
+     * @throws SQLException if a database access severe occurs or this method is called on a closed
      * connection
      */
     @Throws(SQLException::class)
@@ -82,7 +82,7 @@ object SQLDatabase {
         try {
             return sqlConnection.createStatement().execute(statement)
         } catch (exception: SQLException) {
-            Logging.error("Couldn't execute query.", exception)
+            severe("Couldn't execute query.", exception)
             return false
         }
 
@@ -99,7 +99,7 @@ object SQLDatabase {
         return try {
             executeGetResult(sqlConnection.prepareStatement(statement))
         } catch (exception: SQLException) {
-            Logging.error("Failed to execute SQL query!", exception)
+            severe("Failed to execute SQL query!", exception)
             null
         }
 
@@ -115,7 +115,7 @@ object SQLDatabase {
         return try {
             statement.executeQuery()
         } catch (exception: SQLException) {
-            Logging.error("Failed to execute SQL query!", exception)
+            severe("Failed to execute SQL query!", exception)
             null
         }
     }

@@ -1,7 +1,7 @@
 package com.msc.serverbrowser.data.properties
 
 import com.msc.serverbrowser.data.SQLDatabase
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import java.sql.SQLException
 import java.util.Objects
 
@@ -54,7 +54,7 @@ object ClientPropertiesController {
                     }
                 }
             } catch (exception: SQLException) {
-                Logging.error("Could not set the property as a String.", exception)
+                severe("Could not set the property as a String.", exception)
             }
 
         }
@@ -78,7 +78,7 @@ object ClientPropertiesController {
                 statement.execute()
             }
         } catch (exception: SQLException) {
-            Logging.error("Error setting property: $property to value $value", exception)
+            severe("Error setting property: $property to value $value", exception)
         }
 
     }

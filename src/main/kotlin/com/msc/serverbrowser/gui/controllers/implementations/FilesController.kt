@@ -9,9 +9,11 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
 import com.msc.serverbrowser.gui.controllers.interfaces.ViewController
 import com.msc.serverbrowser.gui.views.FilesView
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.info
+import com.msc.serverbrowser.severe
 import com.msc.serverbrowser.util.basic.FileUtility
 import com.msc.serverbrowser.util.basic.StringUtility
+import com.msc.serverbrowser.warn
 import javafx.event.EventHandler
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -67,11 +69,11 @@ class FilesController(private val filesView: FilesView) : ViewController {
                     .map { this.processSampChatlogTimestamps(it) }
                     .map { this.processSampColorCodes(it) }
                     .map { line -> "$line<br/>" }
-                    .forEach({ newContent.append(it) })
+                    .forEach { newContent.append(it) }
         } catch (exception: FileNotFoundException) {
-            Logging.info("Chatlog file doesn't exist.")
+            info("Chatlog file doesn't exist.")
         } catch (exception: IOException) {
-            Logging.error("Error loading chatlog.", exception)
+            severe("Error loading chatlog.", exception)
         }
 
         filesView.setChatLogTextAreaContent(newContent.toString())
@@ -131,7 +133,7 @@ class FilesController(private val filesView: FilesView) : ViewController {
                     .title(Client.getString("couldntClearChatLog"))
                     .message(Client.getString("checkLogsForMoreInformation")).build().showAndDismiss(Client.DEFAULT_TRAY_DISMISS_TIME)
 
-            Logging.warn("Couldn't clear chatlog", exception)
+            warn("Couldn't clear chatlog", exception)
         }
 
     }

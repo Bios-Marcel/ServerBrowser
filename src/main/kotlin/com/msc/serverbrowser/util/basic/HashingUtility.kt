@@ -22,7 +22,7 @@ object HashingUtility {
      *
      * @param file and name of a file that is to be verified
      * @return true The SHA-256 checksum or an empty string.
-     * @throws IOException if there was an error reading the file that is to be hashed
+     * @throws IOException if there was an severe reading the file that is to be hashed
      * @throws FileNotFoundException if the file that is to be hashed couldn't be found
      * @throws NoSuchAlgorithmException if the used Hashing Algorithm couldn't be found
      */

@@ -1,7 +1,7 @@
 package com.msc.serverbrowser.data
 
 import com.msc.serverbrowser.data.entites.SampServer
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import java.sql.SQLException
 import java.util.ArrayList
 import java.util.Optional
@@ -42,7 +42,7 @@ object ServerConfig {
                 return statement.execute()
             }
         } catch (exception: SQLException) {
-            Logging.error("Error while setting username.", exception)
+            severe("Error while setting username.", exception)
             return false
         }
 
@@ -87,7 +87,7 @@ object ServerConfig {
                 return statement.execute()
             }
         } catch (exception: SQLException) {
-            Logging.error("Error while setting last join time.", exception)
+            severe("Error while setting last join time.", exception)
             return false
         }
 
@@ -127,7 +127,7 @@ object ServerConfig {
                         }
                     }
                 } catch (exception: SQLException) {
-                    Logging.error("Error while retrieving previously joined servers.", exception)
+                    severe("Error while retrieving previously joined servers.", exception)
                 }
 
             }
@@ -163,13 +163,13 @@ object ServerConfig {
                             }
                         })
                     } catch (exception: SQLException) {
-                        Logging.error("Error while retrieving field: '$field of server: $ip:$port", exception)
+                        severe("Error while retrieving field: '$field of server: $ip:$port", exception)
                     }
 
                 }
             }
         } catch (exception: SQLException) {
-            Logging.error("Error getting field from server config.", exception)
+            severe("Error getting field from server config.", exception)
         }
 
         return Optional.empty()

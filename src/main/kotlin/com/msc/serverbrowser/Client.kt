@@ -17,7 +17,6 @@ import com.msc.serverbrowser.gui.View
 import com.msc.serverbrowser.gui.controllers.implementations.MainController
 import com.msc.serverbrowser.gui.controllers.implementations.SettingsController
 import com.msc.serverbrowser.gui.views.MainView
-import com.msc.serverbrowser.logging.Logging
 import com.msc.serverbrowser.util.UpdateUtility
 import com.msc.serverbrowser.util.basic.FileUtility
 import com.msc.serverbrowser.util.windows.OSUtility
@@ -150,7 +149,7 @@ class Client : Application() {
      * the user will be asked if he wants to update.
      */
     fun checkForUpdates() {
-        Logging.info("Checking for updates.")
+        info("Checking for updates.")
 
         // Only update if not in development mode
         if (isDevelopmentModeActivated) {
@@ -173,9 +172,9 @@ class Client : Application() {
                     val availableUpdateRelease = UpdateUtility.availableUpdateRelease
                     if (availableUpdateRelease == null) {
                         //If the client think that it isn't up to date, we won't download an update nor use an already downloaded one.
-                        Logging.info("Client is up to date.")
+                        info("Client is up to date.")
                     } else {
-                        Logging.info("An update is available.")
+                        info("An update is available.")
 
                         //If there is already a launcher update on this client, we apply that first.
                         if (File(PathConstants.SAMPEX_TEMP_JAR).exists()) {
@@ -191,7 +190,7 @@ class Client : Application() {
                         }
                     }
                 } catch (exception: IOException) {
-                    Logging.warn("Couldn't check for newer version.", exception)
+                    warn("Couldn't check for newer version.", exception)
                     Platform.runLater { displayCantRetrieveUpdate() }
                 } finally {
                     //Those steps have to be performed in finally, since we never want the text or the progress to stay
@@ -212,16 +211,16 @@ class Client : Application() {
      */
     private fun downloadUpdateFromRelease(release: GHRelease) {
         try {
-            Logging.info("Downloading update (Version: ${release.tagName}).")
+            info("Downloading update (Version: ${release.tagName}).")
             val updateUrl = release.assets[0].browserDownloadUrl
             val url = URI(updateUrl)
             FileUtility.downloadFile(url.toURL(), PathConstants.SAMPEX_TEMP_JAR, mainController
                     .progressProperty(), release.assets[0].size.toInt().toDouble())
-            Logging.info("Download of the updated has been finished.")
+            info("Download of the updated has been finished.")
         } catch (exception: IOException) {
-            Logging.error("Couldn't retrieve update.", exception)
+            severe("Couldn't retrieve update.", exception)
         } catch (exception: URISyntaxException) {
-            Logging.error("Couldn't retrieve update.", exception)
+            severe("Couldn't retrieve update.", exception)
         }
 
     }
@@ -284,13 +283,13 @@ class Client : Application() {
 
     private fun finishUpdate() {
         try {
-            Logging.info("Applying update")
+            info("Applying update")
             FileUtility.copyOverwrite(PathConstants.SAMPEX_TEMP_JAR, PathConstants.OWN_JAR.path)
             ClientPropertiesController.setProperty(ShowChangelogProperty, true)
             Files.delete(Paths.get(PathConstants.SAMPEX_TEMP_JAR))
             selfRestart()
         } catch (exception: IOException) {
-            Logging.error("Failed to update.", exception)
+            severe("Failed to update.", exception)
             val notification = TrayNotificationBuilder().title(getString("applyingUpdate"))
                     .message(getString("couldntApplyUpdate"))
                     .type(NotificationTypeImplementations.ERROR).build()
@@ -299,7 +298,7 @@ class Client : Application() {
                 try {
                     Desktop.getDesktop().open(File(PathConstants.SAMPEX_LOG))
                 } catch (couldntOpenlogfile: IOException) {
-                    Logging.warn("Error opening logfile.", couldntOpenlogfile)
+                    warn("Error opening logfile.", couldntOpenlogfile)
                 }
             }
 
@@ -332,7 +331,7 @@ class Client : Application() {
             builder.start()
             Platform.exit()
         } catch (exception: IOException) {
-            Logging.error("Couldn't selfrestart.", exception)
+            severe("Couldn't selfrestart.", exception)
         }
 
     }
@@ -380,13 +379,13 @@ class Client : Application() {
          * Programs entry point, it also does specific things when passed specific arguments.
          *
          * @param args evaluated by [.readApplicationArguments]
-         * @throws IOException if there was an error while loading language files
+         * @throws IOException if there was an severe while loading language files
          * @throws FileNotFoundException if language files don't exist
          */
         @JvmStatic
         fun main(args: Array<String>) {
             Thread.setDefaultUncaughtExceptionHandler { thread, exception ->
-                Logging.error("Uncaught exception in thread: $thread", exception)
+                severe("Uncaught exception in thread: $thread", exception)
                 Platform.runLater { UncaughtExceptionHandlerView(UncaughtExceptionHandlerController(), exception).show() }
             }
 
@@ -407,7 +406,7 @@ class Client : Application() {
                 Files.copy(Client::class.java.getResourceAsStream("/com/msc/serverbrowser/tools/sampcmd.exe"), Paths
                         .get(PathConstants.SAMP_CMD), StandardCopyOption.REPLACE_EXISTING)
             } catch (exception: IOException) {
-                Logging.warn("Error copying SAMP CMD to sampex folder.", exception)
+                warn("Error copying SAMP CMD to sampex folder.", exception)
             }
 
             val clientCacheFolder = File(PathConstants.CLIENT_CACHE)

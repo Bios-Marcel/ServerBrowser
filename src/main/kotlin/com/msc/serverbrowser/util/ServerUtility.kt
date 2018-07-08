@@ -2,7 +2,7 @@ package com.msc.serverbrowser.util
 
 import com.eclipsesource.json.Json
 import com.msc.serverbrowser.data.entites.SampServer
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -47,7 +47,7 @@ object ServerUtility {
                 }
             }
         } catch (exception: IOException) {
-            Logging.error("Error retrieving servers from masterlist.", exception)
+            severe("Error retrieving servers from masterlist.", exception)
         }
 
         return servers

@@ -90,10 +90,7 @@ class VersionChangeController(val client: Client) : ViewController {
                 GTAController.killGTA()
                 GTAController.killSAMP()
 
-                /*
-				 * TODO(MSC) Check JavaFX Threading API (Task / Service) Using a thread here, in
-				 * case someone wants to keep using the application meanwhile
-				 */
+                //Installing in a thread in order to keep the app responsive.
                 Thread {
                     Installer.installViaInstallationCandidate(toInstall)
                     finishInstalling()

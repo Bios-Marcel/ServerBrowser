@@ -23,7 +23,7 @@ import java.io.StringWriter
 import java.util.Optional
 
 /**
- * Simple view for showing runtime errors, it contains the error message, the stacktrace and a
+ * Simple view for showing runtime errors, it contains the severe message, the stacktrace and a
  * github issue creation hyperlink.
  *
  * @author Marcel
@@ -32,7 +32,7 @@ import java.util.Optional
 class UncaughtExceptionHandlerView
 /**
  * @param controller the view controller
- * @param cause the [Throwable] instance that requires a error dialog
+ * @param cause the [Throwable] instance that requires a severe dialog
  */
 (controller: UncaughtExceptionHandlerController, cause: Throwable) {
     private val root: Parent
@@ -125,6 +125,6 @@ class UncaughtExceptionHandlerView
     }
 
     companion object {
-        private const val TITLE = "An error occurred during program execution"
+        private const val TITLE = "An severe occurred during program execution"
     }
 }

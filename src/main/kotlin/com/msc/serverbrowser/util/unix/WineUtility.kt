@@ -4,24 +4,28 @@ import com.msc.serverbrowser.data.properties.ClientPropertiesController
 import com.msc.serverbrowser.data.properties.WineBinaryProperty
 import com.msc.serverbrowser.data.properties.WinePrefixProperty
 import com.msc.serverbrowser.util.windows.Registry
+import java.io.IOException
 
 object WineUtility {
 
     val documentsPath: String?
         get() {
-            val pathAfterExpandedPath = Registry
-                    .readString("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders", "Personal")
+            try {
+                val pathAfterExpandedPath = Registry
+                        .readString("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders", "Personal")
 
-            pathAfterExpandedPath ?: return null
+                pathAfterExpandedPath ?: return null
 
-            val expandedPath = createWineRunner(mutableListOf("cmd", "/c", "echo", pathAfterExpandedPath))
-                    .start()
-                    .inputStream
-                    .bufferedReader()
-                    .readLine()
-                    .replace("\"", "")
-
-            return convertPath(expandedPath)
+                val expandedPath = createWineRunner(mutableListOf("cmd", "/c", "echo", pathAfterExpandedPath))
+                        .start()
+                        .inputStream
+                        .bufferedReader()
+                        .readLine()
+                        .replace("\"", "")
+                return convertPath(expandedPath)
+            } catch (exception: IOException) {
+                return null
+            }
         }
 
     fun createWineRunner(commands: List<String>): ProcessBuilder {
@@ -30,13 +34,13 @@ object WineUtility {
 
         val prefix = getCustomWinePrefix()
         if (prefix.isNullOrBlank().not()) {
-            processBuilder.environment().put("WINEPREFIX", prefix)
+            processBuilder.environment()["WINEPREFIX"] = prefix
         }
 
         return processBuilder
     }
 
-    fun getWineBinaryPath(): String {
+    private fun getWineBinaryPath(): String {
         val path = ClientPropertiesController.getProperty(WineBinaryProperty)
         return if (path.isNotBlank()) {
             path

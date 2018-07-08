@@ -1,7 +1,7 @@
 package com.msc.serverbrowser.data.properties
 
 import com.msc.serverbrowser.constants.PathConstants
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.severe
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -49,7 +49,7 @@ object LegacySettingsController {
     val legacyProperties: Optional<Properties>
         get() {
             if (Files.notExists(Paths.get(PathConstants.SAMP_PATH))) {
-                Logging.error("SA-MP data can't be found.")
+                severe("SA-MP data can't be found.")
                 return Optional.empty()
             }
 
@@ -60,7 +60,7 @@ object LegacySettingsController {
                     return Optional.of(properties)
                 }
             } catch (exception: IOException) {
-                Logging.error("Error while loading SA_MP legacy properties.", exception)
+                severe("Error while loading SA_MP legacy properties.", exception)
                 return Optional.empty()
             }
 
@@ -75,7 +75,7 @@ object LegacySettingsController {
         try {
             Files.newOutputStream(Paths.get(PathConstants.SAMP_CFG)).use { output -> properties.store(output, null) }
         } catch (exception: IOException) {
-            Logging.error("Error while saving SA_MP legacy properties.", exception)
+            severe("Error while saving SA_MP legacy properties.", exception)
         }
 
     }

@@ -5,10 +5,11 @@ import com.msc.serverbrowser.constants.PathConstants
 import com.msc.serverbrowser.data.ServerConfig
 import com.msc.serverbrowser.data.properties.AllowCloseGtaProperty
 import com.msc.serverbrowser.data.properties.ClientPropertiesController
-import com.msc.serverbrowser.logging.Logging
+import com.msc.serverbrowser.info
 import com.msc.serverbrowser.util.ServerUtility
 import com.msc.serverbrowser.util.unix.WineUtility
 import com.msc.serverbrowser.util.windows.OSUtility
+import com.msc.serverbrowser.warn
 import java.awt.Desktop
 import java.io.File
 import java.io.IOException
@@ -17,7 +18,6 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.net.UnknownHostException
 import java.time.Instant
-import java.util.ArrayList
 import java.util.Objects
 import java.util.Optional
 
@@ -35,7 +35,7 @@ object SAMPLauncher {
      * Also does:
      *
      *  * kill GTA process
-     *  * Check if GTA can be found and display an error otherwise
+     *  * Check if GTA can be found and display an severe otherwise
      *  * use multiple methods for connecting, in case the best one doesn't work
      *
      * @param address the IP-address / domain for the server
@@ -77,19 +77,22 @@ object SAMPLauncher {
 
     private fun connectInternal(gtaPath: String, address: String, port: Int, serverPassword: String): Boolean {
 
-        if (connectUsingDLLInjection(gtaPath, address, port, serverPassword)) {
+        /*if (connectUsingDLLInjection(gtaPath, address, port, serverPassword)) {
+            info("Connection to $address:$port via DLL injection successful.")
             return true
-        }
+        }*/
 
         if (connectUsingExecutable(gtaPath, address, port, serverPassword)) {
+            info("Connection to $address:$port by calling the sa-mp executable successful.")
             return true
         }
 
         if (Objects.isNull(serverPassword) || serverPassword.isEmpty()) {
+            info("Connection to $address:$port by calling the sa-mp windows protocol successful.")
             return connectUsingWindowsProtocol(address, port)
         }
 
-        Logging.warn("Couldn't connect to server using the protocol, since a password was used.")
+        warn("Couldn't connect to server using the protocol, since a password was used.")
         return false
     }
 
@@ -107,7 +110,7 @@ object SAMPLauncher {
             builder.start()
             return true
         } catch (exception: Exception) {
-            Logging.warn("Error using sampcmd.exe", exception)
+            warn("Error using sampcmd.exe", exception)
         }
 
         return false
@@ -141,7 +144,7 @@ object SAMPLauncher {
         val addressAndPort = address + ":" + port.toString()
 
         try {
-            Logging.info("Connecting using executable.")
+            info("Connecting using executable.")
             val arguments = mutableListOf<String>()
 
             arguments.add(gtaPath + "samp.exe ")
@@ -158,7 +161,7 @@ object SAMPLauncher {
             builder.start()
             return true
         } catch (exception: IOException) {
-            Logging.warn("Error connecting to server $addressAndPort by manually calling the executable", exception)
+            warn("Error connecting to server $addressAndPort by manually calling the executable", exception)
             return false
         }
 
@@ -179,7 +182,7 @@ object SAMPLauncher {
         }
 
         try {
-            Logging.info("Connecting using protocol.")
+            info("Connecting using protocol.")
             val desktop = Desktop.getDesktop()
 
             if (desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -188,9 +191,9 @@ object SAMPLauncher {
                 return true
             }
         } catch (exception: IOException) {
-            Logging.warn("Error connecting to server using the windows protocol.", exception)
+            warn("Error connecting to server using the windows protocol.", exception)
         } catch (exception: URISyntaxException) {
-            Logging.warn("Error connecting to server using the windows protocol.", exception)
+            warn("Error connecting to server using the windows protocol.", exception)
         }
 
         return false
