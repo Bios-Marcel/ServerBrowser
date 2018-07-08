@@ -18,8 +18,7 @@ env:
 before_deploy:
   # Tag release with current verson set in gradle.properties
   - test $TRAVIS_BRANCH = "master" &&
-    git tag `sed -n 's/^projectVersion = //p' gradle.properties` &&
-    git push
+    git tag `sed -n 's/^projectVersion = //p' gradle.properties`
 deploy:
   provider: releases
   api_key:
@@ -28,4 +27,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: Bios-Marcel/ServerBrowser
-    tags: true
+    branch: master
