@@ -28,11 +28,10 @@ compileKotlin {
     }
 
     //Overwriting the launchers version number, to assure its correct in the deployed build
-    File propsFile = new File('src/main/resources/com/msc/serverbrowser/version.properties')
     Properties props = new Properties()
-    props.load(propsFile.newDataInputStream())
-
     props.setProperty('version', projectVersion)
+
+    File propsFile = new File('src/main/resources/com/msc/serverbrowser/version.properties')
     props.store(propsFile.newWriter(), "Do not change manually, only change gradle.properties")
 }
 
