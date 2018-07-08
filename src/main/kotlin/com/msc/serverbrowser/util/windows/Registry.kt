@@ -26,7 +26,7 @@ object Registry {
         if (OSUtility.isWindows) {
             ProcessBuilder(arguments).start()
         } else {
-            WineUtility.createWineRunner(arguments)
+            WineUtility.createWineRunner(arguments).start()
         }
 
     }
