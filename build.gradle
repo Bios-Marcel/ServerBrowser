@@ -4,7 +4,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
 
-    ext.kotlin_version = '1.2.50'
+    ext.kotlin_version = '1.2.51'
     dependencies {
         //Used to build a shadow jar (contains all its dependencies, putting aside the jre)
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.+'
@@ -70,7 +70,7 @@ dependencies {
 /*
 * Provide a fixed version of gradle for people building this project.
 */
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion = gradleWrapperVersion
 }
 
