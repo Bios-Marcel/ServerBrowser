@@ -27,7 +27,7 @@ object UpdateUtility {
      * In the new version scheme i will include the major version of the compatible jre version,
      * since in the feature i'll to know this as for having to update the jre as well.
      */
-    const val VERSION = "8.6.1"
+    const val VERSION = "8.6.2"
 
     /** Username/Repository on GitHub. */
     private const val TARGET_REPOSITORY_FOR_UPDATES = "Bios-Marcel/ServerBrowser"
