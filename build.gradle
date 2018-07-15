@@ -87,6 +87,8 @@ wrapper {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
+    dependsOn "test"
+
     baseName = 'launcher'
     //Those are `null` since we only want baseName.jar as our filename.
     version = null
