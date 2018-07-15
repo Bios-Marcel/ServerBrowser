@@ -8,7 +8,6 @@ buildscript {
         //Used to build a shadow jar (contains all its dependencies, putting aside the jre)
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.+'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.layer:gradle-git-repo-plugin:2.0.+'
     }
 }
 
