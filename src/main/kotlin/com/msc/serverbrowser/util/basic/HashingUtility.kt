@@ -6,7 +6,6 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import kotlin.experimental.and
 
 /**
  * Contains a single method, that is used to take the SHA-256 of a file.

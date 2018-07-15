@@ -39,7 +39,7 @@ object ServerUtility {
             openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0")
             BufferedReader(InputStreamReader(openConnection.getInputStream())).use { `in` ->
                 `in`.lines().forEach { inputLine ->
-                    val data = inputLine.split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                    val data = inputLine.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                     val server = SampServer(data[0], Integer.parseInt(data[1]))
                     if (!servers.contains(server)) {
                         servers.add(server)
@@ -93,7 +93,7 @@ object ServerUtility {
 
             jsonArray.forEach { `object` ->
                 val jsonServerData = `object`.asObject()
-                val addressData = jsonServerData.getString("ip", UNKNOWN).split(":".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                val addressData = jsonServerData.getString("ip", UNKNOWN).split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val port = if (addressData.size == 2) Integer.parseInt(addressData[1]) else ServerUtility.DEFAULT_SAMP_PORT
                 val server = SampServer(addressData[0], port)
 

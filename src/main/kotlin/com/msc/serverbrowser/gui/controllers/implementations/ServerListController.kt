@@ -35,8 +35,7 @@ import javafx.scene.text.TextAlignment
 import javafx.util.Pair
 import java.io.IOException
 import java.text.MessageFormat
-import java.util.Objects
-import java.util.Optional
+import java.util.*
 import java.util.function.Predicate
 import java.util.regex.PatternSyntaxException
 
@@ -74,7 +73,7 @@ class ServerListController(private val client: Client, private val mainControlle
             val address = view.addressTextField.text
 
             if (Objects.nonNull(address) && !address.isEmpty()) {
-                val ipAndPort = view.addressTextField.text.split("[:]".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                val ipAndPort = view.addressTextField.text.split("[:]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 if (ipAndPort.size == 1) {
                     return Optional.of(Pair(ipAndPort[0], ServerUtility.DEFAULT_SAMP_PORT.toString()))
                 } else if (ipAndPort.size == 2) {
@@ -173,7 +172,7 @@ class ServerListController(private val client: Client, private val mainControlle
                 view.serverTable.placeholder = Label(Client.getString("noServerHistory"))
                 view.lastJoinTableColumn.isVisible = true
                 val servers = ServerConfig.lastJoinedServers
-                servers.forEach({ server -> updateServerInfo(server, false) })
+                servers.forEach { server -> updateServerInfo(server, false) }
                 view.serverTable.addAll(servers)
             }
         }

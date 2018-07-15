@@ -54,7 +54,7 @@ object FileUtility {
      */
     @Throws(IOException::class)
     fun copyOverwrite(source: String, target: String) {
-        Files.newInputStream(Paths.get(source)).use { fileInputStream -> Channels.newChannel(fileInputStream).use({ readableByteChannel -> FileOutputStream(target).use { fileOutputStream -> fileOutputStream.channel.transferFrom(readableByteChannel, 0, java.lang.Long.MAX_VALUE) } }) }
+        Files.newInputStream(Paths.get(source)).use { fileInputStream -> Channels.newChannel(fileInputStream).use { readableByteChannel -> FileOutputStream(target).use { fileOutputStream -> fileOutputStream.channel.transferFrom(readableByteChannel, 0, java.lang.Long.MAX_VALUE) } } }
     }
 
     /**
@@ -116,9 +116,7 @@ object FileUtility {
             connection.inputStream
             return connection.contentLength
         } finally {
-            if (connection != null) {
-                connection.disconnect()
-            }
+            connection?.disconnect()
         }
     }
 
@@ -150,20 +148,20 @@ object FileUtility {
                 parent?.mkdirs()
 
                 // Extract the file
-                zipFile.getInputStream(zipEntry).use({ inputStream ->
+                zipFile.getInputStream(zipEntry).use { inputStream ->
                     Files.newOutputStream(Paths.get(outputFile.toURI())).use { outputStream ->
                         /*
-					 * The buffer is the max amount of bytes kept in RAM during any given time while
-					 * unzipping. Since most windows disks are aligned to 4096 or 8192, we use a
-					 * multiple of those values for best performance.
-					 */
+                             * The buffer is the max amount of bytes kept in RAM during any given time while
+                             * unzipping. Since most windows disks are aligned to 4096 or 8192, we use a
+                             * multiple of those values for best performance.
+                             */
                         val bytes = ByteArray(8192)
                         while (inputStream.available() > 0) {
                             val length = inputStream.read(bytes)
                             outputStream.write(bytes, 0, length)
                         }
                     }
-                })
+                }
             }
         }
     }
@@ -220,7 +218,7 @@ object FileUtility {
      */
     @Throws(IOException::class)
     fun readAllLinesTryEncodings(path: Path, vararg charsets: Charset): List<String> {
-        if(!Files.exists(path)) {
+        if (!Files.exists(path)) {
             throw FileNotFoundException("The file at $path doesn't exist.")
         }
 

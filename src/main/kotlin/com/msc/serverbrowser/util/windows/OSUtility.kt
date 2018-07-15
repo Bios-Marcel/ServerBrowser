@@ -21,8 +21,7 @@ object OSUtility {
     /**
      * @return true if the system is windows (most likely), otherwise false
      */
-    val isWindows: Boolean
-        get() = OS.startsWith("windows")
+    val isWindows = OS.startsWith("windows")
 
     /**
      * Opens a website using the default browser. It will automatically apply http:// in front of the
@@ -50,17 +49,25 @@ object OSUtility {
      */
     fun browse(uri: URI) {
         if (Desktop.isDesktopSupported()) {
-            /*
-			 * HACK Workaround for Unix, since the Desktop Class seems to freeze the application
-			 * unless the call is threaded.
-			 */
-            Thread {
+
+            val runnable = Runnable {
                 try {
                     Desktop.getDesktop().browse(uri)
                 } catch (exception: IOException) {
                     warn("Couldn't visit website '$uri'", exception)
                 }
-            }.start()
+            }
+
+            if (isWindows) {
+                runnable.run()
+            } else {
+                /*
+                 * HACK Workaround for Unix, since the Desktop Class seems to freeze the application
+                 * unless the call is threaded. We also avoid unnecessarily creating threads on windows.
+                 */
+                Thread(runnable).start()
+            }
+
         }
     }
 }

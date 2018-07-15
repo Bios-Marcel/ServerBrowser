@@ -14,6 +14,10 @@ import java.net.URISyntaxException
  */
 class UncaughtExceptionHandlerController {
 
+    companion object {
+        private const val LINE_SEPARATOR = "\n"
+    }
+
     /**
      * Opens the webbrowser with the new issue Github-page and an already given issue title and
      * issue body, which already contains information about the exception, th os and the jvm.
@@ -72,10 +76,5 @@ class UncaughtExceptionHandlerController {
         } catch (exception: URISyntaxException) {
             severe("Error reporting severe", exception)
         }
-
-    }
-
-    companion object {
-        private const val LINE_SEPARATOR = "\n"
     }
 }

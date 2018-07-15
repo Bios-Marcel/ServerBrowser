@@ -23,10 +23,15 @@ class OneLineStringProperty : SimpleStringProperty("") {
 
 }
 
+/**
+ * Replacing \r\n first and afterwards leftover \n by doing it like that, i never replace a
+ * single line break by two spaces
+ *
+ * @return the given String, but without line breaks
+ */
 private fun replaceLineBreaks(value: String): String {
-    /*
-     * Replacing \r\n first and afterwards leftover \n by doing it like that, i never replace a
-     * single line break by two spaces
-     */
-    return value.replace("\r\n", " ").replace("\n", " ").trim({ it <= ' ' })
+    return value
+            .replace("\r\n", " ")
+            .replace("\n", " ")
+            .trim { it <= ' ' }
 }

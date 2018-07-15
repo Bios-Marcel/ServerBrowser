@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.sql.SQLException
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Contains static methods for setting and retrieving favourite servers
@@ -68,18 +68,18 @@ object FavouritesController {
         val server = SampServer(address, port)
         try {
             SampQuery(address, port).use { query ->
-                query.basicServerInfo.ifPresent({ serverInfo ->
+                query.basicServerInfo.ifPresent { serverInfo ->
                     server.players = Integer.parseInt(serverInfo[1])
                     server.maxPlayers = Integer.parseInt(serverInfo[2])
                     server.hostname = serverInfo[3]!!
                     server.mode = serverInfo[4]!!
                     server.language = serverInfo[5]!!
-                })
+                }
 
-                query.serversRules.ifPresent({ rules ->
+                query.serversRules.ifPresent { rules ->
                     server.website = rules["weburl"]!!
                     server.version = rules["version"]!!
-                })
+                }
             }
         } catch (exception: SocketException) {
             warn("Error updating server information.", exception)

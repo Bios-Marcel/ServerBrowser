@@ -3,8 +3,7 @@ package com.msc.serverbrowser.data
 import com.msc.serverbrowser.data.entites.SampServer
 import com.msc.serverbrowser.severe
 import java.sql.SQLException
-import java.util.ArrayList
-import java.util.Optional
+import java.util.*
 
 /**
  * Allows controller over server specific settings. TODO(MSC) I could still improve the setter
@@ -102,7 +101,7 @@ object ServerConfig {
      * @return An [Optional] containing the to be used username or empty
      */
     private fun getLastJoinForServer(ip: String, port: Int): Optional<Long> {
-        return getStringOfField(ip, port, "lastJoin").map({ it.toLong() })
+        return getStringOfField(ip, port, "lastJoin").map { it.toLong() }
     }
 
     /**
@@ -141,7 +140,7 @@ object ServerConfig {
      * @param servers servers to inject their last join date into
      */
     fun initLastJoinData(servers: Collection<SampServer>) {
-        servers.forEach { server -> getLastJoinForServer(server.address, server.port).ifPresent({ server.lastJoin = it }) }
+        servers.forEach { server -> getLastJoinForServer(server.address, server.port).ifPresent { server.lastJoin = it } }
     }
 
     private fun getStringOfField(ip: String, port: Int, field: String): Optional<String> {
@@ -157,11 +156,11 @@ object ServerConfig {
 
                 if (resultSet != null) {
                     try {
-                        resultSet.use({
+                        resultSet.use {
                             if (it.next()) {
                                 return Optional.of(it.getString(field))
                             }
-                        })
+                        }
                     } catch (exception: SQLException) {
                         severe("Error while retrieving field: '$field of server: $ip:$port", exception)
                     }

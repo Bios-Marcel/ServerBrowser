@@ -49,7 +49,7 @@ object WineUtility {
         }
     }
 
-    fun getCustomWinePrefix(): String? {
+    private fun getCustomWinePrefix(): String? {
         val path = ClientPropertiesController.getProperty(WinePrefixProperty)
         return if (path.isNotBlank()) {
             path

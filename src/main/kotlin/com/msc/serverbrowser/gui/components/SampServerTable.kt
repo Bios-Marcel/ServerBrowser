@@ -13,29 +13,16 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.collections.transformation.FilteredList
 import javafx.collections.transformation.SortedList
-import javafx.scene.control.Alert
+import javafx.scene.control.*
 import javafx.scene.control.Alert.AlertType
-import javafx.scene.control.ButtonType
-import javafx.scene.control.ContextMenu
-import javafx.scene.control.MenuItem
-import javafx.scene.control.SelectionMode
-import javafx.scene.control.SeparatorMenuItem
-import javafx.scene.control.TableRow
-import javafx.scene.control.TableView
-import javafx.scene.input.Clipboard
-import javafx.scene.input.ClipboardContent
-import javafx.scene.input.DataFormat
-import javafx.scene.input.DragEvent
-import javafx.scene.input.KeyCode
-import javafx.scene.input.MouseButton
-import javafx.scene.input.MouseEvent
-import javafx.scene.input.TransferMode
+import javafx.scene.input.*
 import javafx.scene.text.Text
-import java.util.Collections
 import java.util.Optional
 import java.util.StringJoiner
 import java.util.function.Predicate
 import java.util.stream.Collectors
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
 /**
  * [TableView] that was made for the ServerList View, contains a special TableRowFactory and
@@ -216,7 +203,7 @@ class SampServerTable(val client: Client) : TableView<SampServer>() {
         val clipboardContent = ClipboardContent()
 
         val selectedServerIndices = selectionModel.selectedItems.stream()
-                .map<Int>({ servers.indexOf(it) })
+                .map<Int> { servers.indexOf(it) }
                 .collect(Collectors.toList())
         clipboardContent[OLD_INDEXES_LIST_DATA_FORMAT] = selectedServerIndices
 

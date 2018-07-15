@@ -18,8 +18,7 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.net.UnknownHostException
 import java.time.Instant
-import java.util.Objects
-import java.util.Optional
+import java.util.*
 
 /**
  * This classes purpose is solely to launch GTA and connect to a server.
@@ -77,10 +76,10 @@ object SAMPLauncher {
 
     private fun connectInternal(gtaPath: String, address: String, port: Int, serverPassword: String): Boolean {
 
-        /*if (connectUsingDLLInjection(gtaPath, address, port, serverPassword)) {
+        if (connectUsingDLLInjection(gtaPath, address, port, serverPassword)) {
             info("Connection to $address:$port via DLL injection successful.")
             return true
-        }*/
+        }
 
         if (connectUsingExecutable(gtaPath, address, port, serverPassword)) {
             info("Connection to $address:$port by calling the sa-mp executable successful.")
