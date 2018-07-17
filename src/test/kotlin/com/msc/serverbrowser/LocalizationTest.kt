@@ -8,8 +8,7 @@ import java.io.IOException
 import java.net.URISyntaxException
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.Locale
-import java.util.ResourceBundle
+import java.util.*
 
 /**
  * Checks all localization files for completion. There is a separate test for every language in
@@ -72,7 +71,7 @@ class LocalizationTest {
     private fun testLanguageForCompletion(lang: Language) {
         val englishLanguage = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", Locale(Language.EN.shortcut))
         val langProperties = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", Locale(lang.shortcut))
-        assertEquals(langProperties.keySet().size, englishLanguage.keySet().size, "Language $lang doesn't inherit all necessary keys.")
+        assertEquals(langProperties.keySet().size, englishLanguage.keySet().size, "Language ${lang.name} doesn't inherit all necessary keys.")
     }
 
     @Test
