@@ -30,6 +30,8 @@ src/main/resources/com/msc/serverbrowser/version.properties
 ### IntelliJ ###
 **/.idea/
 **/*.iml
+**/*.ipr
+**/*.iws
 **/out/
 
 # JDT-specific (Eclipse Java Development Tools)		
