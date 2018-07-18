@@ -4,6 +4,7 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/Bios-Marcel/ServerBrowser.svg?columns=all&style=flat-square)](https://waffle.io/Bios-Marcel/ServerBrowser) 
 
 master: [![Build Status](https://img.shields.io/travis/Bios-Marcel/ServerBrowser.svg?branch=master&style=flat-square)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
+
 develop: [![Build Status](https://img.shields.io/travis/Bios-Marcel/ServerBrowser.svg?branch=develop&style=flat-square)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
 
 ## Description
