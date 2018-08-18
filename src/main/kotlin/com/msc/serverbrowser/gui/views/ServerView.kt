@@ -106,7 +106,7 @@ class ServerView(client: Client) {
         val gamemodeTableColumn = TableColumn<SampServer, String>(Client.getString("gamemodeTableHeader"))
         val languageTableColumn = TableColumn<SampServer, String>(Client.getString("languageTableHeader"))
         val versionTableColum = TableColumn<SampServer, String>(Client.getString("versionTableHeader"))
-        lastJoinTableColumn = TableColumn(Client.getString("columnLastJoin"))
+        lastJoinTableColumn = TableColumn(Client.getString("lastVisit"))
 
         passwordedTableColumn.cellValueFactory = PropertyValueFactory<SampServer, Boolean>("passworded")
         passwordedTableColumn.setCellFactory {
