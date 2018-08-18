@@ -1,8 +1,11 @@
 # SA-MP Server Browser
 
-[![Build Status](https://img.shields.io/travis/Bios-Marcel/ServerBrowser.svg?style=flat-square)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
 [![Codacy grade](https://img.shields.io/codacy/grade/7e9eab6cb5644617a590ef4e81a2e466.svg?style=flat-square)](https://app.codacy.com/app/Bios-Marcel/ServerBrowser/dashboard)
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/Bios-Marcel/ServerBrowser.svg?columns=all&style=flat-square)](https://waffle.io/Bios-Marcel/ServerBrowser) 
+
+master: [![Build Status](https://img.shields.io/travis/Bios-Marcel/ServerBrowser.svg?branch=master&style=flat-square)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
+
+develop: [![Build Status](https://img.shields.io/travis/Bios-Marcel/ServerBrowser.svg?branch=develop&style=flat-square)](https://travis-ci.org/Bios-Marcel/ServerBrowser)
 
 ## Description
 
