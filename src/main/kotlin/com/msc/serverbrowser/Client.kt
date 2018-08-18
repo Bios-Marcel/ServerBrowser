@@ -4,13 +4,7 @@ import com.github.plushaze.traynotification.animations.Animations
 import com.github.plushaze.traynotification.notification.NotificationTypeImplementations
 import com.github.plushaze.traynotification.notification.TrayNotificationBuilder
 import com.msc.serverbrowser.constants.PathConstants
-import com.msc.serverbrowser.data.properties.AutomaticUpdatesProperty
-import com.msc.serverbrowser.data.properties.ChangelogEnabledProperty
-import com.msc.serverbrowser.data.properties.ClientPropertiesController
-import com.msc.serverbrowser.data.properties.LanguageProperty
-import com.msc.serverbrowser.data.properties.MaximizedProperty
-import com.msc.serverbrowser.data.properties.ShowChangelogProperty
-import com.msc.serverbrowser.data.properties.UseDarkThemeProperty
+import com.msc.serverbrowser.data.properties.*
 import com.msc.serverbrowser.gui.UncaughtExceptionHandlerController
 import com.msc.serverbrowser.gui.UncaughtExceptionHandlerView
 import com.msc.serverbrowser.gui.View
@@ -39,9 +33,7 @@ import java.net.URISyntaxException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.Locale
-import java.util.MissingResourceException
-import java.util.ResourceBundle
+import java.util.*
 
 /**
  * This is the main class of the client.
@@ -320,11 +312,7 @@ class Client : Application() {
         }
 
         val javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java"
-        val command = ArrayList<String>()
-
-        command.add(javaBin)
-        command.add("-jar")
-        command.add(PathConstants.OWN_JAR.path)
+        val command = listOf(javaBin, "-jar", PathConstants.OWN_JAR.path)
 
         try {
             val builder = ProcessBuilder(command)
@@ -359,20 +347,22 @@ class Client : Application() {
 
         /**
          * ResourceBundle which contains all the localized strings.
-         *
-         * Using `lateinit`, since a method is used to avoid code duplication.
          */
-        lateinit var languageResourceBundle: ResourceBundle
+        var languageResourceBundle: ResourceBundle
 
         init {
             createFolderStructure()
-            applyCurrentLanguage()
+            languageResourceBundle = loadChosenResourceBundle()
         }
 
         fun applyCurrentLanguage() {
+            languageResourceBundle = loadChosenResourceBundle()
+        }
+
+        private fun loadChosenResourceBundle(): ResourceBundle {
             val locale = Locale(ClientPropertiesController.getProperty(LanguageProperty))
             Locale.setDefault(locale)
-            languageResourceBundle = ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale)
+            return ResourceBundle.getBundle("com.msc.serverbrowser.localization.Lang", locale)
         }
 
         /**
