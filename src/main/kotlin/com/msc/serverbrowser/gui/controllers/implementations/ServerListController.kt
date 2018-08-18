@@ -223,8 +223,8 @@ class ServerListController(private val client: Client, private val mainControlle
     private fun setPlayerComparator() {
         view.playersTableColumn.setComparator { stringOne, stringTwo ->
             val maxPlayersRemovalRegex = "/.*"
-            val playersOne = Integer.parseInt(stringOne.replace(maxPlayersRemovalRegex.toRegex(), ""))
-            val playersTwo = Integer.parseInt(stringTwo.replace(maxPlayersRemovalRegex.toRegex(), ""))
+            val playersOne = stringOne.replace(maxPlayersRemovalRegex.toRegex(), "").toIntOrNull() ?: 0
+            val playersTwo = stringTwo.replace(maxPlayersRemovalRegex.toRegex(), "").toIntOrNull() ?: 0
 
             Integer.compare(playersOne, playersTwo)
         }
