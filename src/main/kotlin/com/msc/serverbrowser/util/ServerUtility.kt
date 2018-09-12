@@ -7,7 +7,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.URL
-import java.util.ArrayList
+import java.util.*
 
 /**
  * @author Marcel
@@ -26,6 +26,8 @@ object ServerUtility {
 
     private const val MAX_PAGES = 20
 
+    private const val CUSTOM_USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0"
+
     /**
      * Retrieves servers from the SA-MP masterlist for the given version.
      *
@@ -36,7 +38,7 @@ object ServerUtility {
         val servers = ArrayList<SampServer>()
         try {
             val openConnection = URL("http://lists.sa-mp.com/$version/servers").openConnection()
-            openConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0")
+            openConnection.addRequestProperty("User-Agent", CUSTOM_USER_AGENT)
             BufferedReader(InputStreamReader(openConnection.getInputStream())).use { `in` ->
                 `in`.lines().forEach { inputLine ->
                     val data = inputLine.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -54,14 +56,16 @@ object ServerUtility {
     }
 
     @Throws(IOException::class)
-    private fun readUrl(urlString: String): String {
-        BufferedReader(InputStreamReader(URL(urlString).openStream())).use { reader ->
-            val buffer = StringBuilder()
+    private fun readStringFromURL(urlString: String): String {
+        val output = StringBuilder()
+        val openConnection = URL(urlString).openConnection()
 
-            reader.lines().forEach { buffer.append(it) }
-
-            return buffer.toString()
+        openConnection.addRequestProperty("User-Agent", CUSTOM_USER_AGENT)
+        BufferedReader(InputStreamReader(openConnection.getInputStream())).use { it ->
+            it.lines().forEach { line -> output.append(line) }
         }
+
+        return output.toString()
     }
 
     /**
@@ -82,7 +86,7 @@ object ServerUtility {
 
         // The pages are 1 indexed, so we start at 1 and go up to the given max amount of pages
         for (page in 1 until MAX_PAGES) {
-            val json = readUrl("$apiAddress?page=$page")
+            val json = readStringFromURL("$apiAddress?page=$page")
 
             // In case the page equals 'null', we have already received all data.
             if ("null".equals(json, ignoreCase = true)) {
@@ -91,9 +95,9 @@ object ServerUtility {
 
             val jsonArray = Json.parse(json).asArray()
 
-            jsonArray.forEach { `object` ->
-                val jsonServerData = `object`.asObject()
-                val addressData = jsonServerData.getString("ip", UNKNOWN).split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            jsonArray.forEach { jsonValue ->
+                val jsonServerData = jsonValue.asObject()
+                val addressData = jsonServerData.getString("ip", UNKNOWN).split(":").dropLastWhile { it.isEmpty() }.toTypedArray()
                 val port = if (addressData.size == 2) Integer.parseInt(addressData[1]) else ServerUtility.DEFAULT_SAMP_PORT
                 val server = SampServer(addressData[0], port)
 

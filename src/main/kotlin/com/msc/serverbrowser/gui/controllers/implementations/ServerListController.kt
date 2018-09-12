@@ -195,6 +195,9 @@ class ServerListController(private val client: Client, private val mainControlle
             } catch (exception: IOException) {
                 severe("Couldn't retrieve data from announce api.", exception)
                 Platform.runLater { view.serverTable.placeholder = Label(Client.getString("errorFetchingServers")) }
+
+                //The exception will be thrown in order to show an error dialog.
+                throw exception
             }
 
             Platform.runLater { this.updateGlobalInfo() }
