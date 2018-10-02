@@ -126,7 +126,7 @@ Note: Some of the following key-value pairs might already be correct, in that ca
 Done
 
 #### Georgian
-```
+```ini
 errorFetchingServers=Couldn't fetch servers
 favourites=Favourites
 pageSize=PageSize
@@ -177,7 +177,7 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
 #### Greek
-```
+```ini
 errorFetchingServers=Couldn't fetch servers
 favourites=Favourites
 fetchingServers=Fetching servers, please wait a moment.
@@ -226,7 +226,7 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
 #### Dutch
-```
+```ini
 errorFetchingServers=Couldn't fetch servers
 favourites=Favourites
 fetchingServers=Fetching servers, please wait a moment.
@@ -276,7 +276,7 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 ```
 
 #### Russian
-```
+```ini
 errorFetchingServers=Couldn't fetch servers
 favourites=Favourites
 connectToServerUsingPassword=Connect using password
@@ -321,7 +321,7 @@ openDonationPageTooltip=Opens the 'Donate' section of the GitHub project page
 Done
 
 #### Romanian
-```
+```ini
 connectToServerUsingPassword=Connect using password
 lagcomp=lagcomp:
 lastVisit=Last visit
@@ -342,7 +342,7 @@ enterServerPasswordMessage=Enter the servers password (Leave empty if you think 
 ```
 
 #### Spanish
-```
+```ini
 favourites=Favourites
 connectToServerUsingPassword=Connect using password
 enterFilterValue=Enter filter value
@@ -379,7 +379,7 @@ enterServerPasswordMessage=Enter the servers password (Leave empty if you think 
 ```
 
 #### Turkish
-```
+```ini
 favourites=Favourites
 pageSize=PageSize
 connectToServerUsingPassword=Connect using password
@@ -414,7 +414,7 @@ enterServerPasswordMessage=Enter the servers password (Leave empty if you think 
 ```
 
 #### Bosnian
-```
+```ini
 pageSize=PageSize
 connectToServerUsingPassword=Connect using password
 lagcomp=lagcomp:
@@ -435,14 +435,14 @@ To see which tasks are available, run:
 
 **on Unix:**
 
-``` shell
-$ ./gradlew tasks
+```bash
+> ./gradlew tasks
 ```
 
 **on Windows:**
 
-``` shell
-$ ./gradlew.bat tasks
+```bash
+> ./gradlew.bat tasks
 ```
 
 The first time you execute __gradlew__ (gradle wrapper) it will download a local copy of gradle into the project folder __.gradle__. This will not be committed to version control.
@@ -453,20 +453,20 @@ You are of course free to use your own or systems copy of gradle, but this appro
 
 To run tasks on the subprojects, you can either __cd__ into the subproject and run the task, e.g.:
 
-``` shell
-$ cd client
-$ ../gradlew run
+```bash
+> cd client
+> ../gradlew run
 ```
 
 Assemble and test the build outputs. You will find the results in the __build__ folder of __client__.
 
-``` shell
-$ ./gradlew build
+```bash
+> ./gradlew build
 ```
 
 In order to build a runnable `.jar` file, run:
-``` shell
-$ ./gradlew shadowJar
+```bash
+> ./gradlew shadowJar
 ```
 
 ### Syncing gradle with Eclipse
@@ -477,8 +477,8 @@ However, if you want to be extra sure, don´t want to use the plugin or need to 
 
 From the parent project run:
 
-``` shell
-$ ./gradlew eclipseClean eclipse
+```bash
+> ./gradlew eclipseClean eclipse
 ```
 
 Eclipse will instantly reload the fresh project settings files.
